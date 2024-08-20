@@ -1,0 +1,52 @@
+.authentication {
+    margin: 40px;
+}
+
+.authentication h1 {
+    font-size: 40px;
+}
+
+.authentication-form {
+    padding: 30px 50px;
+    margin: 40px auto;
+    max-width: 500px;
+    display: block;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    text-transform: uppercase;
+    background-color: #C0C78C;
+}
+
+.authentication-input, .authentication-form button {
+    width: 500px;
+    margin: 15px auto;
+    padding: 10px;
+    font-size: 18px;
+}
+
+.authentication-form button, .authentication h1 {
+    text-transform: uppercase;
+    margin: auto;
+}
+
+.authentication-form button {
+    margin-top: 15px;
+    width: 525px;
+}
+
+.authentication-form button:hover {
+    color: white;
+    background-color: black;
+}
+
+.authentication-error {
+    margin-bottom: 10px;
+    margin-left: 10px;
+    text-align: left;
+    font-size: 17px;
+    font-weight: 500; 
+    text-transform: none;
+    letter-spacing: 0.8px;
+    color: rgb(219, 5, 5);
+}
