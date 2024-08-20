@@ -33,12 +33,12 @@ export default function Header() {
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink>
+                    <NavLink to='/login'>
                         Login
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink>
+                    <NavLink to='/register'>
                         Register
                     </NavLink>
                 </li>
