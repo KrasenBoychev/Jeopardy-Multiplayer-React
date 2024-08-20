@@ -1,14 +1,20 @@
+import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from "formik";
-
+import { toast } from 'react-hot-toast';
 import "./authentication.css";
 
+import { useRegister } from '../../hooks/useAuth';
+
 export default function Register() {
+  const navigate = useNavigate();
+  const register = useRegister();
+
   return (
     <div className="authentication">
       <div>
         <h1>Register</h1>
         <Formik
-          initialValues={{ email: "", password: "", rePass: "" }}
+          initialValues={{ email: "", username: "", password: "", rePass: "" }}
           validate={(values) => {
             const errors = {};
             if (!values.email) {
@@ -19,6 +25,10 @@ export default function Register() {
               errors.email = "Invalid email address";
             }
 
+            if (!values.username) {
+              errors.username = "Username is required";
+            }
+
             if (!values.password) {
               errors.password = "Password is required";
             } else if (values.password != values.rePass) {
@@ -27,11 +37,14 @@ export default function Register() {
 
             return errors;
           }}
-          onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
-              setSubmitting(false);
-            }, 400);
+          onSubmit={async (values) => {
+            try {
+              await register(values.email, values.username, values.password);
+              
+              navigate('/');
+            } catch (error) {
+               return toast.error(error.message);
+            }
           }}
         >
           {({ isSubmitting }) => (
@@ -44,6 +57,17 @@ export default function Register() {
               />
               <ErrorMessage
                 name="email"
+                component="div"
+                className="authentication-error"
+              />
+               <Field
+                type="text"
+                name="username"
+                placeholder="Username"
+                className="authentication-input"
+              />
+              <ErrorMessage
+                name="username"
                 component="div"
                 className="authentication-error"
               />
