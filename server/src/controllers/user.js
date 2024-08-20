@@ -53,8 +53,7 @@ userRouter.post('/register',
     });
   
   } catch (err) {
-      const parsed = parseError(err);
-      res.status(403).json({ code: 403, message: parsed.errors });
+      res.status(403).json({ code: 403, message: err.message });
   }
 });
 
