@@ -1,8 +1,15 @@
+import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { toast } from 'react-hot-toast';
 
 import "./authentication.css";
 
+import { useLogin } from '../../hooks/useAuth';
+
 export default function Login() {
+  const navigate = useNavigate();
+  const login = useLogin();
+
   return (
     <div className="authentication">
       <h1>Login</h1>
@@ -24,11 +31,14 @@ export default function Login() {
 
           return errors;
         }}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
+        onSubmit={async (values) => {
+          try {
+            await login(values.email, values.password);
+            
+            navigate('/');
+          } catch (error) {
+             return toast.error(error.message);
+          }
         }}
       >
         {({ isSubmitting }) => (
