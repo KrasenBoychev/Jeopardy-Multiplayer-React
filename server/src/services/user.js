@@ -1,18 +1,22 @@
 const { User } = require('../models/User');
 const bcrypt = require('bcrypt');
 
-//TODO set identity prop name based on exam description
-const identityName = 'email';
+async function register(email, username, password) {
+  const existingEmail = await User.findOne({ email });
 
-async function register(identity, password) {
-  const existing = await User.findOne({ [identityName]: identity });
+  if (existingEmail) {
+    throw new Error('This email is already in use');
+  }
 
-  if (existing) {
-    throw new Error(`This ${identityName} is already in use`);
+  const existingUsername = await User.findOne({ username });
+
+  if (existingUsername) {
+    throw new Error('This username is already in use');
   }
 
   const user = new User({
-    [identityName]: identity,
+    email,
+    username,
     password: await bcrypt.hash(password, 10)
   });
 
@@ -21,17 +25,17 @@ async function register(identity, password) {
   return user;
 }
 
-async function login(identity, password) {
-    const user = await User.findOne({[identityName]: identity});
+async function login(email, password) {
+    const user = await User.findOne({ email });
 
     if (!user) {
-        throw new Error(`Incorrect ${identityName} or password`);
+        throw new Error('Incorrect email or password');
     }
 
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
-        throw new Error(`Incorrect ${identityName} or password`);
+        throw new Error('Incorrect email or password');
     }
 
     return user;

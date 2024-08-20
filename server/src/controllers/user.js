@@ -22,8 +22,8 @@ userRouter.post('/login',
     res.json({
       userId: result._id,
       email: result.email,
-      accessToken,
-      userCart: result.cart
+      username: result.username,
+      accessToken
     });
   } catch (err) {
       res.status(403).json({ code: 403, message: 'Incorrect email or password' });
@@ -33,6 +33,7 @@ userRouter.post('/login',
 userRouter.post('/register', 
   isGuest(),
   body('email').trim().isEmail().withMessage('Please enter valid email'),
+  body('username').trim().notEmpty().withMessage('Username is required'),
   body('password').trim().isLength({ min: 3 }).withMessage('Password must be at least 3 characters'),
   async (req, res) => {
   try {
@@ -42,13 +43,13 @@ userRouter.post('/register',
       throw validation.errors;
     }
 
-    const result = await register(req.body.email, req.body.password);
+    const result = await register(req.body.email, req.body.username, req.body.password);
     const accessToken = createToken(result);
     res.json({
       userId: result._id,
       email: result.email,
-      accessToken,
-      userCart: result.cart
+      username: result.username,
+      accessToken
     });
   
   } catch (err) {
