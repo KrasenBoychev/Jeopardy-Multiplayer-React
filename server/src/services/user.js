@@ -41,12 +41,7 @@ async function login(email, password) {
     return user;
 }
 
-// async function getByUsername(usernameProvided) {
-//   return User.find({ username: usernameProvided }).lean();
-// }
-
 module.exports = {
     register,
-    login,
-    //getByUsername
+    login
 };
