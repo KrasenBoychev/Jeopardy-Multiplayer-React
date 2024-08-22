@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
-import { useChatContext } from "stream-chat-react";
+import { Channel, useChatContext } from "stream-chat-react";
+
+import { useAuthContext } from "../../../contexts/AuthContext";
 
 import Game from "../game/Game";
 
@@ -8,26 +11,40 @@ export default function JoinGame() {
   const [rivalUsername, setRivalUsername] = useState("");
   const [channel, setChannel] = useState(null);
   const { client } = useChatContext();
-  
+  const { username } = useAuthContext();
+
   const createChannel = async () => {
-    const response = await client.queryUsers({ name: { $eq: rivalUsername } });
+    try {
+      const rivalPlayer = await client.queryUsers({
+        name: { $eq: rivalUsername },
+      });
 
-    if (response.users.length === 0) {
-      alert("User not found");
-      return;
+      if (rivalPlayer.users[0].name === username) {
+        toast.error("Rival name can not be the same as your username");
+        return;
+      }
+
+      if (rivalPlayer.users.length === 0) {
+        alert(`${rivalUsername} not found`);
+        return;
+      }
+      
+      const newChannel = client.channel("messaging", {
+        members: [client.userID, rivalPlayer.users[0].id],
+      });
+
+      await newChannel.watch();
+      setChannel(newChannel);
+    } catch (error) {
+      return toast.error(error.message);
     }
-
-    const newChannel = await client.channel("messaging", {
-      members: [client.userID, response.users[0].id],
-    });
-
-    await newChannel.watch();
-    setChannel(newChannel);
   };
   return (
     <>
       {channel ? (
-        <Game channel={channel} setChannel={setChannel} />
+        <Channel channel={channel}>
+          <Game channel={channel} />
+        </Channel>
       ) : (
         <div className="joinGame">
           <h4>Create Game</h4>
