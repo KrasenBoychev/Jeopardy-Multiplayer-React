@@ -23,7 +23,7 @@ import Play from "./components/game/Play";
 function App() {
   const [isAuth, setIsAuth] = useState(false);
 
-  const api_key = "juudbb2ng7uh";
+  const api_key = "tswxm74zz6uc";
   const client = StreamChat.getInstance(api_key);
 
   return (
