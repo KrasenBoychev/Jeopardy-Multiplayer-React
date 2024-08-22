@@ -19,6 +19,7 @@
     "mongodb": "^6.8.0",
     "mongoose": "^8.4.4",
     "stream-chat": "^8.38.0",
-    "stream-chat-react": "^11.23.6"
+    "stream-chat-react": "^11.23.6",
+    "uuid": "^10.0.0"
   }
 }
