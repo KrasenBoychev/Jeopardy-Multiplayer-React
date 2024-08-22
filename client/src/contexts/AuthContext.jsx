@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext } from 'react';
 
 import usePersistedState from '../hooks/usePersistedState';
 
@@ -10,7 +10,6 @@ export const AuthContext = createContext({
   email: '',
   username: '',
   accessToken: '',
-  gameToken: '',
   isAuthenticated: false,
   userCart: [],
   changeAuthState: (authState = {}) => null,
@@ -33,7 +32,6 @@ export function AuthContextProvider(props) {
     email: authState?.email,
     username: authState?.username,
     accessToken: authState?.accessToken,
-    gameToken: authState?.gameToken,
     isAuthenticated: !!authState?.email,
     userCart: authState?.userCart,
     changeAuthState,
