@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-import { login, logout, register } from '../../api/requester';
+import { login, logout, register } from "../../api/requester";
 
-import { useAuthContext } from '../contexts/AuthContext';
+import { useAuthContext } from "../contexts/AuthContext";
 
 export const useLogin = () => {
   const { changeAuthState } = useAuthContext();
@@ -21,7 +21,11 @@ export const useRegister = () => {
   const { changeAuthState } = useAuthContext();
 
   const registerHandler = async (email, username, password) => {
-    const { password: _, ...authData } = await register(email, username, password);
+    const { password: _, ...authData } = await register(
+      email,
+      username,
+      password
+    );
 
     changeAuthState(authData);
 

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import './home.css';
 
 export default function Home() {
@@ -21,7 +23,11 @@ export default function Home() {
             </div>
 
             <div className='play-button'>
-                <button>Play</button>
+                <button>
+                    <Link to='/play'>
+                        Play
+                    </Link>
+                </button>
             </div>
         </main>
     );
