@@ -19,14 +19,13 @@ export default function LeaveGame(props) {
   }, [leave]);
 
   const leavePage = async () => {
-    setLeave(true);
-
     if (channel) {
-        await channel.stopWatching();
-        setChannel(null);
+      await channel.stopWatching();
+      setChannel(null);
     }
 
     client.disconnectUser();
+    setLeave(true);
     naigate("/");
   };
 
