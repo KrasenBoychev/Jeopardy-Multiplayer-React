@@ -1,13 +1,13 @@
-
-
 import { Chat } from "stream-chat-react";
 
-import JoinGame from "./joinGame/JoinGame";
 import { useAuthContext } from "../../contexts/AuthContext";
 import usePlay from "../../hooks/usePlay";
 
-export default function Play({ props }) {
-  const { isAuth, setIsAuth, client } = props;
+import JoinGame from "./joinGame/JoinGame";
+
+export default function Play(props) {
+  const { isAuth, setIsAuth } = props.auth;
+  const client = props.client;
 
   const { username } = useAuthContext();
 
@@ -17,7 +17,7 @@ export default function Play({ props }) {
     <>
       {isAuth && (
         <Chat client={client}>
-          <JoinGame />
+          <JoinGame channel={props.channel} />
         </Chat>
       )}
     </>
