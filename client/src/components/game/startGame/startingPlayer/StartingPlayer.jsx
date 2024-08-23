@@ -1,6 +1,7 @@
 import { useState } from "react";
 import useStartingPlayer from "../../../../hooks/useStartingPlayer";
-import toast from "react-hot-toast";
+
+import VisualizePlayer from "../visualizePlayer/VisualizePlayer";
 
 export default function StartingPlayer({ channel }) {
   const [counter, startingPlayer] = useStartingPlayer(channel);
@@ -21,7 +22,7 @@ export default function StartingPlayer({ channel }) {
   return (
     <div className="gameContainer">
       {gameReady ? (
-        <p>{startingPlayer}</p>
+        <VisualizePlayer startingPlayer={startingPlayer}/>
       ) : !startingPlayer && noGame ? (
         <p>No game created</p>
       ) : (
