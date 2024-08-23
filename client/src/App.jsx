@@ -22,6 +22,7 @@ import Play from "./components/game/Play";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
+  const [channel, setChannel] = useState(null);
 
   const api_key = "tswxm74zz6uc";
   const client = StreamChat.getInstance(api_key);
@@ -31,7 +32,11 @@ function App() {
       <Toaster />
 
       <AuthContextProvider>
-        <Header props={{ isAuth, setIsAuth, client }} />
+        <Header
+          auth={{ isAuth, setIsAuth }}
+          channel={{ channel, setChannel }}
+          client={client}
+        />
 
         <Routes>
           <Route path="/" element={<Home />} />
@@ -44,12 +49,9 @@ function App() {
           <Route element={<PrivateGuard />}>
             <Route
               path="/play"
-              element={<Play props={{ isAuth, setIsAuth, client }} />}
+              element={<Play auth={{ isAuth, setIsAuth }} channel={{channel, setChannel}} client={client} />}
             />
-            <Route
-              path="/logout"
-              element={<Logout client={ client } />}
-            />
+            <Route path="/logout" element={<Logout client={client} />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />
