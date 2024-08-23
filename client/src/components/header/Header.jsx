@@ -4,7 +4,7 @@ import { useAuthContext } from "../../contexts/AuthContext";
 
 import "./header.css";
 
-import LeavePage from "../leavePage/LeavePage";
+import LeaveGame from "../leaveGame/LeaveGame";
 
 export default function Header(props) {
   const { isAuthenticated, username } = useAuthContext();
@@ -20,7 +20,7 @@ export default function Header(props) {
       </ul>
 
       {isAuth ? (
-        <LeavePage
+        <LeaveGame
           auth={{ isAuth, setIsAuth }}
           channel={props.channel}
           client={client}
