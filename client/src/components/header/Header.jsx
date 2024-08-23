@@ -6,10 +6,11 @@ import "./header.css";
 
 import LeavePage from "../leavePage/LeavePage";
 
-export default function Header({ props }) {
+export default function Header(props) {
   const { isAuthenticated, username } = useAuthContext();
 
-  const { isAuth, setIsAuth, client } = props;
+  const { isAuth, setIsAuth } = props.auth;
+  const client = props.client;
 
   return (
     <nav>
@@ -19,7 +20,11 @@ export default function Header({ props }) {
       </ul>
 
       {isAuth ? (
-        <LeavePage props={{ isAuth, setIsAuth, client }} />
+        <LeavePage
+          auth={{ isAuth, setIsAuth }}
+          channel={props.channel}
+          client={client}
+        />
       ) : (
         <>
           <ul className="points">
@@ -37,6 +42,9 @@ export default function Header({ props }) {
             </li>
             <li>
               <NavLink to="/about">About</NavLink>
+            </li>
+            <li>
+              <NavLink to="/play">Play</NavLink>
             </li>
             {isAuthenticated ? (
               <li>
