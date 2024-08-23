@@ -5,11 +5,11 @@ import { Channel, useChatContext } from "stream-chat-react";
 
 import { useAuthContext } from "../../../contexts/AuthContext";
 
-import Game from "../game/Game";
+import ConnectPlayers from "../startGame/connectPlayers/ConnectPlayers";
 
-export default function JoinGame() {
+export default function JoinGame(props) {
   const [rivalUsername, setRivalUsername] = useState("");
-  const [channel, setChannel] = useState(null);
+  const { channel, setChannel } = props.channel;
   const { client } = useChatContext();
   const { username } = useAuthContext();
 
@@ -19,16 +19,16 @@ export default function JoinGame() {
         name: { $eq: rivalUsername },
       });
 
-      if (rivalPlayer.users[0].name === username) {
-        toast.error("Rival name can not be the same as your username");
+      if (rivalPlayer.users.length === 0) {
+        toast.error("Rival player not found");
         return;
       }
 
-      if (rivalPlayer.users.length === 0) {
-        alert(`${rivalUsername} not found`);
+      if (rivalPlayer.users[0].name === username) {
+        toast.error("Rival player can not be you");
         return;
       }
-      
+
       const newChannel = client.channel("messaging", {
         members: [client.userID, rivalPlayer.users[0].id],
       });
@@ -42,8 +42,8 @@ export default function JoinGame() {
   return (
     <>
       {channel ? (
-        <Channel channel={channel}>
-          <Game channel={channel} />
+        <Channel channel={channel} setChannel={setChannel}>
+          <ConnectPlayers channel={channel} />
         </Channel>
       ) : (
         <div className="joinGame">
