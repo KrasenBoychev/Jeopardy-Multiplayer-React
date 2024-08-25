@@ -4,14 +4,14 @@ import useStartingPlayer from "../../../../hooks/useStartingPlayer";
 import VisualizePlayer from "../visualizePlayer/VisualizePlayer";
 
 export default function StartingPlayer({ channel }) {
-  const [counter, startingPlayer] = useStartingPlayer(channel);
+  const [counter, firstPlayer, secondPlayer] = useStartingPlayer(channel);
 
   const [noGame, setNoGame] = useState(false);
   const [gameReady, setGameReady] = useState(false);
 
   if (counter == 1) {
     setTimeout(() => {
-      if (startingPlayer) {
+      if (firstPlayer) {
         setGameReady(true);
       } else {
         setNoGame(true);
@@ -22,8 +22,8 @@ export default function StartingPlayer({ channel }) {
   return (
     <div className="gameContainer">
       {gameReady ? (
-        <VisualizePlayer startingPlayer={startingPlayer}/>
-      ) : !startingPlayer && noGame ? (
+        <VisualizePlayer players={{ firstPlayer, secondPlayer }} />
+      ) : !firstPlayer && noGame ? (
         <p>No game created</p>
       ) : (
         <p>{counter}</p>
