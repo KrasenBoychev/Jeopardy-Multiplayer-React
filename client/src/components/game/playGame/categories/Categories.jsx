@@ -23,6 +23,7 @@ export default function Categories({ props }) {
     allCategories,
     setAllCategories,
     categoriesInfo,
+    defaultOption,
   ] = useCategories();
 
   const chosenOption = async (e) => {
@@ -76,8 +77,18 @@ export default function Categories({ props }) {
         <ChooseQuestion />
       ) : (
         <div className="gameContainer">
-          <p>{activePlayer} chooses category</p>
-          <div className={"categories-container"}>
+          <p
+            className={
+              client.user.name === activePlayer && currCategoryCount < 4
+                ? "activeCat player-categories"
+                : "inactiveCat player-categories"
+            }
+          >
+            {currCategoryCount < 4
+              ? `${activePlayer} chooses category`
+              : "Loading Questions..."}
+          </p>
+          <div className="categories-container">
             {Object.entries(categoriesInfo).map((categoryInfo) => {
               return (
                 <CategoryModel
@@ -90,6 +101,7 @@ export default function Categories({ props }) {
                     selectQuestion,
                     client,
                     activePlayer,
+                    defaultOption,
                   }}
                 />
               );
