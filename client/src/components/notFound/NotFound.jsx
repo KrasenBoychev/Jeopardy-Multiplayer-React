@@ -1,7 +1,9 @@
-import './notFound.css';
+import "./notFound.css";
 
 export default function NotFound() {
   return (
-    <p className='not-found'>Page not found</p>
+    <div className="not-found-wrapper">
+      <p className="not-found">Page not found</p>
+    </div>
   );
 }
