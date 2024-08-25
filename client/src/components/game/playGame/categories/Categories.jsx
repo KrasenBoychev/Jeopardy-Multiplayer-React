@@ -74,7 +74,7 @@ export default function Categories({ props }) {
   return (
     <>
       {moveToNextPage ? (
-        <ChooseQuestion />
+        <ChooseQuestion props={{ categoriesInfo, activePlayer, setActivePlayer, firstPlayer, secondPlayer }}/>
       ) : (
         <div className="gameContainer">
           <p
