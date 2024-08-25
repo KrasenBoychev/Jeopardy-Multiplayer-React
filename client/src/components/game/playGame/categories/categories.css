@@ -1,0 +1,14 @@
+.activeCat {
+    background-color: green;
+}
+
+.inactiveCat {
+    background-color: red;
+}
+
+.no-access {
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    background-color: aqua;
+}
