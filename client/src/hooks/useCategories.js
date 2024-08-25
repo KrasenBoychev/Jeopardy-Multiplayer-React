@@ -42,7 +42,7 @@ export default function useCategories() {
       if (currCategoryCount == 4) {
         setTimeout(() => {
           setMoveToNextPage(true);
-        }, 1000);
+        }, 2000);
       }
     })();
   }, [currCategoryCount]);
@@ -54,5 +54,6 @@ export default function useCategories() {
     allCategories,
     setAllCategories,
     categoriesInfo,
+    defaultOption
   ];
 }
