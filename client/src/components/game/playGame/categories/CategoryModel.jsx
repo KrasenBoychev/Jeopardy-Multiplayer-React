@@ -7,12 +7,17 @@ export default function CategoryModel({ props }) {
     selectQuestion,
     client,
     activePlayer,
+    defaultOption,
   } = props;
 
   return (
     <div
       className={
-        currCategoryCount == categoryInfo[0] ? "activeCat" : "inactiveCat"
+        currCategoryCount > categoryInfo[0]
+          ? "chosen-category category-model"
+          : currCategoryCount == categoryInfo[0]
+          ? "activeCat category-model"
+          : "inactiveCat category-model"
       }
     >
       {currCategoryCount == categoryInfo[0] ? (
@@ -20,6 +25,7 @@ export default function CategoryModel({ props }) {
           <select
             name="categoryA"
             id="categoryA"
+            disabled={client.user.name === activePlayer ? false : true}
             value={categoryInfo[1].category}
             onChange={chosenOption}
           >
@@ -29,7 +35,17 @@ export default function CategoryModel({ props }) {
               </option>
             ))}
           </select>
-          <button disabled={client.user.name === activePlayer ? false : true} onClick={selectQuestion}>Ready</button>
+          <button
+            disabled={
+              client.user.name === activePlayer &&
+              categoryInfo[1].category !== defaultOption
+                ? false
+                : true
+            }
+            onClick={selectQuestion}
+          >
+            Ready
+          </button>
         </>
       ) : (
         <p>{categoryInfo[1].category}</p>
