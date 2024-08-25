@@ -5,64 +5,89 @@ import { useAuthContext } from "../../contexts/AuthContext";
 import "./header.css";
 
 import LeaveGame from "../leaveGame/LeaveGame";
+import { useEffect, useState } from "react";
 
 export default function Header(props) {
   const { isAuthenticated, username } = useAuthContext();
+ // const [error, setError] = useState(false);
 
   const { isAuth, setIsAuth } = props.auth;
   const client = props.client;
 
+  // useEffect(() => {
+  //   (function checkConnection() {
+  //     if (props.channel.channel && props.channel.channel.state.watcher_count < 2) {
+  //       setError(true);
+  //     }
+  //   })();
+  // }, [props.channel.channel]);
+
   return (
-    <nav>
-      <ul className="logo">
-        <li>Logo</li>
-        <li>Welcome, {isAuthenticated ? username : "guest"}</li>
-      </ul>
+    <header>
+      <nav>
+        <ul className="logo">
+          <li>Logo</li>
+          <li>Welcome, {isAuthenticated ? username : "guest"}</li>
+        </ul>
 
-      {isAuth ? (
-        <LeaveGame
-          auth={{ isAuth, setIsAuth }}
-          channel={props.channel}
-          client={client}
-        />
-      ) : (
-        <>
-          <ul className="points">
-            {isAuthenticated && (
-              <>
-                <li>Points won today: e.g. 1000</li>
-                <li>My Rating: e.g. 8.5</li>
-              </>
-            )}
-          </ul>
-
+        {isAuth ? (
           <ul className="profile">
+            {/* {props.channel.channel &&
+              props.channel.channel.state.watcher_count ===
+                2 && (
+                  <li className={error ? "disconnected" : "connected"}>
+                    Rival Player:
+                    {error ? " disconnected" : " connected"}
+                  </li>
+                )} */}
             <li>
-              <NavLink to="/">Home</NavLink>
+              <LeaveGame
+                auth={{ isAuth, setIsAuth }}
+                channel={props.channel}
+                client={client}
+                // setError={setError}
+              />
             </li>
-            <li>
-              <NavLink to="/about">About</NavLink>
-            </li>
-            <li>
-              <NavLink to="/play">Play</NavLink>
-            </li>
-            {isAuthenticated ? (
-              <li>
-                <NavLink to="/logout">Logout</NavLink>
-              </li>
-            ) : (
-              <>
-                <li>
-                  <NavLink to="/login">Login</NavLink>
-                </li>
-                <li>
-                  <NavLink to="/register">Register</NavLink>
-                </li>
-              </>
-            )}
           </ul>
-        </>
-      )}
-    </nav>
+        ) : (
+          <>
+            <ul className="points">
+              {isAuthenticated && (
+                <>
+                  <li>Points won today: e.g. 1000</li>
+                  <li>My Rating: e.g. 8.5</li>
+                </>
+              )}
+            </ul>
+
+            <ul className="profile">
+              <li>
+                <NavLink to="/">Home</NavLink>
+              </li>
+              <li>
+                <NavLink to="/about">About</NavLink>
+              </li>
+              <li>
+                <NavLink to="/play">Play</NavLink>
+              </li>
+              {isAuthenticated ? (
+                <li>
+                  <NavLink to="/logout">Logout</NavLink>
+                </li>
+              ) : (
+                <>
+                  <li>
+                    <NavLink to="/login">Login</NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/register">Register</NavLink>
+                  </li>
+                </>
+              )}
+            </ul>
+          </>
+        )}
+      </nav>
+    </header>
   );
 }

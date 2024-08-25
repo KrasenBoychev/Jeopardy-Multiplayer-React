@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 export default function LeaveGame(props) {
@@ -20,6 +19,11 @@ export default function LeaveGame(props) {
 
   const leavePage = async () => {
     if (channel) {
+      // await channel.sendEvent({
+      //   type: "set-error",
+      //   data: { props },
+      // });
+
       await channel.stopWatching();
       setChannel(null);
     }
@@ -29,5 +33,28 @@ export default function LeaveGame(props) {
     naigate("/");
   };
 
-  return <button onClick={leavePage}>LeavePage</button>;
+  // if (channel) {
+  //   channel.on(async (event) => {
+  //     if (event.type == "set-error") {
+  //       await channel.stopWatching();
+  //       setChannel(null);
+
+  //       client.disconnectUser();
+  //       setLeave(true);
+  //       naigate("/");
+  //     }
+  //   });
+  // }
+
+  return (
+    <>
+      <button onClick={leavePage}>LeavePage</button>
+      {/* {channel && (
+        <p color={channel.state.wather_count == 2 ? "green" : "red"}>
+          Rival Player: 
+          {channel.state.watcher_count == 2 ? " connected" : " disconnected"}
+        </p>
+      )} */}
+    </>
+  );
 }
