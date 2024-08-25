@@ -10,6 +10,7 @@ import { AuthContextProvider } from "./contexts/AuthContext";
 
 import PrivateGuard from "./common/PrivateGuard";
 import PublicGuard from "./common/PublicGuard";
+import AdminGuard from "./common/AdminGuard";
 
 import Home from "./components/home/Home";
 import Header from "./components/header/Header";
@@ -19,6 +20,7 @@ import Register from "./components/authentication/Register";
 import Logout from "./components/authentication/Logout";
 import NotFound from "./components/notFound/NotFound";
 import Play from "./components/game/Play";
+import Create from "./components/create/Create";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -49,9 +51,19 @@ function App() {
           <Route element={<PrivateGuard />}>
             <Route
               path="/play"
-              element={<Play auth={{ isAuth, setIsAuth }} channel={{channel, setChannel}} client={client} />}
+              element={
+                <Play
+                  auth={{ isAuth, setIsAuth }}
+                  channel={{ channel, setChannel }}
+                  client={client}
+                />
+              }
             />
             <Route path="/logout" element={<Logout client={client} />} />
+          </Route>
+
+          <Route element={<AdminGuard />}>
+            <Route path="/create" element={<Create />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />
