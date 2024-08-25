@@ -1,0 +1,26 @@
+.create-section div {
+    width: 30%;
+    height: 200px;
+    float: left;
+    margin: 60px 10%;
+    font-size: x-large;
+    font-weight: bold;
+    text-transform: uppercase;
+    background-color: #C0C78C;
+    border-radius: 10px;
+}
+
+.create-section div:hover {
+    cursor: pointer;
+    background-color: yellowgreen;
+    color: white;
+}
+
+.create-section > div:first-child  p {
+    margin: 60px auto;
+}
+
+.create-section > div:last-child p {
+    margin: 80px auto;
+}
+
