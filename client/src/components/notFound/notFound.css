@@ -1,3 +1,7 @@
+.not-found-wrapper {
+    margin: 12% auto;
+}
+
 .not-found {
     font-size: 50px;
     font-weight: bold;

@@ -1,7 +1,16 @@
-nav {
-    margin: 0;
-    padding: 20px 40px;
+header {
+    height: 70px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: center;
     background-color: #B99470;
+}
+
+nav {
+    width: 100%;
+    margin: 0 auto 60px auto;
+    padding: 5px 0;
+    text-align: center;
 }
 
 nav ul {
@@ -11,14 +20,24 @@ nav ul {
 
 nav li {
     display: inline-block;
-    margin: 0 10px;
+    margin: 0 15px;
 }
 
 .logo {
     float: left;
+    margin-left: 20px;
 }
 
 
 .profile {
     float: right;
+    margin-right: 20px;
+}
+
+.connected {
+    color: greenyellow;
+}
+
+.disconnected {
+    color: red;
 }
