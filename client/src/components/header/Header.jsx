@@ -1,15 +1,15 @@
 import { NavLink } from "react-router-dom";
 
 import { useAuthContext } from "../../contexts/AuthContext";
+import { adminId } from "../../common/credentials.js";
 
 import "./header.css";
 
 import LeaveGame from "../leaveGame/LeaveGame";
-import { useEffect, useState } from "react";
+
 
 export default function Header(props) {
-  const { isAuthenticated, username } = useAuthContext();
- // const [error, setError] = useState(false);
+  const { isAuthenticated, username, userId } = useAuthContext();
 
   const { isAuth, setIsAuth } = props.auth;
   const client = props.client;
@@ -32,14 +32,12 @@ export default function Header(props) {
 
         {isAuth ? (
           <ul className="profile">
-            {/* {props.channel.channel &&
-              props.channel.channel.state.watcher_count ===
-                2 && (
-                  <li className={error ? "disconnected" : "connected"}>
-                    Rival Player:
-                    {error ? " disconnected" : " connected"}
-                  </li>
-                )} */}
+            {/* {props.channel.channel && (
+              <li className={error ? "disconnected" : "connected"}>
+                Rival Player:
+                {error ? " disconnected" : " connected"}
+              </li>
+            )} */}
             <li>
               <LeaveGame
                 auth={{ isAuth, setIsAuth }}
@@ -70,6 +68,11 @@ export default function Header(props) {
               <li>
                 <NavLink to="/play">Play</NavLink>
               </li>
+              {userId == adminId && (
+                <li>
+                  <NavLink to="/create">Create</NavLink>
+                </li>
+              )}
               {isAuthenticated ? (
                 <li>
                   <NavLink to="/logout">Logout</NavLink>
