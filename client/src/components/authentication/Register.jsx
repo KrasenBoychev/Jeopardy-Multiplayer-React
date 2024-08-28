@@ -1,9 +1,9 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { toast } from 'react-hot-toast';
+import { toast } from "react-hot-toast";
 import "./authentication.css";
 
-import { useRegister } from '../../hooks/useAuth';
+import { useRegister } from "../../hooks/useAuth";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -40,10 +40,10 @@ export default function Register() {
           onSubmit={async (values) => {
             try {
               await register(values.email, values.username, values.password);
-              
-              navigate('/');
+
+              navigate("/");
             } catch (error) {
-               return toast.error(error.message);
+              return toast.error(error.message);
             }
           }}
         >
@@ -60,7 +60,7 @@ export default function Register() {
                 component="div"
                 className="authentication-error"
               />
-               <Field
+              <Field
                 type="text"
                 name="username"
                 placeholder="Username"
@@ -93,7 +93,11 @@ export default function Register() {
                 component="div"
                 className="authentication-error"
               />
-              <button type="submit" disabled={isSubmitting}>
+              <button
+                type="submit"
+                className="authentication-form-button"
+                disabled={isSubmitting}
+              >
                 Register
               </button>
             </Form>

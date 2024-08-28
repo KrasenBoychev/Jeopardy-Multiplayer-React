@@ -1,10 +1,10 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { toast } from 'react-hot-toast';
+import { toast } from "react-hot-toast";
 
 import "./authentication.css";
 
-import { useLogin } from '../../hooks/useAuth';
+import { useLogin } from "../../hooks/useAuth";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -34,10 +34,10 @@ export default function Login() {
         onSubmit={async (values) => {
           try {
             await login(values.email, values.password);
-            
-            navigate('/');
+
+            navigate("/");
           } catch (error) {
-             return toast.error(error.message);
+            return toast.error(error.message);
           }
         }}
       >
@@ -65,7 +65,11 @@ export default function Login() {
               component="div"
               className="authentication-error"
             />
-            <button type="submit" disabled={isSubmitting}>
+            <button
+              type="submit"
+              className="authentication-form-button"
+              disabled={isSubmitting}
+            >
               Login
             </button>
           </Form>
