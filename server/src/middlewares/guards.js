@@ -1,3 +1,5 @@
+const { adminId } = require('../api-keys');
+
 function isUser() {
     return function(req, res, next) {
         if (!req.user) {
@@ -18,7 +20,18 @@ function isGuest() {
     };
 }
 
+function isAdmin() {
+    return function(req, res, next) {
+        if (req.user && req.user._id == adminId) {
+            next();
+        } else {
+            res.redirect('/');
+        }
+    };
+}
+
 module.exports = {
     isUser,
-    isGuest
+    isGuest,
+    isAdmin
 };
