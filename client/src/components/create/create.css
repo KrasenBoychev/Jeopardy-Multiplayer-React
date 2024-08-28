@@ -16,11 +16,51 @@
     color: white;
 }
 
-.create-section > div:first-child  p {
+.create-section>div:first-child p {
     margin: 60px auto;
 }
 
-.create-section > div:last-child p {
+.create-section>div:last-child p {
     margin: 80px auto;
 }
 
+.create-questions-paragraph {
+    font-weight: bold;
+}
+
+.create-question-div {
+    padding-bottom: 80px;
+}
+
+.create-question-wrapper {
+    width: 524px;
+    margin: 15px auto;
+    text-align: left;
+    cursor: pointer;
+}
+
+.create-question-input {
+    width: 445px;
+    margin-right: 5px;
+    padding: 10px;
+    font-size: 18px;
+}
+
+
+.create-question-button {
+    padding-top: 4px;
+    width: 50px;
+    height: 44px;
+}
+
+.category-select {
+    width: 524px;
+    text-align: center;
+}
+
+.textarea-question {
+    min-width: 500px;
+    max-width: 500px;
+    min-height: 50px;
+    max-height: 150px;
+}
