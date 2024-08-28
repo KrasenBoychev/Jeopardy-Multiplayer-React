@@ -9,22 +9,22 @@ const QuestionSchema = new Schema({
     answers: {
         answerOne: {
             type: String,
-            correct: Boolean,
             required: true
         },
         answerTwo: {
             type: String,
-            correct: Boolean,
             required: true
         },
         answerThree: {
             type: String,
-            correct: Boolean,
             required: true
         },
         answerFour: {
             type: String,
-            correct: Boolean,
+            required: true
+        },
+        correctAnswer: {
+            type: Number,
             required: true
         }
     },
