@@ -18,9 +18,11 @@ import Footer from "./components/footer/Footer";
 import Login from "./components/authentication/Login";
 import Register from "./components/authentication/Register";
 import Logout from "./components/authentication/Logout";
-import NotFound from "./components/notFound/NotFound";
 import Play from "./components/game/Play";
 import Create from "./components/create/Create";
+import CreateCategory from "./components/create/CreateCategory";
+import CreateQuestion from "./components/create/createQuestion/CreateQuestion";
+import NotFound from "./components/notFound/NotFound";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -64,6 +66,8 @@ function App() {
 
           <Route element={<AdminGuard />}>
             <Route path="/create" element={<Create />} />
+            <Route path="/createCategory" element={<CreateCategory />} />
+            <Route path="/createQuestion" element={<CreateQuestion />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />
