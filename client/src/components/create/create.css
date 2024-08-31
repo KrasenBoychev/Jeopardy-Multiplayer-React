@@ -51,11 +51,36 @@
     padding-top: 4px;
     width: 50px;
     height: 44px;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+}
+
+.true {
+    background-color: green;
+}
+
+.false {
+    background-color: red;
+}
+
+.create-question-button:hover {
+    cursor: pointer;
 }
 
 .category-select {
     width: 524px;
     text-align: center;
+}
+
+.category-span {
+    width: 502px;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #000;
+    border-radius: 2px;
 }
 
 .textarea-question {

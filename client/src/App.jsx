@@ -20,7 +20,7 @@ import Register from "./components/authentication/Register";
 import Logout from "./components/authentication/Logout";
 import Play from "./components/game/Play";
 import Create from "./components/create/Create";
-import CreateCategory from "./components/create/CreateCategory";
+import CreateCategory from "./components/create/createCategory/CreateCategory";
 import CreateQuestion from "./components/create/createQuestion/CreateQuestion";
 import NotFound from "./components/notFound/NotFound";
 
