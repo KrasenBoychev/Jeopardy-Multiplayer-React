@@ -4,9 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
 import { createQuestion } from "../../../../api/create-api";
-import TextareaField from "./chunks/TextareaField";
 
-export default function CreateQuestion() {
+export default function CreateQuestion({
+  category,
+  question,
+  setQuestion,
+  move,
+}) {
   const [answersCorrectValues, setAnswersCorrectValues] = useState([
     "false",
     "false",
@@ -53,30 +57,43 @@ export default function CreateQuestion() {
           return errors;
         }}
         onSubmit={async (values) => {
-          try {
-            await createQuestion(values);
-          } catch (error) {
-            return toast.error(error.message);
+          if (move) {
+            move((oldValue) => oldValue + 1);
+          } else {
+
+            try {
+              await createQuestion(values);
+            } catch (error) {
+              return toast.error(error.message);
+            }
           }
         }}
       >
         {({ isSubmitting }) => (
           <Form className="authentication-form">
-            <Field
-              as="select"
-              name="category"
-              className="authentication-input category-select"
-            >
-              <option value="chooseCategory">--- Choose Category ---</option>
-              <option value="red">Red</option>
-              <option value="green">Green</option>
-              <option value="blue">Blue</option>
-            </Field>
-            <ErrorMessage
-              name="category"
-              component="div"
-              className="authentication-error"
-            />
+            {move ? (
+              <div className="authentication-input category-span">{category}</div>
+            ) : (
+              <>
+                <Field
+                  as="select"
+                  name="category"
+                  className="authentication-input category-select"
+                >
+                  <option value="chooseCategory">
+                    --- Choose Category ---
+                  </option>
+                  <option value="red">Red</option>
+                  <option value="green">Green</option>
+                  <option value="blue">Blue</option>
+                </Field>
+                <ErrorMessage
+                  name="category"
+                  component="div"
+                  className="authentication-error"
+                />
+              </>
+            )}
 
             <Field
               as="select"
@@ -96,15 +113,16 @@ export default function CreateQuestion() {
             />
 
             <Field
+              as="textarea"
               name="name"
-              as={TextareaField}
+              placeholder="Name"
+              className="authentication-input textarea-question"
             />
             <ErrorMessage
               name="name"
               component="div"
               className="authentication-error"
             />
-
             <p className="create-questions-paragraph">
               Choose the correct answer by clicking the button next to it
             </p>
@@ -119,7 +137,11 @@ export default function CreateQuestion() {
               <button
                 type="button"
                 id="correct-0"
-                className="create-question-button"
+                className={
+                  answersCorrectValues[0] == "true"
+                    ? "create-question-button true"
+                    : "create-question-button false"
+                }
                 onClick={changeCorrectAnswer}
               >
                 {answersCorrectValues[0]}
@@ -141,7 +163,11 @@ export default function CreateQuestion() {
               <button
                 type="button"
                 id="correct-1"
-                className="create-question-button"
+                className={
+                  answersCorrectValues[1] == "true"
+                    ? "create-question-button true"
+                    : "create-question-button false"
+                }
                 onClick={changeCorrectAnswer}
               >
                 {answersCorrectValues[1]}
@@ -163,7 +189,11 @@ export default function CreateQuestion() {
               <button
                 type="button"
                 id="correct-2"
-                className="create-question-button"
+                className={
+                  answersCorrectValues[2] == "true"
+                    ? "create-question-button true"
+                    : "create-question-button false"
+                }
                 onClick={changeCorrectAnswer}
               >
                 {answersCorrectValues[2]}
@@ -185,7 +215,11 @@ export default function CreateQuestion() {
               <button
                 type="button"
                 id="correct-3"
-                className="create-question-button"
+                className={
+                  answersCorrectValues[3] == "true"
+                    ? "create-question-button true"
+                    : "create-question-button false"
+                }
                 onClick={changeCorrectAnswer}
               >
                 {answersCorrectValues[3]}
