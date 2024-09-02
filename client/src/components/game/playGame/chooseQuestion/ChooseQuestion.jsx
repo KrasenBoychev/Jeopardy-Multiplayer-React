@@ -2,6 +2,8 @@ import { useChatContext } from "stream-chat-react";
 
 import "./chooseQUestion.css";
 
+import { points } from "../../../../common/gamePoints";
+
 import QuestionModel from "./QuestionModel";
 
 export default function ChooseQuestion({ props }) {
@@ -14,8 +16,6 @@ export default function ChooseQuestion({ props }) {
   } = props;
 
   const { client } = useChatContext();
-
-  const points = [5, 10, 15, 20];
 
   return (
     <div className="gameContainer">
