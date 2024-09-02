@@ -3,6 +3,7 @@ const { body, validationResult } = require('express-validator');
 const { parseError } = require('../util');
 
 const { isAdmin } = require('../middlewares/guards');
+
 const {
   createCategoryService,
   createQuestionService,
@@ -32,7 +33,7 @@ createRouter.post(
 );
 
 createRouter.post(
-  '/question',
+  '/question/:categoryId',
   isAdmin(),
   body('name').trim().notEmpty().withMessage('Name is required'),
   body('answerOne').trim().notEmpty().withMessage('Answer One is required'),
@@ -57,7 +58,7 @@ createRouter.post(
         throw validation.errors;
       }
 
-      const result = await createQuestionService(req.body);
+      const result = await createQuestionService(req.body, req.params.categoryId);
       res.json(result);
     } catch (err) {
       const parsed = parseError(err);

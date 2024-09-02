@@ -22,7 +22,8 @@ async function createQuestionService(data, categoryId) {
         answerFour: data.answerFour,
         correctAnswer: data.correctAnswer
     },
-    points: data.points
+    points: data.points,
+    categoryId
   });
 
   await record.save();
@@ -32,5 +33,5 @@ async function createQuestionService(data, categoryId) {
 
 module.exports = {
   createCategoryService,
-  createQuestionService,
+  createQuestionService
 };
