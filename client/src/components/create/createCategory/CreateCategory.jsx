@@ -1,11 +1,16 @@
 import { useState } from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import toast from "react-hot-toast";
+
+import { createCategory, createQuestion } from "../../../../api/create-api";
+import { getCategory } from "../../../../api/game-api";
 
 import CreateQuestion from "../createQuestion/CreateQuestion";
 import Category from "./Category";
 
 export default function CreateCategory() {
   const [moveToNextPage, setMoveToNextPage] = useState(0);
+  const [recordCategoryAndQuestions, setRecordCategoryAndQuestions] =
+    useState(false);
 
   const [category, setCategory] = useState("");
   const [questionOne, setQuestionOne] = useState({});
@@ -13,8 +18,60 @@ export default function CreateCategory() {
   const [questionThree, setQuestionThree] = useState({});
   const [questionFour, setQuestionFour] = useState({});
 
-  const recordCategoryAndQuestions = () => {
+  if (recordCategoryAndQuestions) {
+    (async function record() {
+      try {
+        await createCategory(category);
+      } catch (error) {
+        toast.error(error.message);
+        return;
+      }
 
+      let createdCategory;
+      
+      try {
+        createdCategory = await getCategory(category);
+      } catch (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      try {
+        if (createCategory) {
+          await createQuestion(questionOne, createCategory.id);
+        }
+      } catch (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      try {
+        if (createCategory) {
+          await createQuestion(questionTwo, createCategory.id);
+        }
+      } catch (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      try {
+        if (createCategory) {
+          await createQuestion(questionThree, createCategory.id);
+        }
+      } catch (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      try {
+        if (createCategory) {
+          await createQuestion(questionFour, createCategory.id);
+        }
+      } catch (error) {
+        toast.error(error.message);
+        return;
+      }
+    })();
   }
 
   return (
@@ -25,38 +82,47 @@ export default function CreateCategory() {
 
       {moveToNextPage == 1 && (
         <CreateQuestion
-          category={category}
-          question={questionOne}
-          setQuestion={setQuestionOne}
-          move={setMoveToNextPage}
+          props={{
+            category,
+            setQuestion: setQuestionOne,
+            move: moveToNextPage,
+            setMove: setMoveToNextPage,
+          }}
         />
       )}
 
       {moveToNextPage == 2 && (
         <CreateQuestion
-          question={questionTwo}
-          setQuestion={setQuestionTwo}
-          move={setMoveToNextPage}
+          props={{
+            category,
+            setQuestion: setQuestionTwo,
+            move: moveToNextPage,
+            setMove: setMoveToNextPage,
+          }}
         />
       )}
 
       {moveToNextPage == 3 && (
         <CreateQuestion
-          question={questionThree}
-          setQuestion={setQuestionThree}
-          move={setMoveToNextPage}
+          props={{
+            category,
+            setQuestion: setQuestionThree,
+            move: moveToNextPage,
+            setMove: setMoveToNextPage,
+          }}
         />
       )}
 
       {moveToNextPage == 4 && (
         <CreateQuestion
-          question={questionFour}
-          setQuestion={setQuestionFour}
-          move={setMoveToNextPage}
+          props={{
+            category,
+            setQuestion: setQuestionFour,
+            move: moveToNextPage,
+            setMove: setMoveToNextPage,
+          }}
         />
       )}
-
-      {moveToNextPage == 5 && recordCategoryAndQuestions}
     </>
   );
 }
