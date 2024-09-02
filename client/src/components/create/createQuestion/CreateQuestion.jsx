@@ -4,19 +4,23 @@ import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
 import { createQuestion } from "../../../../api/create-api";
+import { points } from "../../../common/gamePoints";
 
-export default function CreateQuestion({
-  category,
-  question,
-  setQuestion,
-  move,
-}) {
+import { validateValues } from "./validationForm";
+
+export default function CreateQuestion({ props }) {
+  const { category, setQuestion, move, setMove } = props;
+
   const [answersCorrectValues, setAnswersCorrectValues] = useState([
     "false",
     "false",
     "false",
     "false",
   ]);
+
+  const [allCategories, setAllCategories] = useState([]);
+
+  
 
   const changeCorrectAnswer = (e) => {
     const clickedAnswer = Number(e.target.id.split("-")[1]);
@@ -47,22 +51,29 @@ export default function CreateQuestion({
         }}
         validate={(values) => {
           const errors = {};
-          if (!values.name) {
-            errors.name = "Name is required";
-          }
-          if (!values.answerOne) {
-            errors.answerOne = "Answer One is required";
-          }
+
+          validateValues(values, errors, category, allCategories, answersCorrectValues);
 
           return errors;
         }}
         onSubmit={async (values) => {
-          if (move) {
-            move((oldValue) => oldValue + 1);
-          } else {
+          setQuestion({
+            name: values.name,
+            points: values.points,
+            answers: {
+              answerOne: values.answerOne,
+              answerTwo: values.answerTwo,
+              answerThree: values.answerThree,
+              answerFour: values.answerFour,
+            },
+            correctAnswer: answersCorrectValues.indexOf("true"),
+          });
 
+          if (move) {
+            setMove((oldValue) => oldValue + 1);
+          } else {
             try {
-              await createQuestion(values);
+              //await createQuestion(values);
             } catch (error) {
               return toast.error(error.message);
             }
@@ -72,7 +83,9 @@ export default function CreateQuestion({
         {({ isSubmitting }) => (
           <Form className="authentication-form">
             {move ? (
-              <div className="authentication-input category-span">{category}</div>
+              <div className="authentication-input category-span">
+                {category}
+              </div>
             ) : (
               <>
                 <Field
@@ -101,10 +114,9 @@ export default function CreateQuestion({
               className="authentication-input category-select"
             >
               <option value="choosePoints">--- Choose Points ---</option>
-              <option value="five">5</option>
-              <option value="ten">10</option>
-              <option value="fifteen ">15</option>
-              <option value="twenty ">20</option>
+              {points.map(point => {
+                return <option key={point} value={point}>{point}</option>
+              })}
             </Field>
             <ErrorMessage
               name="points"
@@ -236,7 +248,12 @@ export default function CreateQuestion({
               className="authentication-form-button"
               disabled={isSubmitting}
             >
-              Next Page
+              {move 
+                ? move == 4 
+                  ? "Record Category and Questions"
+                  : "Next Question"
+                : "Record Question"
+              }
             </button>
           </Form>
         )}
