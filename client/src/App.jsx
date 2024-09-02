@@ -67,7 +67,14 @@ function App() {
           <Route element={<AdminGuard />}>
             <Route path="/create" element={<Create />} />
             <Route path="/createCategory" element={<CreateCategory />} />
-            <Route path="/createQuestion" element={<CreateQuestion />} />
+            <Route
+              path="/createQuestion"
+              element={
+                <CreateQuestion
+                  props={{ category: null, setQuestion: null, move: null, setMove: null }}
+                />
+              }
+            />
           </Route>
 
           <Route path="*" element={<NotFound />} />
