@@ -1,13 +1,7 @@
 import toast from "react-hot-toast";
 import { points } from "../../../common/gamePoints";
 
-export function validateValues(
-  values,
-  errors,
-  category,
-  allCategories,
-  answersCorrectValues
-) {
+export function validateValues(values, errors, category, allCategories) {
   if (!category) {
     if (
       !allCategories.includes(values.category) ||
@@ -43,11 +37,14 @@ export function validateValues(
   if (!values.answerFour) {
     errors.answerFour = "Answer Four is required";
   }
+}
+
+export function checkTrueAnswer(answersCorrectValues) {
+  let isTrue = true;
 
   if (!answersCorrectValues.includes("true")) {
-    errors.correctValues = false;
+    isTrue = false;
     toast.error("Choose correct answer");
-
   } else {
     let repeatedTrueValues = 0;
 
@@ -58,8 +55,10 @@ export function validateValues(
     }
 
     if (repeatedTrueValues > 1) {
-      errors.correctValues = false;
+      isTrue = false;
       toast.error("Choose ONLY ONE correct answer");
     }
   }
+
+  return isTrue;
 }

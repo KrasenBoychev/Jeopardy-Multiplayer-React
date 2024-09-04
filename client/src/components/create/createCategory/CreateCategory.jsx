@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import { createCategory, createQuestion } from "../../../../api/create-api";
@@ -18,66 +18,68 @@ export default function CreateCategory() {
   const [questionThree, setQuestionThree] = useState({});
   const [questionFour, setQuestionFour] = useState({});
 
-  if (recordCategoryAndQuestions) {
+  useEffect(() => {
     (async function record() {
-      try {
-        await createCategory(category);
-      } catch (error) {
-        toast.error(error.message);
-        return;
-      }
-
-      let createdCategory;
-      
-      try {
-        createdCategory = await getCategory(category);
-      } catch (error) {
-        toast.error(error.message);
-        return;
-      }
-
-      try {
-        if (createCategory) {
-          await createQuestion(questionOne, createCategory.id);
+      if (recordCategoryAndQuestions) {
+        try {
+          await createCategory(category);
+        } catch (error) {
+          toast.error(error.message);
+          return;
         }
-      } catch (error) {
-        toast.error(error.message);
-        return;
-      }
 
-      try {
-        if (createCategory) {
-          await createQuestion(questionTwo, createCategory.id);
-        }
-      } catch (error) {
-        toast.error(error.message);
-        return;
-      }
+        // let createdCategory;
 
-      try {
-        if (createCategory) {
-          await createQuestion(questionThree, createCategory.id);
-        }
-      } catch (error) {
-        toast.error(error.message);
-        return;
-      }
+        // try {
+        //   createdCategory = await getCategory(category);
+        // } catch (error) {
+        //   toast.error(error.message);
+        //   return;
+        // }
 
-      try {
-        if (createCategory) {
-          await createQuestion(questionFour, createCategory.id);
-        }
-      } catch (error) {
-        toast.error(error.message);
-        return;
+        // try {
+        //   if (createCategory) {
+        //     await createQuestion(questionOne, createCategory.id);
+        //   }
+        // } catch (error) {
+        //   toast.error(error.message);
+        //   return;
+        // }
+
+        // try {
+        //   if (createCategory) {
+        //     await createQuestion(questionTwo, createCategory.id);
+        //   }
+        // } catch (error) {
+        //   toast.error(error.message);
+        //   return;
+        // }
+
+        // try {
+        //   if (createCategory) {
+        //     await createQuestion(questionThree, createCategory.id);
+        //   }
+        // } catch (error) {
+        //   toast.error(error.message);
+        //   return;
+        // }
+
+        // try {
+        //   if (createCategory) {
+        //     await createQuestion(questionFour, createCategory.id);
+        //   }
+        // } catch (error) {
+        //   toast.error(error.message);
+        //   return;
+        // }
       }
     })();
-  }
+  }, [recordCategoryAndQuestions]);
 
   return (
     <>
       {moveToNextPage == 0 && (
-        <Category props={{ category, setCategory, setMoveToNextPage }} />
+            <Category props={{ category, setCategory, setMoveToNextPage }} />
       )}
 
       {moveToNextPage == 1 && (
@@ -87,11 +89,12 @@ export default function CreateCategory() {
             setQuestion: setQuestionOne,
             move: moveToNextPage,
             setMove: setMoveToNextPage,
+            setRecordCategoryAndQuestions
           }}
         />
       )}
 
-      {moveToNextPage == 2 && (
+      {/* {moveToNextPage == 2 && (
         <CreateQuestion
           props={{
             category,
@@ -119,10 +122,11 @@ export default function CreateCategory() {
             category,
             setQuestion: setQuestionFour,
             move: moveToNextPage,
-            setMove: setMoveToNextPage,
+            // setMove: setMoveToNextPage,
+            setRecordCategoryAndQuestions,
           }}
         />
-      )}
+      )} */}
     </>
   );
 }
