@@ -7,13 +7,6 @@
             "name": "Launch Chrome against localhost",
             "url": "http://localhost:5173",
             "webRoot": "${workspaceFolder}/client"
-        },
-        {
-            "type": "node-terminal",
-            "name": "Run Script: debug",
-            "request": "launch",
-            "command": "npm run debug",
-            "cwd": "${workspaceFolder}/server"
         }
     ]
 }
