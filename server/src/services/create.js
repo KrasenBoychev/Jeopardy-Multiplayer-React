@@ -11,18 +11,17 @@ async function createCategoryService(data) {
   return record;
 }
 
-//add Category when creating Question
 async function createQuestionService(data, categoryId) {
   const record = new Question({
     name: data.name,
     answers: {
-        answerOne: data.answerOne,
-        answerTwo: data.answerTwo,
-        answerThree: data.answerThree,
-        answerFour: data.answerFour,
-        correctAnswer: data.correctAnswer
+        answerOne: data.answers.answerOne,
+        answerTwo: data.answers.answerTwo,
+        answerThree: data.answers.answerThree,
+        answerFour: data.answers.answerFour,
+        correctAnswer: data.answers.correctAnswer
     },
-    points: data.points,
+    points: Number(data.points),
     categoryId
   });
 
