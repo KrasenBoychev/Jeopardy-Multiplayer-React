@@ -1,1 +1,1 @@
-export const points = [5, 10, 15, 20];
+export const points = ['5', '10', '15', '20'];
