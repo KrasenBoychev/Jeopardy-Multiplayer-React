@@ -1,25 +1,28 @@
-import { useState } from "react";
-import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 
 import { createQuestion } from "../../../../api/create-api";
-import { points } from "../../../common/gamePoints";
 
+import useCreateQuestion from "../../../hooks/useCreateQuestion";
+
+import { points } from "../../../common/gamePoints";
 import { checkTrueAnswer, validateValues } from "./validationForm";
 
 export default function CreateQuestion({ props }) {
-  const { category, setQuestion, move, setMove, setRecordCategoryAndQuestions } =
-    props;
+  const {
+    category,
+    question,
+    setQuestion,
+    move,
+    setMove,
+    setRecordCategoryAndQuestions,
+  } = props;
 
-  const [answersCorrectValues, setAnswersCorrectValues] = useState([
-    "false",
-    "false",
-    "false",
-    "false",
-  ]);
+  const [answersCorrectValues, setAnswersCorrectValues, allCategories] =
+    useCreateQuestion(category, question);
 
-  const [allCategories, setAllCategories] = useState([]);
+  const navigate = useNavigate();
 
   const changeCorrectAnswer = (e) => {
     const clickedAnswer = Number(e.target.id.split("-")[1]);
@@ -39,7 +42,15 @@ export default function CreateQuestion({ props }) {
     <div className="authentication create-question-div">
       <h1>Category Question</h1>
       <Formik
-        initialValues={{
+        initialValues={category 
+          ? {
+            name: question.name,
+            answerOne: question.answers.answerOne,
+            answerTwo: question.answers.answerTwo,
+            answerThree: question.answers.answerThree,
+            answerFour: question.answers.answerFour,
+          }
+          : {
           category: "--- Choose Category ---",
           points: "--- Choose Points ---",
           name: "",
@@ -51,12 +62,7 @@ export default function CreateQuestion({ props }) {
         validate={(values) => {
           const errors = {};
 
-          validateValues(
-            values,
-            errors,
-            category,
-            allCategories
-          );
+          validateValues(values, errors, category, allCategories);
 
           return errors;
         }}
@@ -64,33 +70,56 @@ export default function CreateQuestion({ props }) {
           if (!checkTrueAnswer(answersCorrectValues)) {
             return;
           }
-
-          setQuestion({
-            name: values.name,
-            points: values.points,
-            answers: {
-              answerOne: values.answerOne,
-              answerTwo: values.answerTwo,
-              answerThree: values.answerThree,
-              answerFour: values.answerFour,
-            },
-            correctAnswer: answersCorrectValues.indexOf("true"),
-          });
-
-          if (move) {
-            setMove((oldValue) => oldValue + 1);
-          } 
-          
-          if (setRecordCategoryAndQuestions) {
-            setRecordCategoryAndQuestions(true);
-          } 
-
-            // try {
-            //   await createQuestion(values);
-            // } catch (error) {
-            //   return toast.error(error.message);
-            // }
-          
+        
+          if (category) {
+            setQuestion({
+              name: values.name,
+              points: values.points,
+              answers: {
+                answerOne: values.answerOne,
+                answerTwo: values.answerTwo,
+                answerThree: values.answerThree,
+                answerFour: values.answerFour,
+                correctAnswer: answersCorrectValues.indexOf("true"),
+              },
+            });
+        
+            if (setMove) {
+              setMove((oldValue) => oldValue + 1);
+        
+              const index = points.indexOf(values.points);
+              points.splice(index, 1);
+            }
+        
+            if (setRecordCategoryAndQuestions) {
+              setRecordCategoryAndQuestions(true);
+            }
+          } else {
+            const selectedCategory = allCategories.filter(
+              (c) => c.name == values.category
+            );
+        
+            try {
+              await createQuestion(
+                {
+                  name: values.name,
+                  points: values.points,
+                  answers: {
+                    answerOne: values.answerOne,
+                    answerTwo: values.answerTwo,
+                    answerThree: values.answerThree,
+                    answerFour: values.answerFour,
+                    correctAnswer: answersCorrectValues.indexOf("true"),
+                  },
+                },
+                selectedCategory[0]._id
+              );
+        
+              navigate("/");
+            } catch (error) {
+              return toast.error(error.message);
+            }
+          }
         }}
       >
         {({ isSubmitting }) => (
@@ -109,9 +138,13 @@ export default function CreateQuestion({ props }) {
                   <option value="chooseCategory">
                     --- Choose Category ---
                   </option>
-                  <option value="red">Red</option>
-                  <option value="green">Green</option>
-                  <option value="blue">Blue</option>
+                  {allCategories.map((eachCategory) => {
+                    return (
+                      <option key={eachCategory.name} value={eachCategory.name}>
+                        {eachCategory.name}
+                      </option>
+                    );
+                  })}
                 </Field>
                 <ErrorMessage
                   name="category"
@@ -126,7 +159,10 @@ export default function CreateQuestion({ props }) {
               name="points"
               className="authentication-input category-select"
             >
-              <option value="choosePoints">--- Choose Points ---</option>
+              {question && question.points 
+                ? <option value={question.points}>{question.points}</option>
+                : <option value="choosePoints">--- Choose Points ---</option>
+              }
               {points.map((point) => {
                 return (
                   <option key={point} value={point}>
@@ -274,6 +310,7 @@ export default function CreateQuestion({ props }) {
           </Form>
         )}
       </Formik>
+      {/* {move && <button onClick={() => setMove(oldValue => oldValue - 1)}>Back</button>} */}
     </div>
   );
 }
