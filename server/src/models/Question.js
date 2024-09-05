@@ -3,8 +3,7 @@ const { Schema, model, Types } = require('mongoose');
 const QuestionSchema = new Schema({
     name: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     answers: {
         answerOne: {

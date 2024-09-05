@@ -46,10 +46,10 @@ export default function Categories({ props }) {
       event.user.name === event.data.activePlayer
     ) {
       if (event.data.currCategoryCount <= 3) {
-        const updateCtaegories = Array.from(event.data.allCategories);
-        const index = updateCtaegories.indexOf(event.data.currOption);
-        updateCtaegories.splice(index, 1);
-        setAllCategories(updateCtaegories);
+        const updateCategories = Array.from(event.data.allCategories);
+        const index = updateCategories.indexOf(event.data.currOption);
+        updateCategories.splice(index, 1);
+        setAllCategories(updateCategories);
 
         setCurrCategoryCount(event.data.currCategoryCount + 1);
 
