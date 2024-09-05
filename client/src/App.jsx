@@ -71,7 +71,13 @@ function App() {
               path="/createQuestion"
               element={
                 <CreateQuestion
-                  props={{ category: null, setQuestion: null, move: null, setMove: null }}
+                  props={{
+                    category: null,
+                    setQuestion: null,
+                    move: null,
+                    setMove: null,
+                    setRecordCategoryAndQuestions: null,
+                  }}
                 />
               }
             />
