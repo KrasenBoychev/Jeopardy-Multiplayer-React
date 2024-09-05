@@ -3,8 +3,10 @@ import { points } from "../../../common/gamePoints";
 
 export function validateValues(values, errors, category, allCategories) {
   if (!category) {
+    const categoryNames = allCategories.map((c) => c.name);
+
     if (
-      !allCategories.includes(values.category) ||
+      !categoryNames.includes(values.category) ||
       values.category == "--- Choose Category ---"
     ) {
       errors.category = "Category should be chosen from the drop down list";
@@ -12,7 +14,7 @@ export function validateValues(values, errors, category, allCategories) {
   }
 
   if (
-    !points.includes(Number(values.points)) ||
+    !points.includes(values.points) ||
     values.points == "--- Choose Points ---"
   ) {
     errors.points = "Points should be chosen from the drop down list";
