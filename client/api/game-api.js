@@ -14,5 +14,8 @@ export async function getGameToken(username) {
     return await api.get(host + '/play/' + username); 
 }
 
+export async function getQuestions(categoriesIDs) {
+    return await api.get(host + '/play/questions/' + categoriesIDs); 
+}
 
 
