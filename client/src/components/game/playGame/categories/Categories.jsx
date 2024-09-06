@@ -24,6 +24,8 @@ export default function Categories({ props }) {
     setAllCategories,
     categoriesInfo,
     defaultOption,
+    questions,
+    allCategoriesInfo,
   ] = useCategories();
 
   const chosenOption = async (e) => {
@@ -74,7 +76,17 @@ export default function Categories({ props }) {
   return (
     <>
       {moveToNextPage ? (
-        <ChooseQuestion props={{ categoriesInfo, activePlayer, setActivePlayer, firstPlayer, secondPlayer }}/>
+        <ChooseQuestion
+          props={{
+            categoriesInfo,
+            activePlayer,
+            setActivePlayer,
+            firstPlayer,
+            secondPlayer,
+            questions,
+            allCategoriesInfo,
+          }}
+        />
       ) : (
         <div className="gameContainer">
           <p
