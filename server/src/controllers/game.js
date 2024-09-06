@@ -6,7 +6,11 @@ const { api_key, api_secret } = require('../api-keys');
 
 const { parseError } = require('../util');
 
-const { getAllCategories, getCategory } = require('../services/game');
+const {
+  getAllCategories,
+  getCategory,
+  getQuestions,
+} = require('../services/game');
 
 const gameRouter = Router();
 
@@ -52,6 +56,18 @@ gameRouter.get('/categories/all', async (req, res) => {
 gameRouter.get('/category/:categoryName', async (req, res) => {
   try {
     const data = await getCategory(req.params.categoryName);
+    res.json(data);
+  } catch (err) {
+    const parsed = parseError(err);
+    res.status(400).json({ code: 400, message: parsed.message });
+  }
+});
+
+gameRouter.get('/questions/:categoriesIDs', async (req, res) => {
+  try {
+    const categoriesIDs = req.params.categoriesIDs;
+    const categoriesIDsArr = categoriesIDs.split(',');
+    const data = await getQuestions(categoriesIDsArr);
     res.json(data);
   } catch (err) {
     const parsed = parseError(err);
