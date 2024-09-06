@@ -1,0 +1,28 @@
+.question-wrapper {
+    margin: auto;
+    padding-top: 5px;
+    width: 80%;
+    height: 300px;
+    border-radius: 5px;
+}
+
+.answers-wrapper {
+    margin: auto;
+}
+
+.answer-box-active, .answer-box-inactive {
+    float: left;
+    margin-left: 5.5%;
+    margin-top: 15px;
+    padding: 10px;
+    width: 40%;
+    height: auto;
+    background-color: #fff;
+    border: 1px solid green;
+    border-radius: 5px;
+}
+
+.answer-box-active:hover {
+    cursor: pointer;
+    background-color: yellowgreen;
+}
