@@ -14,14 +14,14 @@ async function createCategoryService(data) {
 async function createQuestionService(data, categoryId) {
   const record = new Question({
     name: data.name,
+    points: Number(data.points),
     answers: {
         answerOne: data.answers.answerOne,
         answerTwo: data.answers.answerTwo,
         answerThree: data.answers.answerThree,
         answerFour: data.answers.answerFour,
-        correctAnswer: data.answers.correctAnswer
     },
-    points: Number(data.points),
+    correctAnswer: data.correctAnswer,
     categoryId
   });
 
