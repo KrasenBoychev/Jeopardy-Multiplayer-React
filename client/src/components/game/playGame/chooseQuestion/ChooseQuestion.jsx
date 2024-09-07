@@ -25,6 +25,9 @@ export default function ChooseQuestion({ props }) {
   const [pointsFirstPlayer, setPointsFirstPlayer] = useState(0);
   const [pointsSecondPlayer, setPointsSecondPlayer] = useState(0);
 
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
+  const [isAnswerClicked, setIsAnswerClicked] = useState(false);
+
   const { client } = useChatContext();
   const { channel } = useChannelStateContext();
 
@@ -42,16 +45,38 @@ export default function ChooseQuestion({ props }) {
       event.type == "choose-answer" &&
       event.user.name === event.data.activePlayer
     ) {
+      if (event.data.pointsWon > 0) {
+        setIsAnswerCorrect(true);
+      } else {
+        setIsAnswerCorrect(false);
+      }
 
-      setShowQuestion(false);
-      setCurrCategory("");
-      setCurrQuestion("");
+      if (event.data.activePlayer == firstPlayer) {
+        setPointsFirstPlayer(event.data.totalPoints);
+      } else {
+        setPointsSecondPlayer(event.data.totalPoints);
+      }
 
-      event.data.activePlayer == firstPlayer
-      ? setActivePlayer(secondPlayer)
-      : setActivePlayer(firstPlayer);
+      isAnswerClicked
+        ? setIsAnswerClicked(false)
+        : setIsAnswerClicked(true);
     }
   });
+
+  useEffect(() => {
+    (function showAnswers() {
+      setTimeout(() => {
+        setShowQuestion(false);
+        setCurrCategory("");
+        setCurrQuestion("");
+        setIsAnswerCorrect(null);
+
+        activePlayer == firstPlayer
+          ? setActivePlayer(secondPlayer)
+          : setActivePlayer(firstPlayer);
+      }, 3000);
+    })();
+  }, [isAnswerClicked]);
 
   return (
     <>
@@ -61,6 +86,10 @@ export default function ChooseQuestion({ props }) {
             activePlayer,
             currCategory,
             currQuestion,
+            firstPlayer,
+            pointsFirstPlayer,
+            pointsSecondPlayer,
+            isAnswerCorrect,
           }}
         />
       ) : (
@@ -73,6 +102,13 @@ export default function ChooseQuestion({ props }) {
             }
           >
             {activePlayer} chooses question
+          </p>
+
+          <p>
+            {firstPlayer} --- {pointsFirstPlayer} points
+          </p>
+          <p>
+            {secondPlayer} --- {pointsSecondPlayer} points
           </p>
 
           <div className="categories-container">
