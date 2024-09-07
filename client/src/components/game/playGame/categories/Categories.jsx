@@ -25,6 +25,7 @@ export default function Categories({ props }) {
     categoriesInfo,
     defaultOption,
     questions,
+    setQuestions,
     allCategoriesInfo,
   ] = useCategories();
 
@@ -83,6 +84,7 @@ export default function Categories({ props }) {
             firstPlayer,
             secondPlayer,
             questions,
+            setQuestions,
           }}
         />
       ) : (
