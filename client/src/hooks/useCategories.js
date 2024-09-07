@@ -81,12 +81,12 @@ export default function useCategories() {
                 questionsMatching[
                   Math.floor(Math.random() * questionsMatching.length)
                 ];
-              catQuestions.push(randomQuestion);
+              catQuestions.push({ question: randomQuestion, answered: false});
             });
 
             gameQuestions[cat] = catQuestions;
           });
-  
+
           setQuestions(gameQuestions);
         } catch (error) {
           return toast.error(error.message);
@@ -108,6 +108,7 @@ export default function useCategories() {
     categoriesInfo,
     defaultOption,
     questions,
+    setQuestions,
     allCategoriesInfo,
   ];
 }
