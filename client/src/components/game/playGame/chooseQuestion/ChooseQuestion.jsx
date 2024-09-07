@@ -16,6 +16,7 @@ export default function ChooseQuestion({ props }) {
     firstPlayer,
     secondPlayer,
     questions,
+    setQuestions,
   } = props;
 
   const [showQuestion, setShowQuestion] = useState(false);
@@ -27,6 +28,7 @@ export default function ChooseQuestion({ props }) {
 
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
   const [isAnswerClicked, setIsAnswerClicked] = useState(false);
+  const [callShowAnswer, setCallShowAnswer] = useState(false);
 
   const { client } = useChatContext();
   const { channel } = useChannelStateContext();
@@ -45,6 +47,8 @@ export default function ChooseQuestion({ props }) {
       event.type == "choose-answer" &&
       event.user.name === event.data.activePlayer
     ) {
+      setIsAnswerClicked(true);
+
       if (event.data.pointsWon > 0) {
         setIsAnswerCorrect(true);
       } else {
@@ -57,26 +61,45 @@ export default function ChooseQuestion({ props }) {
         setPointsSecondPlayer(event.data.totalPoints);
       }
 
-      isAnswerClicked
-        ? setIsAnswerClicked(false)
-        : setIsAnswerClicked(true);
+      callShowAnswer ? setCallShowAnswer(false) : setCallShowAnswer(true);
+
+      event.data.activePlayer == firstPlayer
+        ? setActivePlayer(secondPlayer)
+        : setActivePlayer(firstPlayer);
     }
   });
 
   useEffect(() => {
     (function showAnswers() {
-      setTimeout(() => {
-        setShowQuestion(false);
-        setCurrCategory("");
-        setCurrQuestion("");
-        setIsAnswerCorrect(null);
+      if (currCategory && currQuestion) {
+        setTimeout(() => {
+          setShowQuestion(false);
 
-        activePlayer == firstPlayer
-          ? setActivePlayer(secondPlayer)
-          : setActivePlayer(firstPlayer);
-      }, 3000);
+          const copyQuestions = { ...questions };
+
+          let findQuestion;
+
+          Object.values(copyQuestions).forEach((copiedQuestions) => {
+            const result = copiedQuestions.filter(
+              (questionInfo) => questionInfo.question._id == currQuestion._id
+            );
+
+            if (result.length > 0) {
+              findQuestion = result;
+            }
+          });
+
+          findQuestion[0].answered = true;
+
+          setQuestions(copyQuestions);
+          setCurrCategory("");
+          setCurrQuestion("");
+          setIsAnswerCorrect(null);
+          setIsAnswerClicked(false);
+        }, 3000);
+      }
     })();
-  }, [isAnswerClicked]);
+  }, [callShowAnswer]);
 
   return (
     <>
@@ -90,6 +113,7 @@ export default function ChooseQuestion({ props }) {
             pointsFirstPlayer,
             pointsSecondPlayer,
             isAnswerCorrect,
+            isAnswerClicked,
           }}
         />
       ) : (
@@ -101,14 +125,12 @@ export default function ChooseQuestion({ props }) {
                 : "inactiveCat player-categories"
             }
           >
-            {activePlayer} chooses question
-          </p>
-
-          <p>
-            {firstPlayer} --- {pointsFirstPlayer} points
-          </p>
-          <p>
-            {secondPlayer} --- {pointsSecondPlayer} points
+            {activePlayer} chooses question (
+            {activePlayer == firstPlayer
+              ? pointsFirstPlayer
+              : pointsSecondPlayer} <span className="points-box">points</span>
+              
+            )
           </p>
 
           <div className="categories-container">
@@ -129,7 +151,8 @@ export default function ChooseQuestion({ props }) {
                         props={{
                           activePlayer,
                           categoryName: Object.keys(questions)[indexQuestion],
-                          question: question[indexItem],
+                          question: question[indexItem].question,
+                          questionAnswered: question[indexItem].answered,
                         }}
                       />
                     );
