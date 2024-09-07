@@ -11,6 +11,7 @@ export default function ({ props }) {
     pointsFirstPlayer,
     pointsSecondPlayer,
     isAnswerCorrect,
+    isAnswerClicked
   } = props;
 
   const { client } = useChatContext();
@@ -70,9 +71,9 @@ export default function ({ props }) {
           <div className="answers-wrapper">
             {Object.values(currQuestion.answers).map((answer) => {
               return (
-                <p
+                <button
                   key={answer}
-                  disabled={client.user.name === activePlayer && isAnswerCorrect == null ? false : true}
+                  disabled={isAnswerClicked ? true : false}
                   onClick={answerQuestionClickHandler}
                   className={
                     isAnswerCorrect == null
@@ -89,7 +90,7 @@ export default function ({ props }) {
                   }
                 >
                   {answer}
-                </p>
+                </button>
               );
             })}
           </div>
