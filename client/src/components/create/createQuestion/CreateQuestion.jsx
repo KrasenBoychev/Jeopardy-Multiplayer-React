@@ -42,23 +42,25 @@ export default function CreateQuestion({ props }) {
     <div className="authentication create-question-div">
       <h1>Category Question</h1>
       <Formik
-        initialValues={category 
-          ? {
-            name: question.name,
-            answerOne: question.answers.answerOne,
-            answerTwo: question.answers.answerTwo,
-            answerThree: question.answers.answerThree,
-            answerFour: question.answers.answerFour,
-          }
-          : {
-          category: "--- Choose Category ---",
-          points: "--- Choose Points ---",
-          name: "",
-          answerOne: "",
-          answerTwo: "",
-          answerThree: "",
-          answerFour: "",
-        }}
+        initialValues={
+          category
+            ? {
+                name: question.name,
+                answerOne: question.answers.answerOne,
+                answerTwo: question.answers.answerTwo,
+                answerThree: question.answers.answerThree,
+                answerFour: question.answers.answerFour,
+              }
+            : {
+                category: "--- Choose Category ---",
+                points: "--- Choose Points ---",
+                name: "",
+                answerOne: "",
+                answerTwo: "",
+                answerThree: "",
+                answerFour: "",
+              }
+        }
         validate={(values) => {
           const errors = {};
 
@@ -67,10 +69,14 @@ export default function CreateQuestion({ props }) {
           return errors;
         }}
         onSubmit={async (values) => {
-          if (!checkTrueAnswer(answersCorrectValues)) {
+          const correctAnswerValue = checkTrueAnswer(
+            answersCorrectValues,
+            values
+          );
+          if (!correctAnswerValue) {
             return;
           }
-        
+
           if (category) {
             setQuestion({
               name: values.name,
@@ -80,17 +86,17 @@ export default function CreateQuestion({ props }) {
                 answerTwo: values.answerTwo,
                 answerThree: values.answerThree,
                 answerFour: values.answerFour,
-                correctAnswer: answersCorrectValues.indexOf("true"),
               },
+              correctAnswer: correctAnswerValue
             });
-        
+
             if (setMove) {
               setMove((oldValue) => oldValue + 1);
-        
+
               const index = points.indexOf(values.points);
               points.splice(index, 1);
             }
-        
+
             if (setRecordCategoryAndQuestions) {
               setRecordCategoryAndQuestions(true);
             }
@@ -98,7 +104,7 @@ export default function CreateQuestion({ props }) {
             const selectedCategory = allCategories.filter(
               (c) => c.name == values.category
             );
-        
+
             try {
               await createQuestion(
                 {
@@ -108,13 +114,13 @@ export default function CreateQuestion({ props }) {
                     answerOne: values.answerOne,
                     answerTwo: values.answerTwo,
                     answerThree: values.answerThree,
-                    answerFour: values.answerFour,
-                    correctAnswer: answersCorrectValues.indexOf("true"),
+                    answerFour: values.answerFour
                   },
+                  correctAnswer: correctAnswerValue
                 },
                 selectedCategory[0]._id
               );
-        
+
               navigate("/");
             } catch (error) {
               return toast.error(error.message);
@@ -159,10 +165,11 @@ export default function CreateQuestion({ props }) {
               name="points"
               className="authentication-input category-select"
             >
-              {question && question.points 
-                ? <option value={question.points}>{question.points}</option>
-                : <option value="choosePoints">--- Choose Points ---</option>
-              }
+              {question && question.points ? (
+                <option value={question.points}>{question.points}</option>
+              ) : (
+                <option value="choosePoints">--- Choose Points ---</option>
+              )}
               {points.map((point) => {
                 return (
                   <option key={point} value={point}>
