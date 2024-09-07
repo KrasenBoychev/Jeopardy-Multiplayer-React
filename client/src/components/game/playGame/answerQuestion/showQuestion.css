@@ -10,7 +10,7 @@
     margin: auto;
 }
 
-.answer-box-active, .answer-box-inactive {
+.answer-box {
     float: left;
     margin-left: 5.5%;
     margin-top: 15px;
@@ -25,4 +25,19 @@
 .answer-box-active:hover {
     cursor: pointer;
     background-color: yellowgreen;
+}
+
+.answer-correct {
+    background-color: yellowgreen;
+    color: #fff;
+}
+
+.answer-correct-question-wrong {
+    background-color: green;
+    color: #fff;
+}
+
+.answer-wrong {
+    background-color: red;
+    color: #fff;
 }
