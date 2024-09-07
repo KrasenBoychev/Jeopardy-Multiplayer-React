@@ -3,17 +3,39 @@ import { useChannelStateContext, useChatContext } from "stream-chat-react";
 import "./showQuestion.css";
 
 export default function ({ props }) {
-  const { activePlayer, currCategory, currQuestion } = props;
+  const {
+    activePlayer,
+    currCategory,
+    currQuestion,
+    firstPlayer,
+    pointsFirstPlayer,
+    pointsSecondPlayer,
+    isAnswerCorrect,
+  } = props;
 
   const { client } = useChatContext();
   const { channel } = useChannelStateContext();
 
-  const answerQuestionClickHandler = async () => {
+  const answerQuestionClickHandler = async (e) => {
+    let pointsWon = 0;
+    let totalPoints = 0;
+
+    if (e.target.textContent == currQuestion.correctAnswer) {
+      pointsWon = currQuestion.points;
+    }
+
+    if (activePlayer == firstPlayer) {
+      totalPoints = pointsFirstPlayer + pointsWon;
+    } else {
+      totalPoints = pointsSecondPlayer + pointsWon;
+    }
+
     await channel.sendEvent({
       type: "choose-answer",
       data: {
         activePlayer,
-        pointsWon: currQuestion.points,
+        pointsWon,
+        totalPoints,
       },
     });
   };
@@ -22,12 +44,20 @@ export default function ({ props }) {
     <div className="gameContainer">
       <p
         className={
-          client.user.name === activePlayer
-            ? "activeCat player-categories"
-            : "inactiveCat player-categories"
+          isAnswerCorrect == null
+            ? client.user.name === activePlayer
+              ? "player-categories activeCat"
+              : "player-categories inactiveCat"
+            : isAnswerCorrect
+              ? "player-categories answer-correct"
+              : "player-categories answer-wrong"
         }
       >
-        {activePlayer} answers question
+        {isAnswerCorrect == null
+          ? `${activePlayer} answers question`
+          : isAnswerCorrect
+          ? "Correct Answer"
+          : "Wrong Answer"}
       </p>
       <div className="categories-container">
         <h3>
@@ -42,11 +72,20 @@ export default function ({ props }) {
               return (
                 <p
                   key={answer}
+                  disabled={client.user.name === activePlayer && isAnswerCorrect == null ? false : true}
                   onClick={answerQuestionClickHandler}
                   className={
-                    client.user.name === activePlayer
-                      ? "answer-box-active"
-                      : "answer-box-inactive"
+                    isAnswerCorrect == null
+                      ? client.user.name === activePlayer
+                        ? "answer-box answer-box-active"
+                        : "answer-box"
+                      : isAnswerCorrect && currQuestion.correctAnswer == answer
+                        ? "answer-box answer-correct"
+                        : !isAnswerCorrect
+                          ? currQuestion.correctAnswer == answer
+                            ? "answer-box answer-correct-question-wrong"
+                            : "answer-box answer-wrong"
+                          : "answer-box"
                   }
                 >
                   {answer}
