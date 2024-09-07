@@ -11,13 +11,11 @@ import ShowQuestion from "../answerQuestion/ShowQuestion";
 
 export default function ChooseQuestion({ props }) {
   const {
-    categoriesInfo,
     activePlayer,
     setActivePlayer,
     firstPlayer,
     secondPlayer,
     questions,
-    allCategoriesInfo,
   } = props;
 
   const [showQuestion, setShowQuestion] = useState(false);
@@ -48,6 +46,10 @@ export default function ChooseQuestion({ props }) {
       setShowQuestion(false);
       setCurrCategory("");
       setCurrQuestion("");
+
+      event.data.activePlayer == firstPlayer
+      ? setActivePlayer(secondPlayer)
+      : setActivePlayer(firstPlayer);
     }
   });
 

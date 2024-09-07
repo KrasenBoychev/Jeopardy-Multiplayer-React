@@ -78,13 +78,11 @@ export default function Categories({ props }) {
       {moveToNextPage ? (
         <ChooseQuestion
           props={{
-            categoriesInfo,
             activePlayer,
             setActivePlayer,
             firstPlayer,
             secondPlayer,
             questions,
-            allCategoriesInfo,
           }}
         />
       ) : (
