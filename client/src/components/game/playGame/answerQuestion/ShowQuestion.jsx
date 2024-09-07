@@ -1,15 +1,9 @@
-import { useEffect } from "react";
-
 import { useChannelStateContext, useChatContext } from "stream-chat-react";
 
 import "./showQuestion.css";
 
 export default function ({ props }) {
-  const {
-    activePlayer,
-    currCategory,
-    currQuestion,
-  } = props;
+  const { activePlayer, currCategory, currQuestion } = props;
 
   const { client } = useChatContext();
   const { channel } = useChannelStateContext();
@@ -19,7 +13,7 @@ export default function ({ props }) {
       type: "choose-answer",
       data: {
         activePlayer,
-        pointsWon: currQuestion.points
+        pointsWon: currQuestion.points,
       },
     });
   };
@@ -44,21 +38,19 @@ export default function ({ props }) {
           <h1>{currQuestion.name}</h1>
 
           <div className="answers-wrapper">
-            {Object.values(currQuestion.answers).map((answer, index) => {
+            {Object.values(currQuestion.answers).map((answer) => {
               return (
-                index < 4 && (
-                  <p
-                    key={answer}
-                    onClick={answerQuestionClickHandler}
-                    className={
-                      client.user.name === activePlayer
-                        ? "answer-box-active"
-                        : "answer-box-inactive"
-                    }
-                  >
-                    {answer}
-                  </p>
-                )
+                <p
+                  key={answer}
+                  onClick={answerQuestionClickHandler}
+                  className={
+                    client.user.name === activePlayer
+                      ? "answer-box-active"
+                      : "answer-box-inactive"
+                  }
+                >
+                  {answer}
+                </p>
               );
             })}
           </div>
