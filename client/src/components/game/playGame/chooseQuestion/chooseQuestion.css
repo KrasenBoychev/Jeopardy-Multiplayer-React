@@ -21,8 +21,8 @@
 .question-box {
     height: 30px;
     line-height: 1.8;
-    background-color: greenyellow;
     border-color: green;
+    background-color: greenyellow;
     color: #000;
 }
 
@@ -30,4 +30,13 @@
     cursor: pointer;
     color: #fff;
     border-color: greenyellow;
+}
+
+.question-answered {
+    background-color: grey;
+    color: #fff;
+}
+
+.points-box {
+    text-transform: lowercase;
 }
