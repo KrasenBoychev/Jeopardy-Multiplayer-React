@@ -8,6 +8,7 @@ export default function useCategories() {
   const defaultOption = "--- Choose Category ---";
 
   const [currCategoryCount, setCurrCategoryCount] = useState(0);
+  const [randomNumber, setRandomNumber] = useState(0);
   const [moveToNextPage, setMoveToNextPage] = useState(false);
 
   const [catA, setCatA] = useState(defaultOption);
@@ -76,10 +77,11 @@ export default function useCategories() {
                   question.categoryId == currCatID &&
                   question.points == Number(currPoints)
               );
+console.log(randomNumber);
 
               const randomQuestion =
                 questionsMatching[
-                  Math.floor(Math.random() * questionsMatching.length)
+                  Math.floor(randomNumber * questionsMatching.length)
                 ];
               catQuestions.push({ question: randomQuestion, answered: false});
             });
@@ -109,6 +111,6 @@ export default function useCategories() {
     defaultOption,
     questions,
     setQuestions,
-    allCategoriesInfo,
+    setRandomNumber,
   ];
 }
