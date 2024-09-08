@@ -1,0 +1,11 @@
+.result-winner {
+    margin: 70px auto;
+    padding: 40px;
+    width: 70%;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: xx-large;
+    letter-spacing: 3px;
+    word-spacing: 3px;
+    border-radius: 10px;
+}
