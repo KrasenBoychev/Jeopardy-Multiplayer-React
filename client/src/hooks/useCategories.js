@@ -77,7 +77,6 @@ export default function useCategories() {
                   question.categoryId == currCatID &&
                   question.points == Number(currPoints)
               );
-console.log(randomNumber);
 
               const randomQuestion =
                 questionsMatching[
