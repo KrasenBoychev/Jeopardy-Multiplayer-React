@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
+import { useChannelStateContext } from "stream-chat-react";
 
-import { useChannelStateContext, useChatContext } from "stream-chat-react";
+import useChooseQuestion from "../../../../hooks/useChooseQuestion";
 
 import "./chooseQUestion.css";
 
-import { points } from "../../../../common/gamePoints";
-
-import QuestionModel from "./QuestionModel";
 import ShowQuestion from "../answerQuestion/ShowQuestion";
+import RenderQuestions from "./chunks/renderQuestions";
+import ResultGame from "../../resultGame/ResultGame";
 
 export default function ChooseQuestion({ props }) {
   const {
@@ -19,18 +18,26 @@ export default function ChooseQuestion({ props }) {
     setQuestions,
   } = props;
 
-  const [showQuestion, setShowQuestion] = useState(false);
-  const [currCategory, setCurrCategory] = useState("");
-  const [currQuestion, setCurrQuestion] = useState("");
+  const [
+    showQuestion,
+    setShowQuestion,
+    currCategory,
+    setCurrCategory,
+    currQuestion,
+    setCurrQuestion,
+    pointsFirstPlayer,
+    setPointsFirstPlayer,
+    pointsSecondPlayer,
+    setPointsSecondPlayer,
+    isAnswerCorrect,
+    setIsAnswerCorrect,
+    isAnswerClicked,
+    setIsAnswerClicked,
+    callShowAnswer,
+    setCallShowAnswer,
+    gameFinished,
+  ] = useChooseQuestion(questions, setQuestions);
 
-  const [pointsFirstPlayer, setPointsFirstPlayer] = useState(0);
-  const [pointsSecondPlayer, setPointsSecondPlayer] = useState(0);
-
-  const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
-  const [isAnswerClicked, setIsAnswerClicked] = useState(false);
-  const [callShowAnswer, setCallShowAnswer] = useState(false);
-
-  const { client } = useChatContext();
   const { channel } = useChannelStateContext();
 
   channel.on((event) => {
@@ -69,41 +76,18 @@ export default function ChooseQuestion({ props }) {
     }
   });
 
-  useEffect(() => {
-    (function showAnswers() {
-      if (currCategory && currQuestion) {
-        setTimeout(() => {
-          setShowQuestion(false);
-
-          const copyQuestions = { ...questions };
-
-          let findQuestion;
-
-          Object.values(copyQuestions).forEach((copiedQuestions) => {
-            const result = copiedQuestions.filter(
-              (questionInfo) => questionInfo.question._id == currQuestion._id
-            );
-
-            if (result.length > 0) {
-              findQuestion = result;
-            }
-          });
-
-          findQuestion[0].answered = true;
-
-          setQuestions(copyQuestions);
-          setCurrCategory("");
-          setCurrQuestion("");
-          setIsAnswerCorrect(null);
-          setIsAnswerClicked(false);
-        }, 3000);
-      }
-    })();
-  }, [callShowAnswer]);
-
   return (
     <>
-      {showQuestion ? (
+      {gameFinished ? (
+        <ResultGame
+          props={{
+            firstPlayer,
+            secondPlayer,
+            pointsFirstPlayer,
+            pointsSecondPlayer,
+          }}
+        />
+      ) : showQuestion ? (
         <ShowQuestion
           props={{
             activePlayer,
@@ -117,51 +101,15 @@ export default function ChooseQuestion({ props }) {
           }}
         />
       ) : (
-        <div className="gameContainer">
-          <p
-            className={
-              client.user.name === activePlayer
-                ? "activeCat player-categories"
-                : "inactiveCat player-categories"
-            }
-          >
-            {activePlayer} chooses question (
-            {activePlayer == firstPlayer
-              ? pointsFirstPlayer
-              : pointsSecondPlayer} <span className="points-box">points</span>
-              
-            )
-          </p>
-
-          <div className="categories-container">
-            {Object.keys(questions).map((categoryName) => {
-              return (
-                <QuestionModel key={categoryName} props={{ categoryName }} />
-              );
-            })}
-          </div>
-          <div className="questions-container">
-            {Object.entries(questions).map((item, indexItem) => {
-              return (
-                <div key={indexItem}>
-                  {Object.values(questions).map((question, indexQuestion) => {
-                    return (
-                      <QuestionModel
-                        key={question + indexQuestion}
-                        props={{
-                          activePlayer,
-                          categoryName: Object.keys(questions)[indexQuestion],
-                          question: question[indexItem].question,
-                          questionAnswered: question[indexItem].answered,
-                        }}
-                      />
-                    );
-                  })}
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <RenderQuestions
+          props={{
+            activePlayer,
+            firstPlayer,
+            pointsFirstPlayer,
+            pointsSecondPlayer,
+            questions,
+          }}
+        />
       )}
     </>
   );
