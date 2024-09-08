@@ -26,7 +26,7 @@ export default function Categories({ props }) {
     defaultOption,
     questions,
     setQuestions,
-    allCategoriesInfo,
+    setRandomNumber,
   ] = useCategories();
 
   const chosenOption = async (e) => {
@@ -37,9 +37,11 @@ export default function Categories({ props }) {
   };
 
   const selectQuestion = async () => {
+    const generatenNumber = Math.random();
+
     await channel.sendEvent({
       type: "select-category",
-      data: { activePlayer, currCategoryCount, allCategories, currOption },
+      data: { activePlayer, currCategoryCount, allCategories, currOption, generatenNumber },
     });
   };
 
@@ -59,6 +61,10 @@ export default function Categories({ props }) {
         event.data.activePlayer == firstPlayer
           ? setActivePlayer(secondPlayer)
           : setActivePlayer(firstPlayer);
+
+          if (event.data.currCategoryCount == 3) {
+            setRandomNumber(event.data.generatenNumber);
+          }
       }
     }
 
