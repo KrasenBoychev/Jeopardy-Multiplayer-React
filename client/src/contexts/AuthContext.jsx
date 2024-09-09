@@ -11,7 +11,7 @@ export const AuthContext = createContext({
   username: '',
   accessToken: '',
   isAuthenticated: false,
-  userCart: [],
+  points: '',
   changeAuthState: (authState = {}) => null,
   logout: () => null,
 });
@@ -33,7 +33,7 @@ export function AuthContextProvider(props) {
     username: authState?.username,
     accessToken: authState?.accessToken,
     isAuthenticated: !!authState?.email,
-    userCart: authState?.userCart,
+    points: authState?.points,
     changeAuthState,
     logout,
   };

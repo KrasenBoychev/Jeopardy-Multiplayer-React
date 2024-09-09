@@ -22,6 +22,7 @@ userRouter.post('/login',
       userId: result._id,
       email: result.email,
       username: result.username,
+      points: result.points,
       accessToken
     });
   } catch (err) {
@@ -49,6 +50,7 @@ userRouter.post('/register',
       userId: result._id,
       email: result.email,
       username: result.username,
+      points: result.points,
       accessToken
     });
   

@@ -17,6 +17,7 @@ async function register(email, username, password) {
   const user = new User({
     email,
     username,
+    points: 0,
     password: await bcrypt.hash(password, 10)
   });
 
