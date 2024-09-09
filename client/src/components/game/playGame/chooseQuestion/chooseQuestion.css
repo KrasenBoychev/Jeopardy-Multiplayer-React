@@ -1,3 +1,26 @@
+.players-points {
+    position: absolute;
+    top: 80px;
+    left: 40px;
+    border-radius: 5px;
+}
+
+.points-first-player {
+    padding: 8px;
+    color: #fff;
+    background-color: #B99470;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.points-second-player {
+    padding: 8px;
+    color: #000;
+    background-color: #b9947081;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
 .category-box, .question-box {
     width: 18.1%;
     float: left;
@@ -35,8 +58,4 @@
 .question-answered {
     background-color: grey;
     color: #fff;
-}
-
-.points-box {
-    text-transform: lowercase;
 }

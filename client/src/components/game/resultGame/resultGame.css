@@ -1,5 +1,5 @@
 .result-winner {
-    margin: 70px auto;
+    margin: 70px auto 40px auto;
     padding: 40px;
     width: 70%;
     text-transform: uppercase;
@@ -8,4 +8,31 @@
     letter-spacing: 3px;
     word-spacing: 3px;
     border-radius: 10px;
+}
+
+.final-result {
+    margin: auto;
+    padding: 2px;
+    width: 50%;
+    font-size: large;
+    font-weight: bold;
+    color: #fff;
+    background-color: #A6B37D;
+    border-radius: 5px;
+}
+
+.final-result p:first-child {
+    font-size: x-large;
+}
+.final-players {
+    margin: auto;
+    margin-bottom: 30px;
+    padding: 5px;
+    width: 70%;
+    background-color: #C0C78C;
+    border-radius: 5px;
+}
+
+.final-vs {
+    margin: auto 20px;
 }
