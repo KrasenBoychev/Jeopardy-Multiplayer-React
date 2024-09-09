@@ -105,6 +105,7 @@ export default function ChooseQuestion({ props }) {
           props={{
             activePlayer,
             firstPlayer,
+            secondPlayer,
             pointsFirstPlayer,
             pointsSecondPlayer,
             questions,

@@ -6,6 +6,7 @@ export default function RenderQuestions({ props }) {
   const {
     activePlayer,
     firstPlayer,
+    secondPlayer,
     pointsFirstPlayer,
     pointsSecondPlayer,
     questions,
@@ -22,11 +23,12 @@ export default function RenderQuestions({ props }) {
             : "inactiveCat player-categories"
         }
       >
-        {activePlayer} chooses question (
-        {activePlayer == firstPlayer ? pointsFirstPlayer : pointsSecondPlayer}{" "}
-        <span className="points-box">points</span>)
+        {activePlayer} chooses question
       </p>
-
+      <p className="players-points">
+        <span className="points-first-player">{firstPlayer}: {pointsFirstPlayer} points</span>
+        <span className="points-second-player">{secondPlayer}: {pointsSecondPlayer} points</span>
+      </p>
       <div className="categories-container">
         {Object.keys(questions).map((categoryName) => {
           return <QuestionModel key={categoryName} props={{ categoryName }} />;
