@@ -11,6 +11,7 @@ nav {
     margin: 0 auto 60px auto;
     padding: 5px 0;
     text-align: center;
+    font-size: large;
 }
 
 nav ul {
@@ -28,10 +29,19 @@ nav li {
     margin-left: 20px;
 }
 
-
 .profile {
     float: right;
     margin-right: 20px;
+}
+
+.profile a {
+    text-decoration: none;
+    color: #000;
+}
+
+.profile a:hover {
+    cursor: pointer;
+    color: #fff;
 }
 
 .connected {

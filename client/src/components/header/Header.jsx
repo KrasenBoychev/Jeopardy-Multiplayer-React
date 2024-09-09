@@ -26,7 +26,6 @@ export default function Header(props) {
     <header>
       <nav>
         <ul className="logo">
-          <li>Logo</li>
           <li>Welcome, {isAuthenticated ? username : "guest"}</li>
         </ul>
 
@@ -49,15 +48,6 @@ export default function Header(props) {
           </ul>
         ) : (
           <>
-            <ul className="points">
-              {isAuthenticated && (
-                <>
-                  <li>Points won today: e.g. 1000</li>
-                  <li>My Rating: e.g. 8.5</li>
-                </>
-              )}
-            </ul>
-
             <ul className="profile">
               <li>
                 <NavLink to="/">Home</NavLink>
