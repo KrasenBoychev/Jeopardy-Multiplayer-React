@@ -36,7 +36,7 @@ export default function ChooseQuestion({ props }) {
     callShowAnswer,
     setCallShowAnswer,
     gameFinished,
-  ] = useChooseQuestion(questions, setQuestions);
+  ] = useChooseQuestion(questions, setQuestions, firstPlayer);
 
   const { channel } = useChannelStateContext();
 

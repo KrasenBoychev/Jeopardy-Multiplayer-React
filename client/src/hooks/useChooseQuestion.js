@@ -1,6 +1,17 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
-export default function useChooseQuestion(questions, setQuestions) {
+import { recordPoints } from "../../api/game-api";
+
+import { useAuthContext } from "../contexts/AuthContext";
+
+export default function useChooseQuestion(
+  questions,
+  setQuestions,
+  firstPlayer
+) {
+  const authData = useAuthContext();
+
   const [showQuestion, setShowQuestion] = useState(false);
   const [currCategory, setCurrCategory] = useState("");
   const [currQuestion, setCurrQuestion] = useState("");
@@ -38,12 +49,31 @@ export default function useChooseQuestion(questions, setQuestions) {
           notAnsweredQuestions.push(...notAnsweredFromCategory);
         });
 
-        setTimeout(() => {
+        setTimeout(async () => {
           if (notAnsweredQuestions.length == 1) {
             setGameFinished(true);
+
+            try {
+              if (authData.username == firstPlayer) {
+                await recordPoints(authData.userId, pointsFirstPlayer);
+
+                authData.points += pointsFirstPlayer;
+                authData.changeAuthState(authData);
+
+              } else {
+                await recordPoints(authData.userId, pointsSecondPlayer);
+
+                authData.points += pointsSecondPlayer;
+                authData.changeAuthState(authData);
+              }
+            } catch (error) {
+              toast.error(
+                "Points could not be added to your account. Please contact our Customer Service Team."
+              );
+              return;
+            }
           } else {
             findQuestion[0].answered = true;
-            //const questionToChange = copyQuestions.filter(())
 
             setQuestions(copyQuestions);
             setCurrCategory("");

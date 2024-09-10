@@ -18,4 +18,9 @@ export async function getQuestions(categoriesIDs) {
     return await api.get(host + '/play/questions/' + categoriesIDs); 
 }
 
+export async function recordPoints(userId, points) {
+    const data = { points };
+    return await api.put(host + '/play/result/' + userId, data); 
+}
+
 
