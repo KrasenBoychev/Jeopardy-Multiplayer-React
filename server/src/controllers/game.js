@@ -1,6 +1,9 @@
 const { Router } = require('express');
+const { body, validationResult } = require('express-validator');
 const { v4 } = require('uuid');
 const { StreamChat } = require('stream-chat');
+
+const { isUser } = require('../middlewares/guards');
 
 const { api_key, api_secret } = require('../api-keys');
 
@@ -10,7 +13,9 @@ const {
   getAllCategories,
   getCategory,
   getQuestions,
+  updatePoints,
 } = require('../services/game');
+
 
 const gameRouter = Router();
 
@@ -74,5 +79,27 @@ gameRouter.get('/questions/:categoriesIDs', async (req, res) => {
     res.status(400).json({ code: 400, message: parsed.message });
   }
 });
+
+gameRouter.put(
+  '/result/:userId',
+  isUser(),
+  body('points').trim().notEmpty().isNumeric().withMessage('Points should be a number'),
+  async (req, res) => {
+    try {
+      const validation = validationResult(req);
+
+      if (validation.errors.length) {
+        throw validation.errors;
+      }
+
+      const result = await updatePoints(req.params.userId, req.body);
+      res.json(result);
+
+    } catch (err) {
+      const parsed = parseError(err);
+      res.status(400).json({ code: 400, message: parsed.errors });
+    }
+  }
+);
 
 module.exports = { gameRouter };
