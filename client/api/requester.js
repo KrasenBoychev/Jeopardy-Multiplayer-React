@@ -99,8 +99,6 @@ export async function logout() {
   return result;
 }
 
-// export async function getUserByUsername(username) {
-//   const result = await get(settings.host + '/users/' + username);
-
-//   return result;
-// }
+export async function getTopPlayers() {
+  return await get(settings.host + '/users/topPlayers');
+}
