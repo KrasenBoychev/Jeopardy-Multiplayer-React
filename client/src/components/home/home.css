@@ -15,24 +15,42 @@ main {
     text-transform: uppercase;
 }
 
-.leaderboards div ul {
-    width: 60%;
-    height: 100%;
-    margin: 0 auto;
-    padding: 0;
-    background-color: #C0C78C;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
 .leaderboard-all-time p {
     padding: 10px 0;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
 
-.leaderboards div ul li {
+.leaderboard-all-time ul {
+    width: 60%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0;
+    text-align: left;
+    background-color: #C0C78C;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.leaderboard-all-time-player {
+    padding: 5px 5px 5px 20px;
     list-style-type: none;
+    font-size: large;
+}
+
+.top-three {
+    font-weight: bold;
+    color: #fff;
+    background-color: yellowgreen;
+}
+
+.leaderboard-username {
+    margin-left: 20px;
+}
+
+.leaderboard-points {
+    float: right;
+    margin-right: 20px;
 }
 
 .points-play p {
