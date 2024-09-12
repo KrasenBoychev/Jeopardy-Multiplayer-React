@@ -2,10 +2,6 @@ const { Category } = require('../models/Category');
 const { Question } = require('../models/Question');
 const { User } = require('../models/User');
 
-// async function getTopPlayers() {
-//   return User.find({ name: categoryName }).lean();
-// }
-
 async function getAllCategories() {
   return Category.find({}).lean();
 }

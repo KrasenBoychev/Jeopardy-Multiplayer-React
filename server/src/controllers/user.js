@@ -1,10 +1,11 @@
 const { Router } = require('express');
 const { body, validationResult } = require('express-validator');
 
-const { login, register } = require('../services/user');
+const { login, register, getTopPlayers } = require('../services/user');
 const { createToken } = require('../services/jwt');
 
 const { isGuest } = require('../middlewares/guards');
+const { parseError } = require('../util');
 
 const userRouter = Router();
 
@@ -61,6 +62,16 @@ userRouter.post('/register',
 
 userRouter.get('/logout', (req, res) => {
   res.status(204).end();
+});
+
+userRouter.get('/topPlayers', async (req, res) => {
+  try {
+    const data = await getTopPlayers();
+    res.json(data);
+  } catch (err) {
+    const parsed = parseError(err);
+    res.status(400).json({ code: 400, message: parsed.message });
+  }
 });
 
 module.exports = { userRouter };

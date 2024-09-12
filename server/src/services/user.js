@@ -42,7 +42,12 @@ async function login(email, password) {
     return user;
 }
 
+async function getTopPlayers() {
+  return await User.find({}).sort({ points: -1 }).limit(8);
+}
+
 module.exports = {
     register,
-    login
+    login,
+    getTopPlayers,
 };
