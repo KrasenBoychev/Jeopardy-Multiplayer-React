@@ -11,7 +11,7 @@ export const AuthContext = createContext({
   username: '',
   accessToken: '',
   isAuthenticated: false,
-  points: '',
+  points: 0,
   changeAuthState: (authState = {}) => null,
   logout: () => null,
 });
