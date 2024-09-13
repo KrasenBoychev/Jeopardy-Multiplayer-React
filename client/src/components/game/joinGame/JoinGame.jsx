@@ -5,6 +5,8 @@ import { Channel, useChatContext } from "stream-chat-react";
 
 import { useAuthContext } from "../../../contexts/AuthContext";
 
+import "./joinGame.css";
+
 import ConnectPlayers from "../startGame/connectPlayers/ConnectPlayers";
 
 export default function JoinGame(props) {
@@ -47,14 +49,19 @@ export default function JoinGame(props) {
         </Channel>
       ) : (
         <div className="joinGame">
-          <h4>Create Game</h4>
+          <h1 className="start-game-heading">Start Game</h1>
           <input
+            className="start-game-rival-player"
             placeholder="Username of rival..."
             onChange={(event) => {
               setRivalUsername(event.target.value);
             }}
           />
-          <button onClick={createChannel}> Join/Start Game</button>
+
+          <button className="start-game-button" onClick={createChannel}>
+            {" "}
+            Join/Start Game
+          </button>
         </div>
       )}
     </>
