@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import './connectPlayers.css'
+
 import StartingPlayer from "../startingPlayer/StartingPlayer";
 
 export default function ConnectPlayers({ channel }) {
@@ -13,7 +15,7 @@ export default function ConnectPlayers({ channel }) {
   });
 
   if (!playersJoined) {
-    return <div>Waiting for other player to join...</div>;
+    return <div className="waiting-to-join">Waiting for the rival player to join...</div>;
   }
 
   return <StartingPlayer channel={channel} />;

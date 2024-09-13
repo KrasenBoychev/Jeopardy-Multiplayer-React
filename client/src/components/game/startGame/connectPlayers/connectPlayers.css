@@ -1,0 +1,11 @@
+.waiting-to-join {
+    margin: 100px auto;
+    width: 60%;
+    height: 100px;
+    line-height: 100px;
+    letter-spacing: 0.8px;
+    font-size: x-large;
+    color: #fff;
+    background-color: #C0C78C;
+    border-radius: 5px;
+}
