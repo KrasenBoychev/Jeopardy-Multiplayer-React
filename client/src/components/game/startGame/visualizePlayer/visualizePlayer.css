@@ -1,0 +1,57 @@
+.visualize-starting-player {
+    margin: 50px auto;
+    width: 350px;
+    height: 300px;
+    font-size: 100px;
+    line-height: 300px;
+    color: #fff;
+    background-color: #C0C78C;
+    border-radius: 5px;
+    animation: visualize-player 1.8s ease-in 0s 1 normal both;
+}
+
+@keyframes visualize-player {
+	0% {
+		animation-timing-function: ease-in;
+		opacity: 1;
+		transform: translateY(45px);
+	}
+
+	24% {
+		opacity: 1;
+	}
+
+	40% {
+		animation-timing-function: ease-in;
+		transform: translateY(24px);
+	}
+
+	65% {
+		animation-timing-function: ease-in;
+		transform: translateY(12px);
+	}
+
+	82% {
+		animation-timing-function: ease-in;
+		transform: translateY(6px);
+	}
+
+	93% {
+		animation-timing-function: ease-in;
+		transform: translateY(4px);
+	}
+
+	25%,
+	55%,
+	75%,
+	87% {
+		animation-timing-function: ease-out;
+		transform: translateY(0px);
+	}
+
+	100% {
+		animation-timing-function: ease-out;
+		opacity: 1;
+		transform: translateY(0px);
+	}
+}

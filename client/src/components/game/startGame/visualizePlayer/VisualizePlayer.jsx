@@ -1,4 +1,7 @@
 import { useState } from "react";
+
+import './visualizePlayer.css'
+
 import Categories from "../../playGame/categories/Categories";
 
 export default function VisualizePlayer(props) {
@@ -6,7 +9,7 @@ export default function VisualizePlayer(props) {
 
   setTimeout(() => {
     setCategories(true);
-  }, 2000);
+  }, 2500);
 
-  return categories ? <Categories props={props} /> : <p>{props.players.firstPlayer}</p>;
+  return categories ? <Categories props={props} /> : <p className="visualize-starting-player">{props.players.firstPlayer}</p>;
 }
