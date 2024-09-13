@@ -1,6 +1,8 @@
 import { useState } from "react";
 import useStartingPlayer from "../../../../hooks/useStartingPlayer";
 
+import './startingPlayer.css'
+
 import VisualizePlayer from "../visualizePlayer/VisualizePlayer";
 
 export default function StartingPlayer({ channel }) {
@@ -26,7 +28,7 @@ export default function StartingPlayer({ channel }) {
       ) : !firstPlayer && noGame ? (
         <p>No game created</p>
       ) : (
-        <p>{counter}</p>
+        <p className="visualize-player-counter">{counter}</p>
       )}
 
       {counter < 1 && <p>No game created</p>}
