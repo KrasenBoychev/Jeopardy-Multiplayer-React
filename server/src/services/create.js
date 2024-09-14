@@ -2,6 +2,12 @@ const { Category } = require('../models/Category');
 const { Question } = require('../models/Question');
 
 async function createCategoryService(data) {
+  const existingCategory = await Category.findOne({ name: data.name });
+
+  if (existingCategory) {
+    throw new Error(`${data.name} category name is already in use`);
+  }
+
   const record = new Category({
     name: data.name
   });
