@@ -89,3 +89,11 @@
     min-height: 50px;
     max-height: 150px;
 }
+
+.loading-wrapper {
+    width: 100%;
+}
+
+.loader {
+    margin: 150px 50%;
+}

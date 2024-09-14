@@ -46,6 +46,7 @@ export default function CreateQuestion({ props }) {
           category
             ? {
                 name: question.name,
+                points: question.points,
                 answerOne: question.answers.answerOne,
                 answerTwo: question.answers.answerTwo,
                 answerThree: question.answers.answerThree,
@@ -87,14 +88,12 @@ export default function CreateQuestion({ props }) {
                 answerThree: values.answerThree,
                 answerFour: values.answerFour,
               },
-              correctAnswer: correctAnswerValue
+              correctAnswer: correctAnswerValue,
+              correctIndex: answersCorrectValues.indexOf("true"),
             });
 
             if (setMove) {
               setMove((oldValue) => oldValue + 1);
-
-              const index = points.indexOf(values.points);
-              points.splice(index, 1);
             }
 
             if (setRecordCategoryAndQuestions) {
@@ -114,9 +113,9 @@ export default function CreateQuestion({ props }) {
                     answerOne: values.answerOne,
                     answerTwo: values.answerTwo,
                     answerThree: values.answerThree,
-                    answerFour: values.answerFour
+                    answerFour: values.answerFour,
                   },
-                  correctAnswer: correctAnswerValue
+                  correctAnswer: correctAnswerValue,
                 },
                 selectedCategory[0]._id
               );
@@ -160,24 +159,33 @@ export default function CreateQuestion({ props }) {
               </>
             )}
 
-            <Field
-              as="select"
-              name="points"
-              className="authentication-input category-select"
-            >
-              {question && question.points ? (
-                <option value={question.points}>{question.points}</option>
-              ) : (
-                <option value="choosePoints">--- Choose Points ---</option>
-              )}
-              {points.map((point) => {
-                return (
-                  <option key={point} value={point}>
-                    {point}
-                  </option>
-                );
-              })}
-            </Field>
+            {category ? (
+              <Field
+                type="number"
+                name="points"
+                disabled={true}
+                className="authentication-input category-span"
+              />
+            ) : (
+              <Field
+                as="select"
+                name="points"
+                className="authentication-input category-select"
+              >
+                {question && question.points ? (
+                  <option value={question.points}>{question.points}</option>
+                ) : (
+                  <option value="choosePoints">--- Choose Points ---</option>
+                )}
+                {points.map((point) => {
+                  return (
+                    <option key={point} value={point}>
+                      {point}
+                    </option>
+                  );
+                })}
+              </Field>
+            )}
             <ErrorMessage
               name="points"
               component="div"
@@ -314,10 +322,18 @@ export default function CreateQuestion({ props }) {
                   : "Next Question"
                 : "Record Question"}
             </button>
+
+            {move && (
+              <button
+                onClick={() => setMove((oldValue) => oldValue - 1)}
+                className="authentication-form-button"
+              >
+                Previous Question
+              </button>
+            )}
           </Form>
         )}
       </Formik>
-      {/* {move && <button onClick={() => setMove(oldValue => oldValue - 1)}>Back</button>} */}
     </div>
   );
 }

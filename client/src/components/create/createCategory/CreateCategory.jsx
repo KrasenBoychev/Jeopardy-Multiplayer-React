@@ -19,7 +19,7 @@ export default function CreateCategory() {
     questionFour,
     setQuestionFour,
     recordCategoryAndQuestions,
-    setRecordCategoryAndQuestions
+    setRecordCategoryAndQuestions,
   ] = useCreateCategory();
 
   return (
@@ -77,7 +77,13 @@ export default function CreateCategory() {
         />
       )}
 
-      {/* {recordCategoryAndQuestions && <DotLoader />} */}
+      {recordCategoryAndQuestions && (
+        <div className="loading-wrapper">
+          <div className="loader">
+            <DotLoader />
+          </div>
+        </div>
+      )}
     </>
   );
 }
