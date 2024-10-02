@@ -7,20 +7,11 @@ import "./header.css";
 
 import LeaveGame from "../leaveGame/LeaveGame";
 
-
 export default function Header(props) {
   const { isAuthenticated, username, userId } = useAuthContext();
 
-  const { isAuth, setIsAuth } = props.auth;
+  const { isGame, setIsGame } = props.game;
   const client = props.client;
-
-  // useEffect(() => {
-  //   (function checkConnection() {
-  //     if (props.channel.channel && props.channel.channel.state.watcher_count < 2) {
-  //       setError(true);
-  //     }
-  //   })();
-  // }, [props.channel.channel]);
 
   return (
     <header>
@@ -29,20 +20,13 @@ export default function Header(props) {
           <li>Welcome, {isAuthenticated ? username : "guest"}</li>
         </ul>
 
-        {isAuth ? (
+        {isGame ? (
           <ul className="profile">
-            {/* {props.channel.channel && (
-              <li className={error ? "disconnected" : "connected"}>
-                Rival Player:
-                {error ? " disconnected" : " connected"}
-              </li>
-            )} */}
             <li>
               <LeaveGame
-                auth={{ isAuth, setIsAuth }}
+                game={{ isGame, setIsGame }}
                 channel={props.channel}
                 client={client}
-                // setError={setError}
               />
             </li>
           </ul>
@@ -63,6 +47,7 @@ export default function Header(props) {
                   <NavLink to="/create">Create</NavLink>
                 </li>
               )}
+
               {isAuthenticated ? (
                 <li>
                   <NavLink to="/logout">Logout</NavLink>

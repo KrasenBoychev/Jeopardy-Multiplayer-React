@@ -6,16 +6,16 @@ import usePlay from "../../hooks/usePlay";
 import JoinGame from "./joinGame/JoinGame";
 
 export default function Play(props) {
-  const { isAuth, setIsAuth } = props.auth;
+  const { isGame, setIsGame } = props.game;
   const client = props.client;
 
   const { username } = useAuthContext();
 
-  usePlay(username, setIsAuth, client);
+  usePlay(username, setIsGame, client);
 
   return (
     <>
-      {isAuth && (
+      {isGame && (
         <Chat client={client}>
           <JoinGame channel={props.channel} />
         </Chat>

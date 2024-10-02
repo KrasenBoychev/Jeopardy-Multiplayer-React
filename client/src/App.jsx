@@ -25,7 +25,7 @@ import CreateQuestion from "./components/create/createQuestion/CreateQuestion";
 import NotFound from "./components/notFound/NotFound";
 
 function App() {
-  const [isAuth, setIsAuth] = useState(false);
+  const [isGame, setIsGame] = useState(false);
   const [channel, setChannel] = useState(null);
 
   const api_key = "tswxm74zz6uc";
@@ -37,7 +37,7 @@ function App() {
 
       <AuthContextProvider>
         <Header
-          auth={{ isAuth, setIsAuth }}
+          game={{ isGame, setIsGame }}
           channel={{ channel, setChannel }}
           client={client}
         />
@@ -55,7 +55,7 @@ function App() {
               path="/play"
               element={
                 <Play
-                  auth={{ isAuth, setIsAuth }}
+                  game={{ isGame, setIsGame }}
                   channel={{ channel, setChannel }}
                   client={client}
                 />

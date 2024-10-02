@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { getGameToken } from "../../api/game-api";
 import toast from "react-hot-toast";
 
-export default function usePlay(username, setIsAuth, client) {
+export default function usePlay(username, setIsGame, client) {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function usePlay(username, setIsAuth, client) {
             token
           )
           .then((user) => {
-            setIsAuth(true);
+            setIsGame(true);
           });
 
         if (!active) {
