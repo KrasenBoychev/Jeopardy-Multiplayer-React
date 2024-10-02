@@ -1,48 +1,49 @@
 import { useEffect, useState } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+
+import useLeaveGame from "../../hooks/useLeaveGame";
+
+import Confrim from "./confirm/Confrim";
 
 export default function LeaveGame(props) {
-  const [leave, setLeave] = useState(false);
-  const naigate = useNavigate();
-
-  const { isAuth, setIsAuth } = props.auth;
+  const { isGame, setIsGame } = props.game;
   const { channel, setChannel } = props.channel;
   const client = props.client;
 
-  const [disconnect, setDisconnect] = useState(false);
-
-  useEffect(() => {
-    (async function setLeaveState() {
-      if (disconnect) {
-        await channel.stopWatching();
-        setChannel(null);
-
-        client.disconnectUser();
-        setIsAuth(false);
-        naigate("/");
-      } else {
-        if (leave) {
-          setIsAuth(false);
-        }
-      }
-    })();
-  }, [leave, disconnect]);
+  const [
+    setLeave,
+    setDisconnect,
+    setLeavingPlayer,
+    showConfirmMessage,
+    setShowConfirmMessage,
+    navigate
+  ] = useLeaveGame(setIsGame, channel, setChannel, client);
 
   const leavePage = async () => {
     if (channel) {
-      await channel.sendEvent({
-        type: "set-error",
-      });
+      setShowConfirmMessage(true);
     } else {
       client.disconnectUser();
       setLeave(true);
-      naigate("/");
+      navigate("/");
     }
   };
 
+  const confirmLeaving = async () => {
+    setLeavingPlayer(client.user.name);
+
+    await channel.sendEvent({
+      type: "leave-game",
+    });
+  };
+
+  const declineLeaving = () => {
+    setShowConfirmMessage(false);
+  };
+
   if (channel) {
-    channel.on(async (event) => {
-      if (event.type == "set-error") {
+    channel.on((event) => {
+      if (event.type == "leave-game") {
         setDisconnect(true);
       }
     });
@@ -56,12 +57,14 @@ export default function LeaveGame(props) {
         </li>
       </ul>
 
-      {/* {channel && (
-        <p color={channel.state.wather_count == 2 ? "green" : "red"}>
-          Rival Player: 
-          {channel.state.watcher_count == 2 ? " connected" : " disconnected"}
-        </p>
-      )} */}
+      {showConfirmMessage && (
+        <Confrim
+          props={{
+            confirmLeaving,
+            declineLeaving,
+          }}
+        />
+      )}
     </>
   );
 }
