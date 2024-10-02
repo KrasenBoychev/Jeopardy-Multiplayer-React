@@ -43,11 +43,3 @@ nav li {
     cursor: pointer;
     color: #fff;
 }
-
-.connected {
-    color: greenyellow;
-}
-
-.disconnected {
-    color: red;
-}
