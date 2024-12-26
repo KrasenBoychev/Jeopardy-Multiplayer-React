@@ -21,7 +21,7 @@ export default function Home() {
 
   return (
     <main>
-      <div className="leaderboards">
+      <div className="home-container">
         <div className="points-play">
           <p>{points != undefined ? `Your Points: ${points}` : "Play to win points!"}</p>
 
