@@ -1,45 +1,51 @@
 header {
-    height: 70px;
-    margin: 0 auto;
-    padding: 0 20px;
-    text-align: center;
-    background-color: #B99470;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    color: var(--white);
+    background-color: var(--midnight-blue);
 }
 
 nav {
     width: 100%;
-    margin: 0 auto 60px auto;
-    padding: 5px 0;
-    text-align: center;
-    font-size: large;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
 }
 
 nav ul {
-    display: inline-block;
-    padding: 0;
+    justify-content: space-between;
+    display: flex;
 }
 
-nav li {
-    display: inline-block;
-    margin: 0 15px;
+nav ul li a, .logo li {
+    align-content: center;
 }
 
 .logo {
-    float: left;
-    margin-left: 20px;
+    flex: 0 0 60%;
 }
 
 .profile {
-    float: right;
-    margin-right: 20px;
+    flex: 0 0 40%;
 }
 
-.profile a {
-    text-decoration: none;
-    color: #000;
+.profile li {
+    display: flex;
+    width: 65px;
+    height: 25px;
+    text-align: center;
+    align-items: center;
+    border-radius: 2px;
 }
 
-.profile a:hover {
+.profile li a {
+    width: 100%;
+    height: 100%;
+}
+
+.profile li:hover {
     cursor: pointer;
-    color: #fff;
+    color: var(--midnight-blue);
+    background-color: var(--white);
 }
