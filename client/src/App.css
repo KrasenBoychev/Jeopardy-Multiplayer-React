@@ -31,5 +31,4 @@ ul {
 main {
   flex-grow: 1;
   display: flex;
-  margin: 40px auto;
 }
