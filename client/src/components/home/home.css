@@ -1,11 +1,15 @@
-main {
-   margin: 40px auto;
+.home-container {
+    flex-grow: 1;
+    padding: 30px 60px;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--baby-blue);
 }
 
-.leaderboards div {
-    float: left;
-    width: 50%;
-    height: 300px;
+/* .leaderboards div {
+    width: 90%;
+    height: 100%;
+    display: flex;
 }
 
 .leaderboards div p {
@@ -79,4 +83,4 @@ main {
     cursor: pointer;
     font-size: xx-large;
     background-color: yellowgreen;
-}
+} */
