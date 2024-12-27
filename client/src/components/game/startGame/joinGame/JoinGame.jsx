@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-
 import { Channel, useChatContext } from "stream-chat-react";
-
-import { useAuthContext } from "../../../contexts/AuthContext";
+import { useAuthContext } from "../../../../contexts/AuthContext";
+import ConnectPlayers from "../connectPlayers/ConnectPlayers";
 
 import "./joinGame.css";
-
-import ConnectPlayers from "../startGame/connectPlayers/ConnectPlayers";
+import "../../play.css";
 
 export default function JoinGame(props) {
   const [rivalUsername, setRivalUsername] = useState("");
@@ -45,23 +43,25 @@ export default function JoinGame(props) {
     <>
       {channel ? (
         <Channel channel={channel} setChannel={setChannel}>
-          <ConnectPlayers channel={channel} />
+          <ConnectPlayers channel={channel} rivalPlayer={rivalUsername} />
         </Channel>
       ) : (
-        <div className="joinGame">
-          <h1 className="start-game-heading">Start Game</h1>
-          <input
-            className="start-game-rival-player"
-            placeholder="Username of rival..."
-            onChange={(event) => {
-              setRivalUsername(event.target.value);
-            }}
-          />
+        <div className="game-container">
+          <div className="game-wrapper">
+            <h1 className="start-game-heading">Start Game</h1>
+            <input
+              className="start-game-rival-player"
+              placeholder="Username of rival player..."
+              onChange={(event) => {
+                setRivalUsername(event.target.value);
+              }}
+            />
 
-          <button className="start-game-button" onClick={createChannel}>
-            {" "}
-            Join/Start Game
-          </button>
+            <button className="start-game-button" onClick={createChannel}>
+              {" "}
+              Join/Start Game
+            </button>
+          </div>
         </div>
       )}
     </>
