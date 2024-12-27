@@ -1,11 +1,23 @@
-.waiting-to-join {
-    margin: 100px auto;
-    width: 60%;
-    height: 100px;
-    line-height: 100px;
-    letter-spacing: 0.8px;
-    font-size: x-large;
-    color: #fff;
-    background-color: #C0C78C;
+.str-chat {
+    flex-grow: 1;
+    align-content: center;
+    justify-items: center;
+    background-color: var(--baby-blue);
+}
+
+.str-chat__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+}
+
+.str-chat__container p {
+    padding: 20px;
+    font-size: 1.5rem;
+    letter-spacing: 1.5px;
+    color: var(--white);
+    background-color: var(--midnight-blue);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     border-radius: 5px;
 }

@@ -1,10 +1,11 @@
 import { useState } from "react";
-
-import './connectPlayers.css'
-
 import StartingPlayer from "../startingPlayer/StartingPlayer";
+import "./connectPlayers.css";
+import DotLoader from "react-spinners/DotLoader";
 
-export default function ConnectPlayers({ channel }) {
+export default function ConnectPlayers(props) {
+  const channel = props.channel;
+  const rivalPlayer = props.rivalPlayer;
 
   const [playersJoined, setPlayersJoined] = useState(
     channel.state.watcher_count === 2
@@ -15,7 +16,12 @@ export default function ConnectPlayers({ channel }) {
   });
 
   if (!playersJoined) {
-    return <div className="waiting-to-join">Waiting for the rival player to join...</div>;
+    return (
+      <>
+        <p>Waiting for {rivalPlayer} to join...</p>
+        <DotLoader />
+      </>
+  );
   }
 
   return <StartingPlayer channel={channel} />;
