@@ -41,6 +41,7 @@
     background-color: var(--purple);
     border-radius: 5px;
     border: none;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     position: relative;
     animation: mymove 3s infinite;
     animation-direction: alternate-reverse;

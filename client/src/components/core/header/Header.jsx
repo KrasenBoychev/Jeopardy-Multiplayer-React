@@ -1,11 +1,11 @@
 import { NavLink } from "react-router-dom";
 
-import { useAuthContext } from "../../contexts/AuthContext";
-import { adminId } from "../../common/credentials.js";
+import { useAuthContext } from "../../../contexts/AuthContext.jsx";
+import { adminId } from "../../../common/credentials.js";
 
 import "./header.css";
 
-import LeaveGame from "../leaveGame/LeaveGame";
+import LeaveGame from "../../leaveGame/LeaveGame.jsx";
 
 export default function Header(props) {
   const { isAuthenticated, username, userId } = useAuthContext();

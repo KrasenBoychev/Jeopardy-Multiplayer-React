@@ -13,8 +13,9 @@ import PublicGuard from "./common/PublicGuard";
 import AdminGuard from "./common/AdminGuard";
 
 import Home from "./components/home/Home";
-import Header from "./components/header/Header";
-import Footer from "./components/footer/Footer";
+import About from "./components/about/About";
+import Header from "./components/core/header/Header";
+import Footer from "./components/core/footer/Footer";
 import Login from "./components/authentication/Login";
 import Register from "./components/authentication/Register";
 import Logout from "./components/authentication/Logout";
@@ -22,7 +23,7 @@ import Play from "./components/game/Play";
 import Create from "./components/create/Create";
 import CreateCategory from "./components/create/createCategory/CreateCategory";
 import CreateQuestion from "./components/create/createQuestion/CreateQuestion";
-import NotFound from "./components/notFound/NotFound";
+import NotFound from "./components/core/notFound/NotFound";
 
 function App() {
   const [isGame, setIsGame] = useState(false);
@@ -44,6 +45,7 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
 
           <Route element={<PublicGuard />}>
             <Route path="/login" element={<Login />} />
