@@ -17,7 +17,7 @@ export default function Home() {
       const players = await getTopPlayers();
       setTopPlayers(players);
     })();
-  }, [topPlayers]);
+  }, []);
 
   return (
     <main>
@@ -30,7 +30,8 @@ export default function Home() {
           </p>
           <Link to="/play">
             <button className="play-button">
-              &gt;&gt;&gt; Play &lt;&lt;&lt;
+              <span className="play-btn-arrows">&gt;&gt;&gt;</span> Play{" "}
+              <span className="play-btn-arrows">&lt;&lt;&lt;</span>
             </button>
           </Link>
         </section>
