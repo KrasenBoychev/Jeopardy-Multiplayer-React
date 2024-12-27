@@ -43,7 +43,7 @@ async function login(email, password) {
 }
 
 async function getTopPlayers() {
-  return await User.find({}).sort({ points: -1 }).limit(8);
+  return await User.find({}).sort({ points: -1 }).limit(10);
 }
 
 module.exports = {
