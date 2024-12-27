@@ -1,11 +1,8 @@
-import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
-
-import useLeaveGame from "../../hooks/useLeaveGame";
-
+import useLeaveGame from "../../../hooks/useLeaveGame";
 import Confrim from "./confirm/Confrim";
+import "./exit.css";
 
-export default function LeaveGame(props) {
+export default function ExitGame(props) {
   const { isNewGameStarted, setIsNewGameStarted } = props.game;
   const { channel, setChannel } = props.channel;
   const client = props.client;
@@ -16,7 +13,7 @@ export default function LeaveGame(props) {
     setLeavingPlayer,
     showConfirmMessage,
     setShowConfirmMessage,
-    navigate
+    navigate,
   ] = useLeaveGame(setIsNewGameStarted, channel, setChannel, client);
 
   const leavePage = async () => {
@@ -48,14 +45,11 @@ export default function LeaveGame(props) {
       }
     });
   }
-
   return (
     <>
-      <ul className="profile">
-        <li onClick={leavePage}>
-          <NavLink>Leave Game</NavLink>
-        </li>
-      </ul>
+      <div className="exit-game-container">
+        <p onClick={leavePage}>Exit Game</p>
+      </div>
 
       {showConfirmMessage && (
         <Confrim
