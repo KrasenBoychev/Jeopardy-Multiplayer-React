@@ -20,13 +20,14 @@ import Login from "./components/authentication/Login";
 import Register from "./components/authentication/Register";
 import Logout from "./components/authentication/Logout";
 import Play from "./components/game/Play";
+import ExitGame from "./components/game/exitGame/ExitGame";
 import Create from "./components/create/Create";
 import CreateCategory from "./components/create/createCategory/CreateCategory";
 import CreateQuestion from "./components/create/createQuestion/CreateQuestion";
 import NotFound from "./components/core/notFound/NotFound";
 
 function App() {
-  const [isGame, setIsGame] = useState(false);
+  const [isNewGameStarted, setIsNewGameStarted] = useState(false);
   const [channel, setChannel] = useState(null);
 
   const api_key = "tswxm74zz6uc";
@@ -37,58 +38,64 @@ function App() {
       <Toaster />
 
       <AuthContextProvider>
-        <Header
-          game={{ isGame, setIsGame }}
-          channel={{ channel, setChannel }}
-          client={client}
-        />
+        {!isNewGameStarted ? (
+          <Header />
+        ) : (
+          <ExitGame
+            game={{ isNewGameStarted, setIsNewGameStarted }}
+            channel={{ channel, setChannel }}
+            client={client}
+          />
+        )}
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
 
-          <Route element={<PublicGuard />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Route>
+            <Route element={<PublicGuard />}>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Route>
 
-          <Route element={<PrivateGuard />}>
-            <Route
-              path="/play"
-              element={
-                <Play
-                  game={{ isGame, setIsGame }}
-                  channel={{ channel, setChannel }}
-                  client={client}
-                />
-              }
-            />
-            <Route path="/logout" element={<Logout client={client} />} />
-          </Route>
+            <Route element={<PrivateGuard />}>
+              <Route
+                path="/play"
+                element={
+                  <Play
+                    game={{ isNewGameStarted, setIsNewGameStarted }}
+                    channel={{ channel, setChannel }}
+                    client={client}
+                  />
+                }
+              />
+              <Route path="/logout" element={<Logout client={client} />} />
+            </Route>
 
-          <Route element={<AdminGuard />}>
-            <Route path="/create" element={<Create />} />
-            <Route path="/createCategory" element={<CreateCategory />} />
-            <Route
-              path="/createQuestion"
-              element={
-                <CreateQuestion
-                  props={{
-                    category: null,
-                    setQuestion: null,
-                    move: null,
-                    setMove: null,
-                    setRecordCategoryAndQuestions: null,
-                  }}
-                />
-              }
-            />
-          </Route>
+            <Route element={<AdminGuard />}>
+              <Route path="/create" element={<Create />} />
+              <Route path="/createCategory" element={<CreateCategory />} />
+              <Route
+                path="/createQuestion"
+                element={
+                  <CreateQuestion
+                    props={{
+                      category: null,
+                      setQuestion: null,
+                      move: null,
+                      setMove: null,
+                      setRecordCategoryAndQuestions: null,
+                    }}
+                  />
+                }
+              />
+            </Route>
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
 
-        <Footer />
+        {!isNewGameStarted && <Footer />}
       </AuthContextProvider>
     </>
   );
