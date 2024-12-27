@@ -1,3 +1,4 @@
+const { adminId } = require('../api-keys');
 const { User } = require('../models/User');
 const bcrypt = require('bcrypt');
 
@@ -43,7 +44,7 @@ async function login(email, password) {
 }
 
 async function getTopPlayers() {
-  return await User.find({}).sort({ points: -1 }).limit(10);
+  return await User.find({ _id: { $nin: [adminId] } }).sort({ points: -1 }).limit(10);
 }
 
 module.exports = {
