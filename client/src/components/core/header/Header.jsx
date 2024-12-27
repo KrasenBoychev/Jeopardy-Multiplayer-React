@@ -10,7 +10,7 @@ import LeaveGame from "../../leaveGame/LeaveGame.jsx";
 export default function Header(props) {
   const { isAuthenticated, username, userId } = useAuthContext();
 
-  const { isGame, setIsGame } = props.game;
+  const { isNewGameStarted, setIsNewGameStarted } = props.game;
   const client = props.client;
 
   return (
@@ -20,11 +20,11 @@ export default function Header(props) {
           <li>Welcome, {isAuthenticated ? username : "guest"}</li>
         </ul>
 
-        {isGame ? (
+        {isNewGameStarted ? (
           <ul className="profile">
             <li>
               <LeaveGame
-                game={{ isGame, setIsGame }}
+                game={{ isNewGameStarted, setIsNewGameStarted }}
                 channel={props.channel}
                 client={client}
               />

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-export default function useLeaveGame(setIsGame, channel, setChannel, client) {
+export default function useLeaveGame(setIsNewGameStarted, channel, setChannel, client) {
   const [leave, setLeave] = useState(false);
   const [disconnect, setDisconnect] = useState(false);
   const [leavingPlayer, setLeavingPlayer] = useState("");
@@ -14,18 +14,18 @@ export default function useLeaveGame(setIsGame, channel, setChannel, client) {
     (async function setLeaveState() {
       if (disconnect) {
         if (leavingPlayer == client.user.name) {
-          disconnectUser(channel, setChannel, client, setIsGame, navigate);
+          disconnectUser(channel, setChannel, client, setIsNewGameStarted, navigate);
         } else {
           toast.error(
             "Rival Player disconnected - you will be redirected in 3 seconds"
           );
           setTimeout(async () => {
-            disconnectUser(channel, setChannel, client, setIsGame, navigate);
+            disconnectUser(channel, setChannel, client, setIsNewGameStarted, navigate);
           }, 3000);
         }
       } else {
         if (leave) {
-          setIsGame(false);
+          setIsNewGameStarted(false);
         }
       }
     })();
@@ -45,12 +45,12 @@ async function disconnectUser(
   channel,
   setChannel,
   client,
-  setIsGame,
+  setIsNewGameStarted,
   navigate
 ) {
   await channel.stopWatching();
   setChannel(null);
   client.disconnectUser();
-  setIsGame(false);
+  setIsNewGameStarted(false);
   navigate("/");
 }

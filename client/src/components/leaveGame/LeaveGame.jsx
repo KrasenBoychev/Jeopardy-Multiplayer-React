@@ -6,7 +6,7 @@ import useLeaveGame from "../../hooks/useLeaveGame";
 import Confrim from "./confirm/Confrim";
 
 export default function LeaveGame(props) {
-  const { isGame, setIsGame } = props.game;
+  const { isNewGameStarted, setIsNewGameStarted } = props.game;
   const { channel, setChannel } = props.channel;
   const client = props.client;
 
@@ -17,7 +17,7 @@ export default function LeaveGame(props) {
     showConfirmMessage,
     setShowConfirmMessage,
     navigate
-  ] = useLeaveGame(setIsGame, channel, setChannel, client);
+  ] = useLeaveGame(setIsNewGameStarted, channel, setChannel, client);
 
   const leavePage = async () => {
     if (channel) {
