@@ -3,7 +3,6 @@ import "./about.css";
 
 export default function Home() {
   return (
-    <main>
       <div className="about-container">
         <section>
           <h2>Get Started</h2>
@@ -32,6 +31,5 @@ export default function Home() {
           </p>
         </section>
       </div>
-    </main>
   );
 }

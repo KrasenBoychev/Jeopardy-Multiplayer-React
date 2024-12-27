@@ -39,315 +39,308 @@ export default function CreateQuestion({ props }) {
   };
 
   return (
-    <main>
-      <div className="authentication-container">
-        <div className="authentication-wrapper">
-          <h1>Category Question</h1>
-          <Formik
-            initialValues={
-              category
-                ? {
-                    name: question.name,
-                    points: question.points,
-                    answerOne: question.answers.answerOne,
-                    answerTwo: question.answers.answerTwo,
-                    answerThree: question.answers.answerThree,
-                    answerFour: question.answers.answerFour,
-                  }
-                : {
-                    category: "--- Choose Category ---",
-                    points: "--- Choose Points ---",
-                    name: "",
-                    answerOne: "",
-                    answerTwo: "",
-                    answerThree: "",
-                    answerFour: "",
-                  }
+    <div className="authentication-container">
+      <div className="authentication-wrapper">
+        <h1>Category Question</h1>
+        <Formik
+          initialValues={
+            category
+              ? {
+                  name: question.name,
+                  points: question.points,
+                  answerOne: question.answers.answerOne,
+                  answerTwo: question.answers.answerTwo,
+                  answerThree: question.answers.answerThree,
+                  answerFour: question.answers.answerFour,
+                }
+              : {
+                  category: "--- Choose Category ---",
+                  points: "--- Choose Points ---",
+                  name: "",
+                  answerOne: "",
+                  answerTwo: "",
+                  answerThree: "",
+                  answerFour: "",
+                }
+          }
+          validate={(values) => {
+            const errors = {};
+
+            validateValues(values, errors, category, allCategories);
+
+            return errors;
+          }}
+          onSubmit={async (values) => {
+            const correctAnswerValue = checkTrueAnswer(
+              answersCorrectValues,
+              values
+            );
+            if (!correctAnswerValue) {
+              return;
             }
-            validate={(values) => {
-              const errors = {};
 
-              validateValues(values, errors, category, allCategories);
+            if (category) {
+              setQuestion({
+                name: values.name,
+                points: values.points,
+                answers: {
+                  answerOne: values.answerOne,
+                  answerTwo: values.answerTwo,
+                  answerThree: values.answerThree,
+                  answerFour: values.answerFour,
+                },
+                correctAnswer: correctAnswerValue,
+                correctIndex: answersCorrectValues.indexOf("true"),
+              });
 
-              return errors;
-            }}
-            onSubmit={async (values) => {
-              const correctAnswerValue = checkTrueAnswer(
-                answersCorrectValues,
-                values
-              );
-              if (!correctAnswerValue) {
-                return;
+              if (setMove) {
+                setMove((oldValue) => oldValue + 1);
               }
 
-              if (category) {
-                setQuestion({
-                  name: values.name,
-                  points: values.points,
-                  answers: {
-                    answerOne: values.answerOne,
-                    answerTwo: values.answerTwo,
-                    answerThree: values.answerThree,
-                    answerFour: values.answerFour,
+              if (setRecordCategoryAndQuestions) {
+                setRecordCategoryAndQuestions(true);
+              }
+            } else {
+              const selectedCategory = allCategories.filter(
+                (c) => c.name == values.category
+              );
+
+              try {
+                await createQuestion(
+                  {
+                    name: values.name,
+                    points: values.points,
+                    answers: {
+                      answerOne: values.answerOne,
+                      answerTwo: values.answerTwo,
+                      answerThree: values.answerThree,
+                      answerFour: values.answerFour,
+                    },
+                    correctAnswer: correctAnswerValue,
                   },
-                  correctAnswer: correctAnswerValue,
-                  correctIndex: answersCorrectValues.indexOf("true"),
-                });
-
-                if (setMove) {
-                  setMove((oldValue) => oldValue + 1);
-                }
-
-                if (setRecordCategoryAndQuestions) {
-                  setRecordCategoryAndQuestions(true);
-                }
-              } else {
-                const selectedCategory = allCategories.filter(
-                  (c) => c.name == values.category
+                  selectedCategory[0]._id
                 );
 
-                try {
-                  await createQuestion(
-                    {
-                      name: values.name,
-                      points: values.points,
-                      answers: {
-                        answerOne: values.answerOne,
-                        answerTwo: values.answerTwo,
-                        answerThree: values.answerThree,
-                        answerFour: values.answerFour,
-                      },
-                      correctAnswer: correctAnswerValue,
-                    },
-                    selectedCategory[0]._id
-                  );
-
-                  navigate("/");
-                } catch (error) {
-                  return toast.error(error.message);
-                }
+                navigate("/");
+              } catch (error) {
+                return toast.error(error.message);
               }
-            }}
-          >
-            {({ isSubmitting }) => (
-              <Form className="authentication-form">
-                {move ? (
-                  <div className="authentication-input category-span">
-                    {category}
-                  </div>
-                ) : (
-                  <>
-                    <Field
-                      as="select"
-                      name="category"
-                      className="authentication-input category-select"
-                    >
-                      <option value="chooseCategory">
-                        --- Choose Category ---
-                      </option>
-                      {allCategories.map((eachCategory) => {
-                        return (
-                          <option
-                            key={eachCategory.name}
-                            value={eachCategory.name}
-                          >
-                            {eachCategory.name}
-                          </option>
-                        );
-                      })}
-                    </Field>
-                    <ErrorMessage
-                      name="category"
-                      component="div"
-                      className="authentication-error"
-                    />
-                  </>
-                )}
-
-                {category ? (
-                  <Field
-                    type="number"
-                    name="points"
-                    disabled={true}
-                    className="authentication-input category-span"
-                  />
-                ) : (
+            }
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form className="authentication-form">
+              {move ? (
+                <div className="authentication-input category-span">
+                  {category}
+                </div>
+              ) : (
+                <>
                   <Field
                     as="select"
-                    name="points"
+                    name="category"
                     className="authentication-input category-select"
                   >
-                    {question && question.points ? (
-                      <option value={question.points}>{question.points}</option>
-                    ) : (
-                      <option value="choosePoints">
-                        --- Choose Points ---
-                      </option>
-                    )}
-                    {points.map((point) => {
+                    <option value="chooseCategory">
+                      --- Choose Category ---
+                    </option>
+                    {allCategories.map((eachCategory) => {
                       return (
-                        <option key={point} value={point}>
-                          {point}
+                        <option
+                          key={eachCategory.name}
+                          value={eachCategory.name}
+                        >
+                          {eachCategory.name}
                         </option>
                       );
                     })}
                   </Field>
-                )}
-                <ErrorMessage
-                  name="points"
-                  component="div"
-                  className="authentication-error"
-                />
+                  <ErrorMessage
+                    name="category"
+                    component="div"
+                    className="authentication-error"
+                  />
+                </>
+              )}
 
+              {category ? (
                 <Field
-                  as="textarea"
-                  name="name"
-                  placeholder="Question Name"
-                  className="authentication-input textarea-question"
+                  type="number"
+                  name="points"
+                  disabled={true}
+                  className="authentication-input category-span"
                 />
-                <ErrorMessage
-                  name="name"
-                  component="div"
-                  className="authentication-error"
-                />
-                <p className="create-questions-paragraph">
-                  Choose the correct answer by clicking the button next to it
-                </p>
-
-                <div className="create-question-wrapper">
-                  <Field
-                    type="text"
-                    name="answerOne"
-                    placeholder="Answer One"
-                    className="create-question-input"
-                  />
-                  <button
-                    type="button"
-                    id="correct-0"
-                    className={
-                      answersCorrectValues[0] == "true"
-                        ? "create-question-button true"
-                        : "create-question-button false"
-                    }
-                    onClick={changeCorrectAnswer}
-                  >
-                    {answersCorrectValues[0]}
-                  </button>
-                </div>
-                <ErrorMessage
-                  name="answerOne"
-                  component="div"
-                  className="authentication-error"
-                />
-
-                <div className="create-question-wrapper">
-                  <Field
-                    type="text"
-                    name="answerTwo"
-                    placeholder="Answer Two"
-                    className="create-question-input"
-                  />
-                  <button
-                    type="button"
-                    id="correct-1"
-                    className={
-                      answersCorrectValues[1] == "true"
-                        ? "create-question-button true"
-                        : "create-question-button false"
-                    }
-                    onClick={changeCorrectAnswer}
-                  >
-                    {answersCorrectValues[1]}
-                  </button>
-                </div>
-                <ErrorMessage
-                  name="answerTwo"
-                  component="div"
-                  className="authentication-error"
-                />
-
-                <div className="create-question-wrapper">
-                  <Field
-                    type="text"
-                    name="answerThree"
-                    placeholder="Answer Three"
-                    className="create-question-input"
-                  />
-                  <button
-                    type="button"
-                    id="correct-2"
-                    className={
-                      answersCorrectValues[2] == "true"
-                        ? "create-question-button true"
-                        : "create-question-button false"
-                    }
-                    onClick={changeCorrectAnswer}
-                  >
-                    {answersCorrectValues[2]}
-                  </button>
-                </div>
-                <ErrorMessage
-                  name="answerThree"
-                  component="div"
-                  className="authentication-error"
-                />
-
-                <div className="create-question-wrapper">
-                  <Field
-                    type="text"
-                    name="answerFour"
-                    placeholder="Answer Four"
-                    className="create-question-input"
-                  />
-                  <button
-                    type="button"
-                    id="correct-3"
-                    className={
-                      answersCorrectValues[3] == "true"
-                        ? "create-question-button true"
-                        : "create-question-button false"
-                    }
-                    onClick={changeCorrectAnswer}
-                  >
-                    {answersCorrectValues[3]}
-                  </button>
-                </div>
-                <ErrorMessage
-                  name="answerFour"
-                  component="div"
-                  className="authentication-error"
-                />
-
-                <div className="question-btns">
-                  {move && (
-                    <button
-                      onClick={() => setMove((oldValue) => oldValue - 1)}
-                      className="authentication-form-button"
-                    >
-                      {move == 1
-                        ? "Edit Category"
-                        : "Previous Question"
-                      }
-                    </button>
+              ) : (
+                <Field
+                  as="select"
+                  name="points"
+                  className="authentication-input category-select"
+                >
+                  {question && question.points ? (
+                    <option value={question.points}>{question.points}</option>
+                  ) : (
+                    <option value="choosePoints">--- Choose Points ---</option>
                   )}
+                  {points.map((point) => {
+                    return (
+                      <option key={point} value={point}>
+                        {point}
+                      </option>
+                    );
+                  })}
+                </Field>
+              )}
+              <ErrorMessage
+                name="points"
+                component="div"
+                className="authentication-error"
+              />
 
+              <Field
+                as="textarea"
+                name="name"
+                placeholder="Question Name"
+                className="authentication-input textarea-question"
+              />
+              <ErrorMessage
+                name="name"
+                component="div"
+                className="authentication-error"
+              />
+              <p className="create-questions-paragraph">
+                Choose the correct answer by clicking the button next to it
+              </p>
+
+              <div className="create-question-wrapper">
+                <Field
+                  type="text"
+                  name="answerOne"
+                  placeholder="Answer One"
+                  className="create-question-input"
+                />
+                <button
+                  type="button"
+                  id="correct-0"
+                  className={
+                    answersCorrectValues[0] == "true"
+                      ? "create-question-button true"
+                      : "create-question-button false"
+                  }
+                  onClick={changeCorrectAnswer}
+                >
+                  {answersCorrectValues[0]}
+                </button>
+              </div>
+              <ErrorMessage
+                name="answerOne"
+                component="div"
+                className="authentication-error"
+              />
+
+              <div className="create-question-wrapper">
+                <Field
+                  type="text"
+                  name="answerTwo"
+                  placeholder="Answer Two"
+                  className="create-question-input"
+                />
+                <button
+                  type="button"
+                  id="correct-1"
+                  className={
+                    answersCorrectValues[1] == "true"
+                      ? "create-question-button true"
+                      : "create-question-button false"
+                  }
+                  onClick={changeCorrectAnswer}
+                >
+                  {answersCorrectValues[1]}
+                </button>
+              </div>
+              <ErrorMessage
+                name="answerTwo"
+                component="div"
+                className="authentication-error"
+              />
+
+              <div className="create-question-wrapper">
+                <Field
+                  type="text"
+                  name="answerThree"
+                  placeholder="Answer Three"
+                  className="create-question-input"
+                />
+                <button
+                  type="button"
+                  id="correct-2"
+                  className={
+                    answersCorrectValues[2] == "true"
+                      ? "create-question-button true"
+                      : "create-question-button false"
+                  }
+                  onClick={changeCorrectAnswer}
+                >
+                  {answersCorrectValues[2]}
+                </button>
+              </div>
+              <ErrorMessage
+                name="answerThree"
+                component="div"
+                className="authentication-error"
+              />
+
+              <div className="create-question-wrapper">
+                <Field
+                  type="text"
+                  name="answerFour"
+                  placeholder="Answer Four"
+                  className="create-question-input"
+                />
+                <button
+                  type="button"
+                  id="correct-3"
+                  className={
+                    answersCorrectValues[3] == "true"
+                      ? "create-question-button true"
+                      : "create-question-button false"
+                  }
+                  onClick={changeCorrectAnswer}
+                >
+                  {answersCorrectValues[3]}
+                </button>
+              </div>
+              <ErrorMessage
+                name="answerFour"
+                component="div"
+                className="authentication-error"
+              />
+
+              <div className="question-btns">
+                {move && (
                   <button
-                    type="submit"
+                    onClick={() => setMove((oldValue) => oldValue - 1)}
                     className="authentication-form-button"
-                    disabled={isSubmitting}
                   >
-                    {move
-                      ? move == 4
-                        ? "Record Category and Questions"
-                        : "Next Question"
-                      : "Record Question"}
+                    {move == 1 ? "Edit Category" : "Previous Question"}
                   </button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="authentication-form-button"
+                  disabled={isSubmitting}
+                >
+                  {move
+                    ? move == 4
+                      ? "Record Category and Questions"
+                      : "Next Question"
+                    : "Record Question"}
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
       </div>
-    </main>
+    </div>
   );
 }

@@ -11,7 +11,6 @@ export default function Login() {
   const login = useLogin();
 
   return (
-    <main>
       <div className="authentication-container">
         <div className="authentication-wrapper">
           <h1>Login</h1>
@@ -82,6 +81,5 @@ export default function Login() {
           </p>
         </div>
       </div>
-    </main>
   );
 }

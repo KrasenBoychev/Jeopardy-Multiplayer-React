@@ -10,7 +10,6 @@ export default function Register() {
   const register = useRegister();
 
   return (
-    <main>
       <div className="authentication-container">
         <div className="authentication-wrapper">
           <h1>Register</h1>
@@ -115,6 +114,5 @@ export default function Register() {
           </p>
         </div>
       </div>
-    </main>
   );
 }
