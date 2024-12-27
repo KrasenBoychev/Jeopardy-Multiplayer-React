@@ -20,49 +20,47 @@ export default function Home() {
   }, []);
 
   return (
-    <main>
-      <div className="home-container">
-        <section className="points-info-and-play-button">
-          <p>
-            {points != undefined
-              ? `Your Points: ${points}`
-              : "Win points and see your name in the Leaderboard!"}
-          </p>
-          <Link to="/play">
-            <button className="play-button">
-              <span className="play-btn-arrows">&gt;&gt;&gt;</span> Play{" "}
-              <span className="play-btn-arrows">&lt;&lt;&lt;</span>
-            </button>
-          </Link>
-        </section>
-        <section className="leaderboard-all-time">
-          <div className="leaderboard-wrapper">
-            <p>Leaderboard All Time</p>
-            <ul>
-              {topPlayers.map((player, index) => (
-                <li
-                  key={player.username}
-                  className={
-                    index < 3
-                      ? "leaderboard-all-time-player top-three"
-                      : "leaderboard-all-time-player"
-                  }
-                >
-                  <div className="leaderboard-player-info">
-                    <span className="leaderboard-position">{index + 1}.</span>
-                    <span className="leaderboard-username">
-                      {player.username}
-                    </span>
-                  </div>
-                  <span className="leaderboard-points">
-                    {player.points} points
+    <div className="home-container">
+      <section className="points-info-and-play-button">
+        <p>
+          {points != undefined
+            ? `Your Points: ${points}`
+            : "Win points and see your name in the Leaderboard!"}
+        </p>
+        <Link to="/play">
+          <button className="play-button">
+            <span className="play-btn-arrows">&gt;&gt;&gt;</span> Play{" "}
+            <span className="play-btn-arrows">&lt;&lt;&lt;</span>
+          </button>
+        </Link>
+      </section>
+      <section className="leaderboard-all-time">
+        <div className="leaderboard-wrapper">
+          <p>Leaderboard All Time</p>
+          <ul>
+            {topPlayers.map((player, index) => (
+              <li
+                key={player.username}
+                className={
+                  index < 3
+                    ? "leaderboard-all-time-player top-three"
+                    : "leaderboard-all-time-player"
+                }
+              >
+                <div className="leaderboard-player-info">
+                  <span className="leaderboard-position">{index + 1}.</span>
+                  <span className="leaderboard-username">
+                    {player.username}
                   </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      </div>
-    </main>
+                </div>
+                <span className="leaderboard-points">
+                  {player.points} points
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    </div>
   );
 }
