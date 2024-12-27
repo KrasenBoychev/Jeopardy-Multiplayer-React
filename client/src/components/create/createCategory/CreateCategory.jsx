@@ -78,11 +78,11 @@ export default function CreateCategory() {
       )}
 
       {recordCategoryAndQuestions && (
-        <div className="loading-wrapper">
-          <div className="loader">
+        <main>
+          <div className="loading-wrapper">
             <DotLoader />
           </div>
-        </div>
+        </main>
       )}
     </>
   );
