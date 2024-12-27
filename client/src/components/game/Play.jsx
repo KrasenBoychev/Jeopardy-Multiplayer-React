@@ -3,7 +3,7 @@ import { Chat } from "stream-chat-react";
 import { useAuthContext } from "../../contexts/AuthContext";
 import usePlay from "../../hooks/usePlay";
 
-import JoinGame from "./joinGame/JoinGame";
+import JoinGame from "./startGame/joinGame/JoinGame";
 
 export default function Play(props) {
   const { isNewGameStarted, setIsNewGameStarted } = props.game;
