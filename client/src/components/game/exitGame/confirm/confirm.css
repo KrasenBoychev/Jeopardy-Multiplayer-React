@@ -11,18 +11,19 @@
 
 .confirm-message {
     position: relative;
-    height: auto;
-    width: 400px;
+    width: 600px;
     top: calc(25vh);
-    left: calc(50% - 200px);
+    left: calc(50% - 300px);
     padding: 20px;
-    background-color: white;
-    border: 1px solid black;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1.3px;
+    background-color: var(--white);
+    border: 2px solid var(--midnight-blue);
     border-radius: 5px;
-}
-
-.confirm-message h2 {
-    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
 }
 
 .confirm-buttons {
@@ -31,26 +32,26 @@
 }
 
 .confirm-buttons button {
-    width: 100px;
-    height: 30px;
-    color: #FFF;
+    padding: 15px 60px;
+    font-size: 1.2rem;
     font-weight: 600;
     text-transform: uppercase;
+    color: var(--white);
     border: none;
     border-radius: 5px;
 }
 
-.confirm-buttons>button:hover {
-    cursor: pointer;
-    width: 120px;
-    height: 40px;
-    font-size: 1.2rem;
-}
-
 .confirm-buttons button:first-child {
-    background-color: yellowgreen;
+    background-color: var(--midnight-blue);
 }
 
 .confirm-buttons button:last-child {
-    background-color: red;
+    background-color: var(--purple);
 }
+
+.confirm-buttons>button:hover {
+    cursor: pointer;
+    color: var(--midnight-blue);
+    background-color: var(--baby-blue);
+}
+
