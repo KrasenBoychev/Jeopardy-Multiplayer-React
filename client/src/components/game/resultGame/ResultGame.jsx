@@ -3,7 +3,7 @@ export default function ResultGame({ props }) {
   const { firstPlayer, secondPlayer, pointsFirstPlayer, pointsSecondPlayer } =
     props;
   return (
-    <div className="gameContainer">
+    <div className="result-game-container">
       <p className="result-winner answer-correct">
         {pointsFirstPlayer == pointsSecondPlayer
           ? `${firstPlayer} and ${secondPlayer} share the first place!`
@@ -15,11 +15,13 @@ export default function ResultGame({ props }) {
         <p>Final Result</p>
         <p className="final-players">
           <span className="final-first-player">
-            {firstPlayer}: {pointsFirstPlayer} points
+            <span>{firstPlayer}:</span>
+            <span>{pointsFirstPlayer} points</span>
           </span>
           <span className="final-vs">VS</span>
           <span className="final-second-player">
-            {secondPlayer}: {pointsSecondPlayer} points
+            <span>{secondPlayer}:</span>
+            <span>{pointsSecondPlayer} points</span>
           </span>
         </p>
       </div>
