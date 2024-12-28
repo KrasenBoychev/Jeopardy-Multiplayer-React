@@ -30,7 +30,7 @@ export default function QuestionModel({ props }) {
           ? "question-box question-answered"
           : client.user.name === activePlayer
           ? "question-box active-box"
-          : "question-box"
+          : "question-box inactive-box"
       }
       onClick={showQuestionClickHandler}
     >
