@@ -60,8 +60,7 @@
     background-color: var(--midnight-blue);
 }
 
-.category-model p,
-.player-categories {
+.category-model p {
     padding: 20px;
     text-align: center;
     font-size: 1.5rem;
@@ -78,8 +77,4 @@
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.active-player {
-    background-color: var(--purple);
 }
