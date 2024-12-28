@@ -83,7 +83,7 @@ export default function useChooseQuestion(
 
             setShowQuestion(false);
           }
-        }, 1000);
+        }, 3000);
       }
     })();
   }, [callShowAnswer]);
