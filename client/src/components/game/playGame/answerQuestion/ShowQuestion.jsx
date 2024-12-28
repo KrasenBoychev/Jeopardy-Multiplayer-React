@@ -11,7 +11,7 @@ export default function ({ props }) {
     pointsFirstPlayer,
     pointsSecondPlayer,
     isAnswerCorrect,
-    isAnswerClicked
+    isAnswerClicked,
   } = props;
 
   const { client } = useChatContext();
@@ -42,16 +42,16 @@ export default function ({ props }) {
   };
 
   return (
-    <div className="gameContainer">
+    <div className="show-question-container">
       <p
         className={
           isAnswerCorrect == null
             ? client.user.name === activePlayer
-              ? "player-categories activeCat"
-              : "player-categories inactiveCat"
+              ? "player-categories active-player"
+              : "player-categories"
             : isAnswerCorrect
-              ? "player-categories answer-correct"
-              : "player-categories answer-wrong"
+            ? "player-categories answer-correct"
+            : "player-categories answer-wrong"
         }
       >
         {isAnswerCorrect == null
@@ -60,40 +60,41 @@ export default function ({ props }) {
           ? "Correct Answer"
           : "Wrong Answer"}
       </p>
-      <div className="categories-container">
+
+      <div className="show-question-category">
         <h3>
           {currCategory} - {currQuestion.points} points
         </h3>
+      </div>
 
-        <div className="question-wrapper activeCat">
-          <h1>{currQuestion.name}</h1>
+      <div className="show-question-wrapper activeCat">
+        <h1>{currQuestion.name}</h1>
 
-          <div className="answers-wrapper">
-            {Object.values(currQuestion.answers).map((answer) => {
-              return (
-                <button
-                  key={answer}
-                  disabled={isAnswerClicked ? true : false}
-                  onClick={answerQuestionClickHandler}
-                  className={
-                    isAnswerCorrect == null
-                      ? client.user.name === activePlayer
-                        ? "answer-box answer-box-active"
-                        : "answer-box"
-                      : isAnswerCorrect && currQuestion.correctAnswer == answer
-                        ? "answer-box answer-correct"
-                        : !isAnswerCorrect
-                          ? currQuestion.correctAnswer == answer
-                            ? "answer-box answer-correct-question-wrong"
-                            : "answer-box answer-wrong"
-                          : "answer-box"
-                  }
-                >
-                  {answer}
-                </button>
-              );
-            })}
-          </div>
+        <div className="answers-wrapper">
+          {Object.values(currQuestion.answers).map((answer) => {
+            return (
+              <button
+                key={answer}
+                disabled={isAnswerClicked ? true : false}
+                onClick={answerQuestionClickHandler}
+                className={
+                  isAnswerCorrect == null
+                    ? client.user.name === activePlayer
+                      ? "answer-box answer-box-active"
+                      : "answer-box"
+                    : isAnswerCorrect && currQuestion.correctAnswer == answer
+                    ? "answer-box answer-correct"
+                    : !isAnswerCorrect
+                    ? currQuestion.correctAnswer == answer
+                      ? "answer-box answer-correct"
+                      : "answer-box answer-wrong"
+                    : "answer-box inactive-player"
+                }
+              >
+                {answer}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
