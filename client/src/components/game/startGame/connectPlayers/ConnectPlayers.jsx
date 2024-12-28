@@ -17,11 +17,13 @@ export default function ConnectPlayers(props) {
 
   if (!playersJoined) {
     return (
-      <>
-        <p>Waiting for {rivalPlayer} to join...</p>
-        <DotLoader />
-      </>
-  );
+      <div className="game-container">
+        <div className="connect-players-wrapper">
+          <p>Waiting for {rivalPlayer} to join...</p>
+          <DotLoader />
+        </div>
+      </div>
+    );
   }
 
   return <StartingPlayer channel={channel} />;
