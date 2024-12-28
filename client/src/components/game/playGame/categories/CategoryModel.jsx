@@ -16,7 +16,7 @@ export default function CategoryModel({ props }) {
         currCategoryCount > categoryInfo[0]
           ? "chosen-category category-model"
           : currCategoryCount == categoryInfo[0]
-          ? "activeCat category-model"
+          ? "category-model"
           : "inactiveCat category-model"
       }
     >
