@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useChannelStateContext, useChatContext } from "stream-chat-react";
-
 import useCategories from "../../../../hooks/useCategories";
-
-import "./categories.css";
-
 import ChooseQuestion from "../chooseQuestion/ChooseQuestion";
 import CategoryModel from "./CategoryModel";
+
+import "../../play.css";
+import "./categories.css";
 
 export default function Categories({ props }) {
   const { firstPlayer, secondPlayer } = props.players;
@@ -41,7 +40,13 @@ export default function Categories({ props }) {
 
     await channel.sendEvent({
       type: "select-category",
-      data: { activePlayer, currCategoryCount, allCategories, currOption, generatenNumber },
+      data: {
+        activePlayer,
+        currCategoryCount,
+        allCategories,
+        currOption,
+        generatenNumber,
+      },
     });
   };
 
@@ -62,9 +67,9 @@ export default function Categories({ props }) {
           ? setActivePlayer(secondPlayer)
           : setActivePlayer(firstPlayer);
 
-          if (event.data.currCategoryCount == 3) {
-            setRandomNumber(event.data.generatenNumber);
-          }
+        if (event.data.currCategoryCount == 3) {
+          setRandomNumber(event.data.generatenNumber);
+        }
       }
     }
 
@@ -94,12 +99,12 @@ export default function Categories({ props }) {
           }}
         />
       ) : (
-        <div className="gameContainer">
+        <div className="categories-page-wrapper">
           <p
             className={
               client.user.name === activePlayer && currCategoryCount < 4
-                ? "activeCat player-categories"
-                : "inactiveCat player-categories"
+                ? "active-player player-categories"
+                : "player-categories"
             }
           >
             {currCategoryCount < 4
