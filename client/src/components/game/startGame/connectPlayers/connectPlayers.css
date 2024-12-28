@@ -1,18 +1,11 @@
-.str-chat {
-    flex-grow: 1;
-    align-content: center;
-    justify-items: center;
-    background-color: var(--baby-blue);
-}
-
-.str-chat__container {
+.connect-players-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 50px;
 }
 
-.str-chat__container p {
+.connect-players-wrapper p {
     padding: 20px;
     font-size: 1.5rem;
     letter-spacing: 1.5px;

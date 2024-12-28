@@ -1,4 +1,5 @@
 .game-container {
+    padding-bottom: 20px;
     flex-grow: 1;
     align-content: center;
     justify-items: center;
@@ -17,4 +18,14 @@
     background-color: var(--midnight-blue);
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     border-radius: 5px;
+}
+
+.str-chat {
+    flex-grow: 1;
+    display: flex;
+}
+
+.str-chat__container {
+    flex-grow: 1;
+    display: flex;
 }
