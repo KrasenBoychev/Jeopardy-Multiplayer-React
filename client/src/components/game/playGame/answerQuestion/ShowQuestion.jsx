@@ -1,5 +1,5 @@
 import { useChannelStateContext, useChatContext } from "stream-chat-react";
-
+import "../../play.css";
 import "./showQuestion.css";
 
 export default function ({ props }) {
@@ -50,7 +50,7 @@ export default function ({ props }) {
               ? "player-categories active-player"
               : "player-categories"
             : isAnswerCorrect
-            ? "player-categories answer-correct"
+            ? "answer-correct player-categories "
             : "player-categories answer-wrong"
         }
       >
