@@ -9,56 +9,69 @@ const { parseError } = require('../util');
 
 const userRouter = Router();
 
-userRouter.post('/login',
+userRouter.post(
+  '/login',
   isGuest(),
   body('email').trim(),
   body('password').trim(),
   async (req, res) => {
-  try {
-    const result = await login(req.body.email, req.body.password);
+    try {
+      const result = await login(req.body.email, req.body.password);
 
-    const accessToken = createToken(result);
-    
-    res.json({
-      userId: result._id,
-      email: result.email,
-      username: result.username,
-      points: result.points,
-      accessToken
-    });
-  } catch (err) {
-      res.status(403).json({ code: 403, message: 'Incorrect email or password' });
+      const accessToken = createToken(result);
+
+      res.json({
+        userId: result._id,
+        email: result.email,
+        username: result.username,
+        points: result.points,
+        accessToken,
+      });
+    } catch (err) {
+      res
+        .status(403)
+        .json({ code: 403, message: 'Incorrect email or password' });
+    }
   }
-});
+);
 
-userRouter.post('/register', 
+userRouter.post(
+  '/register',
   isGuest(),
   body('email').trim().isEmail().withMessage('Please enter valid email'),
-  body('username').trim().notEmpty().withMessage('Username is required'),
-  body('password').trim().isLength({ min: 3 }).withMessage('Password must be at least 3 characters'),
+  body('username').trim().notEmpty().withMessage('Username is required').isLength({ max: 10 }).withMessage('Username should be maximum 10 symbols'),
+  body('password')
+    .trim()
+    .isLength({ min: 3 })
+    .withMessage('Password must be at least 3 characters'),
   async (req, res) => {
-  try {
-    const validation = validationResult(req);
+    try {
+      const validation = validationResult(req);
 
-    if (validation.errors.length) {
-      throw validation.errors;
+      if (validation.errors.length) {
+        throw validation.errors;
+      }
+
+      const result = await register(
+        req.body.email,
+        req.body.username,
+        req.body.password
+      );
+      const accessToken = createToken(result);
+
+      res.json({
+        userId: result._id,
+        email: result.email,
+        username: result.username,
+        points: result.points,
+        accessToken,
+      });
+    } catch (err) {
+      const parsed = parseError(err);
+      res.status(403).json({ code: 403, message: parsed.message });
     }
-
-    const result = await register(req.body.email, req.body.username, req.body.password);
-    const accessToken = createToken(result);
-
-    res.json({
-      userId: result._id,
-      email: result.email,
-      username: result.username,
-      points: result.points,
-      accessToken
-    });
-  
-  } catch (err) {
-      res.status(403).json({ code: 403, message: err.message });
   }
-});
+);
 
 userRouter.get('/logout', (req, res) => {
   res.status(204).end();
