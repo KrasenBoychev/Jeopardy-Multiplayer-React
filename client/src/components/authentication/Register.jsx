@@ -10,109 +10,116 @@ export default function Register() {
   const register = useRegister();
 
   return (
-      <div className="authentication-container">
-        <div className="authentication-wrapper">
-          <h1>Register</h1>
-          <Formik
-            initialValues={{
-              email: "",
-              username: "",
-              password: "",
-              rePass: "",
-            }}
-            validate={(values) => {
-              const errors = {};
-              if (!values.email) {
-                errors.email = "Email is required";
-              } else if (
-                !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-              ) {
-                errors.email = "Invalid email address";
-              }
+    <div className="authentication-container">
+      <div className="authentication-wrapper">
+        <h1>Register</h1>
+        <Formik
+          initialValues={{
+            email: "",
+            username: "",
+            password: "",
+            rePass: "",
+          }}
+          validate={(values) => {
+            const errors = {};
+            if (!values.email) {
+              errors.email = "Email is required";
+            } else if (
+              !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+            ) {
+              errors.email = "Invalid email address";
+            }
 
-              if (!values.username) {
-                errors.username = "Username is required";
-              }
+            if (!values.username) {
+              errors.username = "Username is required";
+            } else if (values.username.length > 10) {
+              errors.username = "Username should be maximum 10 symbols";
+            }
 
-              if (!values.password) {
-                errors.password = "Password is required";
-              } else if (values.password != values.rePass) {
-                errors.rePass = "Passwords do not match";
-              }
+            if (!values.password) {
+              errors.password = "Password is required";
+            } else if (values.password.length < 3) {
+              errors.password = "Password must be at least 3 characters";
+            } else if (values.password != values.rePass) {
+              errors.rePass = "Passwords do not match";
+            }
 
-              return errors;
-            }}
-            onSubmit={async (values) => {
-              try {
-                await register(values.email, values.username, values.password);
+            return errors;
+          }}
+          onSubmit={async (values) => {
+            try {
+              await register(values.email, values.username, values.password);
 
-                navigate("/");
-              } catch (error) {
-                return toast.error(error.message);
-              }
-            }}
-          >
-            {({ isSubmitting }) => (
-              <Form className="authentication-form">
-                <Field
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  className="authentication-input"
-                />
-                <ErrorMessage
-                  name="email"
-                  component="div"
-                  className="authentication-error"
-                />
-                <Field
-                  type="text"
-                  name="username"
-                  placeholder="Username"
-                  className="authentication-input"
-                />
-                <ErrorMessage
-                  name="username"
-                  component="div"
-                  className="authentication-error"
-                />
-                <Field
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  className="authentication-input"
-                />
-                <ErrorMessage
-                  name="password"
-                  component="div"
-                  className="authentication-error"
-                />
-                <Field
-                  type="password"
-                  name="rePass"
-                  placeholder="Repeat Password"
-                  className="authentication-input"
-                />
-                <ErrorMessage
-                  name="rePass"
-                  component="div"
-                  className="authentication-error"
-                />
-                <button
-                  type="submit"
-                  className="authentication-form-button"
-                  disabled={isSubmitting}
-                >
-                  Register
-                </button>
-              </Form>
-            )}
-          </Formik>
+              navigate("/");
+            } catch (error) {
+              return toast.error(error.message);
+            }
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form className="authentication-form">
+              <Field
+                type="email"
+                name="email"
+                placeholder="Email"
+                className="authentication-input"
+              />
+              <ErrorMessage
+                name="email"
+                component="div"
+                className="authentication-error"
+              />
+              <Field
+                type="text"
+                name="username"
+                placeholder="Username"
+                className="authentication-input"
+              />
+              <ErrorMessage
+                name="username"
+                component="div"
+                className="authentication-error"
+              />
+              <Field
+                type="password"
+                name="password"
+                placeholder="Password"
+                className="authentication-input"
+              />
+              <ErrorMessage
+                name="password"
+                component="div"
+                className="authentication-error"
+              />
+              <Field
+                type="password"
+                name="rePass"
+                placeholder="Repeat Password"
+                className="authentication-input"
+              />
+              <ErrorMessage
+                name="rePass"
+                component="div"
+                className="authentication-error"
+              />
+              <button
+                type="submit"
+                className="authentication-form-button"
+                disabled={isSubmitting}
+              >
+                Register
+              </button>
+            </Form>
+          )}
+        </Formik>
 
-          <p>
-            Aready registered? Click here to <Link to="/login" className="authentication-link">Login</Link>
-          </p>
-        </div>
+        <p>
+          Aready registered? Click here to{" "}
+          <Link to="/login" className="authentication-link">
+            Login
+          </Link>
+        </p>
       </div>
+    </div>
   );
 }
