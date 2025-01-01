@@ -1,12 +1,11 @@
-import { useChannelStateContext } from "stream-chat-react";
-
+import { useGameContext } from "../../../../contexts/GameContext";
 import useChooseQuestion from "../../../../hooks/useChooseQuestion";
-
-import "./chooseQUestion.css";
 
 import ShowQuestion from "../answerQuestion/ShowQuestion";
 import RenderQuestions from "./chunks/renderQuestions";
 import ResultGame from "../../resultGame/ResultGame";
+
+import "./chooseQUestion.css";
 
 export default function ChooseQuestion({ props }) {
   const {
@@ -38,7 +37,7 @@ export default function ChooseQuestion({ props }) {
     gameFinished,
   ] = useChooseQuestion(questions, setQuestions, firstPlayer);
 
-  const { channel } = useChannelStateContext();
+  const { channel } = useGameContext();
 
   channel.on((event) => {
     if (
