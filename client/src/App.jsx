@@ -1,12 +1,9 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-
-import { StreamChat } from "stream-chat";
+import { AuthContextProvider } from "./contexts/AuthContext";
 
 import "./App.css";
-
-import { AuthContextProvider } from "./contexts/AuthContext";
 
 import PrivateGuard from "./common/PrivateGuard";
 import PublicGuard from "./common/PublicGuard";
@@ -20,7 +17,6 @@ import Login from "./components/authentication/Login";
 import Register from "./components/authentication/Register";
 import Logout from "./components/authentication/Logout";
 import Play from "./components/game/Play";
-import ExitGame from "./components/game/exitGame/ExitGame";
 import Create from "./components/create/Create";
 import CreateCategory from "./components/create/createCategory/CreateCategory";
 import CreateQuestion from "./components/create/createQuestion/CreateQuestion";
@@ -28,25 +24,13 @@ import NotFound from "./components/core/notFound/NotFound";
 
 function App() {
   const [isNewGameStarted, setIsNewGameStarted] = useState(false);
-  const [channel, setChannel] = useState(null);
-
-  const api_key = "tswxm74zz6uc";
-  const client = StreamChat.getInstance(api_key);
 
   return (
     <>
       <Toaster />
 
       <AuthContextProvider>
-        {!isNewGameStarted ? (
-          <Header />
-        ) : (
-          <ExitGame
-            game={{ isNewGameStarted, setIsNewGameStarted }}
-            channel={{ channel, setChannel }}
-            client={client}
-          />
-        )}
+        {!isNewGameStarted && <Header />}
 
         <main>
           <Routes>
@@ -62,14 +46,10 @@ function App() {
               <Route
                 path="/play"
                 element={
-                  <Play
-                    game={{ isNewGameStarted, setIsNewGameStarted }}
-                    channel={{ channel, setChannel }}
-                    client={client}
-                  />
+                  <Play game={{ isNewGameStarted, setIsNewGameStarted }} />
                 }
               />
-              <Route path="/logout" element={<Logout client={client} />} />
+              <Route path="/logout" element={<Logout />} />
             </Route>
 
             <Route element={<AdminGuard />}>
