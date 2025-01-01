@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { Channel, useChatContext } from "stream-chat-react";
 import { useAuthContext } from "../../../../contexts/AuthContext";
+import { GameContext } from "../../../../contexts/GameContext";
+
 import ConnectPlayers from "../connectPlayers/ConnectPlayers";
+import ExitGame from "../../exitGame/ExitGame";
 
 import "./joinGame.css";
 import "../../play.css";
 
+
 export default function JoinGame(props) {
   const [rivalUsername, setRivalUsername] = useState("");
-  const { channel, setChannel } = props.channel;
-  const { client } = useChatContext();
+  const [channel, setChannel] = useState(null);
+  const client = props.client;
+  const { setIsNewGameStarted } = props.game;
   const { username } = useAuthContext();
 
   const createChannel = async () => {
@@ -35,6 +39,9 @@ export default function JoinGame(props) {
 
       await newChannel.watch();
       setChannel(newChannel);
+
+      setIsNewGameStarted(true);
+      
     } catch (error) {
       return toast.error(error.message);
     }
@@ -42,9 +49,10 @@ export default function JoinGame(props) {
   return (
     <>
       {channel ? (
-        <Channel channel={channel} setChannel={setChannel}>
-          <ConnectPlayers channel={channel} rivalPlayer={rivalUsername} />
-        </Channel>
+        <GameContext.Provider value={{ channel, setChannel, client, rivalPlayer: rivalUsername, setIsNewGameStarted }}>
+          <ExitGame />
+          <ConnectPlayers  />
+        </GameContext.Provider>
       ) : (
         <div className="game-container">
           <div className="game-wrapper">
