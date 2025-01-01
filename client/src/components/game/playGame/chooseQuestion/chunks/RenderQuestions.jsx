@@ -1,5 +1,4 @@
-import { useChatContext } from "stream-chat-react";
-
+import { useGameContext } from "../../../../../contexts/GameContext";
 import QuestionModel from "./QuestionModel";
 
 export default function RenderQuestions({ props }) {
@@ -12,7 +11,7 @@ export default function RenderQuestions({ props }) {
     questions,
   } = props;
 
-  const { client } = useChatContext();
+  const { client } = useGameContext();
 
   return (
     <div className="questions-page-wrapper">
