@@ -1,5 +1,7 @@
 .exit-game-container {
-    min-width: 1200px;
+    position: absolute;
+    top: 0;
+    right: 0;
     display: flex;
     justify-content: end;
     background-color: var(--baby-blue);
