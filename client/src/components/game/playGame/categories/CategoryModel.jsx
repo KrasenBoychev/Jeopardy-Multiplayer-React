@@ -1,3 +1,5 @@
+import { useGameContext } from "../../../../contexts/GameContext";
+
 export default function CategoryModel({ props }) {
   const {
     categoryInfo,
@@ -5,10 +7,11 @@ export default function CategoryModel({ props }) {
     allCategories,
     chosenOption,
     selectQuestion,
-    client,
     activePlayer,
     defaultOption,
   } = props;
+
+  const { client } = useGameContext();
 
   return (
     <div
