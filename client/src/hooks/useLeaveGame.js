@@ -2,7 +2,12 @@ import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-export default function useLeaveGame(setIsNewGameStarted, channel, setChannel, client) {
+export default function useLeaveGame(
+  setIsNewGameStarted,
+  channel,
+  setChannel,
+  client
+) {
   const [leave, setLeave] = useState(false);
   const [disconnect, setDisconnect] = useState(false);
   const [leavingPlayer, setLeavingPlayer] = useState("");
@@ -14,13 +19,20 @@ export default function useLeaveGame(setIsNewGameStarted, channel, setChannel, c
     (async function setLeaveState() {
       if (disconnect) {
         if (leavingPlayer == client.user.name) {
-          disconnectUser(channel, setChannel, client, setIsNewGameStarted, navigate);
+          disconnectUser(channel, setChannel, client, setIsNewGameStarted, navigate, "/");
         } else {
           toast.error(
             "Rival Player disconnected - you will be redirected in 3 seconds"
           );
           setTimeout(async () => {
-            disconnectUser(channel, setChannel, client, setIsNewGameStarted, navigate);
+            disconnectUser(
+              channel,
+              setChannel,
+              client,
+              setIsNewGameStarted,
+              navigate,
+              "/"
+            );
           }, 3000);
         }
       } else {
@@ -41,16 +53,21 @@ export default function useLeaveGame(setIsNewGameStarted, channel, setChannel, c
   ];
 }
 
-async function disconnectUser(
+export async function disconnectUser(
   channel,
   setChannel,
   client,
   setIsNewGameStarted,
-  navigate
+  navigate,
+  navigatePath,
 ) {
   await channel.stopWatching();
   setChannel(null);
   client.disconnectUser();
-  setIsNewGameStarted(false);
-  navigate("/");
+
+  if (setIsNewGameStarted != null) {
+    setIsNewGameStarted(false);
+  }
+
+  navigate(navigatePath);
 }
