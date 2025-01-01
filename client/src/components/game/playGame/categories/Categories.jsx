@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useChannelStateContext, useChatContext } from "stream-chat-react";
+import { useGameContext } from "../../../../contexts/GameContext";
 import useCategories from "../../../../hooks/useCategories";
 import ChooseQuestion from "../chooseQuestion/ChooseQuestion";
 import CategoryModel from "./CategoryModel";
@@ -9,8 +9,8 @@ import "./categories.css";
 
 export default function Categories({ props }) {
   const { firstPlayer, secondPlayer } = props.players;
-  const { channel } = useChannelStateContext();
-  const { client } = useChatContext();
+
+  const { channel, client } = useGameContext();
 
   const [activePlayer, setActivePlayer] = useState(firstPlayer);
   const [currOption, setCurrOption] = useState("");
@@ -122,7 +122,6 @@ export default function Categories({ props }) {
                     allCategories,
                     chosenOption,
                     selectQuestion,
-                    client,
                     activePlayer,
                     defaultOption,
                   }}
