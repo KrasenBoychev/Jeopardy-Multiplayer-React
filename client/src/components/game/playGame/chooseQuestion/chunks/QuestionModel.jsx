@@ -1,10 +1,9 @@
-import { useChannelStateContext, useChatContext } from "stream-chat-react";
+import { useGameContext } from "../../../../../contexts/GameContext";
 
 export default function QuestionModel({ props }) {
   const { activePlayer, categoryName, question, questionAnswered } = props;
 
-  const { client } = useChatContext();
-  const { channel } = useChannelStateContext();
+  const { channel, client } = useGameContext();
 
   const showQuestionClickHandler = async () => {
     if (questionAnswered) {
