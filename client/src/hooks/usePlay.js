@@ -1,11 +1,16 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { StreamChat } from "stream-chat";
+
 import { getGameToken } from "../../api/game-api";
 import toast from "react-hot-toast";
 
-export default function usePlay(username, setIsNewGameStarted, client) {
+export default function usePlay(username) {
   const navigate = useNavigate();
+
+  const api_key = "tswxm74zz6uc";
+  const client = StreamChat.getInstance(api_key);
 
   useEffect(() => {
     let active = true;
@@ -13,6 +18,7 @@ export default function usePlay(username, setIsNewGameStarted, client) {
 
     return () => {
       active = false;
+      client.disconnectUser();
     };
 
     async function load() {
@@ -26,10 +32,7 @@ export default function usePlay(username, setIsNewGameStarted, client) {
               name: username,
             },
             token
-          )
-          .then((user) => {
-            setIsNewGameStarted(true);
-          });
+          );
 
         if (!active) {
           return;
@@ -40,4 +43,6 @@ export default function usePlay(username, setIsNewGameStarted, client) {
       }
     }
   }, []);
+
+  return client;
 }
