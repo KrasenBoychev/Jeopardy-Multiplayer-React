@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { useGameContext } from "../../../../contexts/GameContext";
 import StartingPlayer from "../startingPlayer/StartingPlayer";
-import "./connectPlayers.css";
 import DotLoader from "react-spinners/DotLoader";
+import "./connectPlayers.css";
 
-export default function ConnectPlayers(props) {
-  const channel = props.channel;
-  const rivalPlayer = props.rivalPlayer;
+export default function ConnectPlayers() {
+  const { channel, rivalPlayer } = useGameContext();
 
   const [playersJoined, setPlayersJoined] = useState(
     channel.state.watcher_count === 2
@@ -26,5 +26,5 @@ export default function ConnectPlayers(props) {
     );
   }
 
-  return <StartingPlayer channel={channel} />;
+  return <StartingPlayer />;
 }
