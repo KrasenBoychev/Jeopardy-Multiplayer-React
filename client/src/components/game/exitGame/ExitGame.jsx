@@ -1,11 +1,10 @@
 import useLeaveGame from "../../../hooks/useLeaveGame";
+import { useGameContext } from "../../../contexts/GameContext";
 import Confrim from "./confirm/Confrim";
 import "./exit.css";
 
-export default function ExitGame(props) {
-  const { isNewGameStarted, setIsNewGameStarted } = props.game;
-  const { channel, setChannel } = props.channel;
-  const client = props.client;
+export default function ExitGame() {
+  const { channel, setChannel, client, setIsNewGameStarted } = useGameContext();
 
   const [
     setLeave,
