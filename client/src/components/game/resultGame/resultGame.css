@@ -88,20 +88,10 @@
     justify-content: right;
 }
 
-/* 
-.final-result p:first-child {
-    font-size: x-large;
+.new-game-msg-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #000;
+    background-color: var(--white);
 }
-.final-players {
-    margin: auto;
-    margin-bottom: 30px;
-    padding: 5px;
-    width: 70%;
-    background-color: #C0C78C;
-    border-radius: 5px;
-}
-
-.final-vs {
-    margin: auto 20px;
-} 
-*/
