@@ -1,12 +1,15 @@
 import { useState } from "react";
+import { useGameContext } from "../../../../contexts/GameContext";
 import useStartingPlayer from "../../../../hooks/useStartingPlayer";
+import VisualizePlayer from "../visualizePlayer/VisualizePlayer";
 
 import "./startingPlayer.css";
 import "../../play.css";
 
-import VisualizePlayer from "../visualizePlayer/VisualizePlayer";
 
-export default function StartingPlayer({ channel }) {
+export default function StartingPlayer() {
+  const { channel } = useGameContext();
+
   const [counter, firstPlayer, secondPlayer] = useStartingPlayer(channel);
 
   const [noGame, setNoGame] = useState(false);
