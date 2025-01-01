@@ -1,4 +1,4 @@
-import { useChannelStateContext, useChatContext } from "stream-chat-react";
+import { useGameContext } from "../../../../contexts/GameContext";
 import "../../play.css";
 import "./showQuestion.css";
 
@@ -14,8 +14,7 @@ export default function ({ props }) {
     isAnswerClicked,
   } = props;
 
-  const { client } = useChatContext();
-  const { channel } = useChannelStateContext();
+  const { channel, client } = useGameContext();
 
   const answerQuestionClickHandler = async (e) => {
     let pointsWon = 0;
