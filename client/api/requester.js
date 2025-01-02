@@ -102,3 +102,7 @@ export async function logout() {
 export async function getTopPlayers() {
   return await get(settings.host + '/users/topPlayers');
 }
+
+export async function getPlayerPoints(userId) {
+  return await get(settings.host + `/users/playerPoints/${userId}`);
+}
