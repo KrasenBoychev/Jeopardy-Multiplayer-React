@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../../../../contexts/AuthContext";
 import { GameContext } from "../../../../contexts/GameContext";
+import usePlay from "../../../../hooks/usePlay";
 
 import ConnectPlayers from "../connectPlayers/ConnectPlayers";
 import ExitGame from "../../exitGame/ExitGame";
@@ -9,13 +10,18 @@ import ExitGame from "../../exitGame/ExitGame";
 import "./joinGame.css";
 import "../../play.css";
 
-
 export default function JoinGame(props) {
+  const { isNewGameStarted, setIsNewGameStarted } = props.game;
+  const {newGameInvitation, setNewGameInvitation} = props.gameInvitation;
+  const { globalChannel, setGlobalChannel } = props.globalChannelInfo;
+  const client = props.client;
+
+  // const [invitationSender, setInvitationSender] = useState(null);
   const [rivalUsername, setRivalUsername] = useState("");
   const [channel, setChannel] = useState(null);
-  const client = props.client;
-  const { setIsNewGameStarted } = props.game;
+  
   const { username } = useAuthContext();
+  // const client = usePlay(username);  
 
   const createChannel = async () => {
     try {
@@ -33,25 +39,47 @@ export default function JoinGame(props) {
         return;
       }
 
-      const newChannel = client.channel("messaging", {
-        members: [client.userID, rivalPlayer.users[0].id],
+      await globalChannel.sendEvent({
+        type: "send-game-invitation",
+        data: { clientId: client.ID },
       });
 
-      await newChannel.watch();
-      setChannel(newChannel);
+      // const gameId = Date.now();
 
-      setIsNewGameStarted(true);
-      
+      // const newChannel = client.channel("messaging", gameId, {
+      //   members: [client.userID, rivalPlayer.users[0].id],
+      // });
+
+      // await newChannel.watch();
+      // setChannel(newChannel);
+
+      // setIsNewGameStarted(true);
     } catch (error) {
       return toast.error(error.message);
     }
   };
+
+  globalChannel.on((event) => {
+    if (event.type == "send-game-invitation" && client.user.ID === event.data.clientId) {
+      setNewGameInvitation(true);
+    }
+  });
+
   return (
     <>
       {channel ? (
-        <GameContext.Provider value={{ channel, setChannel, client, rivalPlayer: rivalUsername, setIsNewGameStarted }}>
+        <GameContext.Provider
+          value={{
+            channel,
+            setChannel,
+            client,
+            rivalPlayer: rivalUsername,
+            isNewGameStarted,
+            setIsNewGameStarted,
+          }}
+        >
           <ExitGame />
-          <ConnectPlayers  />
+          <ConnectPlayers />
         </GameContext.Provider>
       ) : (
         <div className="game-container">
