@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { recordPoints } from "../../api/game-api";
 
 import { useAuthContext } from "../contexts/AuthContext";
+import { getPlayerPoints } from "../../api/requester";
 
 export default function useChooseQuestion(
   questions,
@@ -56,16 +57,13 @@ export default function useChooseQuestion(
             try {
               if (authData.username == firstPlayer) {
                 await recordPoints(authData.userId, pointsFirstPlayer);
-
-                authData.points += pointsFirstPlayer;
-                authData.changeAuthState(authData);
-
               } else {
                 await recordPoints(authData.userId, pointsSecondPlayer);
-
-                authData.points += pointsSecondPlayer;
-                authData.changeAuthState(authData);
               }
+
+              const playerPoints = await getPlayerPoints(authData.userId);
+              authData.points = playerPoints;
+              authData.changeAuthState(authData);
             } catch (error) {
               toast.error(
                 "Points could not be added to your account. Please contact our Customer Service Team."
@@ -83,7 +81,7 @@ export default function useChooseQuestion(
 
             setShowQuestion(false);
           }
-        }, 3000);
+        }, 100);
       }
     })();
   }, [callShowAnswer]);
