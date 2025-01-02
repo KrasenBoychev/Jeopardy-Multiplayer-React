@@ -1,7 +1,12 @@
 const { Router } = require('express');
 const { body, validationResult } = require('express-validator');
 
-const { login, register, getTopPlayers } = require('../services/user');
+const {
+  login,
+  register,
+  getTopPlayers,
+  getPlayerPoints,
+} = require('../services/user');
 const { createToken } = require('../services/jwt');
 
 const { isGuest } = require('../middlewares/guards');
@@ -39,7 +44,12 @@ userRouter.post(
   '/register',
   isGuest(),
   body('email').trim().isEmail().withMessage('Please enter valid email'),
-  body('username').trim().notEmpty().withMessage('Username is required').isLength({ max: 10 }).withMessage('Username should be maximum 10 symbols'),
+  body('username')
+    .trim()
+    .notEmpty()
+    .withMessage('Username is required')
+    .isLength({ max: 10 })
+    .withMessage('Username should be maximum 10 symbols'),
   body('password')
     .trim()
     .isLength({ min: 3 })
@@ -80,6 +90,16 @@ userRouter.get('/logout', (req, res) => {
 userRouter.get('/topPlayers', async (req, res) => {
   try {
     const data = await getTopPlayers();
+    res.json(data);
+  } catch (err) {
+    const parsed = parseError(err);
+    res.status(400).json({ code: 400, message: parsed.message });
+  }
+});
+
+userRouter.get('/playerPoints/:userId', async (req, res) => {
+  try {
+    const data = await getPlayerPoints(req.params.userId);
     res.json(data);
   } catch (err) {
     const parsed = parseError(err);
