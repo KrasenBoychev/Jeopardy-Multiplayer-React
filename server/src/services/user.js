@@ -19,7 +19,7 @@ async function register(email, username, password) {
     email,
     username,
     points: 0,
-    password: await bcrypt.hash(password, 10)
+    password: await bcrypt.hash(password, 10),
   });
 
   await user.save();
@@ -28,27 +28,34 @@ async function register(email, username, password) {
 }
 
 async function login(email, password) {
-    const user = await User.findOne({ email });
+  const user = await User.findOne({ email });
 
-    if (!user) {
-        throw new Error('Incorrect email or password');
-    }
+  if (!user) {
+    throw new Error('Incorrect email or password');
+  }
 
-    const match = await bcrypt.compare(password, user.password);
+  const match = await bcrypt.compare(password, user.password);
 
-    if (!match) {
-        throw new Error('Incorrect email or password');
-    }
+  if (!match) {
+    throw new Error('Incorrect email or password');
+  }
 
-    return user;
+  return user;
 }
 
 async function getTopPlayers() {
-  return await User.find({ _id: { $nin: [adminId] } }).sort({ points: -1 }).limit(10);
+  return await User.find({ _id: { $nin: [adminId] } })
+    .sort({ points: -1 })
+    .limit(10);
+}
+
+async function getPlayerPoints(userId) {
+  return await User.find({ _id: userId }).distinct('points');
 }
 
 module.exports = {
-    register,
-    login,
-    getTopPlayers,
+  register,
+  login,
+  getTopPlayers,
+  getPlayerPoints,
 };
