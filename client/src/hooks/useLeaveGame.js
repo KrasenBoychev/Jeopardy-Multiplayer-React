@@ -19,7 +19,14 @@ export default function useLeaveGame(
     (async function setLeaveState() {
       if (disconnect) {
         if (leavingPlayer == client.user.name) {
-          disconnectUser(channel, setChannel, client, setIsNewGameStarted, navigate, "/");
+          disconnectUser(
+            channel,
+            setChannel,
+            client,
+            setIsNewGameStarted,
+            navigate,
+            "/"
+          );
         } else {
           toast.error(
             "Rival Player disconnected - you will be redirected in 3 seconds"
@@ -59,15 +66,18 @@ export async function disconnectUser(
   client,
   setIsNewGameStarted,
   navigate,
-  navigatePath,
+  navigatePath
 ) {
   await channel.stopWatching();
   setChannel(null);
-  client.disconnectUser();
 
-  if (setIsNewGameStarted != null) {
-    setIsNewGameStarted(false);
+  // if (client !== null) {
+  //   client.disconnectUser();
+  // }
+  
+  setIsNewGameStarted(false);
+
+  if (navigate !== null && navigatePath !== null) {
+    navigate(navigatePath);
   }
-
-  navigate(navigatePath);
 }
