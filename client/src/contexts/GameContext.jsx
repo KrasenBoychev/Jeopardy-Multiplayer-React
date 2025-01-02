@@ -5,6 +5,7 @@ export const GameContext = createContext({
   setChannel: null,
   client: null,
   rivalPlayer: null,
+  isNewGameStarted: null,
   setIsNewGameStarted: null,
 });
 
