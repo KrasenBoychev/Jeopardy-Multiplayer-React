@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
+
 import { AuthContextProvider, useAuthContext } from "./contexts/AuthContext";
-import { StreamChat } from "stream-chat";
-import { getGameToken } from "../api/game-api";
+import { io } from "socket.io-client";
 
 import "./App.css";
 
@@ -27,70 +27,23 @@ import GameInvitation from "./components/game/gameInvitation/GameInvitation";
 
 function App() {
   const [isNewGameStarted, setIsNewGameStarted] = useState(false);
-  const [client, setClient] = useState(null);
   const [globalChannel, setGlobalChannel] = useState(null);
   const [newGameInvitation, setNewGameInvitation] = useState(false);
 
-  const authLocalStorage = localStorage.getItem("auth");
+  // const { username } = JSON.parse(authLocalStorage);
+
+  const [socket, setSocket] = useState(null);
+  const [user, setUser] = useState("");
+
+  // useEffect(() => {
+  //   setSocket(io("http://localhost:5000"));    
+  // }, []);
 
   useEffect(() => {
-    (async function joinChannel() {
-      if (authLocalStorage && !isNewGameStarted && !client) {
-        const api_key = "tswxm74zz6uc";
-        const myClient = StreamChat.getInstance(api_key);
-
-        const { username } = JSON.parse(authLocalStorage);
-
-        let active = true;
-        await load();
-
-        async function load() {
-          try {
-            const { token, userId } = await getGameToken(username);
-
-           await myClient.connectUser(
-              {
-                id: userId,
-                name: username,
-              },
-              token
-            );
-
-            if (!active) {
-              return;
-            }
-
-            setClient(myClient);
-          } catch (error) {
-            toast.error(
-              "Can not play at this moment. Please send a message to our customer service team."
-            );
-          }
-        }
-      }
-
-      if (client) {
-        const newChannel = await client.channel("team", {
-          members: [client.userID],
-        });
-
-        await newChannel.watch();
-
-        setGlobalChannel(newChannel);
-
-        toast.success("Yeee");
-      }
-      
-      // globalChannel.watch();
-      
-
-      return async () => {
-        active = false;
-        // await globalChannel.stopWatching();
-        client.disconnectUser();
-      };
-    })();
-  }, [authLocalStorage, client]);
+    // const authLocalStorage = localStorage.getItem("auth");
+    
+    socket?.emit("newUser", user);
+  }, [socket, user]);
 
   return (
     <>
@@ -111,7 +64,6 @@ function App() {
                   game={{ isNewGameStarted, setIsNewGameStarted }}
                   gameInvitation={{ newGameInvitation, setNewGameInvitation }}
                   globalChannelInfo={{ globalChannel, setGlobalChannel }}
-                  client={client}
                 />
               }
             />
@@ -130,7 +82,6 @@ function App() {
                     game={{ isNewGameStarted, setIsNewGameStarted }}
                     gameInvitation={{ newGameInvitation, setNewGameInvitation }}
                     globalChannelInfo={{ globalChannel, setGlobalChannel }}
-                    client={client}
                   />
                 }
               />
