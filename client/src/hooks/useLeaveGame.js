@@ -72,7 +72,7 @@ export async function disconnectUser(
   setChannel(null);
 
   // if (client !== null) {
-  //   client.disconnectUser();
+    client.disconnectUser();
   // }
   
   setIsNewGameStarted(false);
