@@ -12,16 +12,11 @@ import "../../play.css";
 
 export default function JoinGame(props) {
   const { isNewGameStarted, setIsNewGameStarted } = props.game;
-  const {newGameInvitation, setNewGameInvitation} = props.gameInvitation;
-  const { globalChannel, setGlobalChannel } = props.globalChannelInfo;
-  const client = props.client;
-
-  // const [invitationSender, setInvitationSender] = useState(null);
   const [rivalUsername, setRivalUsername] = useState("");
   const [channel, setChannel] = useState(null);
   
   const { username } = useAuthContext();
-  // const client = usePlay(username);  
+  const client = usePlay(username);  
 
   const createChannel = async () => {
     try {
@@ -39,31 +34,20 @@ export default function JoinGame(props) {
         return;
       }
 
-      await globalChannel.sendEvent({
-        type: "send-game-invitation",
-        data: { clientId: client.ID },
+      const gameId = Date.now();
+
+      const newChannel = client.channel("messaging", gameId, {
+        members: [client.userID, rivalPlayer.users[0].id],
       });
 
-      // const gameId = Date.now();
+      await newChannel.watch();
+      setChannel(newChannel);
 
-      // const newChannel = client.channel("messaging", gameId, {
-      //   members: [client.userID, rivalPlayer.users[0].id],
-      // });
-
-      // await newChannel.watch();
-      // setChannel(newChannel);
-
-      // setIsNewGameStarted(true);
+      setIsNewGameStarted(true);
     } catch (error) {
       return toast.error(error.message);
     }
   };
-
-  globalChannel.on((event) => {
-    if (event.type == "send-game-invitation" && client.user.ID === event.data.clientId) {
-      setNewGameInvitation(true);
-    }
-  });
 
   return (
     <>
