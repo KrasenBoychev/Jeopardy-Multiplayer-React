@@ -34,9 +34,13 @@ export default function JoinGame(props) {
         return;
       }
 
-      const gameId = Date.now();
+      //Unique channel:
+      // const gameId = Date.now();
+      //const newChannel = client.channel("messaging", gameId, {
+      //   members: [client.userID, rivalPlayer.users[0].id],
+      // });
 
-      const newChannel = client.channel("messaging", gameId, {
+      const newChannel = client.channel("messaging", {
         members: [client.userID, rivalPlayer.users[0].id],
       });
 
