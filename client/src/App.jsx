@@ -35,9 +35,9 @@ function App() {
   const [socket, setSocket] = useState(null);
   const [user, setUser] = useState("");
 
-  // useEffect(() => {
-  //   setSocket(io("http://localhost:5000"));    
-  // }, []);
+  useEffect(() => {
+    setSocket(io("http://localhost:5000"));    
+  }, []);
 
   useEffect(() => {
     // const authLocalStorage = localStorage.getItem("auth");
