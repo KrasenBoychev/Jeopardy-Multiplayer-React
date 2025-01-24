@@ -21,20 +21,6 @@ const gameRouter = Router();
 gameRouter.get('/:username', async (req, res) => {
   const serverClient = StreamChat.getInstance(api_key, api_secret);
 
-  //   await serverClient.upsertUsers([
-  //     { id: userID2, role: 'user', book: 'Tin Tin'},
-  // ]);
-
-  // await serverClient.updateChannelType('notification', {
-  //   grants: {
-  //     channel_member: [
-  //       'read-channel', // allow access to the channel
-  //       'create-message', // create messages in the channel
-  //       'update-message-owner', // update own user messages
-  //       'delete-message-owner', // delete own user messages
-  //     ],
-  //   },
-  // });
   try {
     const username = req.params.username;
 
@@ -51,10 +37,6 @@ gameRouter.get('/:username', async (req, res) => {
       token = serverClient.createToken(users[0].id);
       userIdResult = users[0].id;
     }
-
-    await serverClient.upsertUsers([
-      { id: userIdResult, role: 'user' },
-    ]);
 
     res.json({
       token,
