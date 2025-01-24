@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-import { AuthContextProvider, useAuthContext } from "./contexts/AuthContext";
-import { io } from "socket.io-client";
+import { AuthContextProvider } from "./contexts/AuthContext";
 
 import "./App.css";
 
@@ -29,21 +28,6 @@ function App() {
   const [isNewGameStarted, setIsNewGameStarted] = useState(false);
   const [globalChannel, setGlobalChannel] = useState(null);
   const [newGameInvitation, setNewGameInvitation] = useState(false);
-
-  // const { username } = JSON.parse(authLocalStorage);
-
-  const [socket, setSocket] = useState(null);
-  const [user, setUser] = useState("");
-
-  useEffect(() => {
-    setSocket(io("http://localhost:5000"));    
-  }, []);
-
-  useEffect(() => {
-    // const authLocalStorage = localStorage.getItem("auth");
-    
-    socket?.emit("newUser", user);
-  }, [socket, user]);
 
   return (
     <>

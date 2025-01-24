@@ -1,10 +1,24 @@
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuthContext } from "../../../contexts/AuthContext.jsx";
 import { adminId } from "../../../common/credentials.js";
+import { io } from "socket.io-client";
 import "./header.css";
 
 export default function Header() {
   const { isAuthenticated, username, userId } = useAuthContext();
+
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {;
+    if (isAuthenticated) {
+      setSocket(io("http://localhost:5000"));
+    }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    socket?.emit("newUser", username);
+  }, [socket]);
 
   return (
     <header>
