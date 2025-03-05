@@ -26,11 +26,43 @@ async function start() {
     },
   });
 
+  let onlineUsers = [];
+
+  const addNewUser = (username, socketId) => {
+    !onlineUsers.some((user) => user.username === username) &&
+      onlineUsers.push({ username, socketId });
+  };
+
+  const removeUser = (socketId) => {
+    onlineUsers = onlineUsers.filter((user) => user.socketId !== socketId);
+  };
+
+  const getUser = (username) => {
+    return onlineUsers.find((user) => user.username === username);
+  };
+
   io.on('connection', (socket) => {
-    console.log(`User connected ${socket.id}`);
+    socket.on('newUser', (username) => {
+      addNewUser(username, socket.id);
+    });
+
+    socket.on('sendNotification', ({ senderName, receiverName }) => {
+      const receiver = getUser(receiverName);
+
+      if (receiver) {
+        io.to(receiver.socketId).emit('getNotification', {
+          senderName,
+        });
+      }
+    });
+
+    socket.on('disconnect', () => {
+      removeUser(socket.id);
+      console.log('disconnected');
+    });
   });
 
-  server.listen(5000, () => 'Server is running on port 5000');
+  server.listen(5000);
 
   // app.listen(5000);
   // server.listen(5000);
