@@ -28,13 +28,14 @@ function App() {
   const [isNewGameStarted, setIsNewGameStarted] = useState(false);
   const [globalChannel, setGlobalChannel] = useState(null);
   const [newGameInvitation, setNewGameInvitation] = useState(false);
+  const [socket, setSocket] = useState(null);
 
   return (
     <>
       <Toaster />
 
       <AuthContextProvider>
-        {!isNewGameStarted && <Header />}
+        {!isNewGameStarted && <Header socketProps={{ socket, setSocket }} />}
         {!isNewGameStarted && newGameInvitation && (
           <GameInvitation gameInvitation={setNewGameInvitation} />
         )}
@@ -45,9 +46,10 @@ function App() {
               path="/"
               element={
                 <Home
-                  game={{ isNewGameStarted, setIsNewGameStarted }}
-                  gameInvitation={{ newGameInvitation, setNewGameInvitation }}
-                  globalChannelInfo={{ globalChannel, setGlobalChannel }}
+                  // game={{ isNewGameStarted, setIsNewGameStarted }}
+                  // gameInvitation={{ newGameInvitation, setNewGameInvitation }}
+                  // globalChannelInfo={{ globalChannel, setGlobalChannel }}
+                  socket={socket}
                 />
               }
             />
