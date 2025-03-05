@@ -6,11 +6,13 @@ import { useAuthContext } from "../../contexts/AuthContext";
 import { getTopPlayers } from "../../../api/requester";
 
 import "./home.css";
+import toast from "react-hot-toast";
 
-export default function Home() {
-  const { points } = useAuthContext();
+export default function Home({ socket }) {
+  const { username, points } = useAuthContext();
 
   const [topPlayers, setTopPlayers] = useState([]);
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     (async function getPlayers() {
@@ -18,6 +20,26 @@ export default function Home() {
       setTopPlayers(players);
     })();
   }, []);
+
+  useEffect(() => {
+    socket?.on("getNotification", (data) => {
+      setNotifications((prev) => [...prev, data]);
+    });
+  }, [socket]);
+
+  const sendNotification = async () => {
+    if (!socket) {
+      toast.error(
+        "Cannot send the invitation at the moment. Please logout and login again."
+      );
+      return;
+    }
+
+    await socket.emit("sendNotification", {
+      senderName: username,
+      receiverName: "mare",
+    });
+  };
 
   return (
     <div className="home-container">
@@ -27,6 +49,14 @@ export default function Home() {
             ? `Your Points: ${points}`
             : "Win points and see your name in the Leaderboard!"}
         </p>
+        <div>
+          <button onClick={sendNotification}>Send Notification to Mare</button>
+          <ul>
+            {notifications.map((n, i) => (
+              <li key={i}>{n.senderName}</li>
+            ))}
+          </ul>
+        </div>
         <Link to="/play">
           <button className="play-button">
             <span className="play-btn-arrows">&gt;&gt;&gt;</span> Play{" "}
