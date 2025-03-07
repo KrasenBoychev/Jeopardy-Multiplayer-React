@@ -10,8 +10,8 @@ import PrivateGuard from "./common/PrivateGuard";
 import PublicGuard from "./common/PublicGuard";
 import AdminGuard from "./common/AdminGuard";
 
-import Home from "./components/home/Home";
-import About from "./components/about/About";
+import Home from "./components/core/home/Home";
+import About from "./components/core/about/About";
 import Header from "./components/core/header/Header";
 import Footer from "./components/core/footer/Footer";
 import Login from "./components/authentication/Login";
@@ -21,9 +21,9 @@ import Create from "./components/create/Create";
 import CreateCategory from "./components/create/createCategory/CreateCategory";
 import CreateQuestion from "./components/create/createQuestion/CreateQuestion";
 import NotFound from "./components/core/notFound/NotFound";
-import JoinGame from "./components/game/startGame/joinGame/JoinGame";
 import GameInvitation from "./components/game/gameInvitation/GameInvitation";
 import Socket from "./components/core/Socket";
+import PlayPage from "./components/game/playPage/PlayPage";
 
 function App() {
   const [isNewGameStarted, setIsNewGameStarted] = useState(false);
@@ -67,7 +67,7 @@ function App() {
               <Route
                 path="/play"
                 element={
-                  <JoinGame
+                  <PlayPage
                     game={{ isNewGameStarted, setIsNewGameStarted }}
                     gameInvitation={{ newGameInvitation, setNewGameInvitation }}
                     globalChannelInfo={{ globalChannel, setGlobalChannel }}
