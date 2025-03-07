@@ -14,9 +14,9 @@ export default function JoinGame(props) {
   const { isNewGameStarted, setIsNewGameStarted } = props.game;
   const [rivalUsername, setRivalUsername] = useState("");
   const [channel, setChannel] = useState(null);
-  
+
   const { username } = useAuthContext();
-  const client = usePlay(username);  
+  const client = usePlay(username);
 
   const createChannel = async () => {
     try {
@@ -55,7 +55,7 @@ export default function JoinGame(props) {
 
   return (
     <>
-      {channel ? (
+      {channel && (
         <GameContext.Provider
           value={{
             channel,
@@ -69,24 +69,6 @@ export default function JoinGame(props) {
           <ExitGame />
           <ConnectPlayers />
         </GameContext.Provider>
-      ) : (
-        <div className="game-container">
-          <div className="game-wrapper">
-            <h1 className="start-game-heading">Start Game</h1>
-            <input
-              className="start-game-rival-player"
-              placeholder="Username of rival player..."
-              onChange={(event) => {
-                setRivalUsername(event.target.value);
-              }}
-            />
-
-            <button className="start-game-button" onClick={createChannel}>
-              {" "}
-              Join/Start Game
-            </button>
-          </div>
-        </div>
       )}
     </>
   );
