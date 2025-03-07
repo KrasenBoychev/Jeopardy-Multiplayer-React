@@ -1,0 +1,1 @@
+1. Delete 'onlineUsers' controller and the 'onlineUsersRouter' if not in use;
