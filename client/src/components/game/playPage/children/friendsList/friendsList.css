@@ -1,0 +1,100 @@
+.friends_list_wrapper {
+    padding: 10px;
+    width: 350px;
+    height: 300px;
+    font-size: 1.2rem;
+    color: var(--white);
+    background-color: var(--midnight-blue);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.friends_list_wrapper h3 {
+    padding-bottom: 10px;
+    text-align: center;
+    border-bottom: 1px solid var(--white);
+}
+
+.friends_list_wrapper ul {
+    flex-grow: 1;
+    padding: 0 10px;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.friends_list_wrapper li {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.friend_online .friend_username {
+    width: 60%;
+    overflow-x: clip;
+}
+
+.friend_offline .friend_username {
+    width: 220px;
+    overflow-x: clip;
+}
+
+.friend_status,
+.friend_online_play {
+    padding: 5px;
+    width: 50px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #000;
+    border-radius: 5px;
+}
+
+.friend_online .friend_status {
+    background-color: greenyellow;
+}
+
+.friend_offline .friend_status {
+    background-color: red;
+}
+
+.friend_online_play {
+    background-color: var(--white);
+}
+
+.friend_online_play:hover {
+    cursor: pointer;
+    color: var(--white);
+    background-color: var(--purple);
+}
+
+.add_friend {
+    padding-top: 10px;
+    border-top: 1px solid var(--white);
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.add_friend>* {
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+}
+
+.add_friend input {
+    flex-grow: 1;
+}
+
+.add_friend button {
+    background-color: var(--white);  
+}
+
+.add_friend button:hover {
+    cursor: pointer;
+    color: var(--white);
+    background-color: var(--purple);
+}
