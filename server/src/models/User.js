@@ -17,7 +17,12 @@ const UserSchema = new Schema({
   },
   points: {
     type: Number,
-    required: true
+    required: true,
+  },
+  friendsList: {
+    type: Array,
+    required: true,
+    default: [],
   },
   date: {
     type: Date,
