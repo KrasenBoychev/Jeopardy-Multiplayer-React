@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-function connectDatabase() {
-  mongoose
+async function connectDatabase() {
+  await mongoose
     .connect('mongodb://localhost:27017/', {
       dbName: 'Jeopardy-Multiplayer'
     })
