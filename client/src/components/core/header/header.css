@@ -11,14 +11,17 @@ nav {
     height: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: baseline;
 }
 
 nav ul {
+    align-items: baseline;
     justify-content: space-between;
     display: flex;
 }
 
-nav ul li a, .logo li {
+nav ul li a,
+.logo li {
     align-content: center;
 }
 
@@ -32,10 +35,25 @@ nav ul li a, .logo li {
 
 .profile li {
     display: flex;
-    width: 65px;
     height: 25px;
     text-align: center;
     align-items: center;
+    border-radius: 2px;
+}
+
+.profile li:not(.header_game_invitations) {
+    width: 65px;
+}
+
+.header_game_invitations {
+    padding: 0 5px;
+}
+
+.header_game_invitations span {
+    margin-left: 3px;
+    padding: 2px 3px;
+    color: var(--midnight-blue);
+    background-color: var(--white);
     border-radius: 2px;
 }
 
@@ -48,4 +66,9 @@ nav ul li a, .logo li {
     cursor: pointer;
     color: var(--midnight-blue);
     background-color: var(--white);
+}
+
+.header_game_invitations:hover span {
+    color: var(--white);
+    background-color: var(--midnight-blue);
 }

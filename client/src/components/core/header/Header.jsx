@@ -1,11 +1,19 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuthContext } from "../../../contexts/AuthContext.jsx";
 import { adminId } from "../../../common/credentials.js";
 
+import NotificationsBox from "./notificationsBox/NotificationsBox.jsx";
 import "./header.css";
+import "./NotificationsBox/notificationsBox.css";
 
 export default function Header() {
   const { isAuthenticated, username, userId } = useAuthContext();
+  const [notificationsBox, setNotificationsBox] = useState(false);
+
+  const openNotifications = () => {
+    setNotificationsBox(!notificationsBox);
+  };
 
   return (
     <header>
@@ -23,6 +31,9 @@ export default function Header() {
           </li>
           <li>
             <NavLink to="/play">Play</NavLink>
+          </li>
+          <li className="header_game_invitations" onClick={openNotifications}>
+            Notifications <span>0</span>
           </li>
           {userId == adminId && (
             <li>
@@ -46,6 +57,7 @@ export default function Header() {
           )}
         </ul>
       </nav>
+      {notificationsBox && <NotificationsBox />}
     </header>
   );
 }
