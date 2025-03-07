@@ -106,3 +106,7 @@ export async function getTopPlayers() {
 export async function getPlayerPoints(userId) {
   return await get(settings.host + `/users/playerPoints/${userId}`);
 }
+
+export async function getFriendsOnline(userId) {
+  return await get(settings.host + `/users/friendsOnline/${userId}`);
+}
