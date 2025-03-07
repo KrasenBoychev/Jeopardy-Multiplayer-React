@@ -1,0 +1,45 @@
+.game_room_wrapper {
+    width: 300px;
+    height: 350px;
+    font-size: 1.5rem;
+    color: var(--white);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.game_room_wrapper h3 {
+    text-align: center;
+}
+
+.game_room_players {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.game_room_players p {
+    display: flex;
+    justify-content: space-between;
+}
+
+.game_room_players p span:nth-child(2) {
+    display: block;
+    width: 200px;
+    overflow-x: clip;
+}
+
+.game_room_btn {
+    padding: 10px;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    border-radius: 5px;
+    border: none;
+}
+
+.game_room_btn:hover {
+    cursor: pointer;
+    color: var(--white);
+    background-color: var(--midnight-blue);
+}
