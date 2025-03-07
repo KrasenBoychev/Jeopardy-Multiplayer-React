@@ -12,7 +12,7 @@ export default function FriendsList() {
           <span className="friend_username">
             Someoneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
           </span>
-          {friendOnline && <span className="friend_online_play">Play</span>}
+          {friendOnline && <span className="friend_online_play">Invite</span>}
           <span className="friend_status">Online</span>
         </li>
 
@@ -20,7 +20,7 @@ export default function FriendsList() {
           <span className="friend_username">
             Someoneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
           </span>
-          {!friendOnline && <span className="friend_online_play">Play</span>}
+          {!friendOnline && <span className="friend_online_play">Invite</span>}
           <span className="friend_status">Offline</span>
         </li>
 
@@ -28,7 +28,7 @@ export default function FriendsList() {
           <span className="friend_username">
             Someoneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
           </span>
-          {friendOnline && <span className="friend_online_play">Play</span>}
+          {friendOnline && <span className="friend_online_play">Invite</span>}
           <span className="friend_status">Online</span>
         </li>
 
@@ -36,7 +36,7 @@ export default function FriendsList() {
           <span className="friend_username">
             Someoneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
           </span>
-          {!friendOnline && <span className="friend_online_play">Play</span>}
+          {!friendOnline && <span className="friend_online_play">Invite</span>}
           <span className="friend_status">Offline</span>
         </li>
 
@@ -44,7 +44,7 @@ export default function FriendsList() {
           <span className="friend_username">
             Someoneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
           </span>
-          {friendOnline && <span className="friend_online_play">Play</span>}
+          {friendOnline && <span className="friend_online_play">Invite</span>}
           <span className="friend_status">Online</span>
         </li>
       </ul>
