@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { useAuthContext } from "../../contexts/AuthContext";
+import { useAuthContext } from "../../../contexts/AuthContext";
 
-import { getTopPlayers } from "../../../api/requester";
+import { getFriendsOnline, getTopPlayers } from "../../../../api/requester";
 
 import "./home.css";
 import toast from "react-hot-toast";
 
 export default function Home({ socket }) {
-  const { username, points } = useAuthContext();
+  const { userId, username, points, isAuthenticated } = useAuthContext();
 
   const [topPlayers, setTopPlayers] = useState([]);
-  const [notifications, setNotifications] = useState([]);
+  const [friendsOnline, setFriendsOnline] = useState([]);
 
   useEffect(() => {
     (async function getPlayers() {
@@ -22,15 +22,24 @@ export default function Home({ socket }) {
   }, []);
 
   useEffect(() => {
+    (async function getFriends() {
+      if (isAuthenticated) {
+        const allFriendsOnline = await getFriendsOnline(userId);
+        setFriendsOnline(allFriendsOnline);
+      }
+    })();
+  }, [isAuthenticated]);
+
+  useEffect(() => {
     socket?.on("getNotification", (data) => {
-      setNotifications((prev) => [...prev, data]);
+      // setNotifications((prev) => [...prev, data]);
     });
   }, [socket]);
 
-  const sendNotification = async () => {
+  const sendFriendRequest = async () => {
     if (!socket) {
       toast.error(
-        "Cannot send the invitation at the moment. Please logout and login again."
+        "Cannot send the invitation at the moment. Please refresh the page and try again."
       );
       return;
     }
@@ -49,14 +58,6 @@ export default function Home({ socket }) {
             ? `Your Points: ${points}`
             : "Win points and see your name in the Leaderboard!"}
         </p>
-        <div>
-          <button onClick={sendNotification}>Send Notification to Mare</button>
-          <ul>
-            {notifications.map((n, i) => (
-              <li key={i}>{n.senderName}</li>
-            ))}
-          </ul>
-        </div>
         <Link to="/play">
           <button className="play-button">
             <span className="play-btn-arrows">&gt;&gt;&gt;</span> Play{" "}
