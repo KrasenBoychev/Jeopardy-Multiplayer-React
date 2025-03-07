@@ -23,6 +23,7 @@ import CreateQuestion from "./components/create/createQuestion/CreateQuestion";
 import NotFound from "./components/core/notFound/NotFound";
 import JoinGame from "./components/game/startGame/joinGame/JoinGame";
 import GameInvitation from "./components/game/gameInvitation/GameInvitation";
+import Socket from "./components/core/Socket";
 
 function App() {
   const [isNewGameStarted, setIsNewGameStarted] = useState(false);
@@ -35,7 +36,9 @@ function App() {
       <Toaster />
 
       <AuthContextProvider>
-        {!isNewGameStarted && <Header socketProps={{ socket, setSocket }} />}
+        <Socket socketProps={{ socket, setSocket }} />
+
+        {!isNewGameStarted && <Header />}
         {!isNewGameStarted && newGameInvitation && (
           <GameInvitation gameInvitation={setNewGameInvitation} />
         )}
