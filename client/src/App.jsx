@@ -68,9 +68,10 @@ function App() {
                 path="/play"
                 element={
                   <PlayPage
-                    game={{ isNewGameStarted, setIsNewGameStarted }}
-                    gameInvitation={{ newGameInvitation, setNewGameInvitation }}
-                    globalChannelInfo={{ globalChannel, setGlobalChannel }}
+                    // game={{ isNewGameStarted, setIsNewGameStarted }}
+                    // gameInvitation={{ newGameInvitation, setNewGameInvitation }}
+                    // globalChannelInfo={{ globalChannel, setGlobalChannel }}
+                    socket={socket}
                   />
                 }
               />
