@@ -54,7 +54,7 @@ async function getPlayerPoints(userId) {
 }
 
 async function getUserFriendsList(userId) {
-  return await User.find({ _id: userId }).distinct('friendsList');
+    return await User.find({ _id: userId }).distinct('friendsList');
 }
 
 module.exports = {
