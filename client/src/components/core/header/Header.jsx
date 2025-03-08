@@ -32,9 +32,6 @@ export default function Header() {
           <li>
             <NavLink to="/play">Play</NavLink>
           </li>
-          <li className="header_game_invitations" onClick={openNotifications}>
-            Notifications <span>0</span>
-          </li>
           {userId == adminId && (
             <li>
               <NavLink to="/create">Create</NavLink>
@@ -42,9 +39,17 @@ export default function Header() {
           )}
 
           {isAuthenticated ? (
-            <li>
-              <NavLink to="/logout">Logout</NavLink>
-            </li>
+            <>
+              <li
+                className="header_game_invitations"
+                onClick={openNotifications}
+              >
+                Notifications <span>0</span>
+              </li>
+              <li>
+                <NavLink to="/logout">Logout</NavLink>
+              </li>
+            </>
           ) : (
             <>
               <li>
