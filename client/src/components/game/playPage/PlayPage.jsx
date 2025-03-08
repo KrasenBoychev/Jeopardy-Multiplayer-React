@@ -4,11 +4,11 @@ import GameRoom from "./children/gameRoom/GameRoom";
 
 import "./playPage.css";
 
-export default function PlayPage() {
+export default function PlayPage({ socket }) {
   return (
     <div className="play_page_container">
       <section>
-        <FriendsList />
+        <FriendsList socket={socket} />
         <StartGameWithOtherPlayer />
       </section>
       <section>
