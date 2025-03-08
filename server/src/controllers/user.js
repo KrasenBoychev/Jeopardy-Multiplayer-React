@@ -109,22 +109,4 @@ userRouter.get('/playerPoints/:userId', async (req, res) => {
   }
 });
 
-userRouter.get('/friendsOnline/:userId', async (req, res) => {
-  try {
-    const userFriendsList = await getUserFriendsList(req.params.userId);
-
-    let friendsOnline = [];
-    if (userFriendsList.length > 0) {
-      friendsOnline = userFriendsList.filter((friendUsername) => {
-        onlineUsers.includes(friendUsername);
-      });
-    }
-
-    res.json(friendsOnline);
-  } catch (err) {
-    const parsed = parseError(err);
-    res.status(400).json({ code: 400, message: parsed.message });
-  }
-});
-
 module.exports = { userRouter };
