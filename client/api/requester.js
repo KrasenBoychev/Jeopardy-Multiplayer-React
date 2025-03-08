@@ -108,5 +108,5 @@ export async function getPlayerPoints(userId) {
 }
 
 export async function getFriendsOnline(userId) {
-  return await get(settings.host + `/users/friendsOnline/${userId}`);
+  return await get(settings.host + `/onlineUsers/friendsOnline/${userId}`);
 }
