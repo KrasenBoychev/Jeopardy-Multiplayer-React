@@ -14,14 +14,12 @@ function configSocket(server) {
       await addNewOnlineUser(username, socket.id);
     });
 
-    socket.on('sendNotification', ({ senderName, receiverName }) => {
-      const receiver = getUser(receiverName);
-
-      if (receiver) {
-        io.to(receiver.socketId).emit('getNotification', {
-          senderName,
+    socket.on('sendUserIsOnline', ({ senderInfo, receiverFriends }) => {            
+      receiverFriends.forEach(friend => {
+        io.to(friend.socketId).emit('getFriendIsOnline', {
+          senderInfo,
         });
-      }
+      });
     });
 
     socket.on('disconnect', async () => {
@@ -30,10 +28,5 @@ function configSocket(server) {
   });
 }
 
-let onlineUsers = [];
 
-const getUser = (username) => {
-  return onlineUsers.find((user) => user.username === username);
-};
-
-module.exports = { configSocket, onlineUsers };
+module.exports = { configSocket };
