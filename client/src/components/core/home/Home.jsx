@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 
 import { useAuthContext } from "../../../contexts/AuthContext";
 
-import { getFriendsOnline, getTopPlayers } from "../../../../api/requester";
+import { getTopPlayers } from "../../../../api/requester";
 
 import "./home.css";
 import toast from "react-hot-toast";
 
 export default function Home({ socket }) {
-  const { userId, username, points, isAuthenticated } = useAuthContext();
+  const { username, points, isAuthenticated } = useAuthContext();
 
   const [topPlayers, setTopPlayers] = useState([]);
   const [friendsOnline, setFriendsOnline] = useState([]);
@@ -20,35 +20,6 @@ export default function Home({ socket }) {
       setTopPlayers(players);
     })();
   }, []);
-
-  useEffect(() => {
-    (async function getFriends() {
-      if (isAuthenticated) {
-        const allFriendsOnline = await getFriendsOnline(userId);
-        setFriendsOnline(allFriendsOnline);
-      }
-    })();
-  }, [isAuthenticated]);
-
-  useEffect(() => {
-    socket?.on("getNotification", (data) => {
-      // setNotifications((prev) => [...prev, data]);
-    });
-  }, [socket]);
-
-  const sendFriendRequest = async () => {
-    if (!socket) {
-      toast.error(
-        "Cannot send the invitation at the moment. Please refresh the page and try again."
-      );
-      return;
-    }
-
-    await socket.emit("sendNotification", {
-      senderName: username,
-      receiverName: "mare",
-    });
-  };
 
   return (
     <div className="home-container">
