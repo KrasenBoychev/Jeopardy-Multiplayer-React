@@ -33,6 +33,10 @@
     gap: 10px;
 }
 
+.friends_list_wrapper p {
+    text-align: center;
+}
+
 .friend_online .friend_username {
     width: 60%;
     overflow-x: clip;
