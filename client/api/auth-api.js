@@ -3,7 +3,7 @@ import * as api from './requester.js';
 const host = api.settings.host;
 
 export async function login(email, password) {
-    const result = await api.post(host + '/users/login', {
+    const result = await api.post(host + '/auth/login', {
       email,
       password,
     });
@@ -12,7 +12,7 @@ export async function login(email, password) {
   }
   
   export async function register(email, username, password) {
-    const result = await api.post(host + '/users/register', {
+    const result = await api.post(host + '/auth/register', {
       email,
       username,
       password,
@@ -22,7 +22,7 @@ export async function login(email, password) {
   }
   
   export async function logout() {
-    const result = await api.get(host + '/users/logout');
+    const result = await api.get(host + '/auth/logout');
   
     return result;
   }
