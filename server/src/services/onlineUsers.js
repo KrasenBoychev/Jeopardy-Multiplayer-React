@@ -31,4 +31,18 @@ async function removeOnlineUser(socketId) {
   return record;
 }
 
-module.exports = { getOnlineUsers, getOnlineFriends, addNewOnlineUser, removeOnlineUser };
+async function checkIfUserIsOnline(username) {
+  return await OnlineUsers.findOne({
+    "onlineUsers.username": username
+  }, {
+    "onlineUsers.$": 1
+  });
+}
+
+module.exports = {
+  getOnlineUsers,
+  getOnlineFriends,
+  addNewOnlineUser,
+  removeOnlineUser,
+  checkIfUserIsOnline,
+};
