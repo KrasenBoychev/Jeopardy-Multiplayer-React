@@ -16,7 +16,7 @@ async function getUserFriendsList(userId) {
 }
 
 async function getUserByUsername(username) {
-  return await User.find({ username }).distinct('username');
+  return await User.find({ username });
 }
 
 module.exports = {
