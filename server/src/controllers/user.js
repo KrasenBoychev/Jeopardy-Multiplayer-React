@@ -3,6 +3,7 @@ const { parseError } = require('../util');
 const {
   getTopPlayers,
   getPlayerPoints,
+  getUserByUsername,
 } = require('../services/user');
 
 const userRouter = Router();
@@ -27,14 +28,14 @@ userRouter.get('/playerPoints/:userId', async (req, res) => {
   }
 });
 
-// userRouter.get('/checkUser/:username', async (req, res) => {
-//   try {
-//     const user = await (req.params.username);
-//     res.json(data);
-//   } catch (err) {
-//     const parsed = parseError(err);
-//     res.status(400).json({ code: 400, message: parsed.message });
-//   }
-// });
+userRouter.get('/checkUser/:username', async (req, res) => {
+  try {
+    const user = await getUserByUsername(req.params.username);
+    res.json(user);
+  } catch (err) {
+    const parsed = parseError(err);
+    res.status(400).json({ code: 400, message: parsed.message });
+  }
+});
 
 module.exports = { userRouter };
