@@ -5,7 +5,7 @@ const { isGuest } = require('../middlewares/guards');
 const {
   login,
   register,
-} = require('../services/user');
+} = require('../services/auth');
 const { createToken } = require('../services/jwt');
 
 const authRouter = Router();
