@@ -30,13 +30,14 @@ function App() {
   const [globalChannel, setGlobalChannel] = useState(null);
   const [newGameInvitation, setNewGameInvitation] = useState(false);
   const [socket, setSocket] = useState(null);
+  const [friendsList, setFriendsList] = useState([]);
 
   return (
     <>
       <Toaster />
 
       <AuthContextProvider>
-        <Socket socketProps={{ socket, setSocket }} />
+        <Socket socketProps={{ socket, setSocket }} friendsProps={{ friendsList, setFriendsList }}/>
 
         {!isNewGameStarted && <Header />}
         {!isNewGameStarted && newGameInvitation && (
@@ -72,10 +73,11 @@ function App() {
                     // gameInvitation={{ newGameInvitation, setNewGameInvitation }}
                     // globalChannelInfo={{ globalChannel, setGlobalChannel }}
                     socket={socket}
+                    friendsProps={{ friendsList, setFriendsList }}
                   />
                 }
               />
-              <Route path="/logout" element={<Logout />} />
+              <Route path="/logout" element={<Logout socketProps={{ socket, setSocket }} friendsProps={{ friendsList, setFriendsList }}/>} />
             </Route>
 
             <Route element={<AdminGuard />}>
