@@ -1,16 +1,20 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { checkIfUserExists } from "../../../../../../api/user-api";
+import { useAuthContext } from "../../../../../contexts/AuthContext";
 
 import "./friendsList.css";
 
 export default function FriendsList({ friendsList }) {
-
   const [friendInvitedUsername, setFriendInvitedUsername] = useState(null);
+  const { username } = useAuthContext();
 
   const sendFriendInvitation = async () => {
     if (!friendInvitedUsername) {
       return;
+    } else if (friendInvitedUsername == username) {
+      toast.error('Cannot add yourself');
+      return
     }
 
     let isUsernameInFriendList = false;
@@ -27,13 +31,16 @@ export default function FriendsList({ friendsList }) {
     }
 
     try {
-      const friendInvited = await checkIfUserExists(friendInvitedUsername);
-      if (friendInvited.length == 0) {
-        toast.error(friendInvitedUsername + ' does not exist')
-      } else {
-        
+      const friendCheckResponse = await checkIfUserExists(friendInvitedUsername);
+
+      if (friendCheckResponse.status == 'success') {
+        toast.success(friendCheckResponse.msg);
+      } else if (friendCheckResponse.status == 'error') {
+        toast.error(friendCheckResponse.msg);
+      } else if (friendCheckResponse.status == 'send invitation') {
+        console.log(friendCheckResponse.msg);
       }
-      
+
     } catch (error) {
       toast.error(error.message);
     }
@@ -60,7 +67,7 @@ export default function FriendsList({ friendsList }) {
       }
       <p className="add_friend">
         <input type="text" placeholder="Friend Username" onChange={(event) => {
-            setFriendInvitedUsername(event.target.value);
+          setFriendInvitedUsername(event.target.value);
         }} />
         <button onClick={sendFriendInvitation}>Add Friend</button>
       </p>
