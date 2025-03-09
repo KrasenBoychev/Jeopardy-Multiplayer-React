@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import { checkIfUserExists } from "../../../../../../api/user-api";
 
 import "./friendsList.css";
 
@@ -7,7 +8,7 @@ export default function FriendsList({ friendsList }) {
 
   const [friendInvitedUsername, setFriendInvitedUsername] = useState(null);
 
-  const sendFriendInvitation = () => {
+  const sendFriendInvitation = async () => {
     if (!friendInvitedUsername) {
       return;
     }
@@ -25,7 +26,17 @@ export default function FriendsList({ friendsList }) {
       return;
     }
 
-    
+    try {
+      const friendInvited = await checkIfUserExists(friendInvitedUsername);
+      if (friendInvited.length == 0) {
+        toast.error(friendInvitedUsername + ' does not exist')
+      } else {
+        
+      }
+      
+    } catch (error) {
+      toast.error(error.message);
+    }
   }
 
   return (
