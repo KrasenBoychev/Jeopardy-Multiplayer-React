@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { recordPoints } from "../../api/game-api";
 
 import { useAuthContext } from "../contexts/AuthContext";
-import { getPlayerPoints } from "../../api/requester";
+import { getPlayerPoints } from "../../api/user-api";
 
 export default function useChooseQuestion(
   questions,

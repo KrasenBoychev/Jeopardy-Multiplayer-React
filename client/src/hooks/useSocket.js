@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { io } from "socket.io-client";
-import { getFriendsOnline } from "../../api/requester";
+import { getFriendsOnline } from "../../api/user-api";
 import { useAuthContext } from "../contexts/AuthContext";
 
 export default function useSocket(socket, setSocket, setFriendsList) {

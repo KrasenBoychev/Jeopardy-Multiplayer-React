@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { login, logout, register } from "../../api/requester";
+import { login, logout, register } from "../../api/auth-api";
 
 import { useAuthContext } from "../contexts/AuthContext";
 

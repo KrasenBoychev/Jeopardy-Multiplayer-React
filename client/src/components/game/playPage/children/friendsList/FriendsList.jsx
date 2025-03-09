@@ -1,6 +1,32 @@
+import { useState } from "react";
+import { toast } from "react-hot-toast";
+
 import "./friendsList.css";
 
 export default function FriendsList({ friendsList }) {
+
+  const [friendInvitedUsername, setFriendInvitedUsername] = useState(null);
+
+  const sendFriendInvitation = () => {
+    if (!friendInvitedUsername) {
+      return;
+    }
+
+    let isUsernameInFriendList = false;
+    friendsList.forEach(friend => {
+      if (friend.username == friendInvitedUsername) {
+        toast.error(friendInvitedUsername + ' is in your Friends List');
+        isUsernameInFriendList = true;
+        return;
+      }
+    });
+
+    if (isUsernameInFriendList) {
+      return;
+    }
+
+    
+  }
 
   return (
     <div className="friends_list_wrapper">
@@ -22,8 +48,10 @@ export default function FriendsList({ friendsList }) {
         <p>Invite friends and earn points!</p>
       }
       <p className="add_friend">
-        <input type="text" placeholder="Friend Username" />
-        <button>Add Friend</button>
+        <input type="text" placeholder="Friend Username" onChange={(event) => {
+            setFriendInvitedUsername(event.target.value);
+        }} />
+        <button onClick={sendFriendInvitation}>Add Friend</button>
       </p>
     </div>
   );

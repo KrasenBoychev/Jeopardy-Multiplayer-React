@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { useAuthContext } from "../../../contexts/AuthContext";
 
-import { getTopPlayers } from "../../../../api/requester";
+import { getTopPlayers } from "../../../../api/user-api";
 
 import "./home.css";
 import toast from "react-hot-toast";

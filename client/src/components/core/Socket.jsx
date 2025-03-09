@@ -1,7 +1,3 @@
-import { useEffect } from "react";
-import { io } from "socket.io-client";
-import { useAuthContext } from "../../contexts/AuthContext";
-import { getFriendsOnline } from "../../../api/requester";
 import useSocket from "../../hooks/useSocket";
 
 export default function Socket(props) {
