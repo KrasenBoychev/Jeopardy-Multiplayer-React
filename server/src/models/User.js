@@ -24,6 +24,16 @@ const UserSchema = new Schema({
     required: true,
     default: [],
   },
+  friendRequests: {
+    type: Array,
+    required: true,
+    default: [],
+  },
+  notificationsLists: {
+    type: Array,
+    required: true,
+    default: [],
+  },
   date: {
     type: Date,
     default: Date.now,
