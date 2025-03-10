@@ -14,12 +14,18 @@ function configSocket(server) {
       await addNewOnlineUser(username, socket.id);
     });
 
-    socket.on('sendUserStatus', ({ senderInfo, receiverFriends, logout }) => {          
+    socket.on('sendUserStatus', ({ senderInfo, receiverFriends, logout }) => {
       receiverFriends.forEach(friend => {
         io.to(friend.socketId).emit('getFriendStatus', {
           senderInfo,
           logout
         });
+      });
+    });
+
+    socket.on('sendNotification', ({ receiverSocketId, msg }) => {
+      io.to(receiverSocketId).emit('getNotification', {
+        msg
       });
     });
 
