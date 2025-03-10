@@ -37,9 +37,9 @@ function App() {
       <Toaster />
 
       <AuthContextProvider>
-        <Socket socketProps={{ socket, setSocket }} friendsProps={{ friendsList, setFriendsList }}/>
+        <Socket socketProps={{ socket, setSocket }} friendsProps={{ friendsList, setFriendsList }} />
 
-        {!isNewGameStarted && <Header />}
+        {!isNewGameStarted && <Header socket={socket} />}
         {!isNewGameStarted && newGameInvitation && (
           <GameInvitation gameInvitation={setNewGameInvitation} />
         )}
@@ -77,7 +77,7 @@ function App() {
                   />
                 }
               />
-              <Route path="/logout" element={<Logout socketProps={{ socket, setSocket }} friendsProps={{ friendsList, setFriendsList }}/>} />
+              <Route path="/logout" element={<Logout socketProps={{ socket, setSocket }} friendsProps={{ friendsList, setFriendsList }} />} />
             </Route>
 
             <Route element={<AdminGuard />}>
