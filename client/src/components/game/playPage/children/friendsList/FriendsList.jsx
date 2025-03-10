@@ -5,7 +5,7 @@ import { useAuthContext } from "../../../../../contexts/AuthContext";
 
 import "./friendsList.css";
 
-export default function FriendsList({ friendsList }) {
+export default function FriendsList({ socket, friendsList }) {
   const [friendInvitedUsername, setFriendInvitedUsername] = useState(null);
   const { username } = useAuthContext();
 
@@ -37,8 +37,15 @@ export default function FriendsList({ friendsList }) {
         toast.success(friendCheckResponse.msg);
       } else if (friendCheckResponse.status == 'error') {
         toast.error(friendCheckResponse.msg);
+
       } else if (friendCheckResponse.status == 'send invitation') {
-        console.log(friendCheckResponse.msg);
+                
+        await socket.emit("sendNotification", {
+          receiverSocketId: friendCheckResponse.friendDetails.socketId,
+          msg: { username, content: ' sent friend request' },
+        });
+
+        toast.success(friendCheckResponse.msg);
       }
 
     } catch (error) {
