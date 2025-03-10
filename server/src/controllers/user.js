@@ -50,15 +50,16 @@ userRouter.get('/checkUser/:username', async (req, res) => {
 
         if (userOnline) {
           result.status = 'send invitation';
-          result.msg = userOnline.onlineUsers[0];
+          result.friendDetails = userOnline.onlineUsers[0];
         } else {
-          friend.friendRequests.push(userUsername);
-          await friend.save();
-
           result.status = 'success';
-          result.msg = 'Invitation sent to ' + friendUsername;
         }
 
+        result.msg = 'Invitation sent to ' + friendUsername;
+        
+        friend.friendRequests.push(userUsername);
+        await friend.save();
+        
       }
     } else {
       result.status = 'error';
