@@ -10,7 +10,7 @@ export default function PlayPage(props) {
   return (
     <div className="play_page_container">
       <section>
-        <FriendsList friendsList={props.friendsProps.friendsList} />
+        <FriendsList socket={props.socket} friendsList={props.friendsProps.friendsList} />
         <StartGameWithOtherPlayer />
       </section>
       <section>
