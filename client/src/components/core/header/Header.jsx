@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuthContext } from "../../../contexts/AuthContext.jsx";
 import { adminId } from "../../../common/credentials.js";
@@ -7,13 +7,20 @@ import NotificationsBox from "./notificationsBox/NotificationsBox.jsx";
 import "./header.css";
 import "./NotificationsBox/notificationsBox.css";
 
-export default function Header() {
+export default function Header({ socket }) {
   const { isAuthenticated, username, userId } = useAuthContext();
   const [notificationsBox, setNotificationsBox] = useState(false);
+  const [notificationsList, setNotificationsList] = useState([]);
 
   const openNotifications = () => {
     setNotificationsBox(!notificationsBox);
   };
+
+  useEffect(() => {
+    socket?.on("getNotification", ({ msg }) => {      
+      setNotificationsList((prevList) => [...prevList, msg]);
+    });
+  }, [socket]);
 
   return (
     <header>
@@ -44,7 +51,7 @@ export default function Header() {
                 className="header_game_invitations"
                 onClick={openNotifications}
               >
-                Notifications <span>0</span>
+                Notifications <span>{notificationsList.length}</span>
               </li>
               <li>
                 <NavLink to="/logout">Logout</NavLink>
@@ -62,7 +69,7 @@ export default function Header() {
           )}
         </ul>
       </nav>
-      {notificationsBox && <NotificationsBox />}
+      {notificationsBox && <NotificationsBox notificationsList={notificationsList} />}
     </header>
   );
 }
