@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { checkIfUserExists } from "../../../../../../api/user-api";
+import { sendFriendRequest } from "../../../../../../api/user-api";
 import { useAuthContext } from "../../../../../contexts/AuthContext";
 
 import "./friendsList.css";
@@ -31,7 +31,7 @@ export default function FriendsList({ socket, friendsList }) {
     }
 
     try {
-      const friendCheckResponse = await checkIfUserExists(friendInvitedUsername);
+      const friendCheckResponse = await sendFriendRequest(friendInvitedUsername);
 
       if (friendCheckResponse.status == 'success') {
         toast.success(friendCheckResponse.msg);
@@ -42,7 +42,7 @@ export default function FriendsList({ socket, friendsList }) {
                 
         await socket.emit("sendNotification", {
           receiverSocketId: friendCheckResponse.friendDetails.socketId,
-          msg: { username, content: ' sent friend request' },
+          msg: { username, content: ' sent friend request', type: 'friendRequest' },
         });
 
         toast.success(friendCheckResponse.msg);
