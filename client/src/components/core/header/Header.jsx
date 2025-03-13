@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuthContext } from "../../../contexts/AuthContext.jsx";
 import { adminId } from "../../../common/credentials.js";
+import { getFriendRequests } from "../../../../api/user-api.js";
 
 import NotificationsBox from "./notificationsBox/NotificationsBox.jsx";
+
 import "./header.css";
 import "./NotificationsBox/notificationsBox.css";
 
@@ -12,15 +14,28 @@ export default function Header({ socket }) {
   const [notificationsBox, setNotificationsBox] = useState(false);
   const [notificationsList, setNotificationsList] = useState([]);
 
-  const openNotifications = () => {
-    setNotificationsBox(!notificationsBox);
-  };
+  useEffect(() => {
+    (async function getNotificationsFunc() {
+      if (isAuthenticated) {
+        const friendRequests = await getFriendRequests();
+        const newNotifications = [];
+        friendRequests.map((username) => {
+          newNotifications.push({ username, content: ' sent friend request', type: 'friendRequest' })
+        })
+        setNotificationsList(newNotifications);
+      }
+    })();
+  }, [isAuthenticated]);
 
   useEffect(() => {
-    socket?.on("getNotification", ({ msg }) => {      
+    socket?.on("getNotification", ({ msg }) => {
       setNotificationsList((prevList) => [...prevList, msg]);
     });
   }, [socket]);
+
+  const openNotifications = () => {
+    setNotificationsBox(!notificationsBox);
+  };
 
   return (
     <header>
