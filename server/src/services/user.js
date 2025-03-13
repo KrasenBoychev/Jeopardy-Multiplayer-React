@@ -11,8 +11,12 @@ async function getPlayerPoints(userId) {
   return await User.find({ _id: userId }).distinct('points');
 }
 
-async function getUserFriendsList(userId) {
-    return await User.find({ _id: userId }).distinct('friendsList');
+async function getUserFriendsList(username) {
+    return await User.find({ username }).distinct('friendsList');
+}
+
+async function getUserFriendRequests(userId) {
+  return await User.find({ _id: userId }).distinct('friendRequests');
 }
 
 async function getUserByUsername(username) {
@@ -23,5 +27,6 @@ module.exports = {
   getTopPlayers,
   getPlayerPoints,
   getUserFriendsList,
+  getUserFriendRequests,
   getUserByUsername,
 };
