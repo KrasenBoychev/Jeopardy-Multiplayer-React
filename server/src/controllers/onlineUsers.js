@@ -1,22 +1,14 @@
 const { Router } = require('express');
 const { parseError } = require('../util');
-const { addNewOnlineUser, getOnlineFriends } = require('../services/onlineUsers');
+const { getOnlineFriends } = require('../services/onlineUsers');
 const { getUserFriendsList } = require('../services/user');
 
 const onlineUsersRouter = Router();
 
-onlineUsersRouter.get('/addNewUser', async (req, res) => {
-  try {
-    await addNewOnlineUser();
-  } catch (err) {
-    const parsed = parseError(err);
-    res.status(400).json({ code: 400, message: parsed.message });
-  }
-});
-
 onlineUsersRouter.get('/friendsOnline/:userId', async (req, res) => {
+  // remove :userId here and on the client
   try {
-    const userFriendsList = await getUserFriendsList(req.params.userId);
+    const userFriendsList = await getUserFriendsList(req.user.username);
     const onlineFriends = await getOnlineFriends(userFriendsList);
     
     const friendsInfo = userFriendsList.map((friend) => {
