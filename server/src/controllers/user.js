@@ -4,6 +4,7 @@ const {
   getTopPlayers,
   getPlayerPoints,
   getUserByUsername,
+  getUserFriendRequests,
 } = require('../services/user');
 const { checkIfUserIsOnline } = require('../services/onlineUsers');
 
@@ -29,44 +30,93 @@ userRouter.get('/playerPoints/:userId', async (req, res) => {
   }
 });
 
-userRouter.get('/checkUser/:username', async (req, res) => {
+userRouter.get('/getFriendRequests', async (req, res) => {
   try {
-    const result = {status: '', msg: ''};
+    const data = await getUserFriendRequests(req.user._id);
+    res.json(data);
+  } catch (err) {
+    const parsed = parseError(err);
+    res.status(400).json({ code: 400, message: parsed.message });
+  }
+});
 
-    const friendUsername = req.params.username;
-    const userUsername = req.user.username;
+userRouter.get('/friendRequest/:username', async (req, res) => {
+  const result = { status: '', msg: '' };
+  let isError = false;
 
-    const user = await getUserByUsername(friendUsername);
+  const friendUsername = req.params.username;
+  const userUsername = req.user.username;
 
-    if (user.length > 0) {
-      const friend = user[0];
+  try {
+    const userFriendRequests = await getUserFriendRequests(req.user._id); 
 
-      if (friend.friendRequests.includes(userUsername)) {
-        result.status = 'error';
-        result.msg = 'Invitation has already been sent to ' + friendUsername;
-
-      } else {
-        const userOnline = await checkIfUserIsOnline(friendUsername);
-
-        if (userOnline) {
-          result.status = 'send invitation';
-          result.friendDetails = userOnline.onlineUsers[0];
-        } else {
-          result.status = 'success';
-        }
-
-        result.msg = 'Invitation sent to ' + friendUsername;
-        
-        friend.friendRequests.push(userUsername);
-        await friend.save();
-        
-      }
-    } else {
+    if (userFriendRequests.includes(friendUsername)) {
       result.status = 'error';
-      result.msg = friendUsername + ' does not exist';
+      result.msg = friendUsername + ' has already sent invitation to you - check notifications';
+      isError = true;
+    }
+
+    if (!isError) {
+      const getFriendUser = await getUserByUsername(friendUsername);
+
+      if (getFriendUser.length > 0) {
+        const friend = getFriendUser[0];
+
+        if (friend.friendRequests.includes(userUsername)) {
+          result.status = 'error';
+          result.msg = 'Invitation has already been sent to ' + friendUsername;
+
+        } else {
+          const userOnline = await checkIfUserIsOnline(friendUsername);
+
+          if (userOnline) {
+            result.status = 'send invitation';
+            result.friendDetails = userOnline.onlineUsers[0];
+          } else {
+            result.status = 'success';
+          }
+
+          result.msg = 'Invitation sent to ' + friendUsername;
+
+          friend.friendRequests.push(userUsername);
+          await friend.save();
+
+        }
+      } else {
+        result.status = 'error';
+        result.msg = friendUsername + ' does not exist';
+      }
     }
 
     res.json(result);
+  } catch (err) {
+    const parsed = parseError(err);
+    res.status(400).json({ code: 400, message: parsed.message });
+  }
+});
+
+userRouter.get('/friendResponse/:data', async (req, res) => {
+  const sentDataDetails = JSON.parse(req.params.data);
+  const friendUsername = sentDataDetails.username;
+
+  try {
+    const getUser = await getUserByUsername(req.user.username);
+    const userDetails = getUser[0];
+    userDetails.friendRequests = userDetails.friendRequests.filter((friend) => friend !== friendUsername);
+
+    if (sentDataDetails.status == 'friendRequestAccepted') {
+      userDetails.friendsList.push(friendUsername);
+
+      const getFriendUser = await getUserByUsername(friendUsername);
+      const friendDetails = getFriendUser[0];
+      friendDetails.friendsList.push(userDetails.username);
+
+      await friendDetails.save();
+    }
+
+    await userDetails.save();
+
+    res.json(true);
   } catch (err) {
     const parsed = parseError(err);
     res.status(400).json({ code: 400, message: parsed.message });
