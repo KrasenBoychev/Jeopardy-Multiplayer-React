@@ -14,6 +14,15 @@ export async function getFriendsOnline(userId) {
     return await api.get(host + `/onlineUsers/friendsOnline/${userId}`);
 }
 
-export async function checkIfUserExists(username) {
-    return await api.get(host + `/users/checkUser/${username}`);
+export async function sendFriendRequest(username) {
+    return await api.get(host + `/users/friendRequest/${username}`);
 }
+
+export async function sendFriendResponse(data) {
+    return await api.get(host + `/users/friendResponse/${data}`);
+}
+
+export async function getFriendRequests() {
+    return await api.get(host + `/users/getFriendRequests`);
+}
+
