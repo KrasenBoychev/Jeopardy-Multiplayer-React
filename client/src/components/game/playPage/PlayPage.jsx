@@ -5,16 +5,22 @@ import GameRoom from "./children/gameRoom/GameRoom";
 
 import "./playPage.css";
 
-export default function PlayPage(props) {
+export default function PlayPage({ socket, friendsProps }) {
+  const { friendsList, gameFriendResponse } = friendsProps;
+  const [friendInvited, setFriendInvited] = useState(null);
 
   return (
     <div className="play_page_container">
       <section>
-        <FriendsList socket={props.socket} friendsList={props.friendsProps.friendsList} />
+        <FriendsList
+          socket={socket}
+          friendsList={friendsList}
+          friendProps={{ friendInvited, setFriendInvited, gameFriendResponse }}
+        />
         <StartGameWithOtherPlayer />
       </section>
       <section>
-        <GameRoom />
+        <GameRoom socket={socket} friendProps={{ friendsList, friendInvited, setFriendInvited, gameFriendResponse }} />
       </section>
     </div>
   );
