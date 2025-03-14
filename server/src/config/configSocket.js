@@ -23,10 +23,8 @@ function configSocket(server) {
       });
     });
 
-    socket.on('sendNotification', ({ receiverSocketId, msg }) => {
-      io.to(receiverSocketId).emit('getNotification', {
-        msg
-      });
+    socket.on('sendNotification', ({ receiverSocketId, msg, data }) => {
+      io.to(receiverSocketId).emit('getNotification', { msg, data });
     });
 
     socket.on('disconnect', async () => {
