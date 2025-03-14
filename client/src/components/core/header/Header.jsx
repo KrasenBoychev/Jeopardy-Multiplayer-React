@@ -88,8 +88,6 @@ export default function Header({ socket, setFriendsList }) {
                 onClick={openNotifications}
               >
                 Notifications <span>{notificationsList.length}</span>
-
-                {notificationsBox && <NotificationsBox socket={socket} setFriendsList={setFriendsList} notifications={{ notificationsList, setNotificationsList }} />}
               </li>
               <li>
                 <NavLink to="/logout">Logout</NavLink>
@@ -107,6 +105,7 @@ export default function Header({ socket, setFriendsList }) {
           )}
         </ul>
       </nav>
+      {notificationsBox && <NotificationsBox socket={socket} setFriendsList={setFriendsList} notifications={{ notificationsList, setNotificationsList }} />}
     </header>
   );
 }
