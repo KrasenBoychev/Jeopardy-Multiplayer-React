@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuthContext } from "../../../contexts/AuthContext.jsx";
 import { adminId } from "../../../common/credentials.js";
-import { getFriendRequests } from "../../../../api/user-api.js";
+import { getUserNotifications } from "../../../../api/user-api.js";
 
 import NotificationsBox from "./notificationsBox/NotificationsBox.jsx";
 
 import "./header.css";
 import "./NotificationsBox/notificationsBox.css";
+import toast from "react-hot-toast";
 
-export default function Header({ socket }) {
+export default function Header({ socket, setFriendsList }) {
   const { isAuthenticated, username, userId } = useAuthContext();
   const [notificationsBox, setNotificationsBox] = useState(false);
   const [notificationsList, setNotificationsList] = useState([]);
@@ -17,19 +18,29 @@ export default function Header({ socket }) {
   useEffect(() => {
     (async function getNotificationsFunc() {
       if (isAuthenticated) {
-        const friendRequests = await getFriendRequests();
-        const newNotifications = [];
-        friendRequests.map((username) => {
-          newNotifications.push({ username, content: ' sent friend request', type: 'friendRequest' })
-        })
-        setNotificationsList(newNotifications);
+        try {
+          const userNotifications = await getUserNotifications();
+          setNotificationsList(userNotifications);
+        } catch (error) {
+          toast.error(error.message);
+        }
       }
     })();
   }, [isAuthenticated]);
 
   useEffect(() => {
-    socket?.on("getNotification", ({ msg }) => {
-      setNotificationsList((prevList) => [...prevList, msg]);
+    socket?.on("getNotification", async ({ msg, data }) => {
+      try {
+        const userNotifications = await getUserNotifications();
+        setNotificationsList(userNotifications);
+
+        if (msg == 'friendRequestAccepted') {
+          setFriendsList((prev) => [...prev, data]);
+        }
+
+      } catch (error) {
+        toast.error(error.message);
+      }
     });
   }, [socket]);
 
@@ -84,7 +95,7 @@ export default function Header({ socket }) {
           )}
         </ul>
       </nav>
-      {notificationsBox && <NotificationsBox notificationsList={notificationsList} />}
+      {notificationsBox && <NotificationsBox socket={socket} setFriendsList={setFriendsList} notifications={{ notificationsList, setNotificationsList }} />}
     </header>
   );
 }
