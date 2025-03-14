@@ -11,7 +11,7 @@ export default function InviteFriend({ socket, friendProps }) {
     setFriendInvited(e.target.id);
   };
 
-  const openBtnName = "Invite";
+  const openBtnName = "+";
   const popupHeading = "Friends Online";
 
   const popupContent = (

@@ -12,15 +12,17 @@ export default function PlayPage({ socket, friendsProps }) {
   return (
     <div className="play_page_container">
       <section>
+        <GameRoom socket={socket} friendProps={{ friendsList, friendInvited, setFriendInvited, gameFriendResponse }} />
+      </section>
+      <section>
         <FriendsList
           socket={socket}
           friendsList={friendsList}
           friendProps={{ friendInvited, setFriendInvited, gameFriendResponse }}
         />
-        <StartGameWithOtherPlayer />
-      </section>
-      <section>
-        <GameRoom socket={socket} friendProps={{ friendsList, friendInvited, setFriendInvited, gameFriendResponse }} />
+
+        {/* Change the component to StartGameWithRandomPlayer - write the code for it */}
+        {/* <StartGameWithOtherPlayer /> */}
       </section>
     </div>
   );
