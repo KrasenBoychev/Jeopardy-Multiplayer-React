@@ -39,6 +39,7 @@ nav ul li a,
     text-align: center;
     align-items: center;
     border-radius: 2px;
+    overflow: hidden;
 }
 
 .profile li:not(.header_game_invitations) {
@@ -62,7 +63,7 @@ nav ul li a,
     height: 100%;
 }
 
-.profile li:hover {
+.profile li:hover, .header_active_link {
     cursor: pointer;
     color: var(--midnight-blue);
     background-color: var(--white);
