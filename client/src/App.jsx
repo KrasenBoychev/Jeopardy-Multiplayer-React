@@ -39,7 +39,7 @@ function App() {
       <AuthContextProvider>
         <Socket socketProps={{ socket, setSocket }} friendsProps={{ friendsList, setFriendsList }} />
 
-        {!isNewGameStarted && <Header socket={socket} />}
+        {!isNewGameStarted && <Header socket={socket} setFriendsList={setFriendsList}/>}
         {!isNewGameStarted && newGameInvitation && (
           <GameInvitation gameInvitation={setNewGameInvitation} />
         )}
