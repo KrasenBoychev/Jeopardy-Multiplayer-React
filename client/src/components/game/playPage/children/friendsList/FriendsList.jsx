@@ -10,11 +10,11 @@ export default function FriendsList({ socket, friendsList }) {
   const { username } = useAuthContext();
 
   const sendFriendInvitation = async () => {
-    if (!friendInvitedUsername) {
+    if (!friendInvitedUsername.trim()) {
       return;
     } else if (friendInvitedUsername == username) {
       toast.error('Cannot add yourself');
-      return
+      return;
     }
 
     let isUsernameInFriendList = false;
@@ -35,16 +35,14 @@ export default function FriendsList({ socket, friendsList }) {
 
       if (friendCheckResponse.status == 'success') {
         toast.success(friendCheckResponse.msg);
+
       } else if (friendCheckResponse.status == 'error') {
         toast.error(friendCheckResponse.msg);
 
       } else if (friendCheckResponse.status == 'send invitation') {
-                
         await socket.emit("sendNotification", {
           receiverSocketId: friendCheckResponse.friendDetails.socketId,
-          msg: { username, content: ' sent friend request', type: 'friendRequest' },
         });
-
         toast.success(friendCheckResponse.msg);
       }
 
