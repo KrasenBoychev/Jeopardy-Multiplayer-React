@@ -29,7 +29,7 @@ const UserSchema = new Schema({
     required: true,
     default: [],
   },
-  notificationsLists: {
+  notificationsList: {
     type: Array,
     required: true,
     default: [],
