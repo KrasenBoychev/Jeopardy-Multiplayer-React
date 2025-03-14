@@ -6,16 +6,16 @@ export async function getTopPlayers() {
     return await api.get(host + '/users/topPlayers');
 }
 
-export async function getPlayerPoints(userId) {
-    return await api.get(host + `/users/playerPoints/${userId}`);
+export async function getPlayerPoints() {
+    return await api.get(host + `/users/playerPoints`);
 }
 
-export async function getFriendsOnline(userId) {
-    return await api.get(host + `/onlineUsers/friendsOnline/${userId}`);
+export async function getFriendsOnline() {
+    return await api.get(host + `/onlineUsers/friendsOnline`);
 }
 
-export async function sendFriendRequest(username) {
-    return await api.get(host + `/users/friendRequest/${username}`);
+export async function sendFriendRequest(friendUsername) {
+    return await api.get(host + `/users/friendRequest/${friendUsername}`);
 }
 
 export async function sendFriendResponse(data) {

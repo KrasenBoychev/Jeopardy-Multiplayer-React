@@ -5,15 +5,14 @@ const { getUserFriendsList } = require('../services/user');
 
 const onlineUsersRouter = Router();
 
-onlineUsersRouter.get('/friendsOnline/:userId', async (req, res) => {
-  // remove :userId here and on the client
+onlineUsersRouter.get('/friendsOnline', async (req, res) => {
   try {
     const userFriendsList = await getUserFriendsList(req.user.username);
     const onlineFriends = await getOnlineFriends(userFriendsList);
-    
+
     const friendsInfo = userFriendsList.map((friend) => {
       const findFriend = onlineFriends.find((onlineUser) => onlineUser.username == friend);
-      
+
       const friendObj = { username: friend };
       if (findFriend) {
         friendObj.online = true;

@@ -61,7 +61,7 @@ export default function useChooseQuestion(
                 await recordPoints(authData.userId, pointsSecondPlayer);
               }
 
-              const playerPoints = await getPlayerPoints(authData.userId);
+              const playerPoints = await getPlayerPoints();
               authData.points = playerPoints;
               authData.changeAuthState(authData);
             } catch (error) {

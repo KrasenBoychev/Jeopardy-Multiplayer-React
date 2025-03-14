@@ -11,16 +11,16 @@ async function getTopPlayers() {
     .limit(10);
 }
 
-async function getPlayerPoints(userId) {
-  return await User.find({ _id: userId }).distinct('points');
+async function getPlayerPoints(username) {
+  return await User.find({ username }).distinct('points');
 }
 
 async function getUserFriendsList(username) {
     return await User.find({ username }).distinct('friendsList');
 }
 
-async function getUserFriendRequests(userId) {
-  return await User.find({ _id: userId }).distinct('friendRequests');
+async function getUserFriendRequests(username) {
+  return await User.find({ username }).distinct('friendRequests');
 }
 
 async function getUserNotificationsList(username) {

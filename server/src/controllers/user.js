@@ -21,9 +21,9 @@ userRouter.get('/topPlayers', async (req, res) => {
   }
 });
 
-userRouter.get('/playerPoints/:userId', async (req, res) => {
+userRouter.get('/playerPoints', async (req, res) => {
   try {
-    const data = await getPlayerPoints(req.params.userId);
+    const data = await getPlayerPoints(req.user.username);
     res.json(data);
   } catch (err) {
     const parsed = parseError(err);
@@ -41,15 +41,15 @@ userRouter.get('/getUserNotifications', async (req, res) => {
   }
 });
 
-userRouter.get('/friendRequest/:username', async (req, res) => {
+userRouter.get('/friendRequest/:friendUsername', async (req, res) => {
   const result = { status: '', msg: '' };
   let isError = false;
 
-  const friendUsername = req.params.username;
+  const friendUsername = req.params.friendUsername;
   const userUsername = req.user.username;
 
   try {
-    const userFriendRequests = await getUserFriendRequests(req.user._id);
+    const userFriendRequests = await getUserFriendRequests(userUsername);
 
     if (userFriendRequests.includes(friendUsername)) {
       result.status = 'error';
@@ -118,12 +118,12 @@ userRouter.get('/friendResponse/:data', async (req, res) => {
     const friendDetails = getFriendUser[0];
 
     if (sentDataDetails.status == 'friendRequestAccepted') {
-      if (!userDetails.friendsList.inclueds(friendUsername)) {
+      if (!userDetails.friendsList.includes(friendUsername)) {
         userDetails.friendsList.push(friendUsername);
       }
       result.userDetails.friends = userDetails.friendsList;
 
-      if (!friendDetails.friendsList.incudes(userDetails.username)) {
+      if (!friendDetails.friendsList.includes(userDetails.username)) {
         friendDetails.friendsList.push(userDetails.username);
       }
 

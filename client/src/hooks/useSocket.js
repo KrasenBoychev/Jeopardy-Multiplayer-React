@@ -38,7 +38,7 @@ export async function getFriends(socket, setFriendsList, userId, username, logou
     let allFriends = friendsList;
   
     if (!logout) {
-      allFriends = await getFriendsOnline(userId);
+      allFriends = await getFriendsOnline();
       setFriendsList(allFriends);
     }
   
