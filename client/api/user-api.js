@@ -22,7 +22,10 @@ export async function sendFriendResponse(data) {
     return await api.get(host + `/users/friendResponse/${data}`);
 }
 
-export async function getFriendRequests() {
-    return await api.get(host + `/users/getFriendRequests`);
+export async function getUserNotifications() {
+    return await api.get(host + `/users/getUserNotifications`);
 }
 
+export async function removeNotification(friendUsername) {
+    return await api.get(host + `/users/removeNotification/${friendUsername}`);
+}
