@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useAuthContext } from "../../../contexts/AuthContext.jsx";
 import { adminId } from "../../../common/credentials.js";
 import { getUserNotifications } from "../../../../api/user-api.js";
@@ -12,6 +12,9 @@ import toast from "react-hot-toast";
 
 export default function Header({ socket, setFriendsList }) {
   const { isAuthenticated, username, userId } = useAuthContext();
+  const location = useLocation();
+
+  const [currLocation, setCurrLocation] = useState(null);
   const [notificationsBox, setNotificationsBox] = useState(false);
   const [notificationsList, setNotificationsList] = useState([]);
 
@@ -44,6 +47,13 @@ export default function Header({ socket, setFriendsList }) {
     });
   }, [socket]);
 
+  useEffect(() => {
+    setCurrLocation(location.pathname);
+    if (notificationsBox) {
+      setNotificationsBox(!notificationsBox);
+    }
+  }, [location]);
+
   const openNotifications = () => {
     setNotificationsBox(!notificationsBox);
   };
@@ -57,27 +67,29 @@ export default function Header({ socket, setFriendsList }) {
 
         <ul className="profile">
           <li>
-            <NavLink to="/">Home</NavLink>
+            <NavLink to="/" className={currLocation == "/" ? "header_active_link" : ""}>Home</NavLink>
           </li>
           <li>
-            <NavLink to="/about">About</NavLink>
+            <NavLink to="/about" className={currLocation == "/about" ? "header_active_link" : ""}>About</NavLink>
           </li>
           <li>
-            <NavLink to="/play">Play</NavLink>
+            <NavLink to="/play" className={currLocation == "/play" ? "header_active_link" : ""}>Play</NavLink>
           </li>
           {userId == adminId && (
             <li>
-              <NavLink to="/create">Create</NavLink>
+              <NavLink to="/create" className={currLocation == "/create" ? "header_active_link" : ""}>Create</NavLink>
             </li>
           )}
 
           {isAuthenticated ? (
             <>
               <li
-                className="header_game_invitations"
+                className={notificationsBox ? "header_game_invitations header_active_link" : "header_game_invitations"}
                 onClick={openNotifications}
               >
                 Notifications <span>{notificationsList.length}</span>
+
+                {notificationsBox && <NotificationsBox socket={socket} setFriendsList={setFriendsList} notifications={{ notificationsList, setNotificationsList }} />}
               </li>
               <li>
                 <NavLink to="/logout">Logout</NavLink>
@@ -86,16 +98,15 @@ export default function Header({ socket, setFriendsList }) {
           ) : (
             <>
               <li>
-                <NavLink to="/login">Login</NavLink>
+                <NavLink to="/login" className={currLocation == "/login" ? "header_active_link" : ""}>Login</NavLink>
               </li>
               <li>
-                <NavLink to="/register">Register</NavLink>
+                <NavLink to="/register" className={currLocation == "/register" ? "header_active_link" : ""}>Register</NavLink>
               </li>
             </>
           )}
         </ul>
       </nav>
-      {notificationsBox && <NotificationsBox socket={socket} setFriendsList={setFriendsList} notifications={{ notificationsList, setNotificationsList }} />}
     </header>
   );
 }
