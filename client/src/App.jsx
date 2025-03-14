@@ -31,6 +31,7 @@ function App() {
   const [newGameInvitation, setNewGameInvitation] = useState(false);
   const [socket, setSocket] = useState(null);
   const [friendsList, setFriendsList] = useState([]);
+  const [gameFriendResponse, setGameFriendResponse] = useState(false);
 
   return (
     <>
@@ -73,7 +74,8 @@ function App() {
                     // gameInvitation={{ newGameInvitation, setNewGameInvitation }}
                     // globalChannelInfo={{ globalChannel, setGlobalChannel }}
                     socket={socket}
-                    friendsProps={{ friendsList, setFriendsList }}
+                    friendsProps={{ friendsList, gameFriendResponse }}
+
                   />
                 }
               />
