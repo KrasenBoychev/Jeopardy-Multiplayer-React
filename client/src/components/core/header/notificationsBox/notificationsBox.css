@@ -33,12 +33,16 @@
     border: none;
 }
 
-.notifications_box_btns button:first-of-type {
+.notification_btn_accept {
     background-color: yellowgreen;
 }
 
-.notifications_box_btns button:last-of-type {
+.notification_btn_reject {
     background-color: red;
+}
+
+.notification_btn_read {
+    background-color: orange;
 }
 
 .notifications_box_btns button:hover {
