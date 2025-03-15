@@ -31,16 +31,30 @@ function App() {
   const [newGameInvitation, setNewGameInvitation] = useState(false);
   const [socket, setSocket] = useState(null);
   const [friendsList, setFriendsList] = useState([]);
-  const [gameFriendResponse, setGameFriendResponse] = useState(false);
+  const [gameFriendResponse, setGameFriendResponse] = useState(null);
+  const [friendInvited, setFriendInvited] = useState(null);
 
   return (
     <>
       <Toaster />
 
       <AuthContextProvider>
-        <Socket socketProps={{ socket, setSocket }} friendsProps={{ friendsList, setFriendsList }} />
+        <Socket
+          socketProps={{ socket, setSocket }}
+          friendsProps={{ friendsList, setFriendsList }}
+        />
 
-        {!isNewGameStarted && <Header socket={socket} setFriendsList={setFriendsList}/>}
+        {!isNewGameStarted && (
+          <Header
+            socket={socket}
+            friendsListProps={{friendsList, setFriendsList}}
+            gameFriendResponseProps={{
+              gameFriendResponse,
+              setGameFriendResponse,
+            }}
+            friendInvitedProps={{ friendInvited, setFriendInvited }}
+          />
+        )}
         {!isNewGameStarted && newGameInvitation && (
           <GameInvitation gameInvitation={setNewGameInvitation} />
         )}
@@ -74,12 +88,25 @@ function App() {
                     // gameInvitation={{ newGameInvitation, setNewGameInvitation }}
                     // globalChannelInfo={{ globalChannel, setGlobalChannel }}
                     socket={socket}
-                    friendsProps={{ friendsList, gameFriendResponse }}
-
+                    friendsProps={{
+                      friendsList,
+                      gameFriendResponse,
+                      setGameFriendResponse,
+                      friendInvited,
+                      setFriendInvited,
+                    }}
                   />
                 }
               />
-              <Route path="/logout" element={<Logout socketProps={{ socket, setSocket }} friendsProps={{ friendsList, setFriendsList }} />} />
+              <Route
+                path="/logout"
+                element={
+                  <Logout
+                    socketProps={{ socket, setSocket }}
+                    friendsProps={{ friendsList, setFriendsList }}
+                  />
+                }
+              />
             </Route>
 
             <Route element={<AdminGuard />}>
