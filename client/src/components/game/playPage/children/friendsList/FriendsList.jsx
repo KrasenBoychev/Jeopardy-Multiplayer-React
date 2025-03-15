@@ -16,7 +16,13 @@ export default function FriendsList({ socket, friendsList, friendProps }) {
               <span className="friend_username">
                 {friend.username}
               </span>
-              <span className="friend_status">{friend.online ? 'Online' : 'Offline'}</span>
+              <span className="friend_status">
+                {friend.online 
+                  ? 'Online' 
+                  : friend.gameInProgress 
+                    ? 'Game in progress'
+                    : 'Offline'}
+                </span>
             </li>
           })}
         </ul>
