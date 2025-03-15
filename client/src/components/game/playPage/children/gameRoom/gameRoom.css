@@ -28,11 +28,19 @@
 
 .game_room_player_name {
   width: 40%;
+  min-width: 220px;
+  max-width: 400px;
   padding: 10px;
   color: var(--white);
   border-radius: 20%;
   background-color: var(--midnight-blue);
   box-shadow: rgba(255, 255, 255, 0.35) 0px 5px 15px;
+}
+
+.game_room_player_name p {
+  width: 200px;
+  text-align: center;
+  overflow: clip;
 }
 
 .game_room_vs {
@@ -72,6 +80,24 @@
   cursor: pointer;
   color: #000;
   background-color: var(--white);
+}
+
+.game_room_group_btns {
+  display: flex;
+  position: absolute;
+  left: calc(50% - 60px);
+  bottom: 10px;
+  width: 150px;
+  gap: 10px;
+}
+
+.game_room_group_btns > button {
+  width: 60px;
+  padding: 5px;
+  color: var(--white);
+  background-color: red;
+  border-radius: 5px;
+  border: none;
 }
 
 .game_room_btn {
