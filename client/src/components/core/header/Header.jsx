@@ -10,7 +10,15 @@ import "./header.css";
 import "./NotificationsBox/notificationsBox.css";
 import toast from "react-hot-toast";
 
-export default function Header({ socket, setFriendsList }) {
+export default function Header({
+  socket,
+  friendsListProps,
+  gameFriendResponseProps,
+  friendInvitedProps,
+}) {
+  const { friendsList, setFriendsList } = friendsListProps;
+  const { gameFriendResponse, setGameFriendResponse } = gameFriendResponseProps;
+  const { friendInvited, setFriendInvited } = friendInvitedProps;
   const { isAuthenticated, username, userId } = useAuthContext();
   const location = useLocation();
 
@@ -24,6 +32,10 @@ export default function Header({ socket, setFriendsList }) {
         try {
           const userNotifications = await getUserNotifications();
           setNotificationsList(userNotifications);
+
+          socket?.on("getClients", async ({ clients }) => {
+            console.log(clients);
+          });
         } catch (error) {
           toast.error(error.message);
         }
@@ -37,15 +49,53 @@ export default function Header({ socket, setFriendsList }) {
         const userNotifications = await getUserNotifications();
         setNotificationsList(userNotifications);
 
-        if (msg == 'friendRequestAccepted') {
+        if (msg == "friendRequestAccepted") {
           setFriendsList((prev) => [...prev, data]);
         }
-
       } catch (error) {
         toast.error(error.message);
       }
     });
+
+    socket?.on("getGameInvitation", async ({ data }) => {
+      if (!friendInvited) {
+        setFriendInvited(data.username);
+        setGameFriendResponse("gameInvitationReceived");
+      } else {
+        await socket.emit("sendGameRejection", {
+          receiverSocketId: data.socketId,
+        });
+      }
+    });
+
+    socket?.on("getGameRejection", async ({}) => {
+      setGameFriendResponse("otherPlayerRoomBusy");
+    });
   }, [socket]);
+
+  useEffect(() => {
+    if (gameFriendResponse == "gameInvitationReceived") {
+      toast.success("Game invitation received from " + friendInvited);
+    } else if (gameFriendResponse == "otherPlayerRoomBusy") {
+      toast.error("Game invitation received from " + friendInvited);
+      setFriendInvited(null);
+    }
+  }, [gameFriendResponse]);
+
+  useEffect(() => {
+    (async function changePlayerStatus() {
+      const onlineFriends = friendsList.filter(
+        (friend) => friend.online == true
+      );
+      if (onlineFriends.length > 0) {
+        await socket.emit("sendUserStatus", {
+          senderInfo: { username, socketId: socket.id },
+          receiverFriends: onlineFriends,
+          action: "changeToGameInProgress",
+        });
+      }
+    })();
+  }, [friendInvited]);
 
   useEffect(() => {
     setCurrLocation(location.pathname);
@@ -67,24 +117,50 @@ export default function Header({ socket, setFriendsList }) {
 
         <ul className="profile">
           <li>
-            <NavLink to="/" className={currLocation == "/" ? "header_active_link" : ""}>Home</NavLink>
+            <NavLink
+              to="/"
+              className={currLocation == "/" ? "header_active_link" : ""}
+            >
+              Home
+            </NavLink>
           </li>
           <li>
-            <NavLink to="/about" className={currLocation == "/about" ? "header_active_link" : ""}>About</NavLink>
+            <NavLink
+              to="/about"
+              className={currLocation == "/about" ? "header_active_link" : ""}
+            >
+              About
+            </NavLink>
           </li>
           <li>
-            <NavLink to="/play" className={currLocation == "/play" ? "header_active_link" : ""}>Play</NavLink>
+            <NavLink
+              to="/play"
+              className={currLocation == "/play" ? "header_active_link" : ""}
+            >
+              Play
+            </NavLink>
           </li>
           {userId == adminId && (
             <li>
-              <NavLink to="/create" className={currLocation == "/create" ? "header_active_link" : ""}>Create</NavLink>
+              <NavLink
+                to="/create"
+                className={
+                  currLocation == "/create" ? "header_active_link" : ""
+                }
+              >
+                Create
+              </NavLink>
             </li>
           )}
 
           {isAuthenticated ? (
             <>
               <li
-                className={notificationsBox ? "header_game_invitations header_active_link" : "header_game_invitations"}
+                className={
+                  notificationsBox
+                    ? "header_game_invitations header_active_link"
+                    : "header_game_invitations"
+                }
                 onClick={openNotifications}
               >
                 Notifications <span>{notificationsList.length}</span>
@@ -96,16 +172,36 @@ export default function Header({ socket, setFriendsList }) {
           ) : (
             <>
               <li>
-                <NavLink to="/login" className={currLocation == "/login" ? "header_active_link" : ""}>Login</NavLink>
+                <NavLink
+                  to="/login"
+                  className={
+                    currLocation == "/login" ? "header_active_link" : ""
+                  }
+                >
+                  Login
+                </NavLink>
               </li>
               <li>
-                <NavLink to="/register" className={currLocation == "/register" ? "header_active_link" : ""}>Register</NavLink>
+                <NavLink
+                  to="/register"
+                  className={
+                    currLocation == "/register" ? "header_active_link" : ""
+                  }
+                >
+                  Register
+                </NavLink>
               </li>
             </>
           )}
         </ul>
       </nav>
-      {notificationsBox && <NotificationsBox socket={socket} setFriendsList={setFriendsList} notifications={{ notificationsList, setNotificationsList }} />}
+      {notificationsBox && (
+        <NotificationsBox
+          socket={socket}
+          setFriendsList={setFriendsList}
+          notifications={{ notificationsList, setNotificationsList }}
+        />
+      )}
     </header>
   );
 }
