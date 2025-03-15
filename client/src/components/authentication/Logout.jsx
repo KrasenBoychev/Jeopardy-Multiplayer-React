@@ -8,13 +8,13 @@ export default function Logout(props) {
   const { socket, setSocket } = props.socketProps;
   const { friendsList, setFriendsList } = props.friendsProps;
 
-  const { username, userId } = useAuthContext();
+  const { username } = useAuthContext();
   const logout = useLogout();
-  const logoutValue = true;
+  const action = 'logout';
 
   useEffect(() => {
     (async function logoutUser() {
-      await getFriends(socket, setFriendsList, userId, username, logoutValue, friendsList);
+      await getFriends(socket, setFriendsList, username, action, friendsList);
       await socket.disconnect();
       setSocket(null);
       logout();
