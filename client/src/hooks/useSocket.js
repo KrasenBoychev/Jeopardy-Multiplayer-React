@@ -1,7 +1,13 @@
 import { useEffect } from "react";
 import { io } from "socket.io-client";
-import { getFriendsOnline } from "../../api/user-api";
+import {
+  recordUserInOnlineUsers,
+  deleteUserInOnlineUsers,
+} from "../../api/user-api";
+
+import { getUserFriendsAndTheirStatus } from "../../api/friends-api";
 import { useAuthContext } from "../contexts/AuthContext";
+import toast from "react-hot-toast";
 
 export default function useSocket(socket, setSocket, setFriendsList) {
   const { isAuthenticated, username } = useAuthContext();
@@ -9,38 +15,66 @@ export default function useSocket(socket, setSocket, setFriendsList) {
   useEffect(() => {
     (async function socketService() {
       if (isAuthenticated) {
-        const createSocket = io("http://localhost:5000");
-        const action = "";
-        await getFriends(createSocket, setFriendsList, username, action);
-        setSocket(createSocket);
+        try {
+          const createSocket = io("http://localhost:5000");
+          setSocket(createSocket);
+
+          createSocket.emit("newUser");
+        } catch (error) {
+          toast.error(error.message);
+        }
       }
     })();
   }, [isAuthenticated]);
 
   useEffect(() => {
-    socket?.emit("newUser", username);
+    socket?.on("newUserCreated", () => {
+      (async function addOnlineUser() {
+        try {
+          await recordUserInOnlineUsers(username, socket.id);
+
+          const friendsListResponse = await getUserFriendsAndTheirStatus();
+          setFriendsList(friendsListResponse);
+
+          const action = "userAuthenticated";
+          await sendUpdateToOnlineFriends(
+            socket,
+            username,
+            friendsListResponse,
+            action
+          );
+        } catch (error) {
+          toast.error(error.message);
+        }
+      })();
+    });
+
+    socket?.on("disconnect", () => {
+      (async function removeOnlineUser() {
+        try {
+          await deleteUserInOnlineUsers();
+        } catch (error) {
+          toast.error(error.message);
+        }
+      })();
+    });
 
     socket?.on("getFriendStatus", ({ senderInfo, action }) => {
       setFriendsList((prevFriendList) => {
         const newUpdatedFriendsLst = prevFriendList.filter(
           (friend) => friend.username !== senderInfo.username
         );
-        if (action == "") {
+        if (action == "userAuthenticated") {
           newUpdatedFriendsLst.push({
             username: senderInfo.username,
             online: true,
             socketId: senderInfo.socketId,
+            gameInProgress: senderInfo.gameInProgress,
           });
         } else if (action == "logout") {
           newUpdatedFriendsLst.push({
             username: senderInfo.username,
             online: false,
-          });
-        } else if (action == "changeToGameInProgress") {
-          newUpdatedFriendsLst.push({
-            username: senderInfo.username,
-            gameInProgress: 'gameInPrgress',
-            socketId: senderInfo.socketId,
           });
         }
 
@@ -50,21 +84,13 @@ export default function useSocket(socket, setSocket, setFriendsList) {
   }, [socket]);
 }
 
-export async function getFriends(
+export async function sendUpdateToOnlineFriends(
   socket,
-  setFriendsList,
   username,
-  action,
-  friendsList
+  friendsList,
+  action
 ) {
-  let allFriends = friendsList;
-
-  if (action == '') {
-    allFriends = await getFriendsOnline();
-    setFriendsList(allFriends);
-  }
-
-  const onlineFriends = allFriends.filter((friend) => friend.online == true);
+  const onlineFriends = friendsList.filter((friend) => friend.online == true);
   if (onlineFriends.length > 0) {
     await socket.emit("sendUserStatus", {
       senderInfo: { username, socketId: socket.id },
