@@ -1,12 +1,23 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
 
-const OnlineUsersSchema = new Schema({
-    onlineUsers: {
-        type: Array,
-    }
+const OnlineUserSchema = new Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  socketId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  gameInProgress: {
+    type: Boolean,
+    required: true,
+  },
 });
 
-const OnlineUsers = model('onlineUsers', OnlineUsersSchema);
-OnlineUsers.createIndexes();
+const OnlineUser = model("online_users", OnlineUserSchema);
+OnlineUser.createIndexes();
 
-module.exports = { OnlineUsers };
+module.exports = { OnlineUser };
