@@ -2,111 +2,18 @@ import { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuthContext } from "../../../contexts/AuthContext.jsx";
 import { adminId } from "../../../common/credentials.js";
-import { getUserNotifications } from "../../../../api/user-api.js";
-
-import NotificationsBox from "./notificationsBox/NotificationsBox.jsx";
 
 import "./header.css";
-import "./NotificationsBox/notificationsBox.css";
-import toast from "react-hot-toast";
 
-export default function Header({
-  socket,
-  friendsListProps,
-  gameFriendResponseProps,
-  friendInvitedProps,
-}) {
-  const { friendsList, setFriendsList } = friendsListProps;
-  const { gameFriendResponse, setGameFriendResponse } = gameFriendResponseProps;
-  const { friendInvited, setFriendInvited } = friendInvitedProps;
+export default function Header() {
   const { isAuthenticated, username, userId } = useAuthContext();
   const location = useLocation();
 
   const [currLocation, setCurrLocation] = useState(null);
-  const [notificationsBox, setNotificationsBox] = useState(false);
-  const [notificationsList, setNotificationsList] = useState([]);
-
-  useEffect(() => {
-    (async function getNotificationsFunc() {
-      if (isAuthenticated) {
-        try {
-          const userNotifications = await getUserNotifications();
-          setNotificationsList(userNotifications);
-
-          socket?.on("getClients", async ({ clients }) => {
-            console.log(clients);
-          });
-        } catch (error) {
-          toast.error(error.message);
-        }
-      }
-    })();
-  }, [isAuthenticated]);
-
-  useEffect(() => {
-    socket?.on("getNotification", async ({ msg, data }) => {
-      try {
-        const userNotifications = await getUserNotifications();
-        setNotificationsList(userNotifications);
-
-        if (msg == "friendRequestAccepted") {
-          setFriendsList((prev) => [...prev, data]);
-        }
-      } catch (error) {
-        toast.error(error.message);
-      }
-    });
-
-    socket?.on("getGameInvitation", async ({ data }) => {
-      if (!friendInvited) {
-        setFriendInvited(data.username);
-        setGameFriendResponse("gameInvitationReceived");
-      } else {
-        await socket.emit("sendGameRejection", {
-          receiverSocketId: data.socketId,
-        });
-      }
-    });
-
-    socket?.on("getGameRejection", async ({}) => {
-      setGameFriendResponse("otherPlayerRoomBusy");
-    });
-  }, [socket]);
-
-  useEffect(() => {
-    if (gameFriendResponse == "gameInvitationReceived") {
-      toast.success("Game invitation received from " + friendInvited);
-    } else if (gameFriendResponse == "otherPlayerRoomBusy") {
-      toast.error("Game invitation received from " + friendInvited);
-      setFriendInvited(null);
-    }
-  }, [gameFriendResponse]);
-
-  useEffect(() => {
-    (async function changePlayerStatus() {
-      const onlineFriends = friendsList.filter(
-        (friend) => friend.online == true
-      );
-      if (onlineFriends.length > 0) {
-        await socket.emit("sendUserStatus", {
-          senderInfo: { username, socketId: socket.id },
-          receiverFriends: onlineFriends,
-          action: "changeToGameInProgress",
-        });
-      }
-    })();
-  }, [friendInvited]);
 
   useEffect(() => {
     setCurrLocation(location.pathname);
-    if (notificationsBox) {
-      setNotificationsBox(!notificationsBox);
-    }
   }, [location]);
-
-  const openNotifications = () => {
-    setNotificationsBox(!notificationsBox);
-  };
 
   return (
     <header>
@@ -154,21 +61,9 @@ export default function Header({
           )}
 
           {isAuthenticated ? (
-            <>
-              <li
-                className={
-                  notificationsBox
-                    ? "header_game_invitations header_active_link"
-                    : "header_game_invitations"
-                }
-                onClick={openNotifications}
-              >
-                Notifications <span>{notificationsList.length}</span>
-              </li>
-              <li>
-                <NavLink to="/logout">Logout</NavLink>
-              </li>
-            </>
+            <li>
+              <NavLink to="/logout">Logout</NavLink>
+            </li>
           ) : (
             <>
               <li>
@@ -195,13 +90,6 @@ export default function Header({
           )}
         </ul>
       </nav>
-      {notificationsBox && (
-        <NotificationsBox
-          socket={socket}
-          setFriendsList={setFriendsList}
-          notifications={{ notificationsList, setNotificationsList }}
-        />
-      )}
     </header>
   );
 }

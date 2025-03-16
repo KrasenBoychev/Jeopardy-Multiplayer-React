@@ -46,18 +46,6 @@ nav ul li a,
     width: 65px;
 }
 
-.header_game_invitations {
-    padding: 0 5px;
-}
-
-.header_game_invitations span {
-    margin-left: 3px;
-    padding: 2px 3px;
-    color: var(--midnight-blue);
-    background-color: var(--white);
-    border-radius: 2px;
-}
-
 .profile li a {
     width: 100%;
     height: 100%;
@@ -67,9 +55,4 @@ nav ul li a,
     cursor: pointer;
     color: var(--midnight-blue);
     background-color: var(--white);
-}
-
-.header_game_invitations:hover span {
-    color: var(--white);
-    background-color: var(--midnight-blue);
 }
