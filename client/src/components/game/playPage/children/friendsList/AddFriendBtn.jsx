@@ -1,8 +1,8 @@
 import { toast } from "react-hot-toast";
-import { sendFriendRequest } from "../../../../../../api/user-api";
+import { sendFriendRequest } from "../../../../../../api/friends-api";
 import { useAuthContext } from "../../../../../contexts/AuthContext";
 
-export default function AddFriendBtn({ addFriendUsername, socket, friendsList }) {
+export default function AddFriendBtn({ addFriendUsername, socket, friendsList, setAddFriendUsername }) {
     const { username } = useAuthContext();
 
     const sendFriendInvitation = async () => {
@@ -27,7 +27,10 @@ export default function AddFriendBtn({ addFriendUsername, socket, friendsList })
         }
 
         try {
-            const friendCheckResponse = await sendFriendRequest(addFriendUsername);
+            const friendCheckResponse = await sendFriendRequest(addFriendUsername); 
+            
+            console.log(friendCheckResponse.socketId);
+            
 
             if (friendCheckResponse.status == 'success') {
                 toast.success(friendCheckResponse.msg);
@@ -37,9 +40,11 @@ export default function AddFriendBtn({ addFriendUsername, socket, friendsList })
 
             } else if (friendCheckResponse.status == 'send invitation') {
                 await socket.emit("sendNotification", {
-                    receiverSocketId: friendCheckResponse.friendDetails.socketId,
+                    receiverSocketId: friendCheckResponse.socketId,
                 });
                 toast.success(friendCheckResponse.msg);
+
+                setAddFriendUsername('');
             }
 
         } catch (error) {
