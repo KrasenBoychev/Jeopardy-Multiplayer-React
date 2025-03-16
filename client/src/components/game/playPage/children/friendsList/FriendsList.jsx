@@ -3,7 +3,7 @@ import AddFriendBtn from "./AddFriendBtn";
 import "./friendsList.css";
 
 export default function FriendsList({ socket, friendsList, friendProps }) {
-  const [addFriendUsername, setAddFriendUsername] = useState(null);
+  const [addFriendUsername, setAddFriendUsername] = useState('');
 
   return (
     <div className="friends_list_wrapper">
@@ -30,13 +30,14 @@ export default function FriendsList({ socket, friendsList, friendProps }) {
         <p>Invite friends and earn points!</p>
       }
       <p className="add_friend">
-        <input type="text" placeholder="Friend Username" onChange={(event) => {
+        <input type="text" placeholder="Friend Username" value={addFriendUsername} onChange={(event) => {
           setAddFriendUsername(event.target.value);
         }} />
         <AddFriendBtn
           addFriendUsername={addFriendUsername}
           socket={socket}
           friendsList={friendsList}
+          setAddFriendUsername={setAddFriendUsername}
         />
       </p>
     </div>
