@@ -22,8 +22,9 @@ import CreateCategory from "./components/create/createCategory/CreateCategory";
 import CreateQuestion from "./components/create/createQuestion/CreateQuestion";
 import NotFound from "./components/core/notFound/NotFound";
 import GameInvitation from "./components/game/gameInvitation/GameInvitation";
-import Socket from "./components/core/Socket";
 import PlayPage from "./components/game/playPage/PlayPage";
+import Socket from "./components/core/Socket";
+import NotificationsBox from "./components/core/notificationsBox/NotificationsBox";
 
 function App() {
   const [isNewGameStarted, setIsNewGameStarted] = useState(false);
@@ -33,6 +34,7 @@ function App() {
   const [friendsList, setFriendsList] = useState([]);
   const [gameFriendResponse, setGameFriendResponse] = useState(null);
   const [friendInvited, setFriendInvited] = useState(null);
+  const [notificationsList, setNotificationsList] = useState([]);
 
   return (
     <>
@@ -44,20 +46,21 @@ function App() {
           friendsProps={{ friendsList, setFriendsList }}
         />
 
-        {!isNewGameStarted && (
-          <Header
-            socket={socket}
-            friendsListProps={{friendsList, setFriendsList}}
-            gameFriendResponseProps={{
-              gameFriendResponse,
-              setGameFriendResponse,
-            }}
-            friendInvitedProps={{ friendInvited, setFriendInvited }}
-          />
-        )}
+        {!isNewGameStarted && <Header />}
         {!isNewGameStarted && newGameInvitation && (
           <GameInvitation gameInvitation={setNewGameInvitation} />
         )}
+
+        <NotificationsBox
+          socket={socket}
+          friendsListProps={{ friendsList, setFriendsList }}
+          gameFriendResponseProps={{
+            gameFriendResponse,
+            setGameFriendResponse,
+          }}
+          friendInvitedProps={{ friendInvited, setFriendInvited }}
+          notifications={{ notificationsList, setNotificationsList }}
+        />
 
         <main>
           <Routes>
