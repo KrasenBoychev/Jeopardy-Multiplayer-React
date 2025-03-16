@@ -1,8 +1,5 @@
 const { Server } = require("socket.io");
-const {
-  addNewOnlineUser,
-  removeOnlineUser,
-} = require("../services/onlineUsers");
+const { removeOnlineUser } = require("../services/onlineUsers");
 
 function configSocket(server) {
   const io = new Server(server, {
@@ -13,23 +10,9 @@ function configSocket(server) {
   });
 
   io.on("connection", (socket) => {
-    socket.on("newUser", async (username) => {
-      await addNewOnlineUser(username, socket.id);
-
-      const count = io.engine.clientsCount;
-      const c = Object.keys(io.engine.clients);
-      
-
-      console.log(count);
-      console.log(c);
-
-      // io.to(socket.id).emit("getClients", { clients });
+    socket.on("newUser", () => {
+      io.to(socket.id).emit("newUserCreated");
     });
-
-    // socket.on("sendClientsReq", ({}) => {
-    //   const clients = io.sockets.clients();
-    //   io.to(friend.socketId).emit("getClients", { clients });
-    // });
 
     socket.on("sendUserStatus", ({ senderInfo, receiverFriends, action }) => {
       receiverFriends.forEach((friend) => {
@@ -52,9 +35,7 @@ function configSocket(server) {
       io.to(receiverSocketId).emit("getGameRejection", {});
     });
 
-    socket.on("disconnect", async () => {
-      await removeOnlineUser(socket.id);
-    });
+    socket.on("disconnect", async () => {});
   });
 }
 
