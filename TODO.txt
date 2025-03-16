@@ -1,1 +1,1 @@
-1. Delete 'onlineUsers' controller and the 'onlineUsersRouter' if not in use;
+ - By exiting the page from the cross, should send a disconnect alert to all users and delete the user
