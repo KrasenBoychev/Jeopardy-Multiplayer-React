@@ -11,3 +11,8 @@ export async function sendFriendRequest(friendUsername) {
   //used
   return await api.get(host + `/friends/addFriendRequest/${friendUsername}`);
 }
+
+export async function sendFriendResponse(username, status) {
+  //used
+  return await api.post(host + `/friends/friendResponse`, { username, status });
+}

@@ -22,13 +22,8 @@ export async function deleteUserInOnlineUsers() {
   await api.del(host + `/users/deleteUser`);
 }
 
-
-
-export async function sendFriendResponse(data) {
-  return await api.get(host + `/users/friendResponse/${data}`);
-}
-
 export async function getUserNotifications() {
+  //used
   return await api.get(host + `/users/getUserNotifications`);
 }
 
