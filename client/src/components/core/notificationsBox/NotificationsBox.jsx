@@ -3,11 +3,10 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "../../../contexts/AuthContext";
 import { getUserNotifications } from "../../../../api/user-api";
 
-import AcceptNotification from "./buttons/acceptNotification";
-import RejectNotification from "./buttons/RejectNotification";
-import ReadNotification from "./buttons/ReadNotification";
+import NotificationsHeader from "./children/NotificationsHeader";
+import NotificationsBody from "./children/NotificationsBody";
+
 import "./notificationsBox.css";
-import { useLocation } from "react-router-dom";
 
 export default function NotificationsBox({
   socket,
@@ -23,17 +22,6 @@ export default function NotificationsBox({
   const [notificationsBox, setNotificationsBox] = useState(false);
 
   const { isAuthenticated } = useAuthContext();
-  const location = useLocation();
-
-  useEffect(() => {
-    if (notificationsBox) {
-      setNotificationsBox(!notificationsBox)
-    }
-  }, [location]);
-
-  const openNotifications = () => {
-    setNotificationsBox(!notificationsBox);
-  };
 
   useEffect(() => {
     (async function getNotificationsFunc() {
@@ -104,59 +92,18 @@ export default function NotificationsBox({
 
   return (
     <>
-      <div
-        className={
-          notificationsList.length > 0
-            ? "notifications_header notifications_unread"
-            : "notifications_header"
-        }
-        onClick={openNotifications}
-      >
-        <i className="fa-solid fa-message"></i>
-        <p>{notificationsList.length}</p>
-      </div>
-      {notificationsBox && (
-        <div className="notifications_box_container">
-          {notificationsList.length > 0 ? (
-            <ul>
-              {notificationsList.map((notification) => {
-                return (
-                  <li key={notification.username}>
-                    {notification.username + notification.content}
-                    <div className="notifications_box_btns">
-                      {notification.notificationBtns == "Accept/Reject" ? (
-                        <>
-                          <AcceptNotification
-                            props={{
-                              socket,
-                              notification,
-                              setNotificationsList,
-                              setFriendsList,
-                            }}
-                          />
-                          <RejectNotification
-                            props={{
-                              socket,
-                              notification,
-                              setNotificationsList,
-                            }}
-                          />
-                        </>
-                      ) : (
-                        <ReadNotification
-                          props={{ notification, setNotificationsList }}
-                        />
-                      )}
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          ) : (
-            <p>There are no notifications at the moment</p>
-          )}
-        </div>
-      )}
+      <NotificationsHeader
+        props={{ notificationsList, notificationsBox, setNotificationsBox }}
+      />
+      <NotificationsBody
+        props={{
+          socket,
+          notificationsBox,
+          setFriendsList,
+          notificationsList,
+          setNotificationsList,
+        }}
+      />
     </>
   );
 }
