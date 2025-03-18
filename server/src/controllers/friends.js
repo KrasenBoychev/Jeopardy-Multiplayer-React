@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const { body } = require("express-validator");
 const { parseError } = require("../util");
 const {
   getOnlineUsers,
@@ -97,5 +98,81 @@ friendsRouter.get("/addFriendRequest/:friendUsername", async (req, res) => {
     res.status(400).json({ code: 400, message: parsed.message });
   }
 });
+
+//IN PROGRESS
+
+friendsRouter.get(
+  "/friendResponse",
+  body("username").trim(),
+  body("status").trim(),
+  async (req, res) => {
+    const friendUsername = req.body.username;
+    const status = req.body.status;
+
+    const result = {
+      status: "offline",
+      friendSocketDetails: "",
+      userDetails: { notifications: "", friends: "" },
+    };
+
+    try {
+      const userDetailsUser = await getUserByUsername(req.user.username);
+      userDetails.friendRequests = userDetails.friendRequests.filter(
+        (friend) => friend !== friendUsername
+      );
+
+      const getFriendUser = await getUserByUsername(friendUsername);
+      const friendDetails = getFriendUser[0];
+
+      if (sentDataDetails.status == "friendRequestAccepted") {
+        if (!userDetails.friendsList.includes(friendUsername)) {
+          userDetails.friendsList.push(friendUsername);
+        }
+        result.userDetails.friends = userDetails.friendsList;
+
+        if (!friendDetails.friendsList.includes(userDetails.username)) {
+          friendDetails.friendsList.push(userDetails.username);
+        }
+
+        friendDetails.notificationsList.push({
+          username: userDetails.username,
+          content: " accepted your friend request",
+          type: "friendResponse",
+          notificationBtns: "Mark as read",
+        });
+      } else {
+        friendDetails.notificationsList.push({
+          username: userDetails.username,
+          content: " rejected your friend request",
+          type: "friendResponse",
+          notificationBtns: "Mark as read",
+        });
+      }
+
+      userDetails.notificationsList = userDetails.notificationsList.filter(
+        (notification) => {
+          notification.username !== friendUsername;
+        }
+      );
+
+      result.userDetails.notifications = userDetails.notificationsList;
+
+      await friendDetails.save();
+      await userDetails.save();
+
+      // const userOnline = await checkIfUserIsOnline(friendUsername);
+
+      if (userOnline) {
+        result.status = "online";
+        result.friendSocketDetails = userOnline.onlineUsers[0];
+      }
+
+      res.json(result);
+    } catch (err) {
+      const parsed = parseError(err);
+      res.status(400).json({ code: 400, message: parsed.message });
+    }
+  }
+);
 
 module.exports = { friendsRouter };
