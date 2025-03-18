@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { sendFriendResponse } from "../../../../../api/user-api";
+import { sendFriendResponse } from "../../../../../api/friends-api";
 import { useAuthContext } from "../../../../contexts/AuthContext";
 
 export default function AcceptNotification({ props }) {
@@ -12,10 +12,8 @@ export default function AcceptNotification({ props }) {
     if (e.target.value == "friendRequest") {
       try {
         const response = await sendFriendResponse(
-          JSON.stringify({
-            username: friendUsername,
-            status: "friendRequestAccepted",
-          })
+          friendUsername,
+          "friendRequestAccepted"
         );
 
         if (response.status == "online") {
