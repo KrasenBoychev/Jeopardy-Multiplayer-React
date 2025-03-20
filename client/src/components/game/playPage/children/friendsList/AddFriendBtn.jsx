@@ -28,9 +28,6 @@ export default function AddFriendBtn({ addFriendUsername, socket, friendsList, s
 
         try {
             const friendCheckResponse = await sendFriendRequest(addFriendUsername); 
-            
-            console.log(friendCheckResponse.socketId);
-            
 
             if (friendCheckResponse.status == 'success') {
                 toast.success(friendCheckResponse.msg);
