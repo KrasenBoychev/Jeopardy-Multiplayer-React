@@ -10,7 +10,7 @@ export default function Logout(props) {
 
   const { username } = useAuthContext();
   const logout = useLogout();
-  const action = "logout";
+  const action = "friendIsOffline";
 
   useEffect(() => {
     (async function logoutUser() {
