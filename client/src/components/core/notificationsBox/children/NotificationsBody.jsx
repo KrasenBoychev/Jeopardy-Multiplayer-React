@@ -32,7 +32,7 @@ export default function NotificationsBody({ props })
                               socket,
                               notification,
                               setFriendsList,
-                              isNewGameStarted,
+                              friendInvited,
                               setUpdateNotifications
                             }}
                           />

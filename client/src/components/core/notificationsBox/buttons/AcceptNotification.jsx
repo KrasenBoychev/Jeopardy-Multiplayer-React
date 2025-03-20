@@ -7,7 +7,7 @@ export default function AcceptNotification({ props }) {
     socket,
     notification,
     setFriendsList,
-    isNewGameStarted,
+    friendInvited,
     setUpdateNotifications,
   } = props;
   const { username } = useAuthContext();
@@ -30,7 +30,7 @@ export default function AcceptNotification({ props }) {
               username,
               online: true,
               socketId: socket.id,
-              gameInProgress: isNewGameStarted,
+              gameInProgress: friendInvited ? true : false,
             },
           });
 
