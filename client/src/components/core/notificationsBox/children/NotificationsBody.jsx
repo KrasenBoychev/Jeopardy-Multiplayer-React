@@ -1,4 +1,4 @@
-import AcceptNotification from "../buttons/acceptNotification";
+import AcceptNotification from "../buttons/AcceptNotification";
 import ReadNotification from "../buttons/ReadNotification";
 import RejectNotification from "../buttons/RejectNotification";
 
@@ -10,6 +10,8 @@ export default function NotificationsBody({ props })
     setFriendsList,
     notificationsList,
     setNotificationsList,
+    isNewGameStarted,
+    setUpdateNotifications,
   } = props;
   
   return (
@@ -29,21 +31,22 @@ export default function NotificationsBody({ props })
                             props={{
                               socket,
                               notification,
-                              setNotificationsList,
                               setFriendsList,
+                              isNewGameStarted,
+                              setUpdateNotifications
                             }}
                           />
                           <RejectNotification
                             props={{
                               socket,
                               notification,
-                              setNotificationsList,
+                              setUpdateNotifications,
                             }}
                           />
                         </>
                       ) : (
                         <ReadNotification
-                          props={{ notification, setNotificationsList }}
+                          props={{ notification, setUpdateNotifications }}
                         />
                       )}
                     </div>

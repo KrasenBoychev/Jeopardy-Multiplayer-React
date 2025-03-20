@@ -1,8 +1,8 @@
 import toast from "react-hot-toast";
-import { sendFriendResponse } from "../../../../../api/user-api";
+import { sendFriendResponse } from "../../../../../api/friends-api";
 
 export default function RejectNotification({ props }) {
-  const { socket, notification, setNotificationsList } = props;
+  const { socket, notification, setUpdateNotifications } = props;
 
   const rejectNotification = async (e) => {
     const friendUsername = e.target.id;
@@ -10,19 +10,17 @@ export default function RejectNotification({ props }) {
     if (e.target.value == "friendRequest") {
       try {
         const response = await sendFriendResponse(
-          JSON.stringify({
-            username: friendUsername,
-            status: "friendRequestRejected",
-          })
+          friendUsername,
+          "friendRequestRejected"
         );
 
         if (response.status == "online") {
           await socket.emit("sendNotification", {
-            receiverSocketId: response.friendSocketDetails.socketId,
+            receiverSocketId: response.socketId,
           });
         }
 
-        setNotificationsList(response.userDetails.notifications);
+        setUpdateNotifications(true);
       } catch (error) {
         toast.error(error.message);
       }

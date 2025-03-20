@@ -3,7 +3,13 @@ import { sendFriendResponse } from "../../../../../api/friends-api";
 import { useAuthContext } from "../../../../contexts/AuthContext";
 
 export default function AcceptNotification({ props }) {
-  const { socket, notification, setNotificationsList, setFriendsList } = props;
+  const {
+    socket,
+    notification,
+    setFriendsList,
+    isNewGameStarted,
+    setUpdateNotifications,
+  } = props;
   const { username } = useAuthContext();
 
   const acceptNotification = async (e) => {
@@ -18,9 +24,14 @@ export default function AcceptNotification({ props }) {
 
         if (response.status == "online") {
           await socket.emit("sendNotification", {
-            receiverSocketId: response.friendSocketDetails.socketId,
+            receiverSocketId: response.socketId,
             msg: "friendRequestAccepted",
-            data: { username, online: true, socketId: socket.id },
+            data: {
+              username,
+              online: true,
+              socketId: socket.id,
+              gameInProgress: isNewGameStarted,
+            },
           });
 
           setFriendsList((prev) => [
@@ -28,7 +39,8 @@ export default function AcceptNotification({ props }) {
             {
               username: friendUsername,
               online: true,
-              socketId: response.friendSocketDetails.socketId,
+              socketId: response.socketId,
+              gameInProgress: response.gameInProgress,
             },
           ]);
         } else {
@@ -38,7 +50,7 @@ export default function AcceptNotification({ props }) {
           ]);
         }
 
-        setNotificationsList(response.userDetails.notifications);
+        setUpdateNotifications(true);
       } catch (error) {
         toast.error(error.message);
       }
