@@ -5,13 +5,18 @@ const {
   getOnlineUsers,
   getOnlineUserDetails,
 } = require("../services/onlineUsers");
-const { getUserFriendsList, getUserByUsername } = require("../services/user");
-const { getUserFriendRequests } = require("../services/friends");
+const { addNotification, removeNotification } = require("../services/user");
+const {
+  getUserFriendsList,
+  getUserFriendRequests,
+  addUsernameToFriendRequests,
+  removeUsernameFromFriendRequests,
+  addUsernameToFriendsList,
+} = require("../services/friends");
 
 const friendsRouter = Router();
 
 friendsRouter.get("/getFriendsAndTheirStatus", async (req, res) => {
-  //used
   try {
     const userFriendsList = await getUserFriendsList(req.user.username);
     const onlineFriends = await getOnlineUsers(userFriendsList);
@@ -40,34 +45,47 @@ friendsRouter.get("/getFriendsAndTheirStatus", async (req, res) => {
   }
 });
 
-friendsRouter.get("/addFriendRequest/:friendUsername", async (req, res) => {
-  //used
-  const result = { status: "", msg: "" };
+friendsRouter.put(
+  "/addFriendRequest",
+  body("friendUsername").trim(),
+  async (req, res) => {
+    const result = { status: "", msg: "" };
 
-  const friendUsername = req.params.friendUsername;
-  const userUsername = req.user.username;
+    const friendUsername = req.body.friendUsername;
+    const userUsername = req.user.username;
 
-  try {
-    const isFriendInUserFriendRequestsList = await getUserFriendRequests(
-      userUsername,
-      friendUsername
-    );
+    try {
+      const isFriendInUserFriendRequestsList = await getUserFriendRequests(
+        userUsername,
+        friendUsername
+      );
 
-    if (isFriendInUserFriendRequestsList) {
-      result.status = "error";
-      result.msg =
-        friendUsername +
-        " has already sent invitation to you - check notifications";
-    } else {
-      const friendDetails = await getUserByUsername(friendUsername);
+      if (isFriendInUserFriendRequestsList) {
+        result.status = "error";
+        result.msg =
+          friendUsername +
+          " has already sent invitation to you - check notifications";
+      } else {
+        const addUsernameToFriendReq = await addUsernameToFriendRequests(
+          friendUsername,
+          userUsername
+        );
 
-      if (friendDetails) {
-        if (friendDetails.friendRequests.includes(userUsername)) {
+        if (addUsernameToFriendReq.matchedCount == 0) {
+          result.status = "error";
+          result.msg = friendUsername + " does not exist";
+        }
+
+        if (
+          addUsernameToFriendReq.matchedCount > 0 &&
+          addUsernameToFriendReq.modifiedCount == 0
+        ) {
           result.status = "error";
           result.msg = "Invitation has already been sent to " + friendUsername;
-        } else {
-          const userOnline = await getOnlineUserDetails(friendUsername);
+        }
 
+        if (addUsernameToFriendReq.modifiedCount > 0) {
+          const userOnline = await getOnlineUserDetails(friendUsername);
           if (userOnline) {
             result.status = "send invitation";
             result.socketId = userOnline.socketId;
@@ -75,96 +93,68 @@ friendsRouter.get("/addFriendRequest/:friendUsername", async (req, res) => {
             result.status = "success";
           }
 
-          result.msg = "Invitation sent to " + friendUsername;
-
-          friendDetails.friendRequests.push(userUsername);
-          friendDetails.notificationsList.push({
+          const notification = {
             username: userUsername,
             content: " sent friend request",
             type: "friendRequest",
             notificationBtns: "Accept/Reject",
-          });
-          await friendDetails.save();
+          };
+          await addNotification(friendUsername, notification);
+
+          result.msg = "Invitation sent to " + friendUsername;
         }
-      } else {
-        result.status = "error";
-        result.msg = friendUsername + " does not exist";
       }
+
+      res.json(result);
+    } catch (err) {
+      const parsed = parseError(err);
+      res.status(400).json({ code: 400, message: parsed.message });
     }
-
-    res.json(result);
-  } catch (err) {
-    const parsed = parseError(err);
-    res.status(400).json({ code: 400, message: parsed.message });
   }
-});
+);
 
-//IN PROGRESS
-
-friendsRouter.get(
+friendsRouter.put(
   "/friendResponse",
   body("username").trim(),
-  body("status").trim(),
+  body("type").trim(),
   async (req, res) => {
+    const userUsername = req.user.username;
     const friendUsername = req.body.username;
-    const status = req.body.status;
-
-    const result = {
-      status: "offline",
-      friendSocketDetails: "",
-      userDetails: { notifications: "", friends: "" },
-    };
+    const type = req.body.type;
 
     try {
-      const userDetailsUser = await getUserByUsername(req.user.username);
-      userDetails.friendRequests = userDetails.friendRequests.filter(
-        (friend) => friend !== friendUsername
-      );
+      await removeUsernameFromFriendRequests(userUsername, friendUsername);
 
-      const getFriendUser = await getUserByUsername(friendUsername);
-      const friendDetails = getFriendUser[0];
+      let notification = {};
 
-      if (sentDataDetails.status == "friendRequestAccepted") {
-        if (!userDetails.friendsList.includes(friendUsername)) {
-          userDetails.friendsList.push(friendUsername);
-        }
-        result.userDetails.friends = userDetails.friendsList;
+      if (type == "friendRequestAccepted") {
+        await addUsernameToFriendsList(userUsername, friendUsername);
+        await addUsernameToFriendsList(friendUsername, userUsername);
 
-        if (!friendDetails.friendsList.includes(userDetails.username)) {
-          friendDetails.friendsList.push(userDetails.username);
-        }
-
-        friendDetails.notificationsList.push({
-          username: userDetails.username,
+        notification = {
+          username: userUsername,
           content: " accepted your friend request",
           type: "friendResponse",
           notificationBtns: "Mark as read",
-        });
+        };
       } else {
-        friendDetails.notificationsList.push({
-          username: userDetails.username,
+        notification = {
+          username: userUsername,
           content: " rejected your friend request",
           type: "friendResponse",
           notificationBtns: "Mark as read",
-        });
+        };
       }
 
-      userDetails.notificationsList = userDetails.notificationsList.filter(
-        (notification) => {
-          notification.username !== friendUsername;
-        }
-      );
+      await addNotification(friendUsername, notification);
+      await removeNotification(userUsername, "friendRequest", friendUsername);
 
-      result.userDetails.notifications = userDetails.notificationsList;
-
-      await friendDetails.save();
-      await userDetails.save();
-
-      // const userOnline = await checkIfUserIsOnline(friendUsername);
-
+      const userOnline = await getOnlineUserDetails(friendUsername);
+      const result = { status: "offline" };
       if (userOnline) {
         result.status = "online";
-        result.friendSocketDetails = userOnline.onlineUsers[0];
+        result.socketId = userOnline.socketId;
+        result.gameInProgress = userOnline.gameInProgress;
       }
 
       res.json(result);
