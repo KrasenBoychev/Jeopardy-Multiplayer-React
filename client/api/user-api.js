@@ -10,14 +10,6 @@ export async function getPlayerPoints() {
   return await api.get(host + `/users/playerPoints`);
 }
 
-export async function recordUserInOnlineUsers(username, socketId) {
-  return await api.post(host + `/users/recordNewUser`, { username, socketId });
-}
-
-export async function deleteUserInOnlineUsers() {
-  await api.del(host + `/users/deleteUser`);
-}
-
 export async function getUserNotifications() {
   return await api.get(host + `/users/getUserNotifications`);
 }
@@ -27,4 +19,16 @@ export async function removeNotification(friendUsername, type) {
     friendUsername,
     type,
   });
+}
+
+export async function recordUserInOnlineUsers(username, socketId) {
+  return await api.post(host + `/users/recordNewOnlineUser`, { username, socketId });
+}
+
+export async function deleteUserInOnlineUsers() {
+  await api.del(host + `/users/deleteOnlineUser`);
+}
+
+export async function updateGameInProgress() {
+  return await api.put(host + `/users/gameInProgress`);
 }
