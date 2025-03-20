@@ -27,13 +27,16 @@ function configSocket(server) {
       io.to(receiverSocketId).emit("getNotification", { msg, data });
     });
 
-    socket.on("sendGameInvitation", ({ receiverSocketId, data }) => {
-      io.to(receiverSocketId).emit("getGameInvitation", { data });
+    socket.on("sendGameInvitation", ({ receiverSocketId, username }) => {
+      // console.log(receiverSocketId.rooms);
+      // TODO
+      // check if the friendSocketId is not connected to another room
+      io.to(receiverSocketId).emit("getGameInvitation", { username });
     });
 
-    socket.on("sendGameRejection", ({ receiverSocketId }) => {
-      io.to(receiverSocketId).emit("getGameRejection", {});
-    });
+    // socket.on("sendGameRejection", ({ receiverSocketId }) => {
+    //   io.to(receiverSocketId).emit("getGameRejection", {});
+    // });
 
     socket.on("disconnect", async () => {});
   });
