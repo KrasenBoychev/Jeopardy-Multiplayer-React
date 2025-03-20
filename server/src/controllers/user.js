@@ -2,10 +2,10 @@ const { Router } = require("express");
 const { body } = require("express-validator");
 const { parseError } = require("../util");
 const {
-  getUserByUsername,
   getTopPlayers,
   getPlayerPoints,
   getUserNotificationsList,
+  removeNotification,
 } = require("../services/user");
 const {
   addNewOnlineUser,
@@ -73,29 +73,24 @@ userRouter.delete("/deleteUser", async (req, res) => {
   }
 });
 
+userRouter.put(
+  "/removeNotification",
+  body("friendUsername").trim(),
+  body("type").trim(),
+  async (req, res) => {
+    const userUsername = req.user.username;
+    const friendUsername = req.body.friendUsername;
+    const type = req.body.type;
 
-// Not Used Yet
+    try {
+      const result = await removeNotification(userUsername, type, friendUsername);
 
-// userRouter.get("/removeNotification/:friendUsername", async (req, res) => {
-//   const username = req.user.username;
-//   const friendUsername = req.params.friendUsername;
-
-//   try {
-//     const getUser = await getUserByUsername(username);
-//     const user = getUser[0];
-//     user.notificationsList = user.notificationsList.filter((notification) => {
-//       notification.username !== friendUsername;
-//     });
-
-//     await user.save();
-
-//     const result = { notifications: user.notificationsList };
-
-//     res.json(result);
-//   } catch (err) {
-//     const parsed = parseError(err);
-//     res.status(400).json({ code: 400, message: parsed.message });
-//   }
-// });
+      res.json(result);
+    } catch (err) {
+      const parsed = parseError(err);
+      res.status(400).json({ code: 400, message: parsed.message });
+    }
+  }
+);
 
 module.exports = { userRouter };
