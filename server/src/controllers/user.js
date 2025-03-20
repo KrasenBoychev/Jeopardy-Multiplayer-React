@@ -6,6 +6,7 @@ const {
   getPlayerPoints,
   getUserNotificationsList,
   removeNotification,
+  updateGameInProgress,
 } = require("../services/user");
 const {
   addNewOnlineUser,
@@ -44,8 +45,32 @@ userRouter.get("/getUserNotifications", async (req, res) => {
   }
 });
 
+userRouter.put(
+  "/removeNotification",
+  body("friendUsername").trim(),
+  body("type").trim(),
+  async (req, res) => {
+    const userUsername = req.user.username;
+    const friendUsername = req.body.friendUsername;
+    const type = req.body.type;
+
+    try {
+      const result = await removeNotification(
+        userUsername,
+        type,
+        friendUsername
+      );
+
+      res.json(result);
+    } catch (err) {
+      const parsed = parseError(err);
+      res.status(400).json({ code: 400, message: parsed.message });
+    }
+  }
+);
+
 userRouter.post(
-  "/recordNewUser",
+  "/recordNewOnlineUser",
   body("username").trim(),
   body("socketId").trim(),
   async (req, res) => {
@@ -62,7 +87,7 @@ userRouter.post(
   }
 );
 
-userRouter.delete("/deleteUser", async (req, res) => {
+userRouter.delete("/deleteOnlineUser", async (req, res) => {
   try {
     const username = req.user.username;
     await deleteOnlineUser(username);
@@ -73,24 +98,15 @@ userRouter.delete("/deleteUser", async (req, res) => {
   }
 });
 
-userRouter.put(
-  "/removeNotification",
-  body("friendUsername").trim(),
-  body("type").trim(),
-  async (req, res) => {
-    const userUsername = req.user.username;
-    const friendUsername = req.body.friendUsername;
-    const type = req.body.type;
-
-    try {
-      const result = await removeNotification(userUsername, type, friendUsername);
-
-      res.json(result);
-    } catch (err) {
-      const parsed = parseError(err);
-      res.status(400).json({ code: 400, message: parsed.message });
-    }
+userRouter.put("/gameInProgress", async (req, res) => {
+  try {
+    const username = req.user.username;
+    await updateGameInProgress(username);
+    res.json(`game in progress updated for ${username}`);
+  } catch (err) {
+    const parsed = parseError(err);
+    res.status(400).json({ code: 400, message: parsed.message });
   }
-);
+});
 
 module.exports = { userRouter };
