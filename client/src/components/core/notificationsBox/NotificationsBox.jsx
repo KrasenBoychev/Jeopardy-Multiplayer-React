@@ -14,12 +14,14 @@ export default function NotificationsBox({
   friendInvitedProps,
   gameFriendResponseProps,
   notifications,
+  isNewGameStarted,
 }) {
   const { friendsList, setFriendsList } = friendsListProps;
   const { friendInvited, setFriendInvited } = friendInvitedProps;
   const { gameFriendResponse, setGameFriendResponse } = gameFriendResponseProps;
   const { notificationsList, setNotificationsList } = notifications;
   const [notificationsBox, setNotificationsBox] = useState(false);
+  const [updateNotifications, setUpdateNotifications] = useState(false);
 
   const { isAuthenticated } = useAuthContext();
 
@@ -29,12 +31,16 @@ export default function NotificationsBox({
         try {
           const userNotifications = await getUserNotifications();
           setNotificationsList(userNotifications);
+
+          if (updateNotifications) {
+            setUpdateNotifications(false);
+          }
         } catch (error) {
           toast.error(error.message);
         }
       }
     })();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, updateNotifications]);
 
   useEffect(() => {
     socket?.on("getNotification", async ({ msg, data }) => {
@@ -102,6 +108,8 @@ export default function NotificationsBox({
           setFriendsList,
           notificationsList,
           setNotificationsList,
+          isNewGameStarted,
+          setUpdateNotifications,
         }}
       />
     </>
