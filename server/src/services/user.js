@@ -1,5 +1,6 @@
 const { adminId } = require("../api-keys");
 const { User } = require("../models/User");
+const { OnlineUser } = require("../models/OnlineUsers");
 
 async function getUserByEmail(email) {
   return await User.findOne({ email });
@@ -37,6 +38,12 @@ async function removeNotification(userUsername, type, friendUsername) {
   );
 }
 
+async function updateGameInProgress(username) {
+  return await OnlineUser.updateOne({ username }, [
+    { $set: { gameInProgress: { $not: "$gameInProgress" } } },
+  ]);
+}
+
 module.exports = {
   getUserByEmail,
   getUserByUsername,
@@ -45,4 +52,5 @@ module.exports = {
   getUserNotificationsList,
   addNotification,
   removeNotification,
+  updateGameInProgress,
 };
