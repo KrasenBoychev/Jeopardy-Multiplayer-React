@@ -36,7 +36,7 @@ export default function useSocket(socket, setSocket, setFriendsList) {
           const friendsListResponse = await getUserFriendsAndTheirStatus();
           setFriendsList(friendsListResponse);
 
-          const action = "userAuthenticated";
+          const action = "friendIsOnline";
           await sendUpdateToOnlineFriends(
             socket,
             username,
@@ -61,24 +61,38 @@ export default function useSocket(socket, setSocket, setFriendsList) {
 
     socket?.on("getFriendStatus", ({ senderInfo, action }) => {
       setFriendsList((prevFriendList) => {
-        const newUpdatedFriendsLst = prevFriendList.filter(
-          (friend) => friend.username !== senderInfo.username
-        );
-        if (action == "userAuthenticated") {
-          newUpdatedFriendsLst.push({
-            username: senderInfo.username,
-            online: true,
-            socketId: senderInfo.socketId,
-            gameInProgress: senderInfo.gameInProgress,
-          });
-        } else if (action == "logout") {
-          newUpdatedFriendsLst.push({
-            username: senderInfo.username,
-            online: false,
-          });
+        if (action == "friendIsOnline") {
+          return prevFriendList.map((friendInfo) =>
+            friendInfo.username == senderInfo.username
+              ? {
+                  ...friendInfo,
+                  online: true,
+                  socketId: senderInfo.socketId,
+                  gameInProgress: senderInfo.gameInProgress,
+                }
+              : friendInfo
+          );
+        } else if (action == "friendIsOffline") {
+          return prevFriendList.map((friendInfo) =>
+            friendInfo.username == senderInfo.username
+              ? {
+                  ...friendInfo,
+                  online: false,
+                  socketId: null,
+                  gameInProgress: null,
+                }
+              : friendInfo
+          );
+        } else if (action == "changeGameInProgress") {       
+          return prevFriendList.map((friendInfo) =>
+            friendInfo.username == senderInfo.username
+              ? {
+                  ...friendInfo,
+                  gameInProgress: senderInfo.gameInProgress,
+                }
+              : friendInfo
+          );
         }
-
-        return newUpdatedFriendsLst;
       });
     });
   }, [socket]);
