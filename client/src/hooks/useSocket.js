@@ -9,7 +9,12 @@ import { getUserFriendsAndTheirStatus } from "../../api/friends-api";
 import { useAuthContext } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
 
-export default function useSocket(socket, setSocket, setFriendsList) {
+export default function useSocket(
+  socket,
+  setSocket,
+  setFriendsList,
+  setNotificationsList,
+) {
   const { isAuthenticated, username } = useAuthContext();
 
   useEffect(() => {
@@ -83,7 +88,7 @@ export default function useSocket(socket, setSocket, setFriendsList) {
                 }
               : friendInfo
           );
-        } else if (action == "changeGameInProgress") {       
+        } else if (action == "changeGameInProgress") {
           return prevFriendList.map((friendInfo) =>
             friendInfo.username == senderInfo.username
               ? {
@@ -94,6 +99,14 @@ export default function useSocket(socket, setSocket, setFriendsList) {
           );
         }
       });
+      if (action == "friendIsOffline") {
+        setNotificationsList((prevNotifications) => {
+          return prevNotifications.filter((notification) => {
+            notification.username == senderInfo.username &&
+              notification.type == "gameInvitation";
+          });
+        });
+      }
     });
   }, [socket]);
 }
