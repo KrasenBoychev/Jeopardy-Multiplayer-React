@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-import { AuthContextProvider, useAuthContext } from "./contexts/AuthContext";
+import { AuthContextProvider } from "./contexts/AuthContext";
 
 import "./App.css";
 
@@ -21,7 +21,6 @@ import Create from "./components/create/Create";
 import CreateCategory from "./components/create/createCategory/CreateCategory";
 import CreateQuestion from "./components/create/createQuestion/CreateQuestion";
 import NotFound from "./components/core/notFound/NotFound";
-import GameInvitation from "./components/game/gameInvitation/GameInvitation";
 import PlayPage from "./components/game/playPage/PlayPage";
 import Socket from "./components/core/Socket";
 import NotificationsBox from "./components/core/notificationsBox/NotificationsBox";
@@ -29,13 +28,10 @@ import NotificationsBox from "./components/core/notificationsBox/NotificationsBo
 function App() {
   const [isNewGameStarted, setIsNewGameStarted] = useState(false);
   const [globalChannel, setGlobalChannel] = useState(null);
-  const [newGameInvitation, setNewGameInvitation] = useState(false);
   const [socket, setSocket] = useState(null);
   const [friendsList, setFriendsList] = useState([]);
   const [friendInvited, setFriendInvited] = useState(null);
   const [notificationsList, setNotificationsList] = useState([]);
-
-  const { isAuthenticated } = useAuthContext();
 
   return (
     <>
@@ -45,20 +41,22 @@ function App() {
         <Socket
           socketProps={{ socket, setSocket }}
           friendsProps={{ friendsList, setFriendsList }}
+          friendInvited={friendInvited}
           setNotificationsList={{ setNotificationsList }}
+          newGameStartedProps={{ isNewGameStarted, setIsNewGameStarted }}
         />
 
         {!isNewGameStarted && <Header />}
-        {!isNewGameStarted && newGameInvitation && (
-          <GameInvitation gameInvitation={setNewGameInvitation} />
-        )}
 
-        <NotificationsBox
-          socket={socket}
-          friendsListProps={{ friendsList, setFriendsList }}
-          friendInvitedProps={{ friendInvited, setFriendInvited }}
-          notifications={{ notificationsList, setNotificationsList }}
-        />
+        {!isNewGameStarted && (
+          <NotificationsBox
+            socket={socket}
+            friendsListProps={{ friendsList, setFriendsList }}
+            friendInvitedProps={{ friendInvited, setFriendInvited }}
+            notifications={{ notificationsList, setNotificationsList }}
+            setIsNewGameStarted={setIsNewGameStarted}
+          />
+        )}
 
         <main>
           <Routes>
@@ -67,7 +65,6 @@ function App() {
               element={
                 <Home
                   // game={{ isNewGameStarted, setIsNewGameStarted }}
-                  // gameInvitation={{ newGameInvitation, setNewGameInvitation }}
                   // globalChannelInfo={{ globalChannel, setGlobalChannel }}
                   socket={socket}
                 />
@@ -86,7 +83,6 @@ function App() {
                 element={
                   <PlayPage
                     // game={{ isNewGameStarted, setIsNewGameStarted }}
-                    // gameInvitation={{ newGameInvitation, setNewGameInvitation }}
                     // globalChannelInfo={{ globalChannel, setGlobalChannel }}
                     socket={socket}
                     friendsProps={{
