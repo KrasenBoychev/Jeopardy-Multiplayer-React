@@ -2,7 +2,7 @@ import { useState } from "react";
 import AddFriendBtn from "./AddFriendBtn";
 import "./friendsList.css";
 
-export default function FriendsList({ socket, friendsList, friendProps }) {
+export default function FriendsList({ socket, friendsList }) {
   const [addFriendUsername, setAddFriendUsername] = useState("");
 
   return (
