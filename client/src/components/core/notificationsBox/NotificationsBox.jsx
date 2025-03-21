@@ -13,12 +13,12 @@ export default function NotificationsBox({
   friendsListProps,
   friendInvitedProps,
   notifications,
+  setIsNewGameStarted,
 }) {
   const { friendsList, setFriendsList } = friendsListProps;
   const { friendInvited, setFriendInvited } = friendInvitedProps;
   const { notificationsList, setNotificationsList } = notifications;
   const [notificationsBox, setNotificationsBox] = useState(false);
-  const [updateNotifications, setUpdateNotifications] = useState(false);
 
   const { isAuthenticated, username } = useAuthContext();
 
@@ -28,27 +28,37 @@ export default function NotificationsBox({
         try {
           const userNotifications = await getUserNotifications();
           setNotificationsList(userNotifications);
-
-          if (updateNotifications) {
-            setUpdateNotifications(false);
-          }
         } catch (error) {
           toast.error(error.message);
         }
       }
     })();
-  }, [isAuthenticated, updateNotifications]);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     socket?.on("getNotification", async ({ msg, data }) => {
-      try {
-        setUpdateNotifications(true);
+      if (msg == "friendRequestAccepted") {
+        setFriendsList((prev) => [...prev, data.friendsListUpdate]);
 
-        if (msg == "friendRequestAccepted") {
-          setFriendsList((prev) => [...prev, data]);
-        }
-      } catch (error) {
-        toast.error(error.message);
+        setNotificationsList((prev) => [
+          ...prev,
+          {
+            username: data.notificationInfo.friendUsername,
+            content: data.notificationInfo.content,
+            type: msg,
+            notificationBtns: data.notificationInfo.btns,
+          },
+        ]);
+      } else {
+        setNotificationsList((prev) => [
+          ...prev,
+          {
+            username: data.friendUsername,
+            content: data.content,
+            type: msg,
+            notificationBtns: data.btns,
+          },
+        ]);
       }
     });
 
@@ -69,14 +79,17 @@ export default function NotificationsBox({
       );
     });
 
-    socket?.on("getCancelGameInvitation", async ({ senderUsername }) => {
-      setNotificationsList((prevNotifications) => {
-        return prevNotifications.filter((notification) => {
-          notification.username == senderUsername &&
-            notification.type == "gameInvitation";
-        });
-      });
+    socket?.on("getAcceptGameInvitation", async ({ senderUsername }) => {
+      setIsNewGameStarted(true);
+      toast.success(senderUsername + " accepted game invitation");
+    });
 
+    socket?.on("getCancelGameInvitation", async ({ senderUsername }) => {
+      removeNotificationFromNotificationsList(
+        setNotificationsList,
+        senderUsername,
+        "gameInvitation"
+      );
       toast.error(senderUsername + " cancelled game invitation");
     });
 
@@ -104,9 +117,25 @@ export default function NotificationsBox({
           notificationsList,
           setNotificationsList,
           friendInvited,
-          setUpdateNotifications,
+          setFriendInvited,
+          setIsNewGameStarted,
         }}
       />
     </>
   );
 }
+
+export const removeNotificationFromNotificationsList = (
+  setNotificationsList,
+  senderUsername,
+  type
+) => {
+  setNotificationsList((prevNotifications) =>
+    prevNotifications.filter((notification) => {
+      return (
+        notification.username != senderUsername ||
+        (notification.username == senderUsername && notification.type != type)
+      );
+    })
+  );
+};
