@@ -8,12 +8,13 @@ import {
 import { getUserFriendsAndTheirStatus } from "../../api/friends-api";
 import { useAuthContext } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
+import { removeNotificationFromNotificationsList } from "../components/core/notificationsBox/NotificationsBox";
 
 export default function useSocket(
   socket,
   setSocket,
   setFriendsList,
-  setNotificationsList,
+  setNotificationsList
 ) {
   const { isAuthenticated, username } = useAuthContext();
 
@@ -100,12 +101,11 @@ export default function useSocket(
         }
       });
       if (action == "friendIsOffline") {
-        setNotificationsList((prevNotifications) => {
-          return prevNotifications.filter((notification) => {
-            notification.username == senderInfo.username &&
-              notification.type == "gameInvitation";
-          });
-        });
+        removeNotificationFromNotificationsList(
+          setNotificationsList,
+          senderInfo.username,
+          "gameInvitation"
+        );
       }
     });
   }, [socket]);
