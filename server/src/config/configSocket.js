@@ -27,16 +27,40 @@ function configSocket(server) {
       io.to(receiverSocketId).emit("getNotification", { msg, data });
     });
 
-    socket.on("sendGameInvitation", ({ receiverSocketId, username }) => {
-      // console.log(receiverSocketId.rooms);
-      // TODO
-      // check if the friendSocketId is not connected to another room
-      io.to(receiverSocketId).emit("getGameInvitation", { username });
-    });
+    socket.on(
+      "sendGameInvitation",
+      ({ receiverSocketId, userUsername, friendUsername }) => {
+        socket.join(`${userUsername}-${friendUsername}`);
 
-    // socket.on("sendGameRejection", ({ receiverSocketId }) => {
-    //   io.to(receiverSocketId).emit("getGameRejection", {});
-    // });
+        io.to(receiverSocketId).emit("getGameInvitation", {
+          senderUsername: userUsername,
+        });
+      }
+    );
+
+    socket.on(
+      "setCancelGameInvitation",
+      ({ receiverSocketId, userUsername, friendUsername }) => {
+        socket.leave(`${userUsername}-${friendUsername}`);
+
+        io.to(receiverSocketId).emit("getCancelGameInvitation", {
+          senderUsername: userUsername,
+        });
+      }
+    );
+
+    socket.on(
+      "setRejectGameInvitation",
+      ({ receiverSocketId, userUsername }) => {
+        io.to(receiverSocketId).emit("getRejectGameInvitation", {
+          senderUsername: userUsername,
+        });
+      }
+    );
+
+    socket.on("leaveRoom", ({ userUsername, friendUsername }) => {
+      socket.leave(`${userUsername}-${friendUsername}`);
+    });
 
     socket.on("disconnect", async () => {});
   });
