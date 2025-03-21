@@ -7,6 +7,7 @@ import { useEffect } from "react";
 export default function Logout(props) {
   const { socket, setSocket } = props.socketProps;
   const { friendsList, setFriendsList } = props.friendsProps;
+  const { setFriendInvited } = props.setFriendInvited;
 
   const { username } = useAuthContext();
   const logout = useLogout();
@@ -17,6 +18,7 @@ export default function Logout(props) {
       await sendUpdateToOnlineFriends(socket, username, friendsList, action);
       await socket.disconnect();
       setSocket(null);
+      setFriendInvited(null);
       logout();
     })();
   }, []);
