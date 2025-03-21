@@ -1,1 +1,78 @@
- - By exiting the page from the cross, should send a disconnect alert to all users and delete the user
+1. Send game invitation from User to Friend:
+    + Join socket room with the name "userUsername-friendUsername"
+
+    + Send notification to Friend:
+        + update Friend's notificationsList with the new game invitation
+        + toast.success msg
+
+    + User -> friendInvited must be "friendUsername"
+
+2. User clicks "Cancel" or Logs Out (if (friendInvited)): 
+    + Leave socket room with the name "userUsername-friendUsername"
+
+    + Send socket response that will trigger:
+        + remove game invitation from the Friend's notificationsList
+        + toast.error msg
+
+    + User -> friendInvited must be "null"
+
+// User responds to Friend (swap roles)
+
+3. User clicks "Reject":
+    + Send socket response to Friend -> that will trigger:
+        + toast.error msg
+        + Leave socket room with the name "userUsername-friendUsername"
+        + User - friendInvited must be "null"
+    + Remove game invitation from the notificationsList
+    
+4. User Logs Out if (!friendInvited):
+    + Send socket response to all friends that sent game invitation -> that will trigger:
+        + toast.error msg
+        + Leave socket room with the name "userUsername-friendUsername"
+        + User - friendInvited must be "null"
+
+5. User clicks "Accept":
+    - User "game in progress" changes to "true" for both User and Friend
+        - all online friends must be notififed (except the Friend)
+
+    - Remove all game invitation from notificationsList  for both User and Friend
+
+    - Join socket room with the name "userUsername-friendUsername"
+
+    - Send socket response to Friend -> that will trigger:
+        - toast.success msg
+        - newGameStarted  must be "true"
+
+    - Send socket response to all other friends that sent game invitation for both User and Friend -> that will trigger:
+        - toast.error msg
+        - Leave socket room with the name "userUsername-friendUsername"
+        - User "game in progress" changes to "false"
+            - all users must be notififed (except the Friend)
+        - User - friendInvited must be "null"
+
+    - User -> friendInvited:
+        - if another friend invited at the same time, delete the game invitation from their notificationsList
+        - must be "friendUsername"
+    - User -> newGameStarted  must be "true"
+
+6. Check all socket requests and make them not to be sent to online users who have "gameInProgress == true"
+    
+7. Delete not needed css for the buttons in gameRoom.css
+
+8. Shouldn't be able to send invitation if has already got invitation from this friend
+
+// code
+
+        await updateGameInProgress();
+
+        const receiverFriends = friendsList.filter(
+            (friend) =>
+            friend.online &&
+            !friend.gameInProgress
+        );
+
+        await socket.emit("sendUserStatus", {
+            senderInfo: { username, gameInProgress: true },
+            receiverFriends,
+            action: "changeGameInProgress",
+        });
