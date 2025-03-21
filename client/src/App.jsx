@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-import { AuthContextProvider } from "./contexts/AuthContext";
+import { AuthContextProvider, useAuthContext } from "./contexts/AuthContext";
 
 import "./App.css";
 
@@ -32,9 +32,10 @@ function App() {
   const [newGameInvitation, setNewGameInvitation] = useState(false);
   const [socket, setSocket] = useState(null);
   const [friendsList, setFriendsList] = useState([]);
-  const [gameFriendResponse, setGameFriendResponse] = useState(null);
   const [friendInvited, setFriendInvited] = useState(null);
   const [notificationsList, setNotificationsList] = useState([]);
+
+  const { isAuthenticated } = useAuthContext();
 
   return (
     <>
@@ -44,6 +45,7 @@ function App() {
         <Socket
           socketProps={{ socket, setSocket }}
           friendsProps={{ friendsList, setFriendsList }}
+          setNotificationsList={{ setNotificationsList }}
         />
 
         {!isNewGameStarted && <Header />}
@@ -54,10 +56,6 @@ function App() {
         <NotificationsBox
           socket={socket}
           friendsListProps={{ friendsList, setFriendsList }}
-          gameFriendResponseProps={{
-            gameFriendResponse,
-            setGameFriendResponse,
-          }}
           friendInvitedProps={{ friendInvited, setFriendInvited }}
           notifications={{ notificationsList, setNotificationsList }}
         />
@@ -93,11 +91,11 @@ function App() {
                     socket={socket}
                     friendsProps={{
                       friendsList,
-                      gameFriendResponse,
-                      setGameFriendResponse,
                       friendInvited,
                       setFriendInvited,
+                      isNewGameStarted,
                     }}
+                    notificationsList={notificationsList}
                   />
                 }
               />
@@ -107,6 +105,7 @@ function App() {
                   <Logout
                     socketProps={{ socket, setSocket }}
                     friendsProps={{ friendsList, setFriendsList }}
+                    setFriendInvited={{ setFriendInvited }}
                   />
                 }
               />
