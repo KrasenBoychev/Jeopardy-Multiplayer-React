@@ -1,13 +1,23 @@
 import toast from "react-hot-toast";
 import { sendFriendResponse } from "../../../../../api/friends-api";
+import { useAuthContext } from "../../../../contexts/AuthContext";
 
 export default function RejectNotification({ props }) {
-  const { socket, notification, setUpdateNotifications } = props;
+  const {
+    socket,
+    friendsList,
+    notification,
+    setNotificationsList,
+    setUpdateNotifications,
+  } = props;
+
+  const { username } = useAuthContext();
 
   const rejectNotification = async (e) => {
     const friendUsername = e.target.id;
+    const notificationType = e.target.value;
 
-    if (e.target.value == "friendRequest") {
+    if (notificationType == "friendRequest") {
       try {
         const response = await sendFriendResponse(
           friendUsername,
@@ -24,6 +34,24 @@ export default function RejectNotification({ props }) {
       } catch (error) {
         toast.error(error.message);
       }
+    } else if (notificationType == "gameInvitation") {
+      const findFriend = friendsList.find(
+        (friend) => friend.username == friendUsername
+      );
+
+      if (findFriend && findFriend.online && !findFriend.gameInProgress) {
+        await socket.emit("setRejectGameInvitation", {
+          receiverSocketId: findFriend.socketId,
+          userUsername: username,
+        });
+      }
+
+      setNotificationsList((prevNotifications) => {
+        return prevNotifications.filter((notification) => {
+          notification.username == friendUsername &&
+            notification.type == "gameInvitation";
+        });
+      });
     }
   };
   return (
