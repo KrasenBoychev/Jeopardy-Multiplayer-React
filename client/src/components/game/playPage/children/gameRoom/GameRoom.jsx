@@ -12,19 +12,36 @@ export default function GameRoom({ socket, friendProps, notificationsList }) {
   const { username } = useAuthContext();
 
   useEffect(() => {
-    (async function friendLogsOut() {
-      const findFriend = friendsList.find(
-        (friend) =>
-          friend.username == friendInvited && friend.online == false
+    (async function friendLogsOutOrInGame() {
+      const findOfflineFriend = friendsList.find(
+        (friend) => friend.username == friendInvited && friend.online == false
       );
 
-      if (findFriend) {
+      let findInGameFriend = null;
+
+      if (!findOfflineFriend) {
+        findInGameFriend = friendsList.find(
+          (friend) =>
+            friend.username == friendInvited && friend.gameInProgress == true
+        );
+      }
+
+      if (findOfflineFriend) {
+        leaveRoomAndSetFriendInvited(findOfflineFriend, " left the game");
+      } else if (findInGameFriend) {
+        leaveRoomAndSetFriendInvited(
+          findInGameFriend,
+          " started new game with other player"
+        );
+      }
+
+      async function leaveRoomAndSetFriendInvited(friend, msg) {
         await socket.emit("leaveRoom", {
           userUsername: username,
-          friendUsername: findFriend.username,
+          friendUsername: friend.username,
         });
         setFriendInvited(null);
-        toast.error(findFriend.username + " left the game");
+        toast.error(friend.username + msg);
       }
     })();
   }, [friendsList]);
