@@ -5,14 +5,9 @@ import GameRoom from "./children/gameRoom/GameRoom";
 
 import "./playPage.css";
 
-export default function PlayPage({ socket, friendsProps }) {
-  const {
-    friendsList,
-    gameFriendResponse,
-    setGameFriendResponse,
-    friendInvited,
-    setFriendInvited,
-  } = friendsProps;
+export default function PlayPage({ socket, friendsProps, notificationsList }) {
+  const { friendsList, friendInvited, setFriendInvited, isNewGameStarted } =
+    friendsProps;
 
   return (
     <div className="play_page_container">
@@ -23,17 +18,13 @@ export default function PlayPage({ socket, friendsProps }) {
             friendsList,
             friendInvited,
             setFriendInvited,
-            gameFriendResponse,
-            setGameFriendResponse
+            isNewGameStarted,
           }}
+          notificationsList={notificationsList}
         />
       </section>
       <section>
-        <FriendsList
-          socket={socket}
-          friendsList={friendsList}
-          friendProps={{ friendInvited, setFriendInvited, gameFriendResponse }}
-        />
+        <FriendsList socket={socket} friendsList={friendsList} />
 
         {/* Change the component to StartGameWithRandomPlayer - write the code for it */}
         {/* <StartGameWithOtherPlayer /> */}
