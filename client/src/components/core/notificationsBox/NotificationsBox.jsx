@@ -12,18 +12,15 @@ export default function NotificationsBox({
   socket,
   friendsListProps,
   friendInvitedProps,
-  gameFriendResponseProps,
   notifications,
-  isNewGameStarted,
 }) {
   const { friendsList, setFriendsList } = friendsListProps;
   const { friendInvited, setFriendInvited } = friendInvitedProps;
-  const { gameFriendResponse, setGameFriendResponse } = gameFriendResponseProps;
   const { notificationsList, setNotificationsList } = notifications;
   const [notificationsBox, setNotificationsBox] = useState(false);
   const [updateNotifications, setUpdateNotifications] = useState(false);
 
-  const { isAuthenticated } = useAuthContext();
+  const { isAuthenticated, username } = useAuthContext();
 
   useEffect(() => {
     (async function getNotificationsFunc() {
@@ -45,8 +42,7 @@ export default function NotificationsBox({
   useEffect(() => {
     socket?.on("getNotification", async ({ msg, data }) => {
       try {
-        const userNotifications = await getUserNotifications();
-        setNotificationsList(userNotifications);
+        setUpdateNotifications(true);
 
         if (msg == "friendRequestAccepted") {
           setFriendsList((prev) => [...prev, data]);
@@ -56,45 +52,43 @@ export default function NotificationsBox({
       }
     });
 
-    socket?.on("getGameInvitation", async ({ data }) => {
-      if (!friendInvited) {
-        setFriendInvited(data.username);
-        setGameFriendResponse("gameInvitationReceived");
-      } else {
-        await socket.emit("sendGameRejection", {
-          receiverSocketId: data.socketId,
-        });
-      }
+    socket?.on("getGameInvitation", async ({ senderUsername }) => {
+      const gameInvitation = {
+        username: senderUsername,
+        content: " sent game invitation",
+        type: "gameInvitation",
+        notificationBtns: "Accept/Reject",
+      };
+      setNotificationsList((prevNotifications) => [
+        ...prevNotifications,
+        gameInvitation,
+      ]);
+
+      toast.success(
+        senderUsername + " sent game invitation -> check notifications"
+      );
     });
 
-    socket?.on("getGameRejection", async ({}) => {
-      setGameFriendResponse("otherPlayerRoomBusy");
+    socket?.on("getCancelGameInvitation", async ({ senderUsername }) => {
+      setNotificationsList((prevNotifications) => {
+        return prevNotifications.filter((notification) => {
+          notification.username == senderUsername &&
+            notification.type == "gameInvitation";
+        });
+      });
+
+      toast.error(senderUsername + " cancelled game invitation");
+    });
+
+    socket?.on("getRejectGameInvitation", async ({ senderUsername }) => {
+      await socket.emit("leaveRoom", {
+        userUsername: username,
+        friendUsername: senderUsername,
+      });
+      setFriendInvited(null);
+      toast.error(senderUsername + " cancelled game invitation");
     });
   }, [socket]);
-
-  useEffect(() => {
-    if (gameFriendResponse == "gameInvitationReceived") {
-      toast.success("Game invitation received from " + friendInvited);
-    } else if (gameFriendResponse == "otherPlayerRoomBusy") {
-      toast.error("Game invitation received from " + friendInvited);
-      setFriendInvited(null);
-    }
-  }, [gameFriendResponse]);
-
-  useEffect(() => {
-    (async function changePlayerStatus() {
-      const onlineFriends = friendsList.filter(
-        (friend) => friend.online == true
-      );
-      if (onlineFriends.length > 0) {
-        await socket.emit("sendUserStatus", {
-          senderInfo: { username, socketId: socket.id },
-          receiverFriends: onlineFriends,
-          action: "changeToGameInProgress",
-        });
-      }
-    })();
-  }, [friendInvited]);
 
   return (
     <>
@@ -105,10 +99,11 @@ export default function NotificationsBox({
         props={{
           socket,
           notificationsBox,
+          friendsList,
           setFriendsList,
           notificationsList,
           setNotificationsList,
-          isNewGameStarted,
+          friendInvited,
           setUpdateNotifications,
         }}
       />
