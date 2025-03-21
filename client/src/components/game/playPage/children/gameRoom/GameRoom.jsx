@@ -1,35 +1,33 @@
 import { useAuthContext } from "../../../../../contexts/AuthContext";
-import InviteFriend from "./inviteFriend/InviteFriendBtn";
-import "./gameRoom.css";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import CancelGameInvitation from "./buttons/CancelGameInvitation";
+import InviteFriend from "./buttons/InviteFriendBtn";
+import "./gameRoom.css";
 
-export default function GameRoom({ socket, friendProps }) {
-  const {
-    friendsList,
-    friendInvited,
-    setFriendInvited,
-    gameFriendResponse,
-    setGameFriendResponse,
-  } = friendProps;
+export default function GameRoom({ socket, friendProps, notificationsList }) {
+  const { friendsList, friendInvited, setFriendInvited, isNewGameStarted } =
+    friendProps;
 
   const { username } = useAuthContext();
 
   useEffect(() => {
-    const findFriend = friendsList.find(
-      (friend) => friend.username == friendInvited
-    );
+    (async function friendLogsOut() {
+      const findFriend = friendsList.find(
+        (friend) =>
+          friend.username == friendInvited && friend.online == false
+      );
 
-    if (findFriend && findFriend.online == false) {
-      setFriendInvited(null);
-      setGameFriendResponse(null);
-      toast.error(findFriend.username + " left the game");
-    }
+      if (findFriend) {
+        await socket.emit("leaveRoom", {
+          userUsername: username,
+          friendUsername: findFriend.username,
+        });
+        setFriendInvited(null);
+        toast.error(findFriend.username + " left the game");
+      }
+    })();
   }, [friendsList]);
-
-  const friendInvitedCancel = () => {
-    setFriendInvited(null);
-  };
 
   return (
     <div className="game_room_wrapper">
@@ -46,43 +44,27 @@ export default function GameRoom({ socket, friendProps }) {
             {friendInvited ? (
               friendInvited
             ) : (
-              <InviteFriend socket={socket} friendProps={friendProps} />
+              <InviteFriend
+                socket={socket}
+                friendProps={{ friendsList, friendInvited, setFriendInvited }}
+                notificationsList={notificationsList}
+              />
             )}
 
-            {friendInvited && !gameFriendResponse && (
-              <button
-                className="game_room_cancel_btn"
-                onClick={friendInvitedCancel}
-              >
-                Cancel
-              </button>
+            {friendInvited && !isNewGameStarted && (
+              <CancelGameInvitation
+                socket={socket}
+                friendProps={{ friendsList, friendInvited, setFriendInvited }}
+              />
             )}
-
-            {friendInvited &&
-              gameFriendResponse == "gameInvitationReceived" && (
-                <span className="game_room_group_btns">
-                  <button
-                  // onClick={friendInvitedCancel}
-                  >
-                    Play
-                  </button>
-                  <button
-                  // onClick={friendInvitedCancel}
-                  >
-                    Cancel
-                  </button>
-                </span>
-              )}
           </p>
         </div>
       </div>
       <p className="game_room_btn">
         {friendInvited &&
-          !gameFriendResponse &&
+          !isNewGameStarted &&
           `Waiting for ${friendInvited} to respond...`}
-        {friendInvited &&
-          gameFriendResponse == "gameInvitationAccepted" &&
-          "Loading Game..."}
+        {friendInvited && isNewGameStarted && "Loading Game..."}
       </p>
     </div>
   );
