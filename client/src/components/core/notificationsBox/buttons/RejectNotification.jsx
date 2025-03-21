@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
-import { sendFriendResponse } from "../../../../../api/friends-api";
 import { useAuthContext } from "../../../../contexts/AuthContext";
+import { sendFriendResponse } from "../../../../../api/friends-api";
+import { removeNotificationFromNotificationsList } from "../NotificationsBox";
 
 export default function RejectNotification({ props }) {
   const {
@@ -8,7 +9,6 @@ export default function RejectNotification({ props }) {
     friendsList,
     notification,
     setNotificationsList,
-    setUpdateNotifications,
   } = props;
 
   const { username } = useAuthContext();
@@ -27,10 +27,20 @@ export default function RejectNotification({ props }) {
         if (response.status == "online") {
           await socket.emit("sendNotification", {
             receiverSocketId: response.socketId,
+            msg: "friendResponse",
+            data: {
+              friendUsername: username,
+              content: " rejected your friend request",
+              btns: "Mark as read",
+            },
           });
         }
 
-        setUpdateNotifications(true);
+        removeNotificationFromNotificationsList(
+          setNotificationsList,
+          friendUsername,
+          notificationType
+        );
       } catch (error) {
         toast.error(error.message);
       }
@@ -44,14 +54,18 @@ export default function RejectNotification({ props }) {
           receiverSocketId: findFriend.socketId,
           userUsername: username,
         });
+      } else {
+        // If a bug occurs, then this message will show
+        toast.error(
+          friendUsername + " is no longer online - please refresh the page"
+        );
       }
 
-      setNotificationsList((prevNotifications) => {
-        return prevNotifications.filter((notification) => {
-          notification.username == friendUsername &&
-            notification.type == "gameInvitation";
-        });
-      });
+      removeNotificationFromNotificationsList(
+        setNotificationsList,
+        friendUsername,
+        notificationType
+      );
     }
   };
   return (
