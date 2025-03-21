@@ -39,6 +39,17 @@ function configSocket(server) {
     );
 
     socket.on(
+      "setAcceptGameInvitation",
+      ({ receiverSocketId, userUsername, friendUsername }) => {
+        socket.join(`${friendUsername}-${userUsername}`);
+
+        io.to(receiverSocketId).emit("getAcceptGameInvitation", {
+          senderUsername: userUsername,
+        });
+      }
+    );
+
+    socket.on(
       "setCancelGameInvitation",
       ({ receiverSocketId, userUsername, friendUsername }) => {
         socket.leave(`${userUsername}-${friendUsername}`);
