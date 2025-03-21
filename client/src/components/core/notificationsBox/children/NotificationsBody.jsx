@@ -7,10 +7,11 @@ export default function NotificationsBody({ props })
   const {
     socket,
     notificationsBox,
+    friendsList,
     setFriendsList,
     notificationsList,
     setNotificationsList,
-    isNewGameStarted,
+    friendInvited,
     setUpdateNotifications,
   } = props;
   
@@ -39,7 +40,9 @@ export default function NotificationsBody({ props })
                           <RejectNotification
                             props={{
                               socket,
+                              friendsList,
                               notification,
+                              setNotificationsList,
                               setUpdateNotifications,
                             }}
                           />
