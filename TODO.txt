@@ -53,13 +53,13 @@
         + must be "friendUsername"
     + User -> newGameStarted  must be "true"
 
-6. Check all socket requests and make them not to be sent to online users who have "gameInProgress == true"
+6. + Check all socket requests and make them not to be sent to online users who have "gameInProgress == true"
     
-7. Delete not needed css for the buttons in gameRoom.css
+7. + Delete not needed css for the buttons in gameRoom.css
 
-8. Shouldn't be able to send invitation if has already got invitation from this friend
+8. + Shouldn't be able to send invitation if has already got invitation from this friend
 
-9. All notifications are deleted when cancelling game
+9. + All notifications are deleted when cancelling game
 
 // When game finishes:
 

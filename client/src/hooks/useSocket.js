@@ -100,7 +100,7 @@ export default function useSocket(
           );
         }
       });
-      if (action == "friendIsOffline") {
+      if (action == "friendIsOffline" || action == "changeGameInProgress") {
         removeNotificationFromNotificationsList(
           setNotificationsList,
           senderInfo.username,
@@ -117,7 +117,7 @@ export async function sendUpdateToOnlineFriends(
   friendsList,
   action
 ) {
-  const onlineFriends = friendsList.filter((friend) => friend.online == true);
+  const onlineFriends = friendsList.filter((friend) => friend.online == true && !friend.gameInProgress);
   if (onlineFriends.length > 0) {
     await socket.emit("sendUserStatus", {
       senderInfo: { username, socketId: socket.id },
