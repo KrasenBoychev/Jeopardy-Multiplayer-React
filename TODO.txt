@@ -1,67 +1,32 @@
-1. Send game invitation from User to Friend:
-    + Join socket room with the name "userUsername-friendUsername"
+// Exit Game:
 
-    + Send notification to Friend:
-        + update Friend's notificationsList with the new game invitation
-        + toast.success msg
+1. + Test if friendsList will update when click Exit Game
+2. + Check if the players successfully leave the room
+3. + Game in progress should be sent to both players
+4. + Set notifications to update
+5. + Send update to friends that the user is online
+6. + Leave a room if there was another one before
+7. + Check if friends status will change after click Exit Game if they log in or our during the game
 
-    + User -> friendInvited must be "friendUsername"
+// Components that need to be deleted + their css files:
+    + JoinGame.jsx
+    + ConnectPlayers.jsx
 
-2. User clicks "Cancel" or Logs Out (if (friendInvited)): 
-    + Leave socket room with the name "userUsername-friendUsername"
+// Hooks and other files that need to be deleted:
+    + usePlay.js
+    + useLeaveGame.js
+    - GameContext.jsx
 
-    + Send socket response that will trigger:
-        + remove game invitation from the Friend's notificationsList
-        + toast.error msg
+// Uninstall the following:
+    - stream chat library
+    - react-spinners
 
-    + User -> friendInvited must be "null"
-
-// User responds to Friend (swap roles)
-
-3. User clicks "Reject":
-    + Send socket response to Friend -> that will trigger:
-        + toast.error msg
-        + Leave socket room with the name "userUsername-friendUsername"
-        + User - friendInvited must be "null"
-    + Remove game invitation from the notificationsList
-    
-4. User Logs Out if (!friendInvited):
-    + Send socket response to all friends that sent game invitation -> that will trigger:
-        + toast.error msg
-        + Leave socket room with the name "userUsername-friendUsername"
-        + User - friendInvited must be "null"
-
-5. User clicks "Accept":
-    + User "game in progress" changes to "true" for both User and Friend
-        + all online friends must be notififed (except the Friend)
-
-    + Remove all game invitation from notificationsList  for both User and Friend
-
-    + Join socket room with the name "userUsername-friendUsername"
-
-    + Send socket response to Friend -> that will trigger:
-        + toast.success msg
-        + newGameStarted  must be "true"
-
-    + Send socket response to all other friends that sent game invitation for both User and Friend -> that will trigger:
-        + toast.error msg
-        + Leave socket room with the name "userUsername-friendUsername"
-        + User - friendInvited must be "null"
-
-    + User -> friendInvited:
-        + if another friend invited at the same time, delete the game invitation from their notificationsList
-        + must be "friendUsername"
-    + User -> newGameStarted  must be "true"
-
-6. + Check all socket requests and make them not to be sent to online users who have "gameInProgress == true"
-    
-7. + Delete not needed css for the buttons in gameRoom.css
-
-8. + Shouldn't be able to send invitation if has already got invitation from this friend
-
-9. + All notifications are deleted when cancelling game
 
 // When game finishes:
 
 1. When game finishes, get all notifications from the server - this will trigger the notifications 
     received during the game and avoid showing any game invitations if any left by mistake
+
+
+// Last step:
+ - Check all files in "game" folder for commented code!
