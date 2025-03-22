@@ -14,10 +14,18 @@ export default function NotificationsBox({
   friendInvitedProps,
   notifications,
   setIsNewGameStarted,
+  setPlayersProps,
+  gameRoomNameProps,
 }) {
   const { friendsList, setFriendsList } = friendsListProps;
   const { friendInvited, setFriendInvited } = friendInvitedProps;
-  const { notificationsList, setNotificationsList } = notifications;
+  const {
+    notificationsList,
+    setNotificationsList,
+  } = notifications;
+  const { setFirstPlayer, setSecondPlayer } = setPlayersProps;
+  const { gameRoomName, setGameRoomName } = gameRoomNameProps;
+
   const [notificationsBox, setNotificationsBox] = useState(false);
 
   const { isAuthenticated, username } = useAuthContext();
@@ -36,7 +44,7 @@ export default function NotificationsBox({
   }, [isAuthenticated]);
 
   useEffect(() => {
-    socket?.on("getNotification", async ({ msg, data }) => {
+    socket?.on("getNotification", ({ msg, data }) => {
       if (msg == "friendRequestAccepted") {
         setFriendsList((prev) => [...prev, data.friendsListUpdate]);
 
@@ -62,7 +70,7 @@ export default function NotificationsBox({
       }
     });
 
-    socket?.on("getGameInvitation", async ({ senderUsername }) => {
+    socket?.on("getGameInvitation", ({ senderUsername }) => {
       const gameInvitation = {
         username: senderUsername,
         content: " sent game invitation",
@@ -79,12 +87,29 @@ export default function NotificationsBox({
       );
     });
 
-    socket?.on("getAcceptGameInvitation", async ({ senderUsername }) => {
-      setIsNewGameStarted(true);
-      toast.success(senderUsername + " accepted game invitation");
-    });
+    socket?.on(
+      "getAcceptGameInvitation",
+      async ({ senderUsername, roomName, playersInfo }) => {
+        const { startingPlayerDetails, otherPlayerDetails } = playersInfo;
 
-    socket?.on("getCancelGameInvitation", async ({ senderUsername }) => {
+        setFirstPlayer({
+          username: startingPlayerDetails.username,
+          socketId: startingPlayerDetails.socketId,
+        });
+        setSecondPlayer({
+          username: otherPlayerDetails.username,
+          socketId: otherPlayerDetails.socketId,
+        });
+
+        await socket.emit("joinRoom", { gameRoomName: roomName });
+
+        setGameRoomName(roomName);
+        setIsNewGameStarted(true);
+        toast.success(senderUsername + " accepted game invitation");
+      }
+    );
+
+    socket?.on("getCancelGameInvitation", ({ senderUsername }) => {
       removeNotificationFromNotificationsList(
         setNotificationsList,
         senderUsername,
@@ -94,10 +119,6 @@ export default function NotificationsBox({
     });
 
     socket?.on("getRejectGameInvitation", async ({ senderUsername }) => {
-      await socket.emit("leaveRoom", {
-        userUsername: username,
-        friendUsername: senderUsername,
-      });
       setFriendInvited(null);
       toast.error(senderUsername + " cancelled game invitation");
     });
@@ -119,6 +140,9 @@ export default function NotificationsBox({
           friendInvited,
           setFriendInvited,
           setIsNewGameStarted,
+          setFirstPlayer,
+          setSecondPlayer,
+          setGameRoomName,
         }}
       />
     </>
