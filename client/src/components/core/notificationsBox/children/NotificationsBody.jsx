@@ -13,6 +13,9 @@ export default function NotificationsBody({ props }) {
     friendInvited,
     setFriendInvited,
     setIsNewGameStarted,
+    setFirstPlayer,
+    setSecondPlayer,
+    setGameRoomName,
   } = props;
 
   return (
@@ -38,6 +41,9 @@ export default function NotificationsBody({ props }) {
                               setFriendInvited,
                               setNotificationsList,
                               setIsNewGameStarted,
+                              setFirstPlayer,
+                              setSecondPlayer,
+                              setGameRoomName,
                             }}
                           />
                           <RejectNotification
