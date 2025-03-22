@@ -27,33 +27,15 @@ function configSocket(server) {
       io.to(receiverSocketId).emit("getNotification", { msg, data });
     });
 
-    socket.on(
-      "sendGameInvitation",
-      ({ receiverSocketId, userUsername, friendUsername }) => {
-        socket.join(`${userUsername}-${friendUsername}`);
-
-        io.to(receiverSocketId).emit("getGameInvitation", {
-          senderUsername: userUsername,
-        });
-      }
-    );
-
-    socket.on(
-      "setAcceptGameInvitation",
-      ({ receiverSocketId, userUsername, friendUsername }) => {
-        socket.join(`${friendUsername}-${userUsername}`);
-
-        io.to(receiverSocketId).emit("getAcceptGameInvitation", {
-          senderUsername: userUsername,
-        });
-      }
-    );
+    socket.on("sendGameInvitation", ({ receiverSocketId, userUsername }) => {
+      io.to(receiverSocketId).emit("getGameInvitation", {
+        senderUsername: userUsername,
+      });
+    });
 
     socket.on(
       "setCancelGameInvitation",
-      ({ receiverSocketId, userUsername, friendUsername }) => {
-        socket.leave(`${userUsername}-${friendUsername}`);
-
+      ({ receiverSocketId, userUsername }) => {
         io.to(receiverSocketId).emit("getCancelGameInvitation", {
           senderUsername: userUsername,
         });
@@ -69,9 +51,38 @@ function configSocket(server) {
       }
     );
 
-    socket.on("leaveRoom", ({ userUsername, friendUsername }) => {
-      socket.leave(`${userUsername}-${friendUsername}`);
+    socket.on(
+      "setAcceptGameInvitation",
+      ({ receiverSocketId, userUsername, roomName, playersInfo }) => {
+        socket.join(roomName);
+
+        io.to(receiverSocketId).emit("getAcceptGameInvitation", {
+          senderUsername: userUsername,
+          roomName,
+          playersInfo,
+        });
+      }
+    );
+
+    socket.on("joinRoom", ({ gameRoomName }) => {
+      socket.join(gameRoomName);
     });
+
+    socket.on("leaveRoom", ({ gameRoomName }) => {
+      socket.leave(gameRoomName);
+    });
+
+    socket.on(
+      "setExitGame",
+      ({ receiverSocketId, userUsername, gameRoomName }) => {
+        socket.leave(gameRoomName);
+
+        io.to(receiverSocketId).emit("getExitGame", {
+          senderUsername: userUsername,
+          gameRoomName,
+        });
+      }
+    );
 
     socket.on("disconnect", async () => {});
   });
