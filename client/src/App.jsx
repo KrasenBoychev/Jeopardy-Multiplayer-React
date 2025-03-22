@@ -21,17 +21,25 @@ import Create from "./components/create/Create";
 import CreateCategory from "./components/create/createCategory/CreateCategory";
 import CreateQuestion from "./components/create/createQuestion/CreateQuestion";
 import NotFound from "./components/core/notFound/NotFound";
-import PlayPage from "./components/game/playPage/PlayPage";
+import PlayPage from "./components/game/01. play_page/PlayPage";
 import Socket from "./components/core/Socket";
 import NotificationsBox from "./components/core/notificationsBox/NotificationsBox";
 
 function App() {
-  const [isNewGameStarted, setIsNewGameStarted] = useState(false);
-  const [globalChannel, setGlobalChannel] = useState(null);
   const [socket, setSocket] = useState(null);
   const [friendsList, setFriendsList] = useState([]);
   const [friendInvited, setFriendInvited] = useState(null);
   const [notificationsList, setNotificationsList] = useState([]);
+  const [isNewGameStarted, setIsNewGameStarted] = useState(false);
+  const [firstPlayer, setFirstPlayer] = useState({
+    username: null,
+    socketId: null,
+  });
+  const [secondPlayer, setSecondPlayer] = useState({
+    username: null,
+    socketId: null,
+  });
+  const [gameRoomName, setGameRoomName] = useState(null);
 
   return (
     <>
@@ -53,23 +61,19 @@ function App() {
             socket={socket}
             friendsListProps={{ friendsList, setFriendsList }}
             friendInvitedProps={{ friendInvited, setFriendInvited }}
-            notifications={{ notificationsList, setNotificationsList }}
+            notifications={{
+              notificationsList,
+              setNotificationsList,
+            }}
             setIsNewGameStarted={setIsNewGameStarted}
+            setPlayersProps={{ setFirstPlayer, setSecondPlayer }}
+            gameRoomNameProps={{ gameRoomName, setGameRoomName }}
           />
         )}
 
         <main>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <Home
-                  // game={{ isNewGameStarted, setIsNewGameStarted }}
-                  // globalChannelInfo={{ globalChannel, setGlobalChannel }}
-                  socket={socket}
-                />
-              }
-            />
+            <Route path="/" element={<Home socket={socket} />} />
             <Route path="/about" element={<About />} />
 
             <Route element={<PublicGuard />}>
@@ -82,16 +86,19 @@ function App() {
                 path="/play"
                 element={
                   <PlayPage
-                    // game={{ isNewGameStarted, setIsNewGameStarted }}
-                    // globalChannelInfo={{ globalChannel, setGlobalChannel }}
                     socket={socket}
                     friendsProps={{
                       friendsList,
                       friendInvited,
                       setFriendInvited,
                       isNewGameStarted,
+                      setIsNewGameStarted,
                     }}
-                    notificationsList={notificationsList}
+                    notifications={{
+                      notificationsList,
+                    }}
+                    playersProps={{ firstPlayer, secondPlayer }}
+                    gameRoomNameProps={{ gameRoomName, setGameRoomName }}
                   />
                 }
               />
