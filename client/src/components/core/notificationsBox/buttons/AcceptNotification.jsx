@@ -13,6 +13,9 @@ export default function AcceptNotification({ props }) {
     setFriendInvited,
     setNotificationsList,
     setIsNewGameStarted,
+    setFirstPlayer,
+    setSecondPlayer,
+    setGameRoomName,
   } = props;
   const { username } = useAuthContext();
 
@@ -76,13 +79,30 @@ export default function AcceptNotification({ props }) {
       );
 
       if (findFriend && findFriend.online && !findFriend.gameInProgress) {
+        const usernameDetais = { username, socketId: socket.id };
+        const friendDetails = {
+          username: friendUsername,
+          socketId: findFriend.socketId,
+        };
+
+        const { startingPlayerDetails, otherPlayerDetails } = setPlayers(
+          usernameDetais,
+          friendDetails,
+          setFirstPlayer,
+          setSecondPlayer
+        );
+
+        const roomName = `${friendUsername}-${username}`;
+
         await socket.emit("setAcceptGameInvitation", {
           receiverSocketId: findFriend.socketId,
           userUsername: username,
-          friendUsername,
+          roomName,
+          playersInfo: { startingPlayerDetails, otherPlayerDetails },
         });
 
         setFriendInvited(friendUsername);
+        setGameRoomName(roomName);
         setIsNewGameStarted(true);
       } else {
         // If a bug occurs, then this message will show
@@ -103,4 +123,26 @@ export default function AcceptNotification({ props }) {
       Accept
     </button>
   );
+}
+
+function setPlayers(
+  usernameDetais,
+  friendDetails,
+  setFirstPlayer,
+  setSecondPlayer
+) {
+  const playersNames = [usernameDetais, friendDetails];
+
+  const startingPlayerDetails =
+    playersNames[Math.floor(Math.random() * playersNames.length)];
+
+  const indexOfStartingPlayer = playersNames.indexOf(startingPlayerDetails);
+
+  playersNames.splice(indexOfStartingPlayer, 1);
+  const otherPlayerDetails = playersNames[0];
+
+  setFirstPlayer(startingPlayerDetails);
+  setSecondPlayer(otherPlayerDetails);
+
+  return { startingPlayerDetails, otherPlayerDetails };
 }
