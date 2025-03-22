@@ -9,6 +9,6 @@ export default function Socket(props) {
   const friendInvited = props.friendInvited;
 
   useSocket(socket, setSocket, setFriendsList, setNotificationsList);
-  useNewGameStarted(socket, friendsList, friendInvited, isNewGameStarted);
+  useNewGameStarted(socket, friendsList, isNewGameStarted);
   return;
 }
