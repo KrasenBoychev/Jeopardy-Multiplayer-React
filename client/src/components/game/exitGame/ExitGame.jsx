@@ -1,60 +1,81 @@
-import useLeaveGame from "../../../hooks/useLeaveGame";
-import { useGameContext } from "../../../contexts/GameContext";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useAuthContext } from "../../../contexts/AuthContext";
+import { changeGameInProgress } from "../../../hooks/useNewGameStarted";
 import Confrim from "./confirm/Confrim";
 import "./exit.css";
 
-export default function ExitGame() {
-  const { channel, setChannel, client, setIsNewGameStarted } = useGameContext();
+export default function ExitGame({ props }) {
+  const {
+    socket,
+    friendsList,
+    setFriendInvited,
+    gameRoomName,
+    setGameRoomName,
+    setRenderStartingPlayer,
+    setIsNewGameStarted,
+    firstPlayer,
+    secondPlayer,
+  } = props;
+  const [showConfirmMessage, setShowConfirmMessage] = useState(false);
 
-  const [
-    setLeave,
-    setDisconnect,
-    setLeavingPlayer,
-    showConfirmMessage,
-    setShowConfirmMessage,
-    navigate,
-  ] = useLeaveGame(setIsNewGameStarted, channel, setChannel, client);
+  const { username } = useAuthContext();
+  const navigate = useNavigate();
 
-  const leavePage = async () => {
-    if (channel) {
-      setShowConfirmMessage(true);
-    } else {
-      client.disconnectUser();
-      setLeave(true);
-      navigate("/");
-    }
+  const leaveGameClickHandler = () => {
+    setShowConfirmMessage(true);
   };
 
-  const confirmLeaving = async () => {
-    setLeavingPlayer(client.user.name);
+  useEffect(() => {
+    socket?.on("getExitGame", async ({ senderUsername, gameRoomName }) => {
+      await socket.emit("leaveRoom", {
+        gameRoomName,
+      });
 
-    await channel.sendEvent({
-      type: "leave-game",
+      toast.error(
+        senderUsername + " exit the game. You will be redirected in 3 seconds"
+      );
+
+      setTimeout(async () => {
+        const gameInProgressValue = false;
+        await changeGameInProgress(
+          socket,
+          friendsList,
+          username,
+          gameInProgressValue,
+          navigate,
+          null
+        );
+        setRenderStartingPlayer(false);
+        setGameRoomName(null);
+        setFriendInvited(null);
+        setIsNewGameStarted(false);
+        window.location.reload();
+        navigate("/play");
+      }, 3000);
     });
-  };
+  }, [socket]);
 
-  const declineLeaving = () => {
-    setShowConfirmMessage(false);
-  };
-
-  if (channel) {
-    channel.on((event) => {
-      if (event.type == "leave-game") {
-        setDisconnect(true);
-      }
-    });
-  }
   return (
     <>
       <div className="exit-game-container">
-        <p onClick={leavePage}>Exit Game</p>
+        <p onClick={leaveGameClickHandler}>Exit Game</p>
       </div>
 
       {showConfirmMessage && (
         <Confrim
           props={{
-            confirmLeaving,
-            declineLeaving,
+            socket,
+            friendsList,
+            setShowConfirmMessage,
+            setFriendInvited,
+            gameRoomName,
+            setGameRoomName,
+            setRenderStartingPlayer,
+            setIsNewGameStarted,
+            firstPlayer,
+            secondPlayer,
           }}
         />
       )}
