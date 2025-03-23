@@ -1,0 +1,59 @@
+import { useAuthContext } from "../../../contexts/AuthContext";
+import { useGameContext } from "../../../contexts/GameContext";
+
+export default function CategoryModel({ props }) {
+  const {
+    categoryInfo,
+    currCategoryCount,
+    allCategories,
+    chosenOption,
+    selectQuestion,
+    activePlayer,
+    defaultOption,
+  } = props;
+
+  const { username } = useAuthContext();
+
+  return (
+    <div
+      className={
+        currCategoryCount > categoryInfo[0]
+          ? "chosen_category category_model"
+          : currCategoryCount == categoryInfo[0]
+          ? "category_model"
+          : "inactiveCat category_model"
+      }
+    >
+      {currCategoryCount == categoryInfo[0] ? (
+        <>
+          <select
+            name="category"
+            id="category"
+            disabled={username === activePlayer ? false : true}
+            value={categoryInfo[1].category}
+            onChange={chosenOption}
+          >
+            {allCategories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+          <button
+            disabled={
+              username === activePlayer &&
+              categoryInfo[1].category !== defaultOption
+                ? false
+                : true
+            }
+            onClick={selectQuestion}
+          >
+            Ready
+          </button>
+        </>
+      ) : (
+        <p>{categoryInfo[1].category}</p>
+      )}
+    </div>
+  );
+}
