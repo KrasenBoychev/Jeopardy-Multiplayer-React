@@ -18,11 +18,11 @@ export default function Counter({ props }) {
   }, 1000);
 
   return (
-    <div className="game-container">
+    <div className="game_container">
       {gameReady ? (
         <StartingPlayer players={{ firstPlayer, secondPlayer }} />
       ) : (
-        <p className="visualize-player-counter">{counter}</p>
+        <p className="player_counter">{counter}</p>
       )}
     </div>
   );
