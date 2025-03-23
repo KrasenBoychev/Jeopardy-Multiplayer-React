@@ -1,45 +1,45 @@
-.game-container {
-    padding-bottom: 20px;
-    flex-grow: 1;
-    align-content: center;
-    justify-items: center;
-    background-color: var(--baby-blue);
+.game_container {
+  padding-bottom: 20px;
+  flex-grow: 1;
+  align-content: center;
+  justify-items: center;
+  background-color: var(--baby-blue);
 }
 
-.game-wrapper {
-    width: 500px;
-    padding: 20px;
-    letter-spacing: 1.5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    color: var(--white);
-    background-color: var(--midnight-blue);
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    border-radius: 5px;
+/* .game-wrapper {
+  width: 500px;
+  padding: 20px;
+  letter-spacing: 1.5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  color: var(--white);
+  background-color: var(--midnight-blue);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  border-radius: 5px;
+} */
+
+.player_categories {
+  padding: 20px;
+  text-align: center;
+  font-size: 1.5rem;
+  letter-spacing: 1.5px;
+  color: var(--white);
+  background-color: var(--midnight-blue);
+  box-shadow: var(--white) 0px 2px 5px;
 }
 
-.player-categories {
-    padding: 20px;
-    text-align: center;
-    font-size: 1.5rem;
-    letter-spacing: 1.5px;
-    color: var(--white);
-    background-color: var(--midnight-blue);
-    box-shadow: var(--white) 0px 2px 5px;
+.active_player {
+  background-color: var(--purple);
 }
 
-.active-player {
-    background-color: var(--purple);
+.answer_correct {
+  color: var(--white);
+  background-color: yellowgreen;
 }
 
-.answer-correct {
-    color: var(--white);
-    background-color: yellowgreen;
-}
-
-.answer-wrong {
-    color: var(--white);
-    background-color: red;
+.answer_wrong {
+  color: var(--white);
+  background-color: red;
 }
