@@ -3,7 +3,8 @@ import { useGameContext } from "../../../contexts/GameContext";
 
 export default function CategoryModel({ props }) {
   const {
-    categoryInfo,
+    categoryName,
+    categoryIndex,
     currCategoryCount,
     allCategories,
     chosenOption,
@@ -17,20 +18,20 @@ export default function CategoryModel({ props }) {
   return (
     <div
       className={
-        currCategoryCount > categoryInfo[0]
+        currCategoryCount > categoryIndex
           ? "chosen_category category_model"
-          : currCategoryCount == categoryInfo[0]
+          : currCategoryCount == categoryIndex
           ? "category_model"
           : "inactiveCat category_model"
       }
     >
-      {currCategoryCount == categoryInfo[0] ? (
+      {currCategoryCount == categoryIndex ? (
         <>
           <select
             name="category"
             id="category"
             disabled={username === activePlayer ? false : true}
-            value={categoryInfo[1].category}
+            value={categoryName}
             onChange={chosenOption}
           >
             {allCategories.map((category) => (
@@ -41,8 +42,7 @@ export default function CategoryModel({ props }) {
           </select>
           <button
             disabled={
-              username === activePlayer &&
-              categoryInfo[1].category !== defaultOption
+              username === activePlayer && categoryName !== defaultOption
                 ? false
                 : true
             }
@@ -52,7 +52,7 @@ export default function CategoryModel({ props }) {
           </button>
         </>
       ) : (
-        <p>{categoryInfo[1].category}</p>
+        <p>{categoryName}</p>
       )}
     </div>
   );
