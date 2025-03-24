@@ -4,7 +4,7 @@ import "./counter.css";
 import "../game.css";
 
 export default function Counter({ props }) {
-  const { firstPlayer, secondPlayer } = props;
+  const { socket, firstPlayer, secondPlayer } = props;
   const [gameReady, setGameReady] = useState(false);
   const [counter, setCounter] = useState(3);
 
@@ -20,7 +20,7 @@ export default function Counter({ props }) {
   return (
     <div className="game_container">
       {gameReady ? (
-        <StartingPlayer players={{ firstPlayer, secondPlayer }} />
+        <StartingPlayer props={{ socket, firstPlayer, secondPlayer }} />
       ) : (
         <p className="player_counter">{counter}</p>
       )}

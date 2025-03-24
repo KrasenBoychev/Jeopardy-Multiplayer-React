@@ -39,7 +39,7 @@ export default function PlayPage({
     <>
       {renderStartingPlayer ? (
         <>
-          <Counter props={{ friendInvited, firstPlayer, secondPlayer }} />
+          <Counter props={{ socket, firstPlayer, secondPlayer }} />
           <ExitGame
             props={{
               socket,

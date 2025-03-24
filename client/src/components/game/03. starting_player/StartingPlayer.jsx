@@ -4,7 +4,8 @@ import "../game.css";
 
 import Categories from "../04. categories/Categories";
 
-export default function StartingPlayer({ players }) {
+export default function StartingPlayer({ props }) {
+  const { socket, firstPlayer, secondPlayer } = props;
   const [categories, setCategories] = useState(false);
 
   setTimeout(() => {
@@ -12,11 +13,11 @@ export default function StartingPlayer({ players }) {
   }, 2500);
 
   return categories ? (
-    <Categories props={{ players }} />
+    <Categories props={{ socket, firstPlayer, secondPlayer }} />
   ) : (
     <>
       <div className="game_container">
-        <p className="starting_player">{players.firstPlayer.username}</p>
+        <p className="starting_player">{firstPlayer.username}</p>
       </div>
     </>
   );
