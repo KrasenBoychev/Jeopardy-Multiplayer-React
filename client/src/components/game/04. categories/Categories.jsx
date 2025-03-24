@@ -6,29 +6,37 @@ import CategoryModel from "./CategoryModel";
 import "./categories.css";
 import "../game.css";
 import { useAuthContext } from "../../../contexts/AuthContext";
+import {
+  getFriendSocketId,
+  setNewActivePlayer,
+} from "../../../utils/gameUtils";
 
 export default function Categories({ props }) {
-  const { firstPlayer, secondPlayer } = props.players;
+  const { socket, firstPlayer, secondPlayer } = props;
   const { username } = useAuthContext();
 
-  const [activePlayer, setActivePlayer] = useState(firstPlayer.username);
   const [currOption, setCurrOption] = useState("");
 
   const [
+    activePlayer,
+    setActivePlayer,
     currCategoryCount,
     setCurrCategoryCount,
     moveToNextPage,
     allCategories,
     setAllCategories,
-    categoriesInfo,
     defaultOption,
     questions,
     setQuestions,
     setRandomNumber,
-  ] = useCategories();
+    categoriesNames,
+    setCategoriesNames,
+  ] = useCategories(socket, firstPlayer);
 
   const chosenOption = async (e) => {
-    categoriesInfo[currCategoryCount].setCategory(e.target.value);
+    const newArray = categoriesNames;
+    newArray.splice(currCategoryCount, 1, e.target.value);
+    setCategoriesNames(newArray);
     setCurrOption(e.target.value);
   };
 
@@ -39,18 +47,39 @@ export default function Categories({ props }) {
       updateCategories.splice(index, 1);
       setAllCategories(updateCategories);
 
-      setCurrCategoryCount(currCategoryCount + 1);
+      const newCategoryCount = currCategoryCount + 1;
+      setCurrCategoryCount(newCategoryCount);
 
-      activePlayer == username
-        ? setActivePlayer(secondPlayer)
-        : setActivePlayer(firstPlayer);
+      const newActivePlayer = setNewActivePlayer(
+        activePlayer,
+        setActivePlayer,
+        firstPlayer,
+        secondPlayer
+      );
+
+      const socketData = {
+        categoriesNames,
+        newCategories: updateCategories,
+        newCategoryCount,
+        newActivePlayer,
+      };
 
       if (currCategoryCount == 3) {
         const generatenNumber = Math.random();
         setRandomNumber(generatenNumber);
+        socketData.generatenNumber = generatenNumber;
       }
 
-      //TO DO: await socket....
+      const friendSocketId = getFriendSocketId(
+        activePlayer,
+        firstPlayer,
+        secondPlayer
+      );
+
+      await socket.emit("sendCategorySelected", {
+        receiverSocketId: friendSocketId,
+        socketData,
+      });
     }
   };
 
@@ -81,12 +110,13 @@ export default function Categories({ props }) {
               : "Loading Questions..."}
           </p>
           <div className="categories_container">
-            {Object.entries(categoriesInfo).map((categoryInfo) => {
+            {categoriesNames.map((categoryName, categoryIndex) => {
               return (
                 <CategoryModel
-                  key={categoryInfo[0]}
+                  key={categoryIndex}
                   props={{
-                    categoryInfo,
+                    categoryName,
+                    categoryIndex,
                     currCategoryCount,
                     allCategories,
                     chosenOption,
