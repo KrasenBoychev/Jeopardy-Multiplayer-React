@@ -4,39 +4,24 @@ import toast from "react-hot-toast";
 import { getAllCategories, getQuestions } from "../../api/game-api";
 import { points } from "../common/gamePoints";
 
-export default function useCategories() {
+export default function useCategories(socket, firstPlayer) {
   const defaultOption = "--- Choose Category ---";
 
+  const [activePlayer, setActivePlayer] = useState(firstPlayer.username);
   const [currCategoryCount, setCurrCategoryCount] = useState(0);
   const [randomNumber, setRandomNumber] = useState(0);
   const [moveToNextPage, setMoveToNextPage] = useState(false);
 
-  const [catA, setCatA] = useState(defaultOption);
-  const [catB, setCatB] = useState(defaultOption);
-  const [catC, setCatC] = useState(defaultOption);
-  const [catD, setCatD] = useState(defaultOption);
   const [allCategories, setAllCategories] = useState([]);
   const [allCategoriesInfo, setAllCategoriesInfo] = useState([]);
   const [questions, setQuestions] = useState({});
 
-  const categoriesInfo = {
-    0: {
-      category: catA,
-      setCategory: setCatA,
-    },
-    1: {
-      category: catB,
-      setCategory: setCatB,
-    },
-    2: {
-      category: catC,
-      setCategory: setCatC,
-    },
-    3: {
-      category: catD,
-      setCategory: setCatD,
-    },
-  };
+  const [categoriesNames, setCategoriesNames] = useState([
+    defaultOption,
+    defaultOption,
+    defaultOption,
+    defaultOption,
+  ]);
 
   useEffect(() => {
     (async function getCategories() {
@@ -50,6 +35,24 @@ export default function useCategories() {
       }
     })();
   });
+
+  useEffect(() => {
+    (async function changeActivePlayer() {
+      socket?.on("getCategorySelected", ({ socketData }) => {
+        const {
+          categoriesNames,
+          newCategories,
+          newCategoryCount,
+          newActivePlayer,
+        } = socketData;
+
+        setCategoriesNames(categoriesNames);
+        setCurrCategoryCount(newCategoryCount);
+        setAllCategories(newCategories);
+        setActivePlayer(newActivePlayer);
+      });
+    })();
+  }, [socket]);
 
   useEffect(() => {
     (async function changePage() {
@@ -82,7 +85,7 @@ export default function useCategories() {
                 questionsMatching[
                   Math.floor(randomNumber * questionsMatching.length)
                 ];
-              catQuestions.push({ question: randomQuestion, answered: false});
+              catQuestions.push({ question: randomQuestion, answered: false });
             });
 
             gameQuestions[cat] = catQuestions;
@@ -101,15 +104,18 @@ export default function useCategories() {
   }, [currCategoryCount]);
 
   return [
+    activePlayer,
+    setActivePlayer,
     currCategoryCount,
     setCurrCategoryCount,
     moveToNextPage,
     allCategories,
     setAllCategories,
-    categoriesInfo,
     defaultOption,
     questions,
     setQuestions,
     setRandomNumber,
+    categoriesNames,
+    setCategoriesNames,
   ];
 }
