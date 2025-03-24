@@ -84,6 +84,15 @@ function configSocket(server) {
       }
     );
 
+    socket.on(
+      "sendCategorySelected",
+      ({ receiverSocketId, socketData }) => {
+        io.to(receiverSocketId).emit("getCategorySelected", {
+          socketData,
+        });
+      }
+    );
+
     socket.on("disconnect", async () => {});
   });
 }
