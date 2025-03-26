@@ -84,14 +84,17 @@ function configSocket(server) {
       }
     );
 
-    socket.on(
-      "sendCategorySelected",
-      ({ receiverSocketId, socketData }) => {
-        io.to(receiverSocketId).emit("getCategorySelected", {
-          socketData,
-        });
-      }
-    );
+    socket.on("sendCategorySelected", ({ receiverSocketId, socketData }) => {
+      io.to(receiverSocketId).emit("getCategorySelected", {
+        socketData,
+      });
+    });
+
+    socket.on("sendQuestions", ({ receiverSocketId, gameQuestions }) => {
+      io.to(receiverSocketId).emit("getQuestions", {
+        gameQuestions,
+      });
+    });
 
     socket.on("disconnect", async () => {});
   });
