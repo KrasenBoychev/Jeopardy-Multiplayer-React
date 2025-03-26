@@ -1,4 +1,4 @@
-import { useGameContext } from "../../../../contexts/GameContext";
+import { useAuthContext } from "../../../../contexts/AuthContext";
 import QuestionModel from "./QuestionModel";
 
 export default function RenderQuestions({ props }) {
@@ -11,20 +11,20 @@ export default function RenderQuestions({ props }) {
     questions,
   } = props;
 
-  const { client } = useGameContext();
+  const { username } = useAuthContext();
 
   return (
-    <div className="questions-page-wrapper">
+    <div className="questions_page_wrapper">
       <section>
-        <div className="players-points-wrapper">
+        <div className="players_points_wrapper">
           <h3>Score</h3>
-          <div className="players-points">
-            <p className="points-first-player">
-              <span>{firstPlayer}:</span>
+          <div className="players_points">
+            <p className="points_first_player">
+              <span>{firstPlayer.username}:</span>
               <span>{pointsFirstPlayer} points</span>
             </p>
-            <p className="points-second-player">
-              <span>{secondPlayer}:</span>
+            <p className="points_second_player">
+              <span>{secondPlayer.username}:</span>
               <span>{pointsSecondPlayer} points</span>
             </p>
           </div>
@@ -34,14 +34,14 @@ export default function RenderQuestions({ props }) {
       <section>
         <p
           className={
-            client.user.name === activePlayer
-              ? "active-player player-categories"
-              : "player-categories"
+            username === activePlayer
+              ? "active_player player_categories"
+              : "player_categories"
           }
         >
           {activePlayer} chooses question
         </p>
-        <div className="categories-names">
+        <div className="categories_names">
           {Object.keys(questions).map((categoryName) => {
             return (
               <QuestionModel key={categoryName} props={{ categoryName }} />
@@ -49,7 +49,7 @@ export default function RenderQuestions({ props }) {
           })}
         </div>
 
-        <div className="questions-container">
+        <div className="questions_container">
           {Object.entries(questions).map((item, indexItem) => {
             return (
               <div key={indexItem}>
