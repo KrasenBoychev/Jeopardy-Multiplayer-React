@@ -31,7 +31,8 @@ export default function Categories({ props }) {
     setRandomNumber,
     categoriesNames,
     setCategoriesNames,
-  ] = useCategories(socket, firstPlayer);
+    setCallQuestions,
+  ] = useCategories(socket, firstPlayer, secondPlayer);
 
   const chosenOption = async (e) => {
     const newArray = categoriesNames;
@@ -64,12 +65,6 @@ export default function Categories({ props }) {
         newActivePlayer,
       };
 
-      if (currCategoryCount == 3) {
-        const generatenNumber = Math.random();
-        setRandomNumber(generatenNumber);
-        socketData.generatenNumber = generatenNumber;
-      }
-
       const friendSocketId = getFriendSocketId(
         activePlayer,
         firstPlayer,
@@ -80,6 +75,12 @@ export default function Categories({ props }) {
         receiverSocketId: friendSocketId,
         socketData,
       });
+
+      if (currCategoryCount == 3) {
+        const generateNumber = Math.random();
+        setRandomNumber(generateNumber);
+        setCallQuestions(true);
+      }
     }
   };
 
