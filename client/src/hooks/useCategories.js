@@ -3,8 +3,9 @@ import toast from "react-hot-toast";
 
 import { getAllCategories, getQuestions } from "../../api/game-api";
 import { points } from "../common/gamePoints";
+import { getFriendSocketId } from "../utils/gameUtils";
 
-export default function useCategories(socket, firstPlayer) {
+export default function useCategories(socket, firstPlayer, secondPlayer) {
   const defaultOption = "--- Choose Category ---";
 
   const [activePlayer, setActivePlayer] = useState(firstPlayer.username);
@@ -15,6 +16,7 @@ export default function useCategories(socket, firstPlayer) {
   const [allCategories, setAllCategories] = useState([]);
   const [allCategoriesInfo, setAllCategoriesInfo] = useState([]);
   const [questions, setQuestions] = useState({});
+  const [callQuestions, setCallQuestions] = useState(false);
 
   const [categoriesNames, setCategoriesNames] = useState([
     defaultOption,
@@ -37,28 +39,34 @@ export default function useCategories(socket, firstPlayer) {
   });
 
   useEffect(() => {
-    (async function changeActivePlayer() {
-      socket?.on("getCategorySelected", ({ socketData }) => {
-        const {
-          categoriesNames,
-          newCategories,
-          newCategoryCount,
-          newActivePlayer,
-        } = socketData;
+    socket?.on("getCategorySelected", ({ socketData }) => {
+      const {
+        categoriesNames,
+        newCategories,
+        newCategoryCount,
+        newActivePlayer,
+      } = socketData;
 
-        setCategoriesNames(categoriesNames);
-        setCurrCategoryCount(newCategoryCount);
-        setAllCategories(newCategories);
-        setActivePlayer(newActivePlayer);
-      });
-    })();
+      setCategoriesNames(categoriesNames);
+      setCurrCategoryCount(newCategoryCount);
+      setAllCategories(newCategories);
+      setActivePlayer(newActivePlayer);
+    });
+
+    socket?.on("getQuestions", ({ gameQuestions }) => {
+      setQuestions(gameQuestions);
+
+      setTimeout(() => {
+        setMoveToNextPage(true);
+      }, 500);
+    });
   }, [socket]);
 
   useEffect(() => {
     (async function changePage() {
       if (currCategoryCount == 4) {
         const categoriesIDs = allCategoriesInfo
-          .filter((c) => [catA, catB, catC, catD].includes(c.name))
+          .filter((c) => categoriesNames.includes(c.name))
           .map((c) => c._id);
 
         try {
@@ -66,9 +74,9 @@ export default function useCategories(socket, firstPlayer) {
 
           const gameQuestions = {};
 
-          [catA, catB, catC, catD].map((cat) => {
+          categoriesNames.map((catName) => {
             const currCatInfo = allCategoriesInfo.filter(
-              (catInfo) => catInfo.name == cat
+              (catInfo) => catInfo.name == catName
             );
             const currCatID = currCatInfo[0]._id;
 
@@ -88,20 +96,31 @@ export default function useCategories(socket, firstPlayer) {
               catQuestions.push({ question: randomQuestion, answered: false });
             });
 
-            gameQuestions[cat] = catQuestions;
+            gameQuestions[catName] = catQuestions;
           });
 
           setQuestions(gameQuestions);
+
+          // active player has already changed (selectQuestion in Categories)
+          const friendSocketId =
+            activePlayer == firstPlayer.username
+              ? firstPlayer.socketId
+              : secondPlayer.socketId;
+
+          await socket.emit("sendQuestions", {
+            receiverSocketId: friendSocketId,
+            gameQuestions,
+          });
+
+          setTimeout(() => {
+            setMoveToNextPage(true);
+          }, 500);
         } catch (error) {
           return toast.error(error.message);
         }
-
-        setTimeout(() => {
-          setMoveToNextPage(true);
-        }, 500);
       }
     })();
-  }, [currCategoryCount]);
+  }, [callQuestions]);
 
   return [
     activePlayer,
@@ -117,5 +136,6 @@ export default function useCategories(socket, firstPlayer) {
     setRandomNumber,
     categoriesNames,
     setCategoriesNames,
+    setCallQuestions,
   ];
 }
