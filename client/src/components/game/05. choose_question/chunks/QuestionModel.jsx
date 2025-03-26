@@ -1,35 +1,27 @@
-import { useGameContext } from "../../../../contexts/GameContext";
+import { useAuthContext } from "../../../../contexts/AuthContext";
 
 export default function QuestionModel({ props }) {
   const { activePlayer, categoryName, question, questionAnswered } = props;
-
-  const { channel, client } = useGameContext();
+  const { username } = useAuthContext();
 
   const showQuestionClickHandler = async () => {
     if (questionAnswered) {
       return;
-    }
 
-    await channel.sendEvent({
-      type: "choose-question",
-      data: {
-        activePlayer,
-        categoryName,
-        question,
-      },
-    });
+      //TO DO
+    }
   };
 
   return (
     <div
       className={
         !props.question
-          ? "category-box"
+          ? "category_box"
           : questionAnswered
-          ? "question-box question-answered"
-          : client.user.name === activePlayer
-          ? "question-box active-box"
-          : "question-box inactive-box"
+          ? "question_box question_answered"
+          : username === activePlayer
+          ? "question_box active_box"
+          : "question_box inactive_box"
       }
       onClick={showQuestionClickHandler}
     >
