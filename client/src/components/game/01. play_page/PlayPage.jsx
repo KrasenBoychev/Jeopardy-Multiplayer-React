@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
+import { useAuthContext } from "../../../contexts/AuthContext";
+import { GameContext } from "../../../contexts/GameContext";
 import StartGameWithOtherPlayer from "./children/startGameWithOtherPlayer/StartGameWithOtherPlayer";
 import FriendsList from "./children/friendsList/FriendsList";
 import GameRoom from "./children/gameRoom/GameRoom";
 import Counter from "../02. counter/Counter";
 import ExitGame from "../exitGame/ExitGame";
-
 import "./playPage.css";
 
 export default function PlayPage({
@@ -27,6 +28,10 @@ export default function PlayPage({
 
   const [renderStartingPlayer, setRenderStartingPlayer] = useState(false);
 
+  const { username } = useAuthContext();
+  const friendDetails =
+    firstPlayer.username != username ? firstPlayer : secondPlayer;
+
   useEffect(() => {
     if (isNewGameStarted) {
       setTimeout(() => {
@@ -38,24 +43,27 @@ export default function PlayPage({
   return (
     <>
       {renderStartingPlayer ? (
-        <>
-          <Counter props={{ socket, firstPlayer, secondPlayer }} />
+        <GameContext.Provider
+          value={{
+            socket,
+            friendUsername: friendDetails.username,
+            friendSocketId: friendDetails.socketId,
+            firstPlayerUsername: firstPlayer.username,
+            secondPlayerUsername: secondPlayer.username,
+          }}
+        >
+          <Counter />
           <ExitGame
             props={{
-              socket,
               friendsList,
               setFriendInvited,
               gameRoomName,
               setGameRoomName,
               setRenderStartingPlayer,
               setIsNewGameStarted,
-              firstPlayer,
-              secondPlayer,
             }}
           />
-          {/* TO DO: write the logic in ExitGame.jsx */}
-          {/* setRenderStartingPlayer should be set to false in ExitGame ??? */}
-        </>
+        </GameContext.Provider>
       ) : (
         <div className="play_page_container">
           <section>
