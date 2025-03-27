@@ -1,12 +1,11 @@
 import { createContext, useContext } from "react";
 
 export const GameContext = createContext({
-  channel: null,
-  setChannel: null,
-  client: null,
-  rivalPlayer: null,
-  isNewGameStarted: null,
-  setIsNewGameStarted: null,
+  socket: null,
+  friendUsername: null,
+  friendSocketId: null,
+  firstPlayerUsername: null,
+  secondPlayerUsername: null,
 });
 
 export function useGameContext() {
