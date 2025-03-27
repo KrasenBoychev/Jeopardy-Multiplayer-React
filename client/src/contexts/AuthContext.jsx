@@ -1,15 +1,12 @@
-/* eslint-disable react-refresh/only-export-components */
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-import { createContext, useContext } from 'react';
+import { createContext, useContext } from "react";
 
-import usePersistedState from '../hooks/usePersistedState';
+import usePersistedState from "../hooks/usePersistedState";
 
 export const AuthContext = createContext({
-  userId: '',
-  email: '',
-  username: '',
-  accessToken: '',
+  userId: "",
+  email: "",
+  username: "",
+  accessToken: "",
   isAuthenticated: false,
   points: 0,
   changeAuthState: (authState = {}) => null,
@@ -17,7 +14,7 @@ export const AuthContext = createContext({
 });
 
 export function AuthContextProvider(props) {
-  const [authState, setAuthState] = usePersistedState('auth', {});
+  const [authState, setAuthState] = usePersistedState("auth", {});
 
   const changeAuthState = (state) => {
     setAuthState(state);
