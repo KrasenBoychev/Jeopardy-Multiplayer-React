@@ -1,19 +1,12 @@
 import useChooseQuestion from "../../../hooks/useChooseQuestion";
-import ShowQuestion from "../06. answer_question/ShowQuestion";
-import RenderQuestions from "./chunks/RenderQuestions";
+import Answers from "../06. answers/Answers";
+import QuestionsPoints from "./children/QuestionsPoints";
 import ResultGame from "../07. final_result/ResultGame";
 
-import "./chooseQUestion.css";
+import "./questions.css";
 
-export default function ChooseQuestion({ props }) {
-  const {
-    activePlayer,
-    setActivePlayer,
-    firstPlayer,
-    secondPlayer,
-    questions,
-    setQuestions,
-  } = props;
+export default function Questions({ props }) {
+  const { activePlayer, setActivePlayer, questions, setQuestions } = props;
 
   const [
     showQuestion,
@@ -33,7 +26,7 @@ export default function ChooseQuestion({ props }) {
     callShowAnswer,
     setCallShowAnswer,
     gameFinished,
-  ] = useChooseQuestion(questions, setQuestions, firstPlayer);
+  ] = useChooseQuestion(questions, setQuestions);
 
   // channel.on((event) => {
   //   if (
@@ -83,12 +76,11 @@ export default function ChooseQuestion({ props }) {
           }}
         />
       ) : showQuestion ? (
-        <ShowQuestion
+        <Answers
           props={{
             activePlayer,
             currCategory,
             currQuestion,
-            firstPlayer,
             pointsFirstPlayer,
             pointsSecondPlayer,
             isAnswerCorrect,
@@ -96,14 +88,15 @@ export default function ChooseQuestion({ props }) {
           }}
         />
       ) : (
-        <RenderQuestions
+        <QuestionsPoints
           props={{
             activePlayer,
-            firstPlayer,
-            secondPlayer,
             pointsFirstPlayer,
             pointsSecondPlayer,
             questions,
+            setShowQuestion,
+            setCurrCategory,
+            setCurrQuestion,
           }}
         />
       )}
