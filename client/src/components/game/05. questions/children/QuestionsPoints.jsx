@@ -1,46 +1,24 @@
-import { useAuthContext } from "../../../../contexts/AuthContext";
+import Score from "../../score/Score";
+import Timer from "../../timer/Timer";
 import QuestionModel from "./QuestionModel";
+import QuestionsHeader from "./QuestionsHeader";
 
-export default function RenderQuestions({ props }) {
+export default function QuestionsPoints({ props }) {
   const {
     activePlayer,
-    firstPlayer,
-    secondPlayer,
     pointsFirstPlayer,
     pointsSecondPlayer,
     questions,
+    setShowQuestion,
+    setCurrCategory,
+    setCurrQuestion,
   } = props;
-
-  const { username } = useAuthContext();
 
   return (
     <div className="questions_page_wrapper">
+      <Score points={{ pointsFirstPlayer, pointsSecondPlayer }} />
       <section>
-        <div className="players_points_wrapper">
-          <h3>Score</h3>
-          <div className="players_points">
-            <p className="points_first_player">
-              <span>{firstPlayer.username}:</span>
-              <span>{pointsFirstPlayer} points</span>
-            </p>
-            <p className="points_second_player">
-              <span>{secondPlayer.username}:</span>
-              <span>{pointsSecondPlayer} points</span>
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <p
-          className={
-            username === activePlayer
-              ? "active_player player_categories"
-              : "player_categories"
-          }
-        >
-          {activePlayer} chooses question
-        </p>
+        <QuestionsHeader activePlayer={activePlayer} />
         <div className="categories_names">
           {Object.keys(questions).map((categoryName) => {
             return (
@@ -62,6 +40,9 @@ export default function RenderQuestions({ props }) {
                         categoryName: Object.keys(questions)[indexQuestion],
                         question: question[indexItem].question,
                         questionAnswered: question[indexItem].answered,
+                        setShowQuestion,
+                        setCurrCategory,
+                        setCurrQuestion,
                       }}
                     />
                   );
@@ -71,10 +52,7 @@ export default function RenderQuestions({ props }) {
           })}
         </div>
       </section>
-
-      <section>
-        <p>Timer</p>
-      </section>
+      <Timer />
     </div>
   );
 }
