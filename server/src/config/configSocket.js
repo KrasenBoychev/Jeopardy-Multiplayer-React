@@ -96,6 +96,16 @@ function configSocket(server) {
       });
     });
 
+    socket.on(
+      "sendQuestionOpened",
+      ({ receiverSocketId, categoryName, question }) => {
+        io.to(receiverSocketId).emit("getQuestionOpened", {
+          categoryName,
+          question,
+        });
+      }
+    );
+
     socket.on("disconnect", async () => {});
   });
 }
