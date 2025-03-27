@@ -1,20 +1,14 @@
 import { useState } from "react";
+import { useGameContext } from "../../../contexts/GameContext";
 import useCategories from "../../../hooks/useCategories";
-import ChooseQuestion from "../05. choose_question/ChooseQuestion";
+import Questions from "../05. questions/Questions";
 import CategoryModel from "./CategoryModel";
-
+import CategoriesHeader from "./CategoriesHeader";
 import "./categories.css";
 import "../game.css";
-import { useAuthContext } from "../../../contexts/AuthContext";
-import {
-  getFriendSocketId,
-  setNewActivePlayer,
-} from "../../../utils/gameUtils";
 
-export default function Categories({ props }) {
-  const { socket, firstPlayer, secondPlayer } = props;
-  const { username } = useAuthContext();
-
+export default function Categories() {
+  const { socket, friendSocketId, friendUsername } = useGameContext();
   const [currOption, setCurrOption] = useState("");
 
   const [
@@ -32,7 +26,7 @@ export default function Categories({ props }) {
     categoriesNames,
     setCategoriesNames,
     setCallQuestions,
-  ] = useCategories(socket, firstPlayer, secondPlayer);
+  ] = useCategories();
 
   const chosenOption = async (e) => {
     const newArray = categoriesNames;
@@ -50,26 +44,13 @@ export default function Categories({ props }) {
 
       const newCategoryCount = currCategoryCount + 1;
       setCurrCategoryCount(newCategoryCount);
-
-      const newActivePlayer = setNewActivePlayer(
-        activePlayer,
-        setActivePlayer,
-        firstPlayer,
-        secondPlayer
-      );
+      setActivePlayer(friendUsername);
 
       const socketData = {
         categoriesNames,
         newCategories: updateCategories,
         newCategoryCount,
-        newActivePlayer,
       };
-
-      const friendSocketId = getFriendSocketId(
-        activePlayer,
-        firstPlayer,
-        secondPlayer
-      );
 
       await socket.emit("sendCategorySelected", {
         receiverSocketId: friendSocketId,
@@ -87,29 +68,17 @@ export default function Categories({ props }) {
   return (
     <>
       {moveToNextPage ? (
-        <ChooseQuestion
+        <Questions
           props={{
             activePlayer,
             setActivePlayer,
-            firstPlayer,
-            secondPlayer,
             questions,
             setQuestions,
           }}
         />
       ) : (
         <div className="categories_page_wrapper">
-          <p
-            className={
-              username == activePlayer && currCategoryCount < 4
-                ? "active_player player_categories"
-                : "player_categories"
-            }
-          >
-            {currCategoryCount < 4
-              ? `${activePlayer} chooses category`
-              : "Loading Questions..."}
-          </p>
+          <CategoriesHeader props={{ activePlayer, currCategoryCount }} />
           <div className="categories_container">
             {categoriesNames.map((categoryName, categoryIndex) => {
               return (
