@@ -5,13 +5,11 @@ import { recordPoints } from "../../api/game-api";
 
 import { useAuthContext } from "../contexts/AuthContext";
 import { getPlayerPoints } from "../../api/user-api";
+import { useGameContext } from "../contexts/GameContext";
 
-export default function useChooseQuestion(
-  questions,
-  setQuestions,
-  firstPlayer
-) {
+export default function useChooseQuestion(questions, setQuestions) {
   const authData = useAuthContext();
+  const { socket, friendUsername } = useGameContext();
 
   const [showQuestion, setShowQuestion] = useState(false);
   const [currCategory, setCurrCategory] = useState("");
@@ -25,6 +23,14 @@ export default function useChooseQuestion(
   const [callShowAnswer, setCallShowAnswer] = useState(false);
 
   const [gameFinished, setGameFinished] = useState(false);
+
+  useEffect(() => {
+    socket?.on("getQuestions", ({ categoryName, question }) => {
+      setShowQuestion(true);
+      setCurrCategory(categoryName);
+      setCurrQuestion(question);
+    });
+  }, [socket]);
 
   useEffect(() => {
     (function showAnswers() {
@@ -55,7 +61,7 @@ export default function useChooseQuestion(
             setGameFinished(true);
 
             try {
-              if (authData.username == firstPlayer) {
+              if (authData.username == friendUsername) {
                 await recordPoints(authData.userId, pointsFirstPlayer);
               } else {
                 await recordPoints(authData.userId, pointsSecondPlayer);
