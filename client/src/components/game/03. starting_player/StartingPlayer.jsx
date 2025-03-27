@@ -1,23 +1,23 @@
 import { useState } from "react";
+import Categories from "../04. categories/Categories";
 import "./startingPlayer.css";
 import "../game.css";
+import { useGameContext } from "../../../contexts/GameContext";
 
-import Categories from "../04. categories/Categories";
-
-export default function StartingPlayer({ props }) {
-  const { socket, firstPlayer, secondPlayer } = props;
+export default function StartingPlayer() {
   const [categories, setCategories] = useState(false);
+  const { firstPlayerUsername } = useGameContext();
 
   setTimeout(() => {
     setCategories(true);
   }, 2500);
 
   return categories ? (
-    <Categories props={{ socket, firstPlayer, secondPlayer }} />
+    <Categories />
   ) : (
     <>
       <div className="game_container">
-        <p className="starting_player">{firstPlayer.username}</p>
+        <p className="starting_player">{firstPlayerUsername}</p>
       </div>
     </>
   );
