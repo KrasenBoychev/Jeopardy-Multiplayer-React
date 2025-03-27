@@ -3,12 +3,17 @@ import toast from "react-hot-toast";
 
 import { getAllCategories, getQuestions } from "../../api/game-api";
 import { points } from "../common/gamePoints";
-import { getFriendSocketId } from "../utils/gameUtils";
+import { useGameContext } from "../contexts/GameContext";
+import { useAuthContext } from "../contexts/AuthContext";
 
-export default function useCategories(socket, firstPlayer, secondPlayer) {
+export default function useCategories() {
+  const { username } = useAuthContext();
+  const { socket, friendUsername, friendSocketId, firstPlayerUsername } =
+    useGameContext();
+
   const defaultOption = "--- Choose Category ---";
 
-  const [activePlayer, setActivePlayer] = useState(firstPlayer.username);
+  const [activePlayer, setActivePlayer] = useState(firstPlayerUsername);
   const [currCategoryCount, setCurrCategoryCount] = useState(0);
   const [randomNumber, setRandomNumber] = useState(0);
   const [moveToNextPage, setMoveToNextPage] = useState(false);
@@ -40,17 +45,12 @@ export default function useCategories(socket, firstPlayer, secondPlayer) {
 
   useEffect(() => {
     socket?.on("getCategorySelected", ({ socketData }) => {
-      const {
-        categoriesNames,
-        newCategories,
-        newCategoryCount,
-        newActivePlayer,
-      } = socketData;
+      const { categoriesNames, newCategories, newCategoryCount } = socketData;
 
       setCategoriesNames(categoriesNames);
       setCurrCategoryCount(newCategoryCount);
       setAllCategories(newCategories);
-      setActivePlayer(newActivePlayer);
+      setActivePlayer(username);
     });
 
     socket?.on("getQuestions", ({ gameQuestions }) => {
@@ -100,12 +100,6 @@ export default function useCategories(socket, firstPlayer, secondPlayer) {
           });
 
           setQuestions(gameQuestions);
-
-          // active player has already changed (selectQuestion in Categories)
-          const friendSocketId =
-            activePlayer == firstPlayer.username
-              ? firstPlayer.socketId
-              : secondPlayer.socketId;
 
           await socket.emit("sendQuestions", {
             receiverSocketId: friendSocketId,
