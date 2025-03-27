@@ -13,17 +13,17 @@ export function getFriendSocketId(activePlayer, firstPlayer, secondPlayer) {
     : firstPlayer.socketId;
 }
 
-export function setNewActivePlayer(
-  activePlayer,
-  setActivePlayer,
-  firstPlayer,
-  secondPlayer
-) {
-  const newActivePlayer =
-    activePlayer == firstPlayer.username
-      ? secondPlayer.username
-      : firstPlayer.username;
-  setActivePlayer(newActivePlayer);
+// export function setNewActivePlayer(
+//   activePlayer,
+//   setActivePlayer,
+//   firstPlayer,
+//   secondPlayer
+// ) {
+//   const newActivePlayer =
+//     activePlayer == firstPlayer.username
+//       ? secondPlayer.username
+//       : firstPlayer.username;
+//   setActivePlayer(newActivePlayer);
 
-  return newActivePlayer;
-}
+//   return newActivePlayer;
+// }
