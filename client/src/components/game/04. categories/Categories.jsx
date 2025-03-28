@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useGameContext } from "../../../contexts/GameContext";
 import useCategories from "../../../hooks/useCategories";
 import Questions from "../05. questions/Questions";
-import CategoryModel from "./CategoryModel";
-import CategoriesHeader from "./CategoriesHeader";
+import CategoryModel from "./children/CategoryModel";
+import CategoriesHeader from "./children/CategoriesHeader";
 import "./categories.css";
 import "../game.css";
 
