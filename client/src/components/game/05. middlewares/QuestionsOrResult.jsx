@@ -1,11 +1,12 @@
 import useChooseQuestion from "../../../hooks/useChooseQuestion";
-import Answers from "../06. answers/Answers";
+import Answers from "../07. answers/Answers";
 import QuestionsPoints from "./children/QuestionsPoints";
-import ResultGame from "../07. final_result/ResultGame";
+import ResultGame from "../08. final_result/ResultGame";
 
 import "./questions.css";
+import QuestionsOrAnswers from "./QuestionsOrAnswers";
 
-export default function Questions({ props }) {
+export default function QuestionsOrResult({ props }) {
   const { activePlayer, setActivePlayer, questions, setQuestions } = props;
 
   const [
@@ -75,30 +76,8 @@ export default function Questions({ props }) {
             pointsSecondPlayer,
           }}
         />
-      ) : showQuestion ? (
-        <Answers
-          props={{
-            activePlayer,
-            currCategory,
-            currQuestion,
-            pointsFirstPlayer,
-            pointsSecondPlayer,
-            isAnswerCorrect,
-            isAnswerClicked,
-          }}
-        />
       ) : (
-        <QuestionsPoints
-          props={{
-            activePlayer,
-            pointsFirstPlayer,
-            pointsSecondPlayer,
-            questions,
-            setShowQuestion,
-            setCurrCategory,
-            setCurrQuestion,
-          }}
-        />
+        <QuestionsOrAnswers />
       )}
     </>
   );
