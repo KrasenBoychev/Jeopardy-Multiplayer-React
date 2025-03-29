@@ -1,5 +1,6 @@
 import { useAuthContext } from "../../../../contexts/AuthContext";
 import { useGameContext } from "../../../../contexts/GameContext";
+import "../questions.css";
 
 export default function QuestionModel({ props }) {
   const {
@@ -11,6 +12,7 @@ export default function QuestionModel({ props }) {
     setCurrCategory,
     setCurrQuestion,
   } = props;
+  
   const { username } = useAuthContext();
   const { socket, friendSocketId } = useGameContext();
 
@@ -31,19 +33,18 @@ export default function QuestionModel({ props }) {
   };
 
   return (
-    <div
+    <button
       className={
-        !props.question
-          ? "category_box"
-          : questionAnswered
+        questionAnswered
           ? "question_box question_answered"
           : username === activePlayer
           ? "question_box active_box"
           : "question_box inactive_box"
       }
+      disabled={username === activePlayer ? false : true}
       onClick={showQuestionClickHandler}
     >
-      {props.question ? question.points : props.categoryName}
-    </div>
+      {question.points}
+    </button>
   );
 }
