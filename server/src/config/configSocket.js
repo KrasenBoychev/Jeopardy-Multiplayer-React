@@ -106,6 +106,10 @@ function configSocket(server) {
       }
     );
 
+    socket.on("sendAnswerClicked", ({ receiverSocketId, answerChosen }) => {
+      io.to(receiverSocketId).emit("getAnswerClicked", { answerChosen });
+    });
+
     socket.on("disconnect", async () => {});
   });
 }
