@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../../../contexts/AuthContext";
 import { useGameContext } from "../../../../contexts/GameContext";
-import { changeGameInProgress } from "../../../../hooks/useNewGameStarted";
-import "./confirm.css";
 import { useEffect, useState } from "react";
+import "./confirm.css";
 
 export default function Confrim({ props }) {
   const { setShowConfirmMessage, gameRoomName, setIsGameLeft } = props;
