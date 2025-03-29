@@ -1,4 +1,5 @@
 import { useAuthContext } from "../../../../contexts/AuthContext";
+import "../questions.css";
 
 export default function QuestionsHeader({ activePlayer }) {
   const { username } = useAuthContext();
