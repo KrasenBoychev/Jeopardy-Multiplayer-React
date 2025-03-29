@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../../contexts/AuthContext";
-import { changeGameInProgress } from "../useNewGameStarted";
+import { changeGameInProgress } from "./useNewGameStarted";
 
 export const useExitGame = async (
   socket,
