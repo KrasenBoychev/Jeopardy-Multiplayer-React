@@ -1,58 +1,58 @@
-.show-question-container {
-    width: 600px;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
+.show_question_container {
+  width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  gap: 30px;
 }
 
-.show-question-category {
-    text-align: center;
-    display: flex;
-    justify-content: center;
+.show_question_category {
+  text-align: center;
+  display: flex;
+  justify-content: center;
 }
 
-.show-question-category h3 {
-    padding: 10px;
-    color: var(--midnight-blue);
-    background-color: var(--white);
-    border-radius: 5px;
+.show_question_category h3 {
+  padding: 10px;
+  color: var(--midnight-blue);
+  background-color: var(--white);
+  border-radius: 5px;
 }
 
-.show-question-wrapper {
-    padding: 15px;
-    color: var(--white);
-    background-color: var(--midnight-blue);
-    border-radius: 5px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+.show_question_wrapper {
+  padding: 15px;
+  color: var(--white);
+  background-color: var(--midnight-blue);
+  border-radius: 5px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
-.answers-wrapper {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    gap: 10px;
+.answers_wrapper {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.answer-box {
-    flex: 0 0 100%;
-    text-align: left;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    align-self: stretch;
-    opacity: 0.8;
+.answer_box {
+  flex: 0 0 100%;
+  text-align: left;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  opacity: 0.8;
 }
 
-.answer-box-active {
-    opacity: 1;
+.answer_box_active {
+  opacity: 1;
 }
 
-.answer-box-active:hover {
-    cursor: pointer;
-    background-color: var(--purple);
+.answer_box_active:hover {
+  cursor: pointer;
+  background-color: var(--purple);
 }
