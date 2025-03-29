@@ -1,4 +1,4 @@
-import useNewGameStarted from "../../hooks/useNewGameStarted";
+import useNewGameStarted from "../../hooks/game_hooks/useNewGameStarted";
 import useSocket from "../../hooks/useSocket";
 
 export default function Socket(props) {
