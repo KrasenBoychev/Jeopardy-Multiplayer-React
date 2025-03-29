@@ -1,83 +1,64 @@
-import useChooseQuestion from "../../../hooks/useChooseQuestion";
-import Answers from "../07. answers/Answers";
-import QuestionsPoints from "./children/QuestionsPoints";
+import { useEffect, useState } from "react";
 import ResultGame from "../08. final_result/ResultGame";
-
-import "./questions.css";
 import QuestionsOrAnswers from "./QuestionsOrAnswers";
 
 export default function QuestionsOrResult({ props }) {
   const { activePlayer, setActivePlayer, questions, setQuestions } = props;
 
-  const [
-    showQuestion,
-    setShowQuestion,
-    currCategory,
-    setCurrCategory,
-    currQuestion,
-    setCurrQuestion,
-    pointsFirstPlayer,
-    setPointsFirstPlayer,
-    pointsSecondPlayer,
-    setPointsSecondPlayer,
-    isAnswerCorrect,
-    setIsAnswerCorrect,
-    isAnswerClicked,
-    setIsAnswerClicked,
-    callShowAnswer,
-    setCallShowAnswer,
-    gameFinished,
-  ] = useChooseQuestion(questions, setQuestions);
+  const [gameFinished, setGameFinished] = useState(false);
+  const [pointsFirstPlayer, setPointsFirstPlayer] = useState(0);
+  const [pointsSecondPlayer, setPointsSecondPlayer] = useState(0);
 
-  // channel.on((event) => {
-  //   if (
-  //     event.type == "choose-question" &&
-  //     event.user.name === event.data.activePlayer
-  //   ) {
-  //     setShowQuestion(true);
-  //     setCurrCategory(event.data.categoryName);
-  //     setCurrQuestion(event.data.question);
-  //   }
-
-  //   if (
-  //     event.type == "choose-answer" &&
-  //     event.user.name === event.data.activePlayer
-  //   ) {
-  //     setIsAnswerClicked(true);
-
-  //     if (event.data.pointsWon > 0) {
-  //       setIsAnswerCorrect(true);
-  //     } else {
-  //       setIsAnswerCorrect(false);
-  //     }
-
-  //     if (event.data.activePlayer == firstPlayer) {
-  //       setPointsFirstPlayer(event.data.totalPoints);
-  //     } else {
-  //       setPointsSecondPlayer(event.data.totalPoints);
-  //     }
-
-  //     callShowAnswer ? setCallShowAnswer(false) : setCallShowAnswer(true);
-
-  //     event.data.activePlayer == firstPlayer
-  //       ? setActivePlayer(secondPlayer)
-  //       : setActivePlayer(firstPlayer);
-  //   }
-  // });
+  useEffect(() => {
+    if (gameFinished) {
+      (async function finishGame() {
+        // TO DO: adapt the code
+        // try {
+        //   if (authData.username == friendUsername) {
+        //     await recordPoints(authData.userId, pointsFirstPlayer);
+        //   } else {
+        //     await recordPoints(authData.userId, pointsSecondPlayer);
+        //   }
+        //   const playerPoints = await getPlayerPoints();
+        //   authData.points = playerPoints;
+        //   authData.changeAuthState(authData);
+        // } catch (error) {
+        //   toast.error(
+        //     "Points could not be added to your account. Please contact our Customer Service Team."
+        //   );
+        //   return;
+        // }
+      })();
+    }
+  }, [gameFinished]);
 
   return (
     <>
       {gameFinished ? (
-        <ResultGame
+        <p>result</p>
+      ) : (
+        // <ResultGame
+        //   props={{
+        //     firstPlayer,
+        //     secondPlayer,
+        //     pointsFirstPlayer,
+        //     pointsSecondPlayer,
+        //   }}
+        // />
+        <QuestionsOrAnswers
           props={{
-            firstPlayer,
-            secondPlayer,
+            activePlayer,
+            setActivePlayer,
+            questions,
+            setQuestions,
+            setGameFinished,
             pointsFirstPlayer,
+            setPointsFirstPlayer,
             pointsSecondPlayer,
+            setPointsSecondPlayer,
+            setGameFinished,
           }}
         />
-      ) : (
-        <QuestionsOrAnswers />
       )}
     </>
   );
