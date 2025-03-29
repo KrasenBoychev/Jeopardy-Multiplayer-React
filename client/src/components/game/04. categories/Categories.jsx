@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useGameContext } from "../../../contexts/GameContext";
-import useCategories from "../../../hooks/useCategories";
-import Questions from "../05. questions/Questions";
+import useCategories from "../../../hooks/game_hooks/useCategories";
 import CategoryModel from "./children/CategoryModel";
 import CategoriesHeader from "./children/CategoriesHeader";
+import QuestionsOrResult from "../05. middlewares/QuestionsOrResult";
 import "./categories.css";
 import "../game.css";
 
@@ -68,13 +68,8 @@ export default function Categories() {
   return (
     <>
       {moveToNextPage ? (
-        <Questions
-          props={{
-            activePlayer,
-            setActivePlayer,
-            questions,
-            setQuestions,
-          }}
+        <QuestionsOrResult
+          props={{ activePlayer, setActivePlayer, questions, setQuestions }}
         />
       ) : (
         <div className="categories_page_wrapper">
