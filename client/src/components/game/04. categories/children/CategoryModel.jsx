@@ -1,5 +1,4 @@
-import { useAuthContext } from "../../../contexts/AuthContext";
-import { useGameContext } from "../../../contexts/GameContext";
+import { useAuthContext } from "../../../../contexts/AuthContext";
 
 export default function CategoryModel({ props }) {
   const {
