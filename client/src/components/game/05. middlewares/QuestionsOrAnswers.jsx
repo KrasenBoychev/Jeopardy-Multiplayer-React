@@ -1,19 +1,35 @@
-import Score from "../../score/Score";
-import Timer from "../../timer/Timer";
+import useSetQAndAValues from "../../../hooks/game_hooks/useSetQ&AValues";
+import Score from "../score/Score";
+import Timer from "../timer/Timer";
 import Questions from "../06. questions/Questions";
-import QuestionModel from "./QuestionModel";
-import QuestionsHeader from "./QuestionsHeader";
+import Answers from "../07. answers/Answers";
 
 export default function QuestionsOrAnswers({ props }) {
   const {
     activePlayer,
-    pointsFirstPlayer,
-    pointsSecondPlayer,
+    setActivePlayer,
     questions,
+    setQuestions,
+    pointsFirstPlayer,
+    setPointsFirstPlayer,
+    pointsSecondPlayer,
+    setPointsSecondPlayer,
+    setGameFinished,
+  } = props;
+
+  const [
+    showQuestion,
+    currCategory,
+    currQuestion,
+    isAnswerClicked,
+    isAnswerCorrect,
     setShowQuestion,
     setCurrCategory,
     setCurrQuestion,
-  } = props;
+    setIsAnswerClicked,
+    setIsAnswerCorrect,
+    setRecordAnswer,
+  ] = useSetQAndAValues(questions, setQuestions, setGameFinished);
 
   return (
     <div className="questions_page_wrapper">
@@ -25,14 +41,26 @@ export default function QuestionsOrAnswers({ props }) {
             activePlayer,
             currCategory,
             currQuestion,
-            pointsFirstPlayer,
-            pointsSecondPlayer,
-            isAnswerCorrect,
             isAnswerClicked,
+            isAnswerCorrect,
+            setActivePlayer,
+            setPointsFirstPlayer,
+            setPointsSecondPlayer,
+            setIsAnswerClicked,
+            setIsAnswerCorrect,
+            setRecordAnswer,
           }}
         />
       ) : (
-        <Questions />
+        <Questions
+          props={{
+            activePlayer,
+            questions,
+            setShowQuestion,
+            setCurrCategory,
+            setCurrQuestion,
+          }}
+        />
       )}
       <Timer />
     </div>
