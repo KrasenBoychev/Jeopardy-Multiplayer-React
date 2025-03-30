@@ -1,2 +1,14 @@
-// Uninstall the following if not in use:
-    - react-spinners
+1. Try to rewrite all components and files using Typescript, 
+   excluding all Create Components and the files connected with them
+
+   - When doing the components, check the API calls - they should get the correct types 
+     (some of them are 'any' at the moment)
+
+2. Try to use Redux management system
+
+3. When working over better UI, use the following library: https://ui.aceternity.com/
+
+4. Based on the UI, rework CreateQuestion.jsx - it needs to be devided to simplier components, 
+   but the logic has to be reworked as well
+
+5. Rewrite all Create Components and the files connected with them using Typescript
