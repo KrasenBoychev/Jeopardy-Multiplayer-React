@@ -3,7 +3,6 @@ const { body } = require("express-validator");
 const { parseError } = require("../util");
 const {
   getTopPlayers,
-  getPlayerPoints,
   getUserNotificationsList,
   removeNotification,
   updateGameInProgress,
@@ -18,16 +17,6 @@ const userRouter = Router();
 userRouter.get("/topPlayers", async (req, res) => {
   try {
     const data = await getTopPlayers();
-    res.json(data);
-  } catch (err) {
-    const parsed = parseError(err);
-    res.status(400).json({ code: 400, message: parsed.message });
-  }
-});
-
-userRouter.get("/playerPoints", async (req, res) => {
-  try {
-    const data = await getPlayerPoints(req.user.username);
     res.json(data);
   } catch (err) {
     const parsed = parseError(err);
