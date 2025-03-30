@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import ResultGame from "../08. final_result/ResultGame";
+import { useState } from "react";
 import QuestionsOrAnswers from "./QuestionsOrAnswers";
+import ResultGame from "../08. final_result/ResultGame";
+import useGameFinished from "../../../hooks/game_hooks/useGameFinished";
 
 export default function QuestionsOrResult({ props }) {
   const { activePlayer, setActivePlayer, questions, setQuestions } = props;
@@ -9,42 +10,18 @@ export default function QuestionsOrResult({ props }) {
   const [pointsFirstPlayer, setPointsFirstPlayer] = useState(0);
   const [pointsSecondPlayer, setPointsSecondPlayer] = useState(0);
 
-  useEffect(() => {
-    if (gameFinished) {
-      (async function finishGame() {
-        // TO DO: adapt the code
-        // try {
-        //   if (authData.username == friendUsername) {
-        //     await recordPoints(authData.userId, pointsFirstPlayer);
-        //   } else {
-        //     await recordPoints(authData.userId, pointsSecondPlayer);
-        //   }
-        //   const playerPoints = await getPlayerPoints();
-        //   authData.points = playerPoints;
-        //   authData.changeAuthState(authData);
-        // } catch (error) {
-        //   toast.error(
-        //     "Points could not be added to your account. Please contact our Customer Service Team."
-        //   );
-        //   return;
-        // }
-      })();
-    }
-  }, [gameFinished]);
+  useGameFinished(gameFinished, pointsFirstPlayer, pointsSecondPlayer);
 
   return (
     <>
       {gameFinished ? (
-        <p>result</p>
+        <ResultGame
+          props={{
+            pointsFirstPlayer,
+            pointsSecondPlayer,
+          }}
+        />
       ) : (
-        // <ResultGame
-        //   props={{
-        //     firstPlayer,
-        //     secondPlayer,
-        //     pointsFirstPlayer,
-        //     pointsSecondPlayer,
-        //   }}
-        // />
         <QuestionsOrAnswers
           props={{
             activePlayer,
