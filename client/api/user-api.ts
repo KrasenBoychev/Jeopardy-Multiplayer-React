@@ -10,14 +10,14 @@ export async function getUserNotifications() {
   return await api.get(host + `/users/getUserNotifications`);
 }
 
-export async function removeNotification(friendUsername, type) {
+export async function removeNotification(friendUsername: string, type: string) {
   return await api.put(host + `/users/removeNotification`, {
     friendUsername,
     type,
   });
 }
 
-export async function recordUserInOnlineUsers(username, socketId) {
+export async function recordUserInOnlineUsers(username: string, socketId: string) {
   return await api.post(host + `/users/recordNewOnlineUser`, {
     username,
     socketId,
