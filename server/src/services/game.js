@@ -25,7 +25,7 @@ async function updatePoints(userId, data) {
 
   await record.save();
 
-  return record;
+  return record.points;
 }
 
 module.exports = {
