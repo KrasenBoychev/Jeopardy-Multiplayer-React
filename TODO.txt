@@ -1,18 +1,2 @@
-// Context to be deleted
-    - GameContext.jsx
-
-// Uninstall the following:
-    - stream chat library
+// Uninstall the following if not in use:
     - react-spinners
-
-// When game finishes:
-
-1. When game finishes - perform the Exit Game logic
-    
-
-
-// Last step:
- - Check how many times gameUtils has been used. If ony once, move the logic to the Component
-
- - Check all files in "game" folder for commented code and 
-    improve readability by splitting the code to more files if needed
