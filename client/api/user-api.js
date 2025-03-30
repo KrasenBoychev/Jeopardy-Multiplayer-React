@@ -6,10 +6,6 @@ export async function getTopPlayers() {
   return await api.get(host + "/users/topPlayers");
 }
 
-export async function getPlayerPoints() {
-  return await api.get(host + `/users/playerPoints`);
-}
-
 export async function getUserNotifications() {
   return await api.get(host + `/users/getUserNotifications`);
 }
@@ -22,7 +18,10 @@ export async function removeNotification(friendUsername, type) {
 }
 
 export async function recordUserInOnlineUsers(username, socketId) {
-  return await api.post(host + `/users/recordNewOnlineUser`, { username, socketId });
+  return await api.post(host + `/users/recordNewOnlineUser`, {
+    username,
+    socketId,
+  });
 }
 
 export async function deleteUserInOnlineUsers() {
