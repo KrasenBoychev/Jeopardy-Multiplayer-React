@@ -16,10 +16,6 @@ async function getTopPlayers() {
     .limit(10);
 }
 
-async function getPlayerPoints(username) {
-  return await User.find({ username }).distinct("points");
-}
-
 async function getUserNotificationsList(username) {
   return await User.find({ username }).distinct("notificationsList");
 }
@@ -48,7 +44,6 @@ module.exports = {
   getUserByEmail,
   getUserByUsername,
   getTopPlayers,
-  getPlayerPoints,
   getUserNotificationsList,
   addNotification,
   removeNotification,
