@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { useAuthContext } from "../../../contexts/AuthContext.jsx";
-import { adminId } from "../../../common/credentials.js";
-
+import { useAuthContext } from "../../../contexts/AuthContext";
+import { adminId } from "../../../common/credentials";
 import "./header.css";
 
 export default function Header() {
   const { isAuthenticated, username, userId } = useAuthContext();
-  const location = useLocation();
+  const location: any = useLocation();
 
   const [currLocation, setCurrLocation] = useState(null);
 
