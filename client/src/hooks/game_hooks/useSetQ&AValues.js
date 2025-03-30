@@ -51,7 +51,7 @@ export default function useSetQAndAValues(
             setShowQuestion(false);
             setRecordAnswer(false);
           }
-        }, 3000);
+        }, 1000);
       }
     })();
   }, [recordAnswer]);
