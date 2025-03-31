@@ -6,10 +6,11 @@ export default function useCreateQuestion(category, question) {
   const answersValues = ["false", "false", "false", "false"];
 
   if (question && [0, 1, 2, 3].includes(question.correctIndex)) {
-    answersValues[question.correctIndex] = 'true';
+    answersValues[question.correctIndex] = "true";
   }
 
-  const [answersCorrectValues, setAnswersCorrectValues] = useState(answersValues);
+  const [answersCorrectValues, setAnswersCorrectValues] =
+    useState(answersValues);
 
   const [allCategories, setAllCategories] = useState([]);
 
