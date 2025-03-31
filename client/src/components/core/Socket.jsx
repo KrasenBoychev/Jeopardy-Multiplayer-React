@@ -5,8 +5,7 @@ export default function Socket(props) {
   const { socket, setSocket } = props.socketProps;
   const { friendsList, setFriendsList } = props.friendsProps;
   const { setNotificationsList } = props.setNotificationsList;
-  const { isNewGameStarted, setIsNewGameStarted } = props.newGameStartedProps;
-  const friendInvited = props.friendInvited;
+  const { isNewGameStarted } = props.newGameStartedProps;
 
   useSocket(socket, setSocket, setFriendsList, setNotificationsList);
   useNewGameStarted(socket, friendsList, isNewGameStarted);

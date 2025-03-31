@@ -49,9 +49,8 @@ function App() {
         <Socket
           socketProps={{ socket, setSocket }}
           friendsProps={{ friendsList, setFriendsList }}
-          friendInvited={friendInvited}
           setNotificationsList={{ setNotificationsList }}
-          newGameStartedProps={{ isNewGameStarted, setIsNewGameStarted }}
+          newGameStartedProps={{ isNewGameStarted }}
         />
 
         {!isNewGameStarted && <Header />}
