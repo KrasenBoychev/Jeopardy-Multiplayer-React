@@ -40,7 +40,7 @@ export default function useSocket(
           await recordUserInOnlineUsers(username, socket.id);
 
           const friendsListResponse = await getUserFriendsAndTheirStatus();
-          setFriendsList(friendsListResponse);
+          // setFriendsList(friendsListResponse);
 
           const action = "friendIsOnline";
           await sendUpdateToOnlineFriends(

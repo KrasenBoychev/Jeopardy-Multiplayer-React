@@ -7,7 +7,7 @@ import { getTopPlayers } from "../../../../api/user-api";
 
 import "./home.css";
 import toast from "react-hot-toast";
-import { useGetTopPlayersQuery } from "../../../features/user/userSlice";
+import { useGetTopPlayersQuery } from "../../../slices/userSlice";
 
 export default function Home({ socket }) {
   const { username, points, isAuthenticated } = useAuthContext();
@@ -33,7 +33,7 @@ export default function Home({ socket }) {
   let content;
 
   if (isLoading) {
-    content = <p>Loading...</p>;
+    content = <p>Loading...</p>;    
   } else if (isSuccess) {
     content = (
       <>

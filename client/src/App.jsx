@@ -55,7 +55,7 @@ function App() {
 
         {!isNewGameStarted && <Header />}
 
-        {!isNewGameStarted && (
+        {/* {!isNewGameStarted && (
           <NotificationsBox
             socket={socket}
             friendsListProps={{ friendsList, setFriendsList }}
@@ -68,19 +68,19 @@ function App() {
             setPlayersProps={{ setFirstPlayer, setSecondPlayer }}
             gameRoomNameProps={{ gameRoomName, setGameRoomName }}
           />
-        )}
+        )} */}
 
         <main>
           <Routes>
             <Route path="/" element={<Home socket={socket} />} />
             <Route path="/about" element={<About />} />
 
-            <Route element={<PublicGuard />}>
+            {/* <Route element={<PublicGuard />}>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-            </Route>
+            </Route> */}
 
-            <Route element={<PrivateGuard />}>
+            {/* <Route element={<PrivateGuard />}>
               <Route
                 path="/play"
                 element={
@@ -130,7 +130,7 @@ function App() {
                   />
                 }
               />
-            </Route>
+            </Route> */}
 
             <Route path="*" element={<NotFound />} />
           </Routes>

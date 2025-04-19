@@ -28,7 +28,6 @@ export default function QuestionsOrResult({ props }) {
             setActivePlayer,
             questions,
             setQuestions,
-            setGameFinished,
             pointsFirstPlayer,
             setPointsFirstPlayer,
             pointsSecondPlayer,
