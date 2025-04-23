@@ -10,7 +10,18 @@ export const userApiSlice = apiSlice.injectEndpoints({
     getTopPlayers: builder.query({
       query: () => "/users/topPlayers",
     }),
+    recordUserInOnlineUsers: builder.mutation({
+      query: (data) => ({
+        url: "/users/recordNewOnlineUser",
+        method: "POST",
+        body: {
+          username: data.username,
+          socketId: data.socketId,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetTopPlayersQuery } = userApiSlice;
+export const { useGetTopPlayersQuery, useRecordUserInOnlineUsersMutation } =
+  userApiSlice;
