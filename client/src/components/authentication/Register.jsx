@@ -5,9 +5,9 @@ import "./authentication.css";
 
 import { useRegister } from "../../hooks/useAuth";
 
-export default function Register() {
+export default function Register({ setIsUserAuthenticated }) {
   const navigate = useNavigate();
-  const register = useRegister();
+  const register = useRegister(setIsUserAuthenticated);
 
   return (
     <div className="authentication-container">

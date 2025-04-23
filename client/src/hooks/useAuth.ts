@@ -1,7 +1,8 @@
+import { io } from "socket.io-client";
 import { login, logout, register } from "../../api/auth-api";
 import { useAuthContext } from "../contexts/AuthContext";
 
-export const useLogin = () => {
+export const useLogin = (setIsUserAuthenticated: Function) => {
   const { changeAuthState } = useAuthContext();
 
   const loginHandler = async (email: string, password: string) => {
@@ -9,13 +10,15 @@ export const useLogin = () => {
 
     changeAuthState(authData);
 
+    setIsUserAuthenticated(true);
+
     return authData;
   };
 
   return loginHandler;
 };
 
-export const useRegister = () => {
+export const useRegister = (setIsUserAuthenticated: Function) => {
   const { changeAuthState } = useAuthContext();
 
   const registerHandler = async (
@@ -31,18 +34,22 @@ export const useRegister = () => {
 
     changeAuthState(authData);
 
+    setIsUserAuthenticated(true);
+
     return authData;
   };
 
   return registerHandler;
 };
 
-export const useLogout = () => {
+export const useLogout = (setIsUserAuthenticated: Function) => {
   const { logout: localLogout } = useAuthContext();
 
   const logoutHandler = async () => {
     await logout();
     localLogout();
+
+    setIsUserAuthenticated(false);
   };
 
   return logoutHandler;
