@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
-import { AuthContextProvider } from "./contexts/AuthContext";
+import { AuthContextProvider, useAuthContext } from "./contexts/AuthContext";
 
 import "./App.css";
 
@@ -26,7 +26,8 @@ import Socket from "./components/core/Socket";
 import NotificationsBox from "./components/core/notificationsBox/NotificationsBox";
 
 function App() {
-  const [socket, setSocket] = useState(null);
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(null);
+
   const [friendsList, setFriendsList] = useState([]);
   const [friendInvited, setFriendInvited] = useState(null);
   const [notificationsList, setNotificationsList] = useState([]);
@@ -46,14 +47,18 @@ function App() {
       <Toaster />
 
       <AuthContextProvider>
-        <Socket
-          socketProps={{ socket, setSocket }}
-          friendsProps={{ friendsList, setFriendsList }}
-          setNotificationsList={{ setNotificationsList }}
-          newGameStartedProps={{ isNewGameStarted }}
-        />
-
         {!isNewGameStarted && <Header />}
+
+        {/* {isConnected && ( */}
+        <Socket
+          isUserAuthenticated={isUserAuthenticated}
+          // setIsConnected={setIsConnected}
+          // socketProps={{ socket, setSocket }}
+          // friendsProps={{ friendsList, setFriendsList }}
+          // setNotificationsList={{ setNotificationsList }}
+          // newGameStartedProps={{ isNewGameStarted }}
+        />
+        {/* )} */}
 
         {/* {!isNewGameStarted && (
           <NotificationsBox
@@ -72,16 +77,26 @@ function App() {
 
         <main>
           <Routes>
-            <Route path="/" element={<Home socket={socket} />} />
+            <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
 
-            {/* <Route element={<PublicGuard />}>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-            </Route> */}
-
-            {/* <Route element={<PrivateGuard />}>
+            <Route element={<PublicGuard />}>
               <Route
+                path="/login"
+                element={
+                  <Login setIsUserAuthenticated={setIsUserAuthenticated} />
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  <Register setIsUserAuthenticated={setIsUserAuthenticated} />
+                }
+              />
+            </Route>
+
+            <Route element={<PrivateGuard />}>
+              {/* <Route
                 path="/play"
                 element={
                   <PlayPage
@@ -100,19 +115,20 @@ function App() {
                     gameRoomNameProps={{ gameRoomName, setGameRoomName }}
                   />
                 }
-              />
+              /> */}
               <Route
                 path="/logout"
                 element={
                   <Logout
-                    socketProps={{ socket, setSocket }}
+                    // socketProps={{ socket, setSocket }}
                     friendsProps={{ friendsList, setFriendsList }}
                     setFriendInvited={{ setFriendInvited }}
+                    setIsUserAuthenticated={setIsUserAuthenticated}
                   />
                 }
               />
             </Route>
-
+            {/* 
             <Route element={<AdminGuard />}>
               <Route path="/create" element={<Create />} />
               <Route path="/createCategory" element={<CreateCategory />} />
