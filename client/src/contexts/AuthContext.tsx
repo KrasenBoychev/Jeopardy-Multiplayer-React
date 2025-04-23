@@ -2,7 +2,7 @@ import React, { createContext, useContext } from "react";
 import usePersistedState from "../hooks/usePersistedState";
 import { AuthDataType } from "../types/authDataType";
 
-export const AuthContext = createContext({
+export const AuthContext = createContext<AuthDataType>({
   userId: "",
   email: "",
   username: "",
