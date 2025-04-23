@@ -1,35 +1,56 @@
 import useNewGameStarted from "../../hooks/game_hooks/useNewGameStarted";
-import useSocket from "../../hooks/useSocket";
+import useSocket, { sendUpdateToOnlineFriends } from "../../hooks/useSocket";
+import { useAuthContext } from "../../contexts/AuthContext";
+import { socket } from "../../app/socket";
+import { useEffect } from "react";
+// import { recordUserInOnlineUsers } from "../../../api/user-api";
+import { getUserFriendsAndTheirStatus } from "../../../api/friends-api";
+import toast from "react-hot-toast";
+import { useRecordUserInOnlineUsersMutation } from "../../slices/userSlice";
 
-import { useSelector, useDispatch } from "react-redux";
-import { createSocket } from "../../slices/socketSlice";
+export default function Socket({ isUserAuthenticated }) {
+  // const { friendsList, setFriendsList } = props.friendsProps;
+  // const { setNotificationsList } = props.setNotificationsList;
+  // const { isNewGameStarted } = props.newGameStartedProps;
 
-export default function Socket(props) {
-  // const { socket, setSocket } = props.socketProps;
-  const { friendsList, setFriendsList } = props.friendsProps;
-  const { setNotificationsList } = props.setNotificationsList;
-  const { isNewGameStarted } = props.newGameStartedProps;
+  const { username } = useAuthContext();
+  const [recordUserInOnlineUsers, { isLoading }] =
+    useRecordUserInOnlineUsersMutation();
 
-  const socket = useSelector((state) => state.socket.socketInfo);
-  // const dispatch = useDispatch();
+  useEffect(() => {
+    if (isUserAuthenticated) {
+      socket.connect();
+    }
 
-  // dispatch(createSocket());
-  console.log(socket);
+    async function addOnlineUser() {
+      try {
+        await recordUserInOnlineUsers({ username, socketId: socket.id }).unwrap();
 
-  // const socketStatus = useSelector(getSocketStatus);
-  // const error = useSelector(getSocketError);
+        // after the User model is changed, the server services have to be updated
+        const friendsListResponse = await getUserFriendsAndTheirStatus();
+        // setFriendsList(friendsListResponse);
 
-  // if (socketStatus === "loading") {
-  //   console.log("socket loading");
-  // } else if (socketStatus === "succeeded") {
-  //   console.log(socket);
-  //   // createSocket.emit("newUser");
+        const action = "friendIsOnline";
+        await sendUpdateToOnlineFriends(
+          socket,
+          username,
+          friendsListResponse,
+          action
+        );
+      } catch (error) {
+        toast.error(error.message);
+      }
+    }
 
-  // } else if (socketStatus === "failed") {
-  //   console.log(error);
-  // }
+    socket.on("connect", addOnlineUser);
 
-  // useSocket(socket, setSocket, setFriendsList, setNotificationsList);
+    return () => {
+      socket.disconnect();
+      socket.removeAllListeners();
+    };
+  }, [isUserAuthenticated]);
+
+  // useSocket();
   // useNewGameStarted(socket, friendsList, isNewGameStarted);
   return;
 }
