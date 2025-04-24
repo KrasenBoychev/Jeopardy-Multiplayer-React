@@ -50,14 +50,14 @@ function App() {
         {!isNewGameStarted && <Header />}
 
         {/* {isConnected && ( */}
-        <Socket
+        {/* <Socket
           isUserAuthenticated={isUserAuthenticated}
           // setIsConnected={setIsConnected}
           // socketProps={{ socket, setSocket }}
           // friendsProps={{ friendsList, setFriendsList }}
           // setNotificationsList={{ setNotificationsList }}
           // newGameStartedProps={{ isNewGameStarted }}
-        />
+        /> */}
         {/* )} */}
 
         {/* {!isNewGameStarted && (
@@ -77,7 +77,7 @@ function App() {
 
         <main>
           <Routes>
-            <Route path="/" element={<Home />} />
+            {/* <Route path="/" element={<Home />} /> */}
             <Route path="/about" element={<About />} />
 
             <Route element={<PublicGuard />}>

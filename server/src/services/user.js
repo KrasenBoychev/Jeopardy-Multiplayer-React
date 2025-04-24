@@ -1,6 +1,6 @@
 const { adminId } = require("../api-keys");
 const { User } = require("../models/User");
-const { OnlineUser } = require("../models/OnlineUsers");
+// const { OnlineUser } = require("../models/OnlineUsers");
 
 async function getUserByEmail(email) {
   return await User.findOne({ email });
@@ -16,36 +16,36 @@ async function getTopPlayers() {
     .limit(10);
 }
 
-async function getUserNotificationsList(username) {
-  return await User.find({ username }).distinct("notificationsList");
-}
+// async function getUserNotificationsList(username) {
+//   return await User.find({ username }).distinct("notificationsList");
+// }
 
-async function addNotification(userUsername, notification) {
-  return await User.updateOne(
-    { username: userUsername },
-    { $push: { notificationsList: notification } }
-  );
-}
+// async function addNotification(userUsername, notification) {
+//   return await User.updateOne(
+//     { username: userUsername },
+//     { $push: { notificationsList: notification } }
+//   );
+// }
 
-async function removeNotification(userUsername, type, friendUsername) {
-  return await User.updateOne(
-    { username: userUsername },
-    { $pull: { notificationsList: { username: friendUsername, type } } }
-  );
-}
+// async function removeNotification(userUsername, type, friendUsername) {
+//   return await User.updateOne(
+//     { username: userUsername },
+//     { $pull: { notificationsList: { username: friendUsername, type } } }
+//   );
+// }
 
-async function updateGameInProgress(username) {
-  return await OnlineUser.updateOne({ username }, [
-    { $set: { gameInProgress: { $not: "$gameInProgress" } } },
-  ]);
-}
+// async function updateGameInProgress(username) {
+//   return await OnlineUser.updateOne({ username }, [
+//     { $set: { gameInProgress: { $not: "$gameInProgress" } } },
+//   ]);
+// }
 
 module.exports = {
   getUserByEmail,
   getUserByUsername,
   getTopPlayers,
-  getUserNotificationsList,
-  addNotification,
-  removeNotification,
-  updateGameInProgress,
+  // getUserNotificationsList,
+  // addNotification,
+  // removeNotification,
+  // updateGameInProgress,
 };

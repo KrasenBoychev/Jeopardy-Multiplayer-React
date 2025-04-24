@@ -17,12 +17,11 @@ export async function removeNotification(friendUsername: string, type: string) {
   });
 }
 
-export async function recordUserInOnlineUsers(username: string, socketId: string) {
-  return await api.post(host + `/users/recordNewOnlineUser`, {
-    username,
-    socketId,
-  });
-}
+// export async function recordUserInOnlineUsers(socketId: string) {
+//   return await api.post(host + `/users/recordNewOnlineUser`, {
+//     socketId,
+//   });
+// }
 
 export async function deleteUserInOnlineUsers() {
   await api.del(host + `/users/deleteOnlineUser`);
