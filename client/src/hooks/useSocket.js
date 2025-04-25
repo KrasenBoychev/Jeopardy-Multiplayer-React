@@ -8,7 +8,7 @@ import {
 import { getUserFriendsAndTheirStatus } from "../../api/friends-api";
 import { useAuthContext } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
-import { removeNotificationFromNotificationsList } from "../components/core/notificationsBox/NotificationsBox";
+import { removeNotificationFromNotificationsList } from "../components/notificationsBox/NotificationsBox";
 import { socket } from "../app/socket";
 
 export default function useSocket() {

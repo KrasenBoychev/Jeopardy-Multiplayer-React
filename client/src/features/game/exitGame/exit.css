@@ -1,0 +1,23 @@
+.exit-game-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    justify-content: end;
+    background-color: var(--baby-blue);
+}
+
+.exit-game-container p {
+    margin: 5px;
+    padding: 10px;
+    font-size: 1rem;
+    color: var(--white);
+    background-color: var(--midnight-blue);
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.exit-game-container p:hover {
+    cursor: pointer;
+    background-color: var(--purple);
+}

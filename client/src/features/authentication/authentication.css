@@ -1,0 +1,72 @@
+.authentication-container {
+    margin: 30px auto;
+    display: flex;
+}
+
+.authentication-wrapper {
+    margin: auto;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    color: var(--white);
+    background-color: var(--midnight-blue);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 5px;
+}
+
+.authentication-container h1 {
+    text-align: center;
+    font-size: 2rem;
+    text-transform: uppercase;
+}
+
+.authentication-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.authentication-input, .authentication-form-button {
+    width: 400px;
+    padding: 5px;
+    font-size: 1rem;
+}
+
+.authentication-form-button {
+    margin: 15px auto 0 auto;
+    width: 150px;
+    padding: 10px 0;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+
+.authentication-form-button:hover {
+    cursor: pointer;
+    color: var(--white);
+    background-color: var(--baby-blue);
+    border-radius: 5px;
+}
+
+
+.authentication-link {
+    color: var(--purple);
+}
+
+.authentication-link:hover {
+    text-decoration: underline;
+}
+
+.authentication-error {
+    width: fit-content;
+    margin-bottom: 12px;
+    padding: 3px 5px;
+    font-size: 0.9rem;
+    letter-spacing: 0.9px;
+    color: var(--white);
+    background-color: var(--midnight-blue);
+    box-shadow: var(--white) 0px 5px 5px;
+    border-radius: 5px;
+} 

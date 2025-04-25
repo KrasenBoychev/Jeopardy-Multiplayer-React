@@ -10,20 +10,20 @@ import PrivateGuard from "./common/PrivateGuard";
 import PublicGuard from "./common/PublicGuard";
 import AdminGuard from "./common/AdminGuard";
 
-import Home from "./components/core/home/Home";
-import About from "./components/core/about/About";
-import Header from "./components/core/header/Header";
-import Footer from "./components/core/footer/Footer";
-import Login from "./components/authentication/Login";
-import Register from "./components/authentication/Register";
-import Logout from "./components/authentication/Logout";
-import Create from "./components/create/Create";
-import CreateCategory from "./components/create/createCategory/CreateCategory";
-import CreateQuestion from "./components/create/createQuestion/CreateQuestion";
-import NotFound from "./components/core/notFound/NotFound";
-import PlayPage from "./components/game/01. play_page/PlayPage";
-import Socket from "./components/core/Socket";
-import NotificationsBox from "./components/core/notificationsBox/NotificationsBox";
+import Home from "./features/main_pages/home_page/Home";
+import About from "./features/main_pages/about_page/About";
+import Header from "./components/header/Header";
+import Footer from "./components/footer/Footer";
+import Login from "./features/authentication/Login";
+import Register from "./features/authentication/Register";
+import Logout from "./features/authentication/Logout";
+import Create from "./features/create/Create";
+import CreateCategory from "./features/create/createCategory/CreateCategory";
+import CreateQuestion from "./features/create/createQuestion/CreateQuestion";
+import NotFound from "./features/main_pages/not_found_page";
+import PlayPage from "./features/game/01. play_page/PlayPage";
+import Socket from "./features/socket_connection/Socket";
+import NotificationsBox from "./components/notificationsBox/NotificationsBox";
 
 function App() {
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(null);

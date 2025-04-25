@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { createCategory, createQuestion } from "../../api/create-api";
 import { getCategory } from "../../api/game-api";
 
-import { points } from "../common/gamePoints";
+import { points } from "../features/game/gamePoints";
 
 export default function useCreateCategory() {
   const [moveToNextPage, setMoveToNextPage] = useState(0);
