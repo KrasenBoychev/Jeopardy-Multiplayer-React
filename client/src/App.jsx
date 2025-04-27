@@ -6,9 +6,9 @@ import { AuthContextProvider, useAuthContext } from "./contexts/AuthContext";
 
 import "./App.css";
 
-import PrivateGuard from "./common/PrivateGuard";
-import PublicGuard from "./common/PublicGuard";
-import AdminGuard from "./common/AdminGuard";
+// import PrivateGuard from "./common/PrivateGuard";
+// import PublicGuard from "./common/PublicGuard";
+// import AdminGuard from "./common/AdminGuard";
 
 import Home from "./features/main_pages/home_page/Home";
 import About from "./features/main_pages/about_page/About";
@@ -17,15 +17,20 @@ import Footer from "./components/footer/Footer";
 import Login from "./features/authentication/Login";
 import Register from "./features/authentication/Register";
 import Logout from "./features/authentication/Logout";
-import Create from "./features/create/Create";
-import CreateCategory from "./features/create/createCategory/CreateCategory";
-import CreateQuestion from "./features/create/createQuestion/CreateQuestion";
-import NotFound from "./features/main_pages/not_found_page";
-import PlayPage from "./features/game/01. play_page/PlayPage";
+// import Create from "./features/create/Create";
+// import CreateCategory from "./features/create/createCategory/CreateCategory";
+// import CreateQuestion from "./features/create/createQuestion/CreateQuestion";
+import NotFound from "./features/main_pages/not_found_page/NotFound";
+// import PlayPage from "./features/game/01. play_page/PlayPage";
 import Socket from "./features/socket_connection/Socket";
-import NotificationsBox from "./components/notificationsBox/NotificationsBox";
+// import NotificationsBox from "./components/notificationsBox/NotificationsBox";
+import RequireAuth from "./features/authentication/RequireAuth";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "./features/authentication/authSlice";
 
 function App() {
+  const user = useSelector(selectCurrentUser);
+
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(null);
 
   const [friendsList, setFriendsList] = useState([]);
@@ -46,11 +51,15 @@ function App() {
     <>
       <Toaster />
 
-      <AuthContextProvider>
-        {!isNewGameStarted && <Header />}
+      {/* <AuthContextProvider> */}
+      {!isNewGameStarted && <Header />}
 
-        {/* {isConnected && ( */}
-        {/* <Socket
+      <Socket
+      // isUserAuthenticated={isUserAuthenticated}
+      />
+
+      {/* {isConnected && ( */}
+      {/* <Socket
           isUserAuthenticated={isUserAuthenticated}
           // setIsConnected={setIsConnected}
           // socketProps={{ socket, setSocket }}
@@ -58,9 +67,9 @@ function App() {
           // setNotificationsList={{ setNotificationsList }}
           // newGameStartedProps={{ isNewGameStarted }}
         /> */}
-        {/* )} */}
+      {/* )} */}
 
-        {/* {!isNewGameStarted && (
+      {/* {!isNewGameStarted && (
           <NotificationsBox
             socket={socket}
             friendsListProps={{ friendsList, setFriendsList }}
@@ -75,28 +84,41 @@ function App() {
           />
         )} */}
 
-        <main>
-          <Routes>
-            {/* <Route path="/" element={<Home />} /> */}
-            <Route path="/about" element={<About />} />
+      <main>
+        <Routes>
+          {/* public routes */}
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/register"
+            element={
+              <Register setIsUserAuthenticated={setIsUserAuthenticated} />
+            }
+          />
 
-            <Route element={<PublicGuard />}>
-              <Route
-                path="/login"
-                element={
-                  <Login setIsUserAuthenticated={setIsUserAuthenticated} />
-                }
-              />
-              <Route
-                path="/register"
-                element={
-                  <Register setIsUserAuthenticated={setIsUserAuthenticated} />
-                }
-              />
-            </Route>
+          {/* protected routes */}
+          <Route element={<RequireAuth />}></Route>
 
-            <Route element={<PrivateGuard />}>
-              {/* <Route
+          {/* <Route path="/" element={<Home />} /> */}
+          {/* <Route path="/about" element={<About />} /> */}
+
+          {/* <Route element={<PublicGuard />}>
+            <Route
+              path="/login"
+              element={
+                <Login setIsUserAuthenticated={setIsUserAuthenticated} />
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <Register setIsUserAuthenticated={setIsUserAuthenticated} />
+              }
+            />
+          </Route> */}
+
+          {/* <Route element={<PrivateGuard />}> */}
+          {/* <Route
                 path="/play"
                 element={
                   <PlayPage
@@ -116,19 +138,19 @@ function App() {
                   />
                 }
               /> */}
-              <Route
-                path="/logout"
-                element={
-                  <Logout
-                    // socketProps={{ socket, setSocket }}
-                    friendsProps={{ friendsList, setFriendsList }}
-                    setFriendInvited={{ setFriendInvited }}
-                    setIsUserAuthenticated={setIsUserAuthenticated}
-                  />
-                }
-              />
-            </Route>
-            {/* 
+          {/* <Route
+              path="/logout"
+              element={
+                <Logout
+                  // socketProps={{ socket, setSocket }}
+                  friendsProps={{ friendsList, setFriendsList }}
+                  setFriendInvited={{ setFriendInvited }}
+                  setIsUserAuthenticated={setIsUserAuthenticated}
+                />
+              }
+            />
+          </Route> */}
+          {/* 
             <Route element={<AdminGuard />}>
               <Route path="/create" element={<Create />} />
               <Route path="/createCategory" element={<CreateCategory />} />
@@ -148,12 +170,12 @@ function App() {
               />
             </Route> */}
 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
 
-        {!isNewGameStarted && <Footer />}
-      </AuthContextProvider>
+      {!isNewGameStarted && <Footer />}
+      {/* </AuthContextProvider> */}
     </>
   );
 }
