@@ -1,54 +1,54 @@
-import useNewGameStarted from "../../hooks/game_hooks/useNewGameStarted";
-import useSocket, { sendUpdateToOnlineFriends } from "../../hooks/useSocket";
-import { useAuthContext } from "../../contexts/AuthContext";
 import { socket } from "../../app/socket";
-import { useEffect } from "react";
-// import { recordUserInOnlineUsers } from "../../../api/user-api";
-import { getUserFriendsAndTheirStatus } from "../../../api/friends-api";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useRecordUserInOnlineUsersMutation } from "../../slices/userSlice";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../authentication/authSlice";
+import { useChangeOnlineStatusMutation } from "./socketSlice";
 
 export default function Socket({ isUserAuthenticated }) {
-  // const { friendsList, setFriendsList } = props.friendsProps;
-  // const { setNotificationsList } = props.setNotificationsList;
-  // const { isNewGameStarted } = props.newGameStartedProps;
+  // const [socketConnected, setSocketConnected] = useState(socket.connected);
+  // console.log(socket);
 
-  const { username } = useAuthContext();
-  const [recordUserInOnlineUsers, { isLoading }] =
-    useRecordUserInOnlineUsersMutation();
+  const user = useSelector(selectCurrentUser);
+
+  const [changeOnlineStatus, { isLoading }] = useChangeOnlineStatusMutation();
 
   useEffect(() => {
-    if (isUserAuthenticated) {
+    if (user) {
       socket.connect();
-    }
 
-    async function addOnlineUser() {
-      try {
-        await recordUserInOnlineUsers({ username, socketId: socket.id }).unwrap();
+      socket.on("connect", addOnlineUser);
 
-        // after the User model is changed, the server services have to be updated
-        const friendsListResponse = await getUserFriendsAndTheirStatus();
-        // setFriendsList(friendsListResponse);
+      async function addOnlineUser() {
+        try {
+          await changeOnlineStatus();
 
-        const action = "friendIsOnline";
-        await sendUpdateToOnlineFriends(
-          socket,
-          username,
-          friendsListResponse,
-          action
-        );
-      } catch (error) {
-        toast.error(error.message);
+          console.log("status changed");
+
+          // after the User model is changed, the server services have to be updated
+          // const friendsListResponse = await getUserFriendsAndTheirStatus();
+          // setFriendsList(friendsListResponse);
+
+          //   const action = "friendIsOnline";
+          //   await sendUpdateToOnlineFriends(
+          //     socket,
+          //     username,
+          //     friendsListResponse,
+          //     action
+          //   );
+        } catch (error) {
+          toast.error(error.message);
+        }
       }
+      console.log("socket connected");
     }
-
-    socket.on("connect", addOnlineUser);
 
     return () => {
       socket.disconnect();
       socket.removeAllListeners();
+      console.log("socket disconnected");
     };
-  }, [isUserAuthenticated]);
+  }, [user]);
 
   // useSocket();
   // useNewGameStarted(socket, friendsList, isNewGameStarted);
