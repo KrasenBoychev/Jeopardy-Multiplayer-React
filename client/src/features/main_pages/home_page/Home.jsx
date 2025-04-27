@@ -1,11 +1,11 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuthContext } from "../../../contexts/AuthContext";
-import { useGetTopPlayersQuery } from "../../../slices/userSlice";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../authentication/authSlice";
+import { useGetTopPlayersQuery } from "./homePageSlice";
 import "./home.css";
 
 export default function Home() {
-  const { points } = useAuthContext();
+  const user = useSelector(selectCurrentUser);
 
   const {
     data: topPlayers,
@@ -18,14 +18,14 @@ export default function Home() {
   let content;
 
   if (isLoading) {
-    content = <p>Loading...</p>;    
+    content = <p>Loading...</p>;
   } else if (isSuccess) {
     content = (
       <>
         <section className="points-info-and-play-button">
           <p>
-            {points != undefined
-              ? `Your Points: ${points}`
+            {user
+              ? `Your Points: ${user.gameDetails.points}`
               : "Win points and see your name in the Leaderboard!"}
           </p>
           <Link to="/play">
@@ -55,7 +55,7 @@ export default function Home() {
                     </span>
                   </div>
                   <span className="leaderboard-points">
-                    {player.points} points
+                    {player.gameDetails.points} points
                   </span>
                 </li>
               ))}
