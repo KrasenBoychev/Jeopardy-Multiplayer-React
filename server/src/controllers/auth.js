@@ -15,14 +15,18 @@ authRouter.post(
   async (req, res) => {
     try {
       const result = await login(req.body.email, req.body.password);
-
-      const accessToken = createToken(result);
-
-      res.json({
+      const user = {
         userId: result._id,
         email: result.email,
         username: result.username,
-        points: result.points,
+        gameDetails: result.gameDetails,
+        notificationsList: result.notificationsList,
+      };
+
+      const accessToken = createToken(result.email, result.username, result._id);
+
+      res.json({
+        user,
         accessToken,
       });
     } catch (err) {
