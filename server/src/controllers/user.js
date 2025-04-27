@@ -3,6 +3,7 @@ const { body } = require("express-validator");
 const { parseError } = require("../util");
 const {
   getTopPlayers,
+  changeOnlineStatus,
   // getUserNotificationsList,
   // removeNotification,
   // updateGameInProgress,
@@ -58,23 +59,23 @@ userRouter.get("/topPlayers", async (req, res) => {
 //   }
 // );
 
-// userRouter.post(
-//   "/recordNewOnlineUser",
-//   body("username").trim(),
-//   body("socketId").trim(),
-//   async (req, res) => {
-//     try {
-//       const onlineUser = await addNewOnlineUser(
-//         req.body.username,
-//         req.body.socketId
-//       );
-//       res.json(onlineUser);
-//     } catch (err) {
-//       const parsed = parseError(err);
-//       res.status(400).json({ code: 400, message: parsed.message });
-//     }
-//   }
-// );
+userRouter.post(
+  "/changeOnlineStatus",
+  // body("username").trim(),
+  // body("socketId").trim(),
+  async (req, res) => {
+    try {
+      const username = req.user.username;
+      const result = await changeOnlineStatus(username);
+      console.log(result);
+      
+      res.json(result);
+    } catch (err) {
+      const parsed = parseError(err);
+      res.status(400).json({ code: 400, message: parsed.message });
+    }
+  }
+);
 
 // userRouter.delete("/deleteOnlineUser", async (req, res) => {
 //   try {

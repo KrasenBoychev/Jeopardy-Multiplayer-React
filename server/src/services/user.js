@@ -16,6 +16,10 @@ async function getTopPlayers() {
     .limit(10);
 }
 
+async function changeOnlineStatus(username) {
+  //get the gameDetails, update online field and save record
+}
+
 // async function getUserNotificationsList(username) {
 //   return await User.find({ username }).distinct("notificationsList");
 // }
@@ -44,6 +48,7 @@ module.exports = {
   getUserByEmail,
   getUserByUsername,
   getTopPlayers,
+  changeOnlineStatus,
   // getUserNotificationsList,
   // addNotification,
   // removeNotification,
