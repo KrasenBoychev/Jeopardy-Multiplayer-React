@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useAuthContext } from "../../contexts/AuthContext";
-import { adminId } from "../../common/credentials";
+// import { adminId } from "../../common/credentials";
 
 import "./header.css";
 import { socket } from "../../app/socket";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../features/authentication/authSlice";
 
 export default function Header() {
-  const { isAuthenticated, username, userId } = useAuthContext();
+  // const { isAuthenticated, username, userId } = useAuthContext();
   const location = useLocation();
 
   const [currLocation, setCurrLocation] = useState(null);
+
+  const user = useSelector(selectCurrentUser);
 
   useEffect(() => {
     setCurrLocation(location.pathname);
@@ -20,7 +24,7 @@ export default function Header() {
     <header>
       <nav>
         <ul className="logo">
-          <li>Welcome, {isAuthenticated ? username : "guest"}</li>
+          <li>Welcome, {user ? user.username : "guest"}</li>
         </ul>
 
         <ul className="profile">
@@ -48,7 +52,7 @@ export default function Header() {
               Play
             </NavLink>
           </li>
-          {userId == adminId && (
+          {/* {userId == adminId && (
             <li>
               <NavLink
                 to="/create"
@@ -59,9 +63,9 @@ export default function Header() {
                 Create
               </NavLink>
             </li>
-          )}
+          )} */}
 
-          {isAuthenticated ? (
+          {user ? (
             <li>
               <NavLink to="/logout">Logout</NavLink>
             </li>
