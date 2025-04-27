@@ -4,11 +4,12 @@ import { baseURL } from "./baseURL";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: baseURL,
-  credentials: "include",
+  // credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
     if (token) {
-      headers.set("authorization", `Bearer ${token}`);
+      // headers.set("authorization", `Bearer ${token}`);
+      headers.set("X-Authorization", token);
     }
     return headers;
   },
@@ -36,17 +37,17 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
   return result;
 };
 
-// export const apiSlice = createApi({
-//   baseQuery: baseQueryWithReauth,
-//   endpoints: builder => ({})
-// })
-
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
   tagTypes: [],
   endpoints: (builder) => ({}),
 });
+
+// export const apiSlice = createApi({
+//   baseQuery: baseQueryWithReauth,
+//   endpoints: builder => ({})
+// })
 
 // export const apiSlice = createApi({
 //   reducerPath: "api",
