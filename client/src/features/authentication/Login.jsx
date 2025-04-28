@@ -1,20 +1,15 @@
-import { useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useLoginMutation } from "./authApiSlice";
-
-import "./authentication.css";
 import { setCredentials } from "./authSlice";
+import "./authentication.css";
 
-// import { useLogin } from "../../hooks/useAuth";
-
-export default function Login({ setIsUserAuthenticated }) {
+export default function Login() {
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
-  // const login = useLogin(setIsUserAuthenticated);
 
   return (
     <div className="authentication-container">
@@ -47,7 +42,6 @@ export default function Login({ setIsUserAuthenticated }) {
               }).unwrap();
 
               dispatch(setCredentials(userData));
-
               navigate("/");
             } catch (err) {
               // if (!err?.originalStatus) {
