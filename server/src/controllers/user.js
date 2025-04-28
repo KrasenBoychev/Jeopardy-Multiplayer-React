@@ -25,6 +25,19 @@ userRouter.get("/topPlayers", async (req, res) => {
   }
 });
 
+userRouter.post("/changeOnlineStatus", async (req, res) => {
+  try {
+    const result = await changeOnlineStatus(
+      req.body.username,
+      req.body.socketId
+    );
+    res.json(result);
+  } catch (err) {
+    const parsed = parseError(err);
+    res.status(400).json({ code: 400, message: parsed.message });
+  }
+});
+
 // userRouter.get("/getUserNotifications", async (req, res) => {
 //   try {
 //     const data = await getUserNotificationsList(req.user.username);
@@ -58,24 +71,6 @@ userRouter.get("/topPlayers", async (req, res) => {
 //     }
 //   }
 // );
-
-userRouter.post(
-  "/changeOnlineStatus",
-  // body("username").trim(),
-  // body("socketId").trim(),
-  async (req, res) => {
-    try {
-      const username = req.user.username;
-      const result = await changeOnlineStatus(username);
-      console.log(result);
-      
-      res.json(result);
-    } catch (err) {
-      const parsed = parseError(err);
-      res.status(400).json({ code: 400, message: parsed.message });
-    }
-  }
-);
 
 // userRouter.delete("/deleteOnlineUser", async (req, res) => {
 //   try {
