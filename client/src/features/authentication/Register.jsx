@@ -1,13 +1,15 @@
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-hot-toast";
+import { setCredentials } from "./authSlice";
+import { useRegisterMutation } from "./authApiSlice";
 import "./authentication.css";
 
-import { useRegister } from "../../hooks/useAuth";
-
-export default function Register({ setIsUserAuthenticated }) {
+export default function Register() {
+  const [register, { isLoading }] = useRegisterMutation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const register = useRegister(setIsUserAuthenticated);
 
   return (
     <div className="authentication-container">
@@ -48,11 +50,40 @@ export default function Register({ setIsUserAuthenticated }) {
           }}
           onSubmit={async (values) => {
             try {
-              await register(values.email, values.username, values.password);
+              const userData = await register({
+                email: values.email,
+                username: values.username,
+                password: values.password,
+              }).unwrap();
 
+              dispatch(setCredentials(userData));
               navigate("/");
-            } catch (error) {
-              return toast.error(error.message);
+            } catch (err) {
+              // if (!err?.originalStatus) {
+              //   // isLoading: true until timeout occurs
+              //   toast.error("No Server Response");
+              // } else if (err.originalStatus === 400) {
+              //   toast.error("Missing Username or Password");
+              // } else if (err.originalStatus === 401) {
+              //   toast.error("Unauthorized");
+              // } else if (err.originalStatus === 403) {
+              //   toast.error("Incorrect email or password");
+              // } else {
+              //   toast.error("Login Failed");
+              // }
+
+              if (!err?.status) {
+                // isLoading: true until timeout occurs
+                toast.error("No Server Response");
+              } else if (err.status === 400) {
+                toast.error("Missing Username or Password");
+              } else if (err.status === 401) {
+                toast.error("Unauthorized");
+              } else if (err.status === 403) {
+                toast.error("Incorrect email or password");
+              } else {
+                toast.error("Register Failed");
+              }
             }
           }}
         >
