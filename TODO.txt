@@ -4,7 +4,9 @@
    - When doing the components, check the API calls - they should get the correct types 
      (some of them are 'any' at the moment)
 
-2. Try to use Redux management system
+2. Try to use Redux management system:
+   - add socketId to User Model
+   - create a Public Guard for Login and Register (after backend is completed);
 
 3. When working over better UI, use the following library: https://ui.aceternity.com/
 
