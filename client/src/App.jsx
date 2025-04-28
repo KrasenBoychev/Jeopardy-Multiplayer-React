@@ -31,43 +31,11 @@ import { selectCurrentUser } from "./features/authentication/authSlice";
 function App() {
   const user = useSelector(selectCurrentUser);
 
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState(null);
-
-  const [friendsList, setFriendsList] = useState([]);
-  const [friendInvited, setFriendInvited] = useState(null);
-  const [notificationsList, setNotificationsList] = useState([]);
-  const [isNewGameStarted, setIsNewGameStarted] = useState(false);
-  const [firstPlayer, setFirstPlayer] = useState({
-    username: null,
-    socketId: null,
-  });
-  const [secondPlayer, setSecondPlayer] = useState({
-    username: null,
-    socketId: null,
-  });
-  const [gameRoomName, setGameRoomName] = useState(null);
-
   return (
     <>
       <Toaster />
-
-      {/* <AuthContextProvider> */}
-      {!isNewGameStarted && <Header />}
-
-      <Socket
-      // isUserAuthenticated={isUserAuthenticated}
-      />
-
-      {/* {isConnected && ( */}
-      {/* <Socket
-          isUserAuthenticated={isUserAuthenticated}
-          // setIsConnected={setIsConnected}
-          // socketProps={{ socket, setSocket }}
-          // friendsProps={{ friendsList, setFriendsList }}
-          // setNotificationsList={{ setNotificationsList }}
-          // newGameStartedProps={{ isNewGameStarted }}
-        /> */}
-      {/* )} */}
+      {user && <Socket />}
+      {user ? !user.gameDetails.gameInProgress && <Header /> : <Header />}
 
       {/* {!isNewGameStarted && (
           <NotificationsBox
@@ -88,34 +56,14 @@ function App() {
         <Routes>
           {/* public routes */}
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
-          <Route
-            path="/register"
-            element={
-              <Register setIsUserAuthenticated={setIsUserAuthenticated} />
-            }
-          />
+          <Route path="/register" element={<Register />} />
 
           {/* protected routes */}
-          <Route element={<RequireAuth />}></Route>
-
-          {/* <Route path="/" element={<Home />} /> */}
-          {/* <Route path="/about" element={<About />} /> */}
-
-          {/* <Route element={<PublicGuard />}>
-            <Route
-              path="/login"
-              element={
-                <Login setIsUserAuthenticated={setIsUserAuthenticated} />
-              }
-            />
-            <Route
-              path="/register"
-              element={
-                <Register setIsUserAuthenticated={setIsUserAuthenticated} />
-              }
-            />
-          </Route> */}
+          <Route element={<RequireAuth />}>
+            <Route path="/logout" element={<Logout />} />
+          </Route>
 
           {/* <Route element={<PrivateGuard />}> */}
           {/* <Route
@@ -138,17 +86,7 @@ function App() {
                   />
                 }
               /> */}
-          {/* <Route
-              path="/logout"
-              element={
-                <Logout
-                  // socketProps={{ socket, setSocket }}
-                  friendsProps={{ friendsList, setFriendsList }}
-                  setFriendInvited={{ setFriendInvited }}
-                  setIsUserAuthenticated={setIsUserAuthenticated}
-                />
-              }
-            />
+          {/* 
           </Route> */}
           {/* 
             <Route element={<AdminGuard />}>
@@ -174,8 +112,7 @@ function App() {
         </Routes>
       </main>
 
-      {!isNewGameStarted && <Footer />}
-      {/* </AuthContextProvider> */}
+      {user ? !user.gameDetails.gameInProgress && <Footer /> : <Footer />}
     </>
   );
 }
