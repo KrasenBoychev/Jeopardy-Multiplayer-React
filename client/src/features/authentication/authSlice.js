@@ -9,14 +9,20 @@ const authSlice = createSlice({
       state.user = user;
       state.token = accessToken;
     },
-    logOut: (state, action) => {
+    deleteCredentials: (state, action) => {
       state.user = null;
       state.token = null;
+    },
+    updateOnlineStatus: (state, action) => {
+      const socketId = action.payload;  
+      state.user.gameDetails.socketId = socketId;
+      state.user.gameDetails.online = !state.user.online;
     },
   },
 });
 
-export const { setCredentials, logOut } = authSlice.actions;
+export const { setCredentials, deleteCredentials, updateOnlineStatus } =
+  authSlice.actions;
 
 export default authSlice.reducer;
 
