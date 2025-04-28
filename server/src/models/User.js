@@ -28,6 +28,10 @@ const UserSchema = new Schema({
       type: Boolean,
       default: false,
     },
+    socketId: {
+      type: String,
+      default: "",
+    },
     gameInProgress: {
       type: Boolean,
       default: false,
