@@ -16,8 +16,15 @@ async function getTopPlayers() {
     .limit(10);
 }
 
-async function changeOnlineStatus(username) {
-  //get the gameDetails, update online field and save record
+async function changeOnlineStatus(username, socketId) {
+  return await User.updateOne({ username }, [
+    {
+      $set: {
+        "gameDetails.online": { $not: "$gameDetails.online" },
+        "gameDetails.socketId": socketId ,
+      },
+    },
+  ]);
 }
 
 // async function getUserNotificationsList(username) {
