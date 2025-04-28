@@ -42,14 +42,12 @@ export const useRegister = (setIsUserAuthenticated: Function) => {
   return registerHandler;
 };
 
-export const useLogout = (setIsUserAuthenticated: Function) => {
+export const useLogout = () => {
   const { logout: localLogout } = useAuthContext();
 
   const logoutHandler = async () => {
     await logout();
     localLogout();
-
-    setIsUserAuthenticated(false);
   };
 
   return logoutHandler;
