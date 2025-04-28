@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../authentication/authSlice";
-import { useGetTopPlayersQuery } from "./homePageSlice";
+import { useGetTopPlayersQuery } from "./homePageApiSlice";
 import "./home.css";
 
 export default function Home() {
