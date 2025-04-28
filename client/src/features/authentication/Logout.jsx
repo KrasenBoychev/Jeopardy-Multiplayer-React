@@ -1,35 +1,22 @@
 import { Navigate } from "react-router-dom";
-import { useLogout } from "../../hooks/useAuth";
-import { sendUpdateToOnlineFriends } from "../../hooks/useSocket";
-import { useAuthContext } from "../../contexts/AuthContext";
+import { useDispatch } from "react-redux";
+import { deleteCredentials } from "./authSlice";
 import { useEffect } from "react";
-import { socket } from "../../app/socket";
 import toast from "react-hot-toast";
-import { deleteUserInOnlineUsers } from "../../../api/user-api";
+import { useLogOutMutation } from "./authApiSlice";
 
-export default function Logout(props) {
-  // const { socket, setSocket } = props.socketProps;
-  const { friendsList, setFriendsList } = props.friendsProps;
-  const { setFriendInvited } = props.setFriendInvited;
-  const setIsUserAuthenticated = props.setIsUserAuthenticated;
-
-  const { username } = useAuthContext();
-  const logout = useLogout(setIsUserAuthenticated);
-  const action = "friendIsOffline";
+export default function Logout() {
+  const [logOut, { isLoading }] = useLogOutMutation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    (async function logoutUser() {
+    (async function logout() {
       try {
-        await deleteUserInOnlineUsers();
-
-        setFriendInvited(null);
-        logout();
-      } catch (error) {
-        toast.error(error.message);
+        await logOut();
+        dispatch(deleteCredentials());
+      } catch (err) {
+        toast.error('Logout Failed')
       }
-      // await sendUpdateToOnlineFriends(socket, username, friendsList, action);
-      // socket.disconnect();
-      // setSocket(null);
     })();
   }, []);
 
