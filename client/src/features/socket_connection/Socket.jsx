@@ -6,12 +6,16 @@ import {
   selectCurrentUser,
   updateOnlineStatus,
 } from "../authentication/authSlice";
-import { useChangeOnlineStatusMutation } from "./socketApiSlice";
+import {
+  useChangeOnlineStatusMutation,
+  useGetOnlineFriendsDetailsMutation,
+} from "./socketApiSlice";
 
 export default function Socket() {
   const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
-  const [changeOnlineStatus, { isLoading }] = useChangeOnlineStatusMutation();
+  const [changeOnlineStatus] = useChangeOnlineStatusMutation();
+  const [getOnlineFriendsDetails] = useGetOnlineFriendsDetailsMutation();
 
   useEffect(() => {
     (async function updateStatus() {
@@ -22,7 +26,10 @@ export default function Socket() {
 
       dispatch(updateOnlineStatus(socket.id));
 
-      const onlineFriends = await getOnlineFriendsDetails(user.gameDetails.friendsList);
+      const onlineFriends = await getOnlineFriendsDetails(
+        user.gameDetails.friendsList
+      );
+      console.log(onlineFriends);
     })();
 
     return async () => {
