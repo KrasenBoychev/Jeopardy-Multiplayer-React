@@ -12,13 +12,19 @@ export const socketApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
-    getOnlineFriendsDetails: builder.query({
-      query: () => "/users/onlineFriends",
+    getOnlineFriendsDetails: builder.mutation({
+      query: (friendsList) => ({
+        url: "/users/onlineFriends",
+        method: "POST",
+        body: {
+          friendsList,
+        },
+      }),
     }),
   }),
 });
 
 export const {
   useChangeOnlineStatusMutation,
-  useGetOnlineFriendsDetailsQuery,
+  useGetOnlineFriendsDetailsMutation,
 } = socketApiSlice;
