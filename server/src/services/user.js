@@ -28,7 +28,7 @@ async function changeOnlineStatus(username, socketId) {
 }
 
 async function findOnlineFriends(friendsList) {
-  return await User.find({
+  const user = await User.find({
     username: { $in: friendsList },
     "gameDetails.online": true,
   });
