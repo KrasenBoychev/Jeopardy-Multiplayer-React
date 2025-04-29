@@ -21,10 +21,17 @@ async function changeOnlineStatus(username, socketId) {
     {
       $set: {
         "gameDetails.online": { $not: "$gameDetails.online" },
-        "gameDetails.socketId": socketId ,
+        "gameDetails.socketId": socketId,
       },
     },
   ]);
+}
+
+async function findOnlineFriends(friendsList) {
+  return await User.find({
+    username: { $in: friendsList },
+    "gameDetails.online": true,
+  });
 }
 
 // async function getUserNotificationsList(username) {
@@ -56,6 +63,7 @@ module.exports = {
   getUserByUsername,
   getTopPlayers,
   changeOnlineStatus,
+  findOnlineFriends,
   // getUserNotificationsList,
   // addNotification,
   // removeNotification,
