@@ -41,8 +41,22 @@ userRouter.post("/changeOnlineStatus", async (req, res) => {
 
 userRouter.post("/onlineFriends", async (req, res) => {
   try {
-    const data = await findOnlineFriends(req.body.friendsList);
-    res.json(data);
+    const friendsDetails = await findOnlineFriends(req.body.friendsList);
+
+    if (friendsDetails.length > 0) {
+      const detailsToBeSent = friendsDetails.map((friend) => {
+        return {
+          username: friend.username,
+          online: friend.gameDetails.online,
+          socketId: friend.gameDetails.socketId,
+          gameInProgress: friend.gameDetails.gameInProgress,
+        };
+      });
+
+      res.json(detailsToBeSent);
+    } else {
+      res.json(null);
+    }
   } catch (err) {
     const parsed = parseError(err);
     res.status(400).json({ code: 400, message: parsed.message });
