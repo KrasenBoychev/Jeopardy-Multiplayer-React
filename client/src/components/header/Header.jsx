@@ -4,7 +4,6 @@ import { useAuthContext } from "../../contexts/AuthContext";
 // import { adminId } from "../../common/credentials";
 
 import "./header.css";
-import { socket } from "../../app/socket";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../features/authentication/authSlice";
 
