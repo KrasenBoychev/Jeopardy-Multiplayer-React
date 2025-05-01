@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { useAuthContext } from "../../contexts/AuthContext";
-// import { adminId } from "../../common/credentials";
-
-import "./header.css";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../features/authentication/authSlice";
+// import { adminId } from "../../common/credentials";
+import "./header.css";
 
 export default function Header() {
-  // const { isAuthenticated, username, userId } = useAuthContext();
-  const location = useLocation();
-
   const [currLocation, setCurrLocation] = useState(null);
-
+  const location = useLocation();
   const user = useSelector(selectCurrentUser);
 
   useEffect(() => {
@@ -43,14 +38,6 @@ export default function Header() {
               About
             </NavLink>
           </li>
-          <li>
-            <NavLink
-              to="/play"
-              className={currLocation == "/play" ? "header_active_link" : ""}
-            >
-              Play
-            </NavLink>
-          </li>
           {/* {userId == adminId && (
             <li>
               <NavLink
@@ -65,9 +52,21 @@ export default function Header() {
           )} */}
 
           {user ? (
-            <li>
-              <NavLink to="/logout">Logout</NavLink>
-            </li>
+            <>
+              <li>
+                <NavLink
+                  to="/play"
+                  className={
+                    currLocation == "/play" ? "header_active_link" : ""
+                  }
+                >
+                  Play
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/logout">Logout</NavLink>
+              </li>
+            </>
           ) : (
             <>
               <li>
