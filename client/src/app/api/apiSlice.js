@@ -45,11 +45,6 @@ export const apiSlice = createApi({
 });
 
 // export const apiSlice = createApi({
-//   baseQuery: baseQueryWithReauth,
-//   endpoints: builder => ({})
-// })
-
-// export const apiSlice = createApi({
 //   reducerPath: "api",
 //   baseQuery: fetchBaseQuery({ baseUrl: baseURL }),
 //   tagTypes: ["User"],
