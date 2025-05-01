@@ -21,20 +21,23 @@ import Logout from "./features/authentication/Logout";
 // import CreateCategory from "./features/create/createCategory/CreateCategory";
 // import CreateQuestion from "./features/create/createQuestion/CreateQuestion";
 import NotFound from "./features/main_pages/not_found_page/NotFound";
-// import PlayPage from "./features/game/01. play_page/PlayPage";
+import PlayPage from "./features/game/01. play_page/PlayPage";
 import Socket from "./features/socket_connection/Socket";
 // import NotificationsBox from "./components/notificationsBox/NotificationsBox";
 import RequireAuth from "./features/authentication/RequireAuth";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "./features/authentication/authSlice";
+import { io } from "socket.io-client";
+import { baseURL } from "./app/api/baseURL";
 
 function App() {
   const user = useSelector(selectCurrentUser);
+  const [socket, setSocket] = useState(null);
 
   return (
     <>
       <Toaster />
-      {user && <Socket />}
+      {user && <Socket socketProps={{ socket, setSocket }} />}
       {user ? !user.gameDetails.gameInProgress && <Header /> : <Header />}
 
       {/* {!isNewGameStarted && (
@@ -62,30 +65,11 @@ function App() {
 
           {/* protected routes */}
           <Route element={<RequireAuth />}>
-            <Route path="/logout" element={<Logout />} />
+            <Route path="/play" element={<PlayPage />} />
+            <Route path="/logout" element={<Logout socket={socket} />} />
           </Route>
 
           {/* <Route element={<PrivateGuard />}> */}
-          {/* <Route
-                path="/play"
-                element={
-                  <PlayPage
-                    socket={socket}
-                    friendsProps={{
-                      friendsList,
-                      friendInvited,
-                      setFriendInvited,
-                      isNewGameStarted,
-                      setIsNewGameStarted,
-                    }}
-                    notifications={{
-                      notificationsList,
-                    }}
-                    playersProps={{ firstPlayer, secondPlayer }}
-                    gameRoomNameProps={{ gameRoomName, setGameRoomName }}
-                  />
-                }
-              /> */}
           {/* 
           </Route> */}
           {/* 
