@@ -5,7 +5,7 @@ const {
   getTopPlayers,
   changeOnlineStatus,
   findFriendsDetails,
-  // getUserNotificationsList,
+  getNotificationsList,
   // removeNotification,
   // updateGameInProgress,
 } = require("../services/user");
@@ -63,15 +63,15 @@ userRouter.post("/friendsDetails", async (req, res) => {
   }
 });
 
-// userRouter.get("/getUserNotifications", async (req, res) => {
-//   try {
-//     const data = await getUserNotificationsList(req.user.username);
-//     res.json(data);
-//   } catch (err) {
-//     const parsed = parseError(err);
-//     res.status(400).json({ code: 400, message: parsed.message });
-//   }
-// });
+userRouter.get("/getNotifications", async (req, res) => {
+  try {
+    const data = await getNotificationsList(req.user.username);
+    res.json(data);
+  } catch (err) {
+    const parsed = parseError(err);
+    res.status(400).json({ code: 400, message: parsed.message });
+  }
+});
 
 // userRouter.put(
 //   "/removeNotification",
