@@ -1,34 +1,24 @@
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-
-import { AuthContextProvider, useAuthContext } from "./contexts/AuthContext";
-
-import "./App.css";
-
-// import PrivateGuard from "./common/PrivateGuard";
-// import PublicGuard from "./common/PublicGuard";
-// import AdminGuard from "./common/AdminGuard";
-
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "./features/authentication/authSlice";
 import Home from "./features/main_pages/home_page/Home";
 import About from "./features/main_pages/about_page/About";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
+import RequireAuth from "./features/authentication/RequireAuth";
 import Login from "./features/authentication/Login";
 import Register from "./features/authentication/Register";
 import Logout from "./features/authentication/Logout";
 // import Create from "./features/create/Create";
 // import CreateCategory from "./features/create/createCategory/CreateCategory";
 // import CreateQuestion from "./features/create/createQuestion/CreateQuestion";
-import NotFound from "./features/main_pages/not_found_page/NotFound";
-import PlayPage from "./features/game/01. play_page/PlayPage";
 import Socket from "./features/socket_connection/Socket";
-// import NotificationsBox from "./components/notificationsBox/NotificationsBox";
-import RequireAuth from "./features/authentication/RequireAuth";
-import { useSelector } from "react-redux";
-import { selectCurrentUser } from "./features/authentication/authSlice";
-import { io } from "socket.io-client";
-import { baseURL } from "./app/api/baseURL";
+import Notifications from "./components/notifications/Notifications";
+import PlayPage from "./features/game/01. play_page/PlayPage";
+import NotFound from "./features/main_pages/not_found_page/NotFound";
+import "./App.css";
 
 function App() {
   const user = useSelector(selectCurrentUser);
@@ -37,23 +27,14 @@ function App() {
   return (
     <>
       <Toaster />
-      {user && <Socket socketProps={{ socket, setSocket }} />}
-      {user ? !user.gameDetails.gameInProgress && <Header /> : <Header />}
+      {user && (
+        <>
+          <Socket socketProps={{ socket, setSocket }} />
+          <Notifications />
+        </>
+      )}
 
-      {/* {!isNewGameStarted && (
-          <NotificationsBox
-            socket={socket}
-            friendsListProps={{ friendsList, setFriendsList }}
-            friendInvitedProps={{ friendInvited, setFriendInvited }}
-            notifications={{
-              notificationsList,
-              setNotificationsList,
-            }}
-            setIsNewGameStarted={setIsNewGameStarted}
-            setPlayersProps={{ setFirstPlayer, setSecondPlayer }}
-            gameRoomNameProps={{ gameRoomName, setGameRoomName }}
-          />
-        )} */}
+      {(!user || !user.gameDetails.gameInProgress) && <Header />}
 
       <main>
         <Routes>
@@ -96,7 +77,7 @@ function App() {
         </Routes>
       </main>
 
-      {user ? !user.gameDetails.gameInProgress && <Footer /> : <Footer />}
+      {(!user || !user.gameDetails.gameInProgress) && <Footer />}
     </>
   );
 }
