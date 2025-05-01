@@ -33,11 +33,9 @@ async function findFriendsDetails(friendsList) {
   });
 }
 
-//find().forEach(function(u) { result.push(u.text) })
-
-// async function getUserNotificationsList(username) {
-//   return await User.find({ username }).distinct("notificationsList");
-// }
+async function getNotificationsList(username) {
+  return await User.find({ username }).distinct("notificationsList");
+}
 
 // async function addNotification(userUsername, notification) {
 //   return await User.updateOne(
@@ -65,7 +63,7 @@ module.exports = {
   getTopPlayers,
   changeOnlineStatus,
   findFriendsDetails,
-  // getUserNotificationsList,
+  getNotificationsList,
   // addNotification,
   // removeNotification,
   // updateGameInProgress,
