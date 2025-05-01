@@ -1,16 +1,19 @@
 import { useState } from "react";
 import AddFriendBtn from "./AddFriendBtn";
 import "./friendsList.css";
+import { useSelector } from "react-redux";
+import { selectFriends } from "./friendsSlice";
 
-export default function FriendsList({ socket, friendsList }) {
+export default function FriendsList() {
   const [addFriendUsername, setAddFriendUsername] = useState("");
+  const friends = useSelector(selectFriends);
 
   return (
     <div className="friends_list_wrapper">
       <h3>Friends List</h3>
-      {friendsList.length > 0 ? (
+      {friends ? (
         <ul>
-          {friendsList.map((friend) => {
+          {friends.map((friend) => {
             return (
               <li
                 key={friend.username}
@@ -44,12 +47,12 @@ export default function FriendsList({ socket, friendsList }) {
             setAddFriendUsername(event.target.value);
           }}
         />
-        <AddFriendBtn
+        {/* <AddFriendBtn
           addFriendUsername={addFriendUsername}
           socket={socket}
-          friendsList={friendsList}
+          friends={friends}
           setAddFriendUsername={setAddFriendUsername}
-        />
+        /> */}
       </p>
     </div>
   );
