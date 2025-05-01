@@ -4,7 +4,7 @@ const { parseError } = require("../util");
 const {
   getTopPlayers,
   changeOnlineStatus,
-  findOnlineFriends,
+  findFriendsDetails,
   // getUserNotificationsList,
   // removeNotification,
   // updateGameInProgress,
@@ -39,9 +39,9 @@ userRouter.post("/changeOnlineStatus", async (req, res) => {
   }
 });
 
-userRouter.post("/onlineFriends", async (req, res) => {
+userRouter.post("/friendsDetails", async (req, res) => {
   try {
-    const friendsDetails = await findOnlineFriends(req.body.friendsList);
+    const friendsDetails = await findFriendsDetails(req.body.friendsList);
 
     if (friendsDetails.length > 0) {
       const detailsToBeSent = friendsDetails.map((friend) => {

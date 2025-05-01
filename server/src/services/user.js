@@ -27,12 +27,13 @@ async function changeOnlineStatus(username, socketId) {
   ]);
 }
 
-async function findOnlineFriends(friendsList) {
-  const user = await User.find({
+async function findFriendsDetails(friendsList) {
+  return await User.find({
     username: { $in: friendsList },
-    "gameDetails.online": true,
   });
 }
+
+//find().forEach(function(u) { result.push(u.text) })
 
 // async function getUserNotificationsList(username) {
 //   return await User.find({ username }).distinct("notificationsList");
@@ -63,7 +64,7 @@ module.exports = {
   getUserByUsername,
   getTopPlayers,
   changeOnlineStatus,
-  findOnlineFriends,
+  findFriendsDetails,
   // getUserNotificationsList,
   // addNotification,
   // removeNotification,
