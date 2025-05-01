@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import toast from "react-hot-toast";
 import {
   selectCurrentUser,
   updateOnlineStatus,
@@ -9,16 +8,30 @@ import {
   useChangeOnlineStatusMutation,
   useGetFriendsDetailsMutation,
 } from "../socketApiSlice";
-import { setFriends } from "../../friendsSlice";
+import { setFriends } from "../../game/01. play_page/children/friendsList/friendsSlice";
+import { io } from "socket.io-client";
+import { baseURL } from "../../../app/api/baseURL";
 
-export default function useConnection(socket) {
+export default function useConnection(socketProps) {
+  const { socket, setSocket } = socketProps;
   const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
   const [changeOnlineStatus] = useChangeOnlineStatusMutation();
   const [getFriendsDetails] = useGetFriendsDetailsMutation();
 
   useEffect(() => {
-    socket?.on("connect", async () => {
+    const newSocket = io(baseURL);
+    setSocket(newSocket);
+
+    newSocket.emit("newUserConnected", {});
+
+    return async () => {
+      socket?.removeAllListeners();
+    };
+  }, []);
+
+  useEffect(() => {
+    socket?.on("setConnectedUser", async () => {
       await changeOnlineStatus({
         username: user.username,
         socketId: socket.id,
@@ -26,12 +39,12 @@ export default function useConnection(socket) {
 
       dispatch(updateOnlineStatus(socket.id));
 
-      const friends = await getFriendsDetails(user.gameDetails.friendsList);
+      const friendsList = await getFriendsDetails(user.gameDetails.friendsList);
 
-      if (friends.data) {
-        dispatch(setFriends(friends.data));
+      if (friendsList.data) {
+        dispatch(setFriends(friendsList.data));
 
-        const onlineFriends = friends.data.filter(
+        const onlineFriends = friendsList.data.filter(
           (friend) => friend.online == true
         );
 
@@ -39,7 +52,7 @@ export default function useConnection(socket) {
           socket.emit("sendUserStatus", {
             senderInfo: {
               username: user.username,
-              socketId: user.gameDetails.socketId,
+              socketId: socket.id,
             },
             receiverFriends: onlineFriends,
             // action,
@@ -47,14 +60,5 @@ export default function useConnection(socket) {
         }
       }
     });
-
-    return async () => {
-      try {
-        await changeOnlineStatus({ username: user.username, socketId: "" });
-      } catch (err) {
-        toast.error("Cannot disconnect the user");
-      }
-      socket.removeAllListeners();
-    };
-  }, []);
+  }, [socket]);
 }
