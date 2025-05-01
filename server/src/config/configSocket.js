@@ -10,6 +10,10 @@ function configSocket(server) {
   });
 
   io.on("connection", (socket) => {
+    socket.on("newUserConnected", () => {
+      io.to(socket.id).emit("setConnectedUser", {});
+    });
+
     socket.on("sendUserStatus", ({ senderInfo, receiverFriends }) => {
       receiverFriends.forEach((friend) => {
         io.to(friend.socketId).emit("getFriendStatus", {
