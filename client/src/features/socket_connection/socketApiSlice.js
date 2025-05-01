@@ -12,9 +12,9 @@ export const socketApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
-    getOnlineFriendsDetails: builder.mutation({
+    getFriendsDetails: builder.mutation({
       query: (friendsList) => ({
-        url: "/users/onlineFriends",
+        url: "/users/friendsDetails",
         method: "POST",
         body: {
           friendsList,
@@ -24,7 +24,5 @@ export const socketApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const {
-  useChangeOnlineStatusMutation,
-  useGetOnlineFriendsDetailsMutation,
-} = socketApiSlice;
+export const { useChangeOnlineStatusMutation, useGetFriendsDetailsMutation } =
+  socketApiSlice;
