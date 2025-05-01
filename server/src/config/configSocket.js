@@ -10,11 +10,11 @@ function configSocket(server) {
   });
 
   io.on("connection", (socket) => {
-    socket.on("sendUserStatus", ({ senderInfo, receiverFriends, action }) => {
+    socket.on("sendUserStatus", ({ senderInfo, receiverFriends }) => {
       receiverFriends.forEach((friend) => {
         io.to(friend.socketId).emit("getFriendStatus", {
           senderInfo,
-          action,
+          // action,
         });
       });
     });
