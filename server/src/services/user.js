@@ -33,16 +33,24 @@ async function findFriendsDetails(friendsList) {
   });
 }
 
-async function getNotificationsList(username) {
+async function getUserNotificationsList(username) {
   return await User.find({ username }).distinct("notificationsList");
 }
 
-// async function addNotification(userUsername, notification) {
-//   return await User.updateOne(
-//     { username: userUsername },
-//     { $push: { notificationsList: notification } }
-//   );
-// }
+async function getUserFriendsList(username) {
+  return await User.find({ username }).distinct("gameDetails.friendsList");
+}
+
+async function getUserSocketId(username) {
+  return await User.find({ username }).distinct("gameDetails.socketId");
+}
+
+async function addNotification(username, newNotification) {
+  return await User.updateOne(
+    { username },
+    { $push: { notificationsList: newNotification } }
+  );
+}
 
 // async function removeNotification(userUsername, type, friendUsername) {
 //   return await User.updateOne(
@@ -63,8 +71,10 @@ module.exports = {
   getTopPlayers,
   changeOnlineStatus,
   findFriendsDetails,
-  getNotificationsList,
-  // addNotification,
+  getUserNotificationsList,
+  getUserFriendsList,
+  getUserSocketId,
+  addNotification,
   // removeNotification,
   // updateGameInProgress,
 };
