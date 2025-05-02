@@ -7,7 +7,7 @@ import "./notifications.css";
 export default function Notifications() {
   const [notificationsOpened, setNotificationsOpened] = useState(false);
   const {
-    data: receivedNotifications,
+    data: notifications,
     isLoading,
     isSuccess,
     isError,
@@ -19,7 +19,7 @@ export default function Notifications() {
       <NotificationsHeader
         notificationsProps={{
           isSuccess,
-          receivedNotifications,
+          notifications,
           notificationsOpened,
           setNotificationsOpened,
         }}
@@ -28,7 +28,7 @@ export default function Notifications() {
         <NotificationsBody
           notificationsProps={{
             isSuccess,
-            receivedNotifications,
+            notifications,
           }}
         />
       )}
