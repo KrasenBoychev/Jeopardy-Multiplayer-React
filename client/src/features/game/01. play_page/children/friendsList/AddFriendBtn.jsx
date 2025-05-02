@@ -1,61 +1,85 @@
 import { toast } from "react-hot-toast";
-import { sendFriendRequest } from "../../../../../../api/friends-api";
-import { useAuthContext } from "../../../../../contexts/AuthContext";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser } from "../../../../authentication/authSlice";
+import { selectFriends } from "./friendsSlice";
+import { useSendFriendReqMutation } from "./friendsApiSlice";
+import { useGetNotificationsQuery } from "../../../../../components/notifications/notificationsApiSlice";
+import { setSocketReq } from "../../../../socket_connection/socketSlice";
 
-export default function AddFriendBtn({
-  addFriendUsername,
-  socket,
-  friendsList,
-  setAddFriendUsername,
-}) {
-  const { username } = useAuthContext();
+export default function AddFriendBtn() {
+  const [addFriendUsername, setAddFriendUsername] = useState("");
+  const user = useSelector(selectCurrentUser);
+  const friends = useSelector(selectFriends);
+  const [sendFriendReq] = useSendFriendReqMutation();
+  const { data: notifications } = useGetNotificationsQuery("getNotifications");
+  const dispatch = useDispatch();
 
   const sendFriendInvitation = async () => {
     if (!addFriendUsername.trim()) {
       return;
-    } else if (addFriendUsername == username) {
+    } else if (addFriendUsername == user.username) {
       toast.error("Cannot add yourself");
       return;
     }
 
-    let isUsernameInFriendList = false;
-    friendsList.forEach((friend) => {
-      if (friend.username == addFriendUsername) {
+    if (friends) {
+      const findFriend = friends.find(
+        (friend) => friend.username == addFriendUsername
+      );
+      if (findFriend) {
         toast.error(addFriendUsername + " is in your Friends List");
-        isUsernameInFriendList = true;
         return;
       }
-    });
+    }
 
-    if (isUsernameInFriendList) {
+    const findNotification = notifications.find(
+      (notification) =>
+        notification.type == "addFriendReq" &&
+        notification.username == addFriendUsername
+    );
+    if (findNotification) {
+      toast.error(
+        addFriendUsername +
+          " has already sent friend request to you - check notifications"
+      );
       return;
     }
 
     try {
-      const friendCheckResponse = await sendFriendRequest(addFriendUsername);
+      const response = await sendFriendReq(addFriendUsername);
+      const result = response.data;
 
-      if (friendCheckResponse.status == "success") {
-        toast.success(friendCheckResponse.msg);
-      } else if (friendCheckResponse.status == "error") {
-        toast.error(friendCheckResponse.msg);
-      } else if (friendCheckResponse.status == "send invitation") {
-        await socket.emit("sendNotification", {
-          receiverSocketId: friendCheckResponse.socketId,
-          msg: "friendRequest",
-          data: {
-            friendUsername: username,
-            content: " sent friend request",
-            btns: "Accept/Reject",
-          },
-        });
-        toast.success(friendCheckResponse.msg);
+      if (result.status == "error") {
+        toast.error(result.msg);
+      } else if (result.status == "success") {
+        dispatch(
+          setSocketReq({
+            socketReqName: "friendReqSent",
+            socketData: { receiverSocketId: result.friendSocketId },
+          })
+        );
 
+        toast.success("Friend request sent to " + addFriendUsername);
         setAddFriendUsername("");
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Sending friend request failed");
+      console.log(error.message);
     }
   };
 
-  return <button onClick={sendFriendInvitation}>Add Friend</button>;
+  return (
+    <p className="add_friend">
+      <input
+        type="text"
+        placeholder="Friend Username"
+        value={addFriendUsername}
+        onChange={(event) => {
+          setAddFriendUsername(event.target.value);
+        }}
+      />
+      <button onClick={sendFriendInvitation}>Add Friend</button>
+    </p>
+  );
 }
