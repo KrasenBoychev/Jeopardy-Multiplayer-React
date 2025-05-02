@@ -13,7 +13,10 @@ export default function Home() {
     isSuccess,
     isError,
     error,
-  } = useGetTopPlayersQuery("getTopPlayers");
+  } = useGetTopPlayersQuery("getTopPlayers", {
+    refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,
+  });
 
   let content;
 
