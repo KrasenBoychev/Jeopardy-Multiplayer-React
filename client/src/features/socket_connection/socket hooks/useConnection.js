@@ -27,6 +27,8 @@ export default function useConnection(socketProps) {
 
     return async () => {
       socket?.removeAllListeners();
+      socket?.disconnect;
+      setSocket(null);
     };
   }, []);
 
