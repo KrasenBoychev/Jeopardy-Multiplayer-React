@@ -4,10 +4,8 @@ import {
   selectCurrentUser,
   updateOnlineStatus,
 } from "../../authentication/authSlice";
-import {
-  useChangeOnlineStatusMutation,
-  useGetFriendsDetailsMutation,
-} from "../socketApiSlice";
+import { useChangeOnlineStatusMutation } from "../socketApiSlice";
+import { useGetFriendsDetailsMutation } from "../../game/01. play_page/children/friendsList/friendsApiSlice";
 import { setFriends } from "../../game/01. play_page/children/friendsList/friendsSlice";
 import { io } from "socket.io-client";
 import { baseURL } from "../../../app/api/baseURL";
