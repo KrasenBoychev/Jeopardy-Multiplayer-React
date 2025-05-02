@@ -1,10 +1,13 @@
 import useConnection from "./socket hooks/useConnection";
-import useFriendsStatus from "./socket hooks/useFriendsStatus";
+import useFriends from "./socket hooks/useFriends";
+import useSendSocketReq from "./socket hooks/useSendSocketReq";
 
 export default function Socket({ socketProps }) {
   const { socket } = socketProps;
 
   useConnection(socketProps);
-  useFriendsStatus(socket);
+  useFriends(socket);
+
+  useSendSocketReq(socket);
   return;
 }
