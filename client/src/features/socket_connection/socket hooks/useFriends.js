@@ -2,8 +2,10 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { updateFriendStatus } from "../../game/01. play_page/children/friendsList/friendsSlice";
 import toast from "react-hot-toast";
+import { useGetNotificationsQuery } from "../../../components/notifications/notificationsApiSlice";
 
 export default function useFriends(socket) {
+  const { refetch } = useGetNotificationsQuery("getNotifications");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -12,7 +14,7 @@ export default function useFriends(socket) {
     });
 
     socket?.on("friendReqReceived", () => {
-      toast.success("new friend request received");
+      refetch();
     });
   }, [socket]);
 }
