@@ -1,117 +1,88 @@
-// const { Router } = require("express");
-// const { body } = require("express-validator");
-// const { parseError } = require("../util");
-// const {
-//   getOnlineUsers,
-//   getOnlineUserDetails,
-// } = require("../services/onlineUsers");
-// const { addNotification, removeNotification } = require("../services/user");
-// const {
-//   getUserFriendsList,
-//   getUserFriendRequests,
-//   addUsernameToFriendRequests,
-//   removeUsernameFromFriendRequests,
-//   addUsernameToFriendsList,
-// } = require("../services/friends");
+const { Router } = require("express");
+const { body } = require("express-validator");
+const { parseError } = require("../util");
+const {
+  getUserFriendsList,
+  getUserNotificationsList,
+  getUserSocketId,
+  addNotification,
+} = require("../services/user");
 
-// const friendsRouter = Router();
+const friendsRouter = Router();
 
-// friendsRouter.get("/getFriendsAndTheirStatus", async (req, res) => {
-//   try {
-//     const userFriendsList = await getUserFriendsList(req.user.username);
-//     const onlineFriends = await getOnlineUsers(userFriendsList);
+friendsRouter.post(
+  "/sendFriendReq",
+  body("friendUsername").trim(),
+  async (req, res) => {
+    let result = { status: "success", msg: "" };
 
-//     const friendsInfo = userFriendsList.map((friend) => {
-//       const findFriend = onlineFriends.find(
-//         (onlineUser) => onlineUser.username == friend
-//       );
+    const friendUsername = req.body.friendUsername;
+    const userUsername = req.user.username;
 
-//       const friendObj = { username: friend };
-//       if (findFriend) {
-//         friendObj.online = true;
-//         friendObj.socketId = findFriend.socketId;
-//         friendObj.gameInProgress = findFriend.gameInProgress;
-//       } else {
-//         friendObj.online = false;
-//       }
+    try {
+      const userFriendsList = await getUserFriendsList(userUsername);
 
-//       return friendObj;
-//     });
+      if (userFriendsList.includes(friendUsername)) {
+        result.status = "error";
+        result.msg = friendUsername + " is in your Friends List";
+      }
 
-//     res.json(friendsInfo);
-//   } catch (err) {
-//     const parsed = parseError(err);
-//     res.status(400).json({ code: 400, message: parsed.message });
-//   }
-// });
+      if (result.status == "success") {
+        const friendNotifications = await getUserNotificationsList(
+          friendUsername
+        );
 
-// friendsRouter.put(
-//   "/addFriendRequest",
-//   body("friendUsername").trim(),
-//   async (req, res) => {
-//     const result = { status: "", msg: "" };
+        const findNotification = friendNotifications.find(
+          (notification) =>
+            notification.type == "addFriendReq" &&
+            notification.sentBy == userUsername
+        );
+        if (findNotification) {
+          result.status = "error";
+          result.msg =
+            "You have already sent friend request to " + friendUsername;
+        }
+      }
 
-//     const friendUsername = req.body.friendUsername;
-//     const userUsername = req.user.username;
+      if (result.status == "success") {
+        const userNotifications = await getUserNotificationsList(userUsername);
 
-//     try {
-//       const isFriendInUserFriendRequestsList = await getUserFriendRequests(
-//         userUsername,
-//         friendUsername
-//       );
+        const findNotification = userNotifications.find(
+          (notification) =>
+            notification.type == "addFriendReq" &&
+            notification.sentBy == friendUsername
+        );
+        if (findNotification) {
+          result.status = "error";
+          result.msg =
+            friendUsername +
+            " has already sent friend request to you - check notifications";
+        }
+      }
 
-//       if (isFriendInUserFriendRequestsList) {
-//         result.status = "error";
-//         result.msg =
-//           friendUsername +
-//           " has already sent invitation to you - check notifications";
-//       } else {
-//         const addUsernameToFriendReq = await addUsernameToFriendRequests(
-//           friendUsername,
-//           userUsername
-//         );
+      if (result.status == "success") {
+        const newNotification = {
+          type: "addFriendReq",
+          sentBy: userUsername,
+        };
+        const response = await addNotification(friendUsername, newNotification);
 
-//         if (addUsernameToFriendReq.matchedCount == 0) {
-//           result.status = "error";
-//           result.msg = friendUsername + " does not exist";
-//         }
+        if (response.matchedCount == 0) {
+          result.status = "error";
+          result.msg = friendUsername + " does not exist";
+        } else {
+          const friendSocketId = await getUserSocketId(friendUsername);
+          result.friendSocketId = friendSocketId[0];
+        }
+      }
 
-//         if (
-//           addUsernameToFriendReq.matchedCount > 0 &&
-//           addUsernameToFriendReq.modifiedCount == 0
-//         ) {
-//           result.status = "error";
-//           result.msg = "Invitation has already been sent to " + friendUsername;
-//         }
-
-//         if (addUsernameToFriendReq.modifiedCount > 0) {
-//           const userOnline = await getOnlineUserDetails(friendUsername);
-//           if (userOnline) {
-//             result.status = "send invitation";
-//             result.socketId = userOnline.socketId;
-//           } else {
-//             result.status = "success";
-//           }
-
-//           const notification = {
-//             username: userUsername,
-//             content: " sent friend request",
-//             type: "friendRequest",
-//             notificationBtns: "Accept/Reject",
-//           };
-//           await addNotification(friendUsername, notification);
-
-//           result.msg = "Invitation sent to " + friendUsername;
-//         }
-//       }
-
-//       res.json(result);
-//     } catch (err) {
-//       const parsed = parseError(err);
-//       res.status(400).json({ code: 400, message: parsed.message });
-//     }
-//   }
-// );
+      res.json(result);
+    } catch (err) {
+      const parsed = parseError(err);
+      res.status(400).json({ code: 400, message: parsed.message });
+    }
+  }
+);
 
 // friendsRouter.put(
 //   "/friendResponse",
@@ -165,4 +136,4 @@
 //   }
 // );
 
-// module.exports = { friendsRouter };
+module.exports = { friendsRouter };
