@@ -5,7 +5,7 @@ const {
   getTopPlayers,
   changeOnlineStatus,
   findFriendsDetails,
-  getNotificationsList,
+  getUserNotificationsList,
   // removeNotification,
   // updateGameInProgress,
 } = require("../services/user");
@@ -65,7 +65,7 @@ userRouter.post("/friendsDetails", async (req, res) => {
 
 userRouter.get("/getNotifications", async (req, res) => {
   try {
-    const data = await getNotificationsList(req.user.username);
+    const data = await getUserNotificationsList(req.user.username);
     res.json(data);
   } catch (err) {
     const parsed = parseError(err);
