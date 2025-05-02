@@ -1,12 +1,10 @@
-1. Try to rewrite all components and files using Typescript, 
-   excluding all Create Components and the files connected with them
-
-   - When doing the components, check the API calls - they should get the correct types 
-     (some of them are 'any' at the moment)
-
-2. Try to use Redux management system:
-   - add socketId to User Model
+1. Try to use Redux management system:
+   - get instant Notifications update - try to refetch the Notifications
+   - after login or register try to refetch all the data again
    - create a Public Guard for Login and Register (after backend is completed);
+
+2. Try to rewrite all components and files using Typescript, 
+   excluding all Create Components and the files connected with them
 
 3. When working over better UI, use the following library: https://ui.aceternity.com/
 
