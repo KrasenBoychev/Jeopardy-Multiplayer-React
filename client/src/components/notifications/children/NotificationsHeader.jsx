@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 export default function NotificationsHeader({ notificationsProps }) {
   const {
     isSuccess,
-    receivedNotifications,
+    notifications,
     notificationsOpened,
     setNotificationsOpened,
   } = notificationsProps;
@@ -26,14 +26,14 @@ export default function NotificationsHeader({ notificationsProps }) {
     content = (
       <div
         className={
-          receivedNotifications?.length > 0
+          notifications?.length > 0
             ? "notifications_header notifications_unread"
             : "notifications_header"
         }
         onClick={openNotifications}
       >
         <i className="fa-solid fa-message"></i>
-        <p>{receivedNotifications?.length}</p>
+        <p>{notifications?.length}</p>
       </div>
     );
   }
