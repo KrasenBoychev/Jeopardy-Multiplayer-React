@@ -1,6 +1,5 @@
 1. Try to use Redux management system:
-   - get instant Notifications update - try to refetch the Notifications
-   - after login or register try to refetch all the data again
+   - rework the friends way of fethcing data and its updates
    - create a Public Guard for Login and Register (after backend is completed);
 
 2. Try to rewrite all components and files using Typescript, 
