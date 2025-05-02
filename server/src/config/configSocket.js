@@ -23,6 +23,10 @@ function configSocket(server) {
       });
     });
 
+    socket.on("friendReqSent", ({ receiverSocketId }) => {
+      io.to(receiverSocketId).emit("friendReqReceived", {});
+    });
+
     // socket.on("sendNotification", ({ receiverSocketId, msg, data }) => {
     //   io.to(receiverSocketId).emit("getNotification", { msg, data });
     // });
