@@ -12,7 +12,10 @@ export default function Notifications() {
     isSuccess,
     isError,
     error,
-  } = useGetNotificationsQuery("getNotifications");
+  } = useGetNotificationsQuery("getNotifications", {
+    refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,
+  });
 
   return (
     <>
