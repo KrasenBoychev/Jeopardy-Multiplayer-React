@@ -15,7 +15,9 @@ export default function PopupComp({ openBtnName, heading, content }) {
             &times;
           </button>
           <div className="header">{heading}</div>
-          <div className="content">{content}</div>
+          <div className="content" onClick={close}>
+            {content}
+          </div>
           <div className="actions">
             <button
               className="button"
