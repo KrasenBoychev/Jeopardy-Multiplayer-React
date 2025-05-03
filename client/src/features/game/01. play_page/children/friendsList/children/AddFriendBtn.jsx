@@ -1,11 +1,11 @@
 import { toast } from "react-hot-toast";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectCurrentUser } from "../../../../authentication/authSlice";
-import { selectFriends } from "./friendsSlice";
-import { useSendFriendReqMutation } from "./friendsApiSlice";
-import { useGetNotificationsQuery } from "../../../../../features/notifications/notificationsApiSlice";
-import { setSocketReq } from "../../../../socket_connection/socketSlice";
+import { selectCurrentUser } from "../../../../../authentication/authSlice";
+import { selectFriends } from "../friendsSlice";
+import { useSendFriendReqMutation } from "../friendsApiSlice";
+import { useGetNotificationsQuery } from "../../../../../../features/notifications/notificationsApiSlice";
+import { setSocketReq } from "../../../../../socket_connection/socketSlice";
 
 export default function AddFriendBtn() {
   const [addFriendUsername, setAddFriendUsername] = useState("");
