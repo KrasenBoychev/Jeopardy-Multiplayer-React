@@ -1,49 +1,43 @@
 import toast from "react-hot-toast";
-import { useAuthContext } from "../../../../../../contexts/AuthContext";
 import PopupComp from "../../../../../../components/popup/Popup";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser } from "../../../../../authentication/authSlice";
+import { selectFriends } from "../../friendsList/friendsSlice";
+import { selectGameReqSentBy } from "../../../../gameSlice";
+import { setSocketReq } from "../../../../../socket_connection/socketSlice";
 
-export default function InviteFriend({
-  socket,
-  friendProps,
-  notificationsList,
-}) {
-  const { friendsList, friendInvited, setFriendInvited } = friendProps;
+export default function InviteFriend() {
+  const user = useSelector(selectCurrentUser);
+  const friends = useSelector(selectFriends);
+  const gameReqSentBy = useSelector(selectGameReqSentBy);
+  const dispatch = useDispatch();
 
-  const { username } = useAuthContext();
-
-  const inviteFriendToGameRoom = async (e) => {
+  const inviteFriendToGameRoomClickHandler = async (e) => {
     const friendUsername = e.target.id;
 
-    const findGameInvitationFromFriend = notificationsList.find(
-      (notification) =>
-        notification.username == friendUsername &&
-        notification.type == "gameInvitation"
-    );
-
-    if (findGameInvitationFromFriend) {
-      toast.error(
-        "Game invitation has already been sent from " +
-          friendUsername +
-          " -> check notifications"
-      );
-      return;
-    }
-
-    const findFriend = friendsList.find(
+    const findFriend = friends.find(
       (friend) => friend.username == friendUsername
     );
 
-    if (findFriend && findFriend.online && !findFriend.gameInProgress) {
-      await socket.emit("sendGameInvitation", {
-        receiverSocketId: findFriend.socketId,
-        userUsername: username,
-      });
-
-      setFriendInvited(friendUsername);
-    } else {
-      toast.error(
-        `${friendUsername} is either offline or in game. Please refresh the page`
+    if (
+      findFriend &&
+      findFriend.online &&
+      !findFriend.gameInProgress &&
+      !gameReqSentBy.includes(findFriend.username)
+    ) {
+      dispatch(
+        setSocketReq({
+          socketReqName: "sendGameReq",
+          socketData: {
+            receiverSocketId: findFriend.socketId,
+            username: user.username,
+          },
+        })
       );
+
+      toast.success("Game request sent to " + friendUsername);
+    } else {
+      toast.error(friendUsername + "is either offline or in game");
     }
   };
 
@@ -51,13 +45,17 @@ export default function InviteFriend({
   const popupHeading = "Friends Online";
   const popupContent = (
     <ul>
-      {friendsList.map((friend) => {
-        if (friend.online && !friend.gameInProgress) {
+      {friends.map((friend) => {
+        if (
+          friend.online &&
+          !friend.gameInProgress &&
+          !gameReqSentBy.includes(friend.username)
+        ) {
           return (
             <li
               key={friend.username}
               id={friend.username}
-              onClick={inviteFriendToGameRoom}
+              onClick={inviteFriendToGameRoomClickHandler}
             >
               {friend.username}
             </li>
@@ -69,13 +67,11 @@ export default function InviteFriend({
 
   return (
     <>
-      {!friendInvited && (
-        <PopupComp
-          openBtnName={openBtnName}
-          heading={popupHeading}
-          content={popupContent}
-        />
-      )}
+      <PopupComp
+        openBtnName={openBtnName}
+        heading={popupHeading}
+        content={popupContent}
+      />
     </>
   );
 }
