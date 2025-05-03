@@ -1,79 +1,74 @@
 import toast from "react-hot-toast";
-import { useAuthContext } from "../../../contexts/AuthContext";
-import { sendFriendResponse } from "../../../../api/friends-api";
-import { removeNotificationFromNotificationsList } from "../Notifications";
+import { useDispatch } from "react-redux";
+import { useSendFriendResMutation } from "../../game/01. play_page/children/friendsList/friendsApiSlice";
+import { setSocketReq } from "../../socket_connection/socketSlice";
+import { useGetNotificationsQuery } from "../notificationsApiSlice";
 
-export default function RejectNotification({ props }) {
-  const {
-    socket,
-    friendsList,
-    notification,
-    setNotificationsList,
-  } = props;
+export default function RejectNotification({ notification }) {
+  const dispatch = useDispatch();
+  const [sendFriendRes] = useSendFriendResMutation();
+  const { refetch } = useGetNotificationsQuery("getNotifications");
 
-  const { username } = useAuthContext();
-
-  const rejectNotification = async (e) => {
+  const rejectNotificationClickHandler = async (e) => {
     const friendUsername = e.target.id;
     const notificationType = e.target.value;
 
-    if (notificationType == "friendRequest") {
-      try {
-        const response = await sendFriendResponse(
+    try {
+      if (notificationType == "addFriendReq") {
+        const sendFriendResServerRes = await sendFriendRes({
           friendUsername,
-          "friendRequestRejected"
-        );
-
-        if (response.status == "online") {
-          await socket.emit("sendNotification", {
-            receiverSocketId: response.socketId,
-            msg: "friendResponse",
-            data: {
-              friendUsername: username,
-              content: " rejected your friend request",
-              btns: "Mark as read",
-            },
-          });
-        }
-
-        removeNotificationFromNotificationsList(
-          setNotificationsList,
-          friendUsername,
-          notificationType
-        );
-      } catch (error) {
-        toast.error(error.message);
-      }
-    } else if (notificationType == "gameInvitation") {
-      const findFriend = friendsList.find(
-        (friend) => friend.username == friendUsername
-      );
-
-      if (findFriend && findFriend.online && !findFriend.gameInProgress) {
-        await socket.emit("setRejectGameInvitation", {
-          receiverSocketId: findFriend.socketId,
-          userUsername: username,
+          response: "rejected",
         });
-      } else {
-        // If a bug occurs, then this message will show
-        toast.error(
-          friendUsername + " is no longer online - please refresh the page"
-        );
+
+        const friendDetails = sendFriendResServerRes.data;
+
+        if (friendDetails.online === true) {
+          dispatch(
+            setSocketReq({
+              socketReqName: "setUpdateNotifications",
+              socketData: {
+                receiverSocketId: friendDetails.socketId,
+              },
+            })
+          );
+        }
       }
 
-      removeNotificationFromNotificationsList(
-        setNotificationsList,
-        friendUsername,
-        notificationType
-      );
+      // else if (notificationType == "gameInvitation") {
+      //   const findFriend = friendsList.find(
+      //     (friend) => friend.username == friendUsername
+      //   );
+
+      //   if (findFriend && findFriend.online && !findFriend.gameInProgress) {
+      //     await socket.emit("setRejectGameInvitation", {
+      //       receiverSocketId: findFriend.socketId,
+      //       userUsername: username,
+      //     });
+      //   } else {
+      //     // If a bug occurs, then this message will show
+      //     toast.error(
+      //       friendUsername + " is no longer online - please refresh the page"
+      //     );
+      //   }
+
+      //   removeNotificationFromNotificationsList(
+      //     setNotificationsList,
+      //     friendUsername,
+      //     notificationType
+      //   );
+      // }
+      refetch();
+    } catch (error) {
+      toast.error("Cannot reject the notification");
+      console.log(error.message);
     }
   };
   return (
     <button
       className="notification_btn_reject"
       value={notification.type}
-      id={notification.username}
-      onClick={rejectNotification}
+      id={notification.sentBy}
+      onClick={rejectNotificationClickHandler}
     >
       Reject
     </button>
