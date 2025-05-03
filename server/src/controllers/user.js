@@ -9,6 +9,7 @@ const {
   // removeNotification,
   // updateGameInProgress,
 } = require("../services/user");
+const { friendDetails } = require("./data models/friendDetails");
 // const {
 //   addNewOnlineUser,
 //   deleteOnlineUser,
@@ -45,12 +46,7 @@ userRouter.post("/friendsDetails", async (req, res) => {
 
     if (friendsDetails.length > 0) {
       const detailsToBeSent = friendsDetails.map((friend) => {
-        return {
-          username: friend.username,
-          online: friend.gameDetails.online,
-          socketId: friend.gameDetails.socketId,
-          gameInProgress: friend.gameDetails.gameInProgress,
-        };
+        return friendDetails(friend);
       });
 
       res.json(detailsToBeSent);
