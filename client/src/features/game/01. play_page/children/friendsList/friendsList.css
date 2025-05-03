@@ -48,6 +48,17 @@
   overflow-x: clip;
 }
 
+.friend_game_req {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.friend_game_req i:hover {
+  cursor: pointer;
+  color: var(--baby-blue);
+}
+
 .friend_status {
   padding: 5px;
   text-align: center;
