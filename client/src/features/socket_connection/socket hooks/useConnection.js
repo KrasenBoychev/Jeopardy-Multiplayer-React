@@ -52,8 +52,6 @@ export default function useConnection(socketProps) {
       const friendsList = getFriendsServerRes.data;
 
       if (friendsList) {
-        console.log(friendsList);
-
         dispatch(setFriends(friendsList));
 
         const onlineFriends = friendsList.filter(

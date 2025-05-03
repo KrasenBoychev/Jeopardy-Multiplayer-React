@@ -5,7 +5,18 @@ export const notificationsApiSlice = apiSlice.injectEndpoints({
     getNotifications: builder.query({
       query: () => "/users/getNotifications",
     }),
+    removeNotification: builder.mutation({
+      query: ({ friendUsername, type }) => ({
+        url: "/users/removeNotification",
+        method: "POST",
+        body: {
+          friendUsername,
+          type,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetNotificationsQuery } = notificationsApiSlice;
+export const { useGetNotificationsQuery, useRemoveNotificationMutation } =
+  notificationsApiSlice;
