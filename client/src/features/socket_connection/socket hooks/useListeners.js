@@ -4,7 +4,7 @@ import { updateFriendStatus } from "../../game/01. play_page/children/friendsLis
 import toast from "react-hot-toast";
 import { useGetNotificationsQuery } from "../../../components/notifications/notificationsApiSlice";
 
-export default function useFriends(socket) {
+export default function useListeners(socket) {
   const { refetch } = useGetNotificationsQuery("getNotifications");
   const dispatch = useDispatch();
 
