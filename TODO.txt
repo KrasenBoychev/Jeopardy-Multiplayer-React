@@ -1,5 +1,5 @@
 1. Try to use Redux management system:
-   - rework the friends way of fethcing data and its updates
+   - complete notifications logic
    - create a Public Guard for Login and Register (after backend is completed);
 
 2. Try to rewrite all components and files using Typescript, 
