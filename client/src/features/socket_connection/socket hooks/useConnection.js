@@ -1,3 +1,5 @@
+import { io } from "socket.io-client";
+import { baseURL } from "../../../app/api/baseURL";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -6,9 +8,11 @@ import {
 } from "../../authentication/authSlice";
 import { useChangeOnlineStatusMutation } from "../socketApiSlice";
 import { useGetFriendsDetailsMutation } from "../../game/01. play_page/children/friendsList/friendsApiSlice";
-import { setFriends } from "../../game/01. play_page/children/friendsList/friendsSlice";
-import { io } from "socket.io-client";
-import { baseURL } from "../../../app/api/baseURL";
+import {
+  deleteFriends,
+  setFriends,
+} from "../../game/01. play_page/children/friendsList/friendsSlice";
+import { deleteSocket } from "../socketSlice";
 
 export default function useConnection(socketProps) {
   const { socket, setSocket } = socketProps;
@@ -24,6 +28,9 @@ export default function useConnection(socketProps) {
     newSocket.emit("newUserConnected", {});
 
     return async () => {
+      dispatch(deleteFriends());
+      dispatch(deleteSocket());
+
       socket?.removeAllListeners();
       socket?.disconnect;
       setSocket(null);
@@ -39,13 +46,18 @@ export default function useConnection(socketProps) {
 
       dispatch(updateOnlineStatus(socket.id));
 
-      const friendsList = await getFriendsDetails(user.gameDetails.friendsList);
+      const getFriendsServerRes = await getFriendsDetails(
+        user.gameDetails.friendsList
+      );
+      const friendsList = getFriendsServerRes.data;
 
-      if (friendsList.data) {
-        dispatch(setFriends(friendsList.data));
+      if (friendsList) {
+        console.log(friendsList);
 
-        const onlineFriends = friendsList.data.filter(
-          (friend) => friend.online == true
+        dispatch(setFriends(friendsList));
+
+        const onlineFriends = friendsList.filter(
+          (friend) => friend.online === true
         );
 
         if (onlineFriends.length > 0) {
