@@ -1,5 +1,6 @@
 1. Try to use Redux management system:
-   - complete notifications logic
+   - implement the logic for sending and accepting game request
+   
    - create a Public Guard for Login and Register (after backend is completed);
 
 2. Try to rewrite all components and files using Typescript, 
