@@ -6,14 +6,10 @@ const {
   changeOnlineStatus,
   findFriendsDetails,
   getUserNotificationsList,
-  // removeNotification,
+  removeNotification,
   // updateGameInProgress,
 } = require("../services/user");
 const { friendDetails } = require("./data models/friendDetails");
-// const {
-//   addNewOnlineUser,
-//   deleteOnlineUser,
-// } = require("../services/onlineUsers");
 
 const userRouter = Router();
 
@@ -69,40 +65,29 @@ userRouter.get("/getNotifications", async (req, res) => {
   }
 });
 
-// userRouter.put(
-//   "/removeNotification",
-//   body("friendUsername").trim(),
-//   body("type").trim(),
-//   async (req, res) => {
-//     const userUsername = req.user.username;
-//     const friendUsername = req.body.friendUsername;
-//     const type = req.body.type;
+userRouter.post(
+  "/removeNotification",
+  body("friendUsername").trim(),
+  body("type").trim(),
+  async (req, res) => {
+    const userUsername = req.user.username;
+    const friendUsername = req.body.friendUsername;
+    const type = req.body.type;
 
-//     try {
-//       const result = await removeNotification(
-//         userUsername,
-//         type,
-//         friendUsername
-//       );
+    try {
+      const result = await removeNotification(
+        userUsername,
+        friendUsername,
+        type
+      );
 
-//       res.json(result);
-//     } catch (err) {
-//       const parsed = parseError(err);
-//       res.status(400).json({ code: 400, message: parsed.message });
-//     }
-//   }
-// );
-
-// userRouter.delete("/deleteOnlineUser", async (req, res) => {
-//   try {
-//     const username = req.user.username;
-//     await deleteOnlineUser(username);
-//     res.json(`${username} deleted`);
-//   } catch (err) {
-//     const parsed = parseError(err);
-//     res.status(400).json({ code: 400, message: parsed.message });
-//   }
-// });
+      res.json(result);
+    } catch (err) {
+      const parsed = parseError(err);
+      res.status(400).json({ code: 400, message: parsed.message });
+    }
+  }
+);
 
 // userRouter.put("/gameInProgress", async (req, res) => {
 //   try {
