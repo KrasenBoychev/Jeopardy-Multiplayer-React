@@ -17,37 +17,17 @@ export default function NotificationsBody({ notificationsProps }) {
                 <li key={notification.type + notification.sentBy}>
                   {notification.sentBy + notifTypes[notification.type].content}
                   <div className="notifications_box_btns">
-                    {/* {notifTypes[notification.type].btns == "Accept/Reject" ? (
-                  <>
-                    <AcceptNotification
-                      props={{
-                        socket,
-                        notification,
-                        friendsList,
-                        setFriendsList,
-                        friendInvited,
-                        setFriendInvited,
-                        setNotificationsList,
-                        setIsNewGameStarted,
-                        setFirstPlayer,
-                        setSecondPlayer,
-                        setGameRoomName,
-                      }}
-                    />
-                    <RejectNotification
-                      props={{
-                        socket,
-                        friendsList,
-                        notification,
-                        setNotificationsList,
-                      }}
-                    />
-                  </>
-                ) : (
-                  <ReadNotification
-                    props={{ notification, setNotificationsList }}
-                  />
-                )} */}
+                    {
+                      notifTypes[notification.type].btns == "Accept/Reject" && (
+                        // <>
+                        <AcceptNotification notification={notification} />
+                      )
+                      /* <RejectNotification />
+                      </>
+                    ) : (
+                      <ReadNotification />
+                    ) */
+                    }
                   </div>
                 </li>
               );
