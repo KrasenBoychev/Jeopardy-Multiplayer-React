@@ -20,8 +20,21 @@ export const friendsApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
+    sendFriendRes: builder.mutation({
+      query: ({ friendUsername, response }) => ({
+        url: "/friends/sendFriendRes",
+        method: "POST",
+        body: {
+          friendUsername,
+          response,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetFriendsDetailsMutation, useSendFriendReqMutation } =
-  friendsApiSlice;
+export const {
+  useGetFriendsDetailsMutation,
+  useSendFriendReqMutation,
+  useSendFriendResMutation,
+} = friendsApiSlice;
