@@ -13,6 +13,7 @@ import {
   setFriends,
 } from "../../game/01. play_page/children/friendsList/friendsSlice";
 import { deleteSocket } from "../socketSlice";
+import { deleteGameDetails } from "../../game/gameSlice";
 
 export default function useConnection(socketProps) {
   const { socket, setSocket } = socketProps;
@@ -28,6 +29,7 @@ export default function useConnection(socketProps) {
     newSocket.emit("newUserConnected", {});
 
     return async () => {
+      dispatch(deleteGameDetails());
       dispatch(deleteFriends());
       dispatch(deleteSocket());
 
