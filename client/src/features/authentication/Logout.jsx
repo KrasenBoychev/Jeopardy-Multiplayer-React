@@ -17,7 +17,7 @@ export default function Logout({ socket }) {
   useEffect(() => {
     (async function logout() {
       try {
-        if (friends) {
+        if (friends.length > 0) {
           const onlineFriends = friends.filter(
             (friend) => friend.online == true
           );

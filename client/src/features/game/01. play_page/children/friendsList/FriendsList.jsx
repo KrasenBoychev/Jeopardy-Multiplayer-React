@@ -9,7 +9,7 @@ export default function FriendsList() {
   return (
     <div className="friends_list_wrapper">
       <h3>Friends List</h3>
-      {friends ? (
+      {friends.length > 0 ? (
         <ul>
           {friends.map((friend) => {
             return (

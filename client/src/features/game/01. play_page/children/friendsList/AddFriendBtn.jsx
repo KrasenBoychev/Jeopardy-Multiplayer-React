@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../../authentication/authSlice";
 import { selectFriends } from "./friendsSlice";
 import { useSendFriendReqMutation } from "./friendsApiSlice";
-import { useGetNotificationsQuery } from "../../../../../components/notifications/notificationsApiSlice";
+import { useGetNotificationsQuery } from "../../../../../features/notifications/notificationsApiSlice";
 import { setSocketReq } from "../../../../socket_connection/socketSlice";
 
 export default function AddFriendBtn() {
@@ -23,7 +23,7 @@ export default function AddFriendBtn() {
       return;
     }
 
-    if (friends) {
+    if (friends.length > 0) {
       const findFriend = friends.find(
         (friend) => friend.username == addFriendUsername
       );
@@ -55,7 +55,7 @@ export default function AddFriendBtn() {
       } else if (result.status == "success") {
         dispatch(
           setSocketReq({
-            socketReqName: "friendReqSent",
+            socketReqName: "setUpdateNotifications",
             socketData: { receiverSocketId: result.friendSocketId },
           })
         );
