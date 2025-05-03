@@ -9,9 +9,9 @@ export default function RejectNotification({ notification }) {
   const [sendFriendRes] = useSendFriendResMutation();
   const { refetch } = useGetNotificationsQuery("getNotifications");
 
-  const rejectNotificationClickHandler = async (e) => {
-    const friendUsername = e.target.id;
-    const notificationType = e.target.value;
+  const rejectNotificationClickHandler = async () => {
+    const friendUsername = notification.sentBy;
+    const notificationType = notification.type;
 
     try {
       if (notificationType == "addFriendReq") {
@@ -34,29 +34,6 @@ export default function RejectNotification({ notification }) {
         }
       }
 
-      // else if (notificationType == "gameInvitation") {
-      //   const findFriend = friendsList.find(
-      //     (friend) => friend.username == friendUsername
-      //   );
-
-      //   if (findFriend && findFriend.online && !findFriend.gameInProgress) {
-      //     await socket.emit("setRejectGameInvitation", {
-      //       receiverSocketId: findFriend.socketId,
-      //       userUsername: username,
-      //     });
-      //   } else {
-      //     // If a bug occurs, then this message will show
-      //     toast.error(
-      //       friendUsername + " is no longer online - please refresh the page"
-      //     );
-      //   }
-
-      //   removeNotificationFromNotificationsList(
-      //     setNotificationsList,
-      //     friendUsername,
-      //     notificationType
-      //   );
-      // }
       refetch();
     } catch (error) {
       toast.error("Cannot reject the notification");
@@ -66,8 +43,6 @@ export default function RejectNotification({ notification }) {
   return (
     <button
       className="notification_btn_reject"
-      value={notification.type}
-      id={notification.sentBy}
       onClick={rejectNotificationClickHandler}
     >
       Reject

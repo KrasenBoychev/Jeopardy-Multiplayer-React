@@ -8,10 +8,10 @@ export default function ReadNotification({ notification }) {
   const [removeNotification] = useRemoveNotificationMutation();
   const { refetch } = useGetNotificationsQuery("getNotifications");
 
-  const readNotificationClickHandler = async (e) => {
+  const readNotificationClickHandler = async () => {
     try {
-      const friendUsername = e.target.id;
-      const notificationType = e.target.value;
+      const friendUsername = notification.sentBy;
+      const notificationType = notification.type;
 
       await removeNotification({ friendUsername, type: notificationType });
 
@@ -23,8 +23,6 @@ export default function ReadNotification({ notification }) {
   return (
     <button
       className="notification_btn_read"
-      value={notification.type}
-      id={notification.sentBy}
       onClick={readNotificationClickHandler}
     >
       Mark as read

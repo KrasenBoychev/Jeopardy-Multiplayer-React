@@ -12,9 +12,9 @@ export default function AcceptNotification({ notification }) {
   const [sendFriendRes] = useSendFriendResMutation();
   const { refetch } = useGetNotificationsQuery("getNotifications");
 
-  const acceptNotificationClickHandler = async (e) => {
-    const friendUsername = e.target.id;
-    const notificationType = e.target.value;
+  const acceptNotificationClickHandler = async () => {
+    const friendUsername = notification.sentBy;
+    const notificationType = notification.type;
 
     try {
       if (notificationType == "addFriendReq") {
@@ -44,44 +44,6 @@ export default function AcceptNotification({ notification }) {
 
         dispatch(addNewFriend(friendDetails));
       }
-      // else if (notificationType == "gameInvitation") {
-      //   const findFriend = friendsList.find(
-      //     (friend) => friend.username == friendUsername
-      //   );
-
-      //   if (findFriend && findFriend.online && !findFriend.gameInProgress) {
-      //     const usernameDetais = { username, socketId: socket.id };
-      //     const friendDetails = {
-      //       username: friendUsername,
-      //       socketId: findFriend.socketId,
-      //     };
-
-      //     const { startingPlayerDetails, otherPlayerDetails } = setPlayers(
-      //       usernameDetais,
-      //       friendDetails,
-      //       setFirstPlayer,
-      //       setSecondPlayer
-      //     );
-
-      //     const roomName = `${friendUsername}-${username}`;
-
-      //     await socket.emit("setAcceptGameInvitation", {
-      //       receiverSocketId: findFriend.socketId,
-      //       userUsername: username,
-      //       roomName,
-      //       playersInfo: { startingPlayerDetails, otherPlayerDetails },
-      //     });
-
-      //     setFriendInvited(friendUsername);
-      //     setGameRoomName(roomName);
-      //     setIsNewGameStarted(true);
-      //   } else {
-      //     // If a bug occurs, then this message will show
-      //     toast.error(
-      //       friendUsername + " is no longer online - please refresh the page"
-      //     );
-      //   }
-      // }
 
       refetch();
     } catch (error) {
@@ -93,33 +55,9 @@ export default function AcceptNotification({ notification }) {
   return (
     <button
       className="notification_btn_accept"
-      value={notification.type}
-      id={notification.sentBy}
       onClick={acceptNotificationClickHandler}
     >
       Accept
     </button>
   );
 }
-
-// function setPlayers(
-//   usernameDetais,
-//   friendDetails,
-//   setFirstPlayer,
-//   setSecondPlayer
-// ) {
-//   const playersNames = [usernameDetais, friendDetails];
-
-//   const startingPlayerDetails =
-//     playersNames[Math.floor(Math.random() * playersNames.length)];
-
-//   const indexOfStartingPlayer = playersNames.indexOf(startingPlayerDetails);
-
-//   playersNames.splice(indexOfStartingPlayer, 1);
-//   const otherPlayerDetails = playersNames[0];
-
-//   setFirstPlayer(startingPlayerDetails);
-//   setSecondPlayer(otherPlayerDetails);
-
-//   return { startingPlayerDetails, otherPlayerDetails };
-// }
