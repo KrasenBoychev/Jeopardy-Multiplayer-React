@@ -15,7 +15,7 @@ import Logout from "./features/authentication/Logout";
 // import CreateCategory from "./features/create/createCategory/CreateCategory";
 // import CreateQuestion from "./features/create/createQuestion/CreateQuestion";
 import Socket from "./features/socket_connection/Socket";
-import Notifications from "./components/notifications/Notifications";
+import Notifications from "./features/notifications/Notifications";
 import PlayPage from "./features/game/01. play_page/PlayPage";
 import NotFound from "./features/main_pages/not_found_page/NotFound";
 import "./App.css";
