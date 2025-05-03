@@ -23,10 +23,15 @@ function configSocket(server) {
       });
     });
 
-    socket.on("friendReqSent", ({ receiverSocketId }) => {
-      io.to(receiverSocketId).emit("friendReqReceived", {});
+    socket.on("setUpdateNotifications", ({ receiverSocketId }) => {
+      io.to(receiverSocketId).emit("getUpdateNotifications", {});
     });
 
+    socket.on("setFriendReqAccepted", ({ receiverSocketId, userDetails }) => {
+      io.to(receiverSocketId).emit("getFriendReqAccepted", {
+        userDetails,
+      });
+    });
     // socket.on("sendNotification", ({ receiverSocketId, msg, data }) => {
     //   io.to(receiverSocketId).emit("getNotification", { msg, data });
     // });
