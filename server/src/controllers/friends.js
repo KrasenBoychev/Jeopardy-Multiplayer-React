@@ -5,8 +5,12 @@ const {
   getUserFriendsList,
   getUserNotificationsList,
   getUserSocketId,
+  addUsernameToFriendsList,
   addNotification,
+  removeNotification,
+  getUserByUsername,
 } = require("../services/user");
+const { friendDetails } = require("./data models/friendDetails");
 
 const friendsRouter = Router();
 
@@ -84,56 +88,45 @@ friendsRouter.post(
   }
 );
 
-// friendsRouter.put(
-//   "/friendResponse",
-//   body("username").trim(),
-//   body("type").trim(),
-//   async (req, res) => {
-//     const userUsername = req.user.username;
-//     const friendUsername = req.body.username;
-//     const type = req.body.type;
+friendsRouter.post(
+  "/sendFriendRes",
+  body("friendUsername").trim(),
+  body("response").trim(),
+  async (req, res) => {
+    const userUsername = req.user.username;
+    const friendUsername = req.body.friendUsername;
+    const response = req.body.response;
 
-//     try {
-//       await removeUsernameFromFriendRequests(userUsername, friendUsername);
+    let newNotification;
+    try {
+      if (response == "accepted") {
+        await addUsernameToFriendsList(userUsername, friendUsername);
+        await addUsernameToFriendsList(friendUsername, userUsername);
 
-//       let notification = {};
+        newNotification = {
+          type: "acceptFriendReq",
+          sentBy: userUsername,
+        };
+      } else if (response == "rejected") {
+        newNotification = {
+          type: "rejectFriendReq",
+          sentBy: userUsername,
+        };
+      }
 
-//       if (type == "friendRequestAccepted") {
-//         await addUsernameToFriendsList(userUsername, friendUsername);
-//         await addUsernameToFriendsList(friendUsername, userUsername);
+      await removeNotification(userUsername, friendUsername, "addFriendReq");
+      await addNotification(friendUsername, newNotification);
 
-//         notification = {
-//           username: userUsername,
-//           content: " accepted your friend request",
-//           type: "friendResponse",
-//           notificationBtns: "Mark as read",
-//         };
-//       } else {
-//         notification = {
-//           username: userUsername,
-//           content: " rejected your friend request",
-//           type: "friendResponse",
-//           notificationBtns: "Mark as read",
-//         };
-//       }
+      const getFriendDetails = await getUserByUsername(friendUsername);
 
-//       await addNotification(friendUsername, notification);
-//       await removeNotification(userUsername, "friendRequest", friendUsername);
+      result = friendDetails(getFriendDetails);
 
-//       const userOnline = await getOnlineUserDetails(friendUsername);
-//       const result = { status: "offline" };
-//       if (userOnline) {
-//         result.status = "online";
-//         result.socketId = userOnline.socketId;
-//         result.gameInProgress = userOnline.gameInProgress;
-//       }
-
-//       res.json(result);
-//     } catch (err) {
-//       const parsed = parseError(err);
-//       res.status(400).json({ code: 400, message: parsed.message });
-//     }
-//   }
-// );
+      res.json(result);
+    } catch (err) {
+      const parsed = parseError(err);
+      res.status(400).json({ code: 400, message: parsed.message });
+    }
+  }
+);
 
 module.exports = { friendsRouter };
