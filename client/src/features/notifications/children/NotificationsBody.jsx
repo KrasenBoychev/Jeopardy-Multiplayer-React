@@ -17,17 +17,14 @@ export default function NotificationsBody({ notificationsProps }) {
                 <li key={notification.type + notification.sentBy}>
                   {notification.sentBy + notifTypes[notification.type].content}
                   <div className="notifications_box_btns">
-                    {
-                      notifTypes[notification.type].btns == "Accept/Reject" && (
-                        // <>
+                    {notifTypes[notification.type].btns == "Accept/Reject" ? (
+                      <>
                         <AcceptNotification notification={notification} />
-                      )
-                      /* <RejectNotification />
+                        <RejectNotification notification={notification} />
                       </>
                     ) : (
-                      <ReadNotification />
-                    ) */
-                    }
+                      <ReadNotification notification={notification} />
+                    )}
                   </div>
                 </li>
               );
