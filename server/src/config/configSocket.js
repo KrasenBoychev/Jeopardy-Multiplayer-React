@@ -32,14 +32,21 @@ function configSocket(server) {
         userDetails,
       });
     });
+
+    socket.on("sendGameReq", ({ receiverSocketId, username }) => {
+      io.to(receiverSocketId).emit("receiveGameReq", {
+        username,
+      });
+    });
+
+    socket.on("sendRejectGameRes", ({ receiverSocketId, username }) => {
+      io.to(receiverSocketId).emit("receiveRejectGameRes", {
+        username,
+      });
+    });
+
     // socket.on("sendNotification", ({ receiverSocketId, msg, data }) => {
     //   io.to(receiverSocketId).emit("getNotification", { msg, data });
-    // });
-
-    // socket.on("sendGameInvitation", ({ receiverSocketId, userUsername }) => {
-    //   io.to(receiverSocketId).emit("getGameInvitation", {
-    //     senderUsername: userUsername,
-    //   });
     // });
 
     // socket.on(
