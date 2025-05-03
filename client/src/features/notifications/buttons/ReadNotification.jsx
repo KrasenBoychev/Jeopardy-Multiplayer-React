@@ -1,22 +1,21 @@
 import toast from "react-hot-toast";
-import { removeNotification } from "../../../../api/user-api";
-import { removeNotificationFromNotificationsList } from "../Notifications";
+import {
+  useGetNotificationsQuery,
+  useRemoveNotificationMutation,
+} from "../notificationsApiSlice";
 
-export default function ReadNotification({ props }) {
-  const { notification, setNotificationsList } = props;
+export default function ReadNotification({ notification }) {
+  const [removeNotification] = useRemoveNotificationMutation();
+  const { refetch } = useGetNotificationsQuery("getNotifications");
 
-  const readNotification = async (e) => {
+  const readNotificationClickHandler = async (e) => {
     try {
       const friendUsername = e.target.id;
       const notificationType = e.target.value;
 
-      await removeNotification(friendUsername, "friendResponse");
+      await removeNotification({ friendUsername, type: notificationType });
 
-      removeNotificationFromNotificationsList(
-        setNotificationsList,
-        friendUsername,
-        notificationType
-      );
+      refetch();
     } catch (error) {
       toast.error(error.message);
     }
@@ -25,8 +24,8 @@ export default function ReadNotification({ props }) {
     <button
       className="notification_btn_read"
       value={notification.type}
-      id={notification.username}
-      onClick={readNotification}
+      id={notification.sentBy}
+      onClick={readNotificationClickHandler}
     >
       Mark as read
     </button>

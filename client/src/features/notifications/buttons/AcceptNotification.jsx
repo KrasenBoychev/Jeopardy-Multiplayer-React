@@ -18,12 +18,12 @@ export default function AcceptNotification({ notification }) {
 
     try {
       if (notificationType == "addFriendReq") {
-        const serverResponse = await sendFriendRes({
+        const sendFriendResServerRes = await sendFriendRes({
           friendUsername,
           response: "accepted",
         });
 
-        const friendDetails = serverResponse.data;
+        const friendDetails = sendFriendResServerRes.data;
 
         if (friendDetails.online === true) {
           dispatch(
@@ -85,7 +85,8 @@ export default function AcceptNotification({ notification }) {
 
       refetch();
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Cannot accept the notification");
+      console.log(error.message);
     }
   };
 
