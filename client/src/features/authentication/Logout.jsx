@@ -19,7 +19,7 @@ export default function Logout({ socket }) {
       try {
         if (friends.length > 0) {
           const onlineFriends = friends.filter(
-            (friend) => friend.online == true
+            (friend) => friend.online === true
           );
 
           if (onlineFriends.length > 0) {
@@ -29,7 +29,6 @@ export default function Logout({ socket }) {
                 socketId: "",
               },
               receiverFriends: onlineFriends,
-              // action,
             });
           }
         }
