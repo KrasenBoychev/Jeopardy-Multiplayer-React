@@ -1,41 +1,60 @@
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  useChangeGameInProgressMutation,
+  useGetCategoriesQuery,
+} from "../../../gameApiSlice";
+import { selectCurrentUser } from "../../../../authentication/authSlice";
+import {
+  selectIsNewGameStarted,
+  selectRivalPlayer,
+  selectSetStartGameDetails,
+} from "../../../gameSlice";
 import CancelGameInvitation from "./buttons/CancelGameInvitation";
 import InviteFriend from "./buttons/InviteFriendBtn";
+import { selectFriends } from "../friendsList/friendsSlice";
+import {
+  setCategoriesFunc,
+  setGameInProgress,
+  setPlayersDetails,
+} from "./setGameFunc";
 import "./gameRoom.css";
-import { useSelector } from "react-redux";
-import { selectCurrentUser } from "../../../../authentication/authSlice";
 
 export default function GameRoom() {
   const user = useSelector(selectCurrentUser);
-  // useEffect(() => {
-  //   (async function friendLogsOutOrInGame() {
-  //     const findOfflineFriend = friendsList.find(
-  //       (friend) => friend.username == friendInvited && friend.online == false
-  //     );
+  const friends = useSelector(selectFriends);
+  const rivalPlayer = useSelector(selectRivalPlayer);
+  const isNewGameStarted = useSelector(selectIsNewGameStarted);
+  const setStartGameDetails = useSelector(selectSetStartGameDetails);
+  const [changeGameInProgress] = useChangeGameInProgressMutation();
+  const dispatch = useDispatch();
+  const { data: newCategories } = useGetCategoriesQuery("getCategories");
 
-  //     let findInGameFriend = null;
-
-  //     if (!findOfflineFriend) {
-  //       findInGameFriend = friendsList.find(
-  //         (friend) =>
-  //           friend.username == friendInvited &&
-  //           friend.username != firstPlayer.username &&
-  //           friend.username != secondPlayer.username
-  //       );
-  //     }
-
-  //     if (findOfflineFriend) {
-  //       setFriendInvited(null);
-  //       toast.error(findOfflineFriend.username + " left the game");
-  //     } else if (findInGameFriend) {
-  //       setFriendInvited(null);
-  //       toast.error(
-  //         findInGameFriend.username + " started new game with other player"
-  //       );
-  //     }
-  //   })();
-  // }, [friendsList]);
+  useEffect(() => {
+    if (setStartGameDetails) {
+      (async () => {
+        await setGameInProgress(
+          user.username,
+          friends,
+          changeGameInProgress,
+          dispatch
+        );
+        const [firstPlayerDetails, secondPlayerDetails] = setPlayersDetails(
+          user,
+          rivalPlayer,
+          dispatch
+        );
+        await setCategoriesFunc(
+          firstPlayerDetails,
+          secondPlayerDetails,
+          rivalPlayer,
+          newCategories,
+          user.gameDetails.socketId,
+          dispatch
+        );
+      })();
+    }
+  }, [setStartGameDetails]);
 
   return (
     <div className="game_room_wrapper">
@@ -49,27 +68,18 @@ export default function GameRoom() {
         </div>
         <div className="game_room_player_name">
           <p>
-            {/* {friendInvited ? (
-              friendInvited
-            ) : ( */}
-            <InviteFriend />
-            {/* )}
-
-            {friendInvited && !isNewGameStarted && (
-              <CancelGameInvitation
-                socket={socket}
-                friendProps={{ friendsList, friendInvited, setFriendInvited }}
-              />
-            )} */}
+            {rivalPlayer ? (
+              <>
+                {rivalPlayer.username}
+                {!isNewGameStarted && <CancelGameInvitation />}
+              </>
+            ) : (
+              <InviteFriend />
+            )}
           </p>
         </div>
       </div>
-      {/* <p className="game_room_btn">
-        {friendInvited &&
-          !isNewGameStarted &&
-          `Waiting for ${friendInvited} to respond...`}
-        {friendInvited && isNewGameStarted && "Loading Game..."}
-      </p> */}
+      {isNewGameStarted && <p className="game_room_btn">Loading Game...</p>}
     </div>
   );
 }
