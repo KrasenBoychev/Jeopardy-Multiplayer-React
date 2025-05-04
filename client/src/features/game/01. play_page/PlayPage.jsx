@@ -1,23 +1,14 @@
-// import { useEffect, useState } from "react";
-// import { useAuthContext } from "../../../contexts/AuthContext";
-// import { GameContext } from "../../../contexts/GameContext";
-// import StartGameWithOtherPlayer from "./children/startGameWithOtherPlayer/StartGameWithOtherPlayer";
+import { useSelector } from "react-redux";
+import { selectReadyToPlay } from "../gameSlice";
 import FriendsList from "./children/friendsList/FriendsList";
 import GameRoom from "./children/gameRoom/GameRoom";
 // import Counter from "../02. counter/Counter";
 // import ExitGame from "../exitGame/ExitGame";
+// import StartGameWithOtherPlayer from "./children/startGameWithOtherPlayer/StartGameWithOtherPlayer";
 import "./playPage.css";
 
 export default function PlayPage() {
-  //   const { firstPlayer, secondPlayer } = playersProps;
-  //   const { gameRoomName, setGameRoomName } = gameRoomNameProps;
-  //   const { notificationsList } = notifications;
-
-  //   const [renderStartingPlayer, setRenderStartingPlayer] = useState(false);
-
-  //   const friendDetails =
-  //     firstPlayer.username != username ? firstPlayer : secondPlayer;
-
+  const readyToPlay = useSelector(selectReadyToPlay);
   // useEffect(() => {
   //   if (isNewGameStarted) {
   //     setTimeout(() => {
