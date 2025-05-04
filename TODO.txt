@@ -1,5 +1,6 @@
 1. Try to use Redux management system:
-   - implement the logic for sending and accepting game request
+   - try to do the categories server call when needed
+   - better error handling for the game components
    
    - create a Public Guard for Login and Register (after backend is completed);
 
