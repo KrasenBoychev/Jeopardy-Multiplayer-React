@@ -1,10 +1,10 @@
-// const { Category } = require('../models/Category');
-// const { Question } = require('../models/Question');
-// const { User } = require('../models/User');
+const { Category } = require("../models/Category");
+const { Question } = require("../models/Question");
+const { User } = require("../models/User");
 
-// async function getAllCategories() {
-//   return Category.find({}).lean();
-// }
+async function getAllCategories() {
+  return Category.find({}).lean();
+}
 
 // async function getCategory(categoryName) {
 //   return Category.find({ name: categoryName }).lean();
@@ -28,9 +28,9 @@
 //   return record.points;
 // }
 
-// module.exports = {
-//   getAllCategories,
-//   getCategory,
-//   getQuestions,
-//   updatePoints,
-// };
+module.exports = {
+  getAllCategories,
+  //   getCategory,
+  //   getQuestions,
+  //   updatePoints,
+};
