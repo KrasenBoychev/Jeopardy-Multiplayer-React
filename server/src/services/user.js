@@ -65,11 +65,15 @@ async function changeOnlineStatus(username, socketId) {
   ]);
 }
 
-// async function updateGameInProgress(username) {
-//   return await OnlineUser.updateOne({ username }, [
-//     { $set: { gameInProgress: { $not: "$gameInProgress" } } },
-//   ]);
-// }
+async function updateGameInProgress(username) {
+  return await User.updateOne({ username }, [
+    {
+      $set: {
+        "gameDetails.gameInProgress": { $not: "$gameDetails.gameInProgress" },
+      },
+    },
+  ]);
+}
 
 module.exports = {
   getUserByEmail,
@@ -83,5 +87,5 @@ module.exports = {
   addNotification,
   removeNotification,
   changeOnlineStatus,
-  // updateGameInProgress,
+  updateGameInProgress,
 };
