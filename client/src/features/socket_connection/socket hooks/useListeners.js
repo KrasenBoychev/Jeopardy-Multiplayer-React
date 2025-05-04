@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
 import {
   addNewFriend,
   updateFriendGameInProgress,
@@ -15,14 +16,13 @@ import {
   updateSetStartGameDetails,
   updateStartingPlayers,
 } from "../../game/gameSlice";
-import toast from "react-hot-toast";
 import { setCategories } from "../../game/04. categories/categoriesSlice";
 import { setSocketReq } from "../socketSlice";
 
 export default function useListeners(socket) {
   const user = useSelector(selectCurrentUser);
-  const { refetch } = useGetNotificationsQuery("getNotifications");
   const dispatch = useDispatch();
+  const { refetch } = useGetNotificationsQuery("getNotifications");
 
   useEffect(() => {
     if (!user.gameDetails.gameInProgress) {
@@ -101,6 +101,10 @@ export default function useListeners(socket) {
 
       socket?.on("getReadyToPlay", () => {
         dispatch(updateReadyToPlay());
+      });
+
+      socket?.on("getExitGame", async ({ username }) => {
+        toast.error(username + " exit the game. Press 'EXIT' to leave");
       });
     }
   }, [socket]);
