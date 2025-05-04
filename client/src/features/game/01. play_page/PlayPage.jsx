@@ -3,48 +3,32 @@ import { selectReadyToPlay } from "../gameSlice";
 import FriendsList from "./children/friendsList/FriendsList";
 import GameRoom from "./children/gameRoom/GameRoom";
 // import Counter from "../02. counter/Counter";
-// import ExitGame from "../exitGame/ExitGame";
+import ExitGame from "../exitGame/ExitGame";
 // import StartGameWithOtherPlayer from "./children/startGameWithOtherPlayer/StartGameWithOtherPlayer";
 import "./playPage.css";
 
 export default function PlayPage() {
   const readyToPlay = useSelector(selectReadyToPlay);
-  // useEffect(() => {
-  //   if (isNewGameStarted) {
-  //     setTimeout(() => {
-  //       setRenderStartingPlayer(true);
-  //     }, 2000);
-  //   }
-  // }, [isNewGameStarted]);
 
   return (
     <>
-      {/* {renderStartingPlayer ? (
+      {readyToPlay ? (
         <>
-          <Counter />
-          <ExitGame
-            props={{
-              friendsList,
-              setFriendInvited,
-              gameRoomName,
-              setGameRoomName,
-              setRenderStartingPlayer,
-              setIsNewGameStarted,
-            }}
-          />
+          {/* <Counter /> */}
+          <ExitGame />
         </>
-      ) : ( */}
-      <div className="play_page_container">
-        <section>
-          <GameRoom />
-        </section>
-        <section>
-          <FriendsList />
-          {/* Change the component to StartGameWithRandomPlayer - write the code for it */}
-          {/* <StartGameWithOtherPlayer /> */}
-        </section>
-      </div>
-      {/* )} */}
+      ) : (
+        <div className="play_page_container">
+          <section>
+            <GameRoom />
+          </section>
+          <section>
+            <FriendsList />
+            {/* Change the component to StartGameWithRandomPlayer - write the code for it */}
+            {/* <StartGameWithOtherPlayer /> */}
+          </section>
+        </div>
+      )}
     </>
   );
 }

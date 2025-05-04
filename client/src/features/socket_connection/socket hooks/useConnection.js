@@ -67,7 +67,6 @@ export default function useConnection(socketProps) {
               socketId: socket.id,
             },
             receiverFriends: onlineFriends,
-            // action,
           });
         }
       }
