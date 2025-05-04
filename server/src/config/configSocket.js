@@ -18,7 +18,6 @@ function configSocket(server) {
       receiverFriends.forEach((friend) => {
         io.to(friend.socketId).emit("getFriendStatus", {
           senderInfo,
-          // action,
         });
       });
     });
@@ -45,27 +44,33 @@ function configSocket(server) {
       });
     });
 
-    // socket.on("sendNotification", ({ receiverSocketId, msg, data }) => {
-    //   io.to(receiverSocketId).emit("getNotification", { msg, data });
-    // });
+    socket.on("setCancelGameInvitation", ({ receiverSocketId, username }) => {
+      io.to(receiverSocketId).emit("getCancelGameInvitation", {
+        username,
+      });
+    });
 
-    // socket.on(
-    //   "setCancelGameInvitation",
-    //   ({ receiverSocketId, userUsername }) => {
-    //     io.to(receiverSocketId).emit("getCancelGameInvitation", {
-    //       senderUsername: userUsername,
-    //     });
-    //   }
-    // );
+    socket.on("sendAcceptGameRes", ({ receiverSocketId }) => {
+      io.to(receiverSocketId).emit("getAcceptGameRes", {});
+    });
 
-    // socket.on(
-    //   "setRejectGameInvitation",
-    //   ({ receiverSocketId, userUsername }) => {
-    //     io.to(receiverSocketId).emit("getRejectGameInvitation", {
-    //       senderUsername: userUsername,
-    //     });
-    //   }
-    // );
+    socket.on("sendFriendGameInProgress", ({ receiverFriends, username }) => {
+      receiverFriends.forEach((friend) => {
+        io.to(friend.socketId).emit("getFriendGameInProgress", {
+          username,
+        });
+      });
+    });
+
+    socket.on("sendGameDetails", ({ receiverSocketId, gameDetails }) => {
+      io.to(receiverSocketId).emit("getGameDetails", {
+        gameDetails,
+      });
+    });
+
+    socket.on("setReadyToPlay", ({ receiverSocketId }) => {
+      io.to(receiverSocketId).emit("getReadyToPlay", {});
+    });
 
     // socket.on(
     //   "setAcceptGameInvitation",
@@ -80,13 +85,13 @@ function configSocket(server) {
     //   }
     // );
 
-    // socket.on("joinRoom", ({ gameRoomName }) => {
-    //   socket.join(gameRoomName);
-    // });
+    socket.on("joinRoom", ({ gameRoomName }) => {
+      socket.join(gameRoomName);
+    });
 
-    // socket.on("leaveRoom", ({ gameRoomName }) => {
-    //   socket.leave(gameRoomName);
-    // });
+    socket.on("leaveRoom", ({ gameRoomName }) => {
+      socket.leave(gameRoomName);
+    });
 
     // socket.on(
     //   "setExitGame",
