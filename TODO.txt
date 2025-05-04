@@ -1,5 +1,7 @@
 1. Try to use Redux management system:
-   - try to do the categories server call when needed
+   - change the category request from query to mutation and use it when needed
+   - change friends fetching and rerender to make it simplier and avoid changing the state - 
+      main issue occurs when exiting the game and the player who left the game doesn't get the correct info for the user
    - better error handling for the game components
    
    - create a Public Guard for Login and Register (after backend is completed);
