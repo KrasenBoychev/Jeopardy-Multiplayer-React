@@ -3,7 +3,7 @@ import PopupComp from "../../../../../../components/popup/Popup";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../../../authentication/authSlice";
 import { selectFriends } from "../../friendsList/friendsSlice";
-import { selectGameReqSentBy } from "../../../../gameSlice";
+import { selectGameReqSentBy, updateRivalPlayer } from "../../../../gameSlice";
 import { setSocketReq } from "../../../../../socket_connection/socketSlice";
 
 export default function InviteFriend() {
@@ -32,6 +32,14 @@ export default function InviteFriend() {
             receiverSocketId: findFriend.socketId,
             username: user.username,
           },
+        })
+      );
+
+      dispatch(
+        updateRivalPlayer({
+          username: friendUsername,
+          socketId: findFriend.socketId,
+          updateType: "add",
         })
       );
 
