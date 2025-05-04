@@ -72,6 +72,12 @@ function configSocket(server) {
       io.to(receiverSocketId).emit("getReadyToPlay", {});
     });
 
+    socket.on("setExitGame", ({ receiverSocketId, username }) => {
+      io.to(receiverSocketId).emit("getExitGame", {
+        username,
+      });
+    });
+
     // socket.on(
     //   "setAcceptGameInvitation",
     //   ({ receiverSocketId, userUsername, roomName, playersInfo }) => {
@@ -85,25 +91,13 @@ function configSocket(server) {
     //   }
     // );
 
-    socket.on("joinRoom", ({ gameRoomName }) => {
-      socket.join(gameRoomName);
-    });
+    // socket.on("joinRoom", ({ gameRoomName }) => {
+    //   socket.join(gameRoomName);
+    // });
 
-    socket.on("leaveRoom", ({ gameRoomName }) => {
-      socket.leave(gameRoomName);
-    });
-
-    // socket.on(
-    //   "setExitGame",
-    //   ({ receiverSocketId, userUsername, gameRoomName }) => {
-    //     socket.leave(gameRoomName);
-
-    //     io.to(receiverSocketId).emit("getExitGame", {
-    //       senderUsername: userUsername,
-    //       gameRoomName,
-    //     });
-    //   }
-    // );
+    // socket.on("leaveRoom", ({ gameRoomName }) => {
+    //   socket.leave(gameRoomName);
+    // });
 
     // socket.on("sendCategorySelected", ({ receiverSocketId, socketData }) => {
     //   io.to(receiverSocketId).emit("getCategorySelected", {
