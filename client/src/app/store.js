@@ -4,6 +4,8 @@ import authReducer from "../features/authentication/authSlice";
 import socketReducer from "../features/socket_connection/socketSlice";
 import friendsReducer from "../features/game/01. play_page/children/friendsList/friendsSlice";
 import gameReducer from "../features/game/gameSlice";
+import categoriesReducer from "../features/game/04. categories/categoriesSlice";
+import questionsReducer from "../features/game/06. questions/questionsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +14,8 @@ export const store = configureStore({
     socket: socketReducer,
     friends: friendsReducer,
     game: gameReducer,
+    categories: categoriesReducer,
+    questions: questionsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),
