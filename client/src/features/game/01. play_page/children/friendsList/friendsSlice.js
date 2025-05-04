@@ -18,6 +18,15 @@ const friendsSlice = createSlice({
         return friend;
       });
     },
+    updateFriendGameInProgress: (state, action) => {
+      const username = action.payload;
+      state.friends = state.friends.map((friend) => {
+        if (friend.username == username) {
+          friend.gameInProgress = !friend.gameInProgress;
+        }
+        return friend;
+      });
+    },
     addNewFriend: (state, action) => {
       const newFriend = action.payload;
       state.friends.push(newFriend);
@@ -28,8 +37,13 @@ const friendsSlice = createSlice({
   },
 });
 
-export const { setFriends, updateFriendStatus, addNewFriend, deleteFriends } =
-  friendsSlice.actions;
+export const {
+  setFriends,
+  updateFriendStatus,
+  updateFriendGameInProgress,
+  addNewFriend,
+  deleteFriends,
+} = friendsSlice.actions;
 
 export default friendsSlice.reducer;
 
