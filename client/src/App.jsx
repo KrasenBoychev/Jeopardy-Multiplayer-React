@@ -27,12 +27,9 @@ function App() {
   return (
     <>
       <Toaster />
-      {user && (
-        <>
-          <Socket socketProps={{ socket, setSocket }} />
-          <Notifications />
-        </>
-      )}
+      {user && <Socket socketProps={{ socket, setSocket }} />}
+
+      {user && !user.gameDetails.gameInProgress && <Notifications />}
 
       {(!user || !user.gameDetails.gameInProgress) && <Header />}
 
