@@ -1,35 +1,27 @@
-import { useState } from "react";
-import { useGameContext } from "../../../contexts/GameContext";
-import { useExitGame } from "../../../hooks/game_hooks/useExitGame";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useGetFriendsDetailsMutation } from "../01. play_page/children/friendsList/friendsApiSlice";
+import { selectCurrentUser } from "../../authentication/authSlice";
+import { useChangeGameInProgressMutation } from "../gameApiSlice";
+import exitGameFunc from "./exitGameFunc";
 import Confrim from "./confirm/Confrim";
 import "./exit.css";
 
-export default function ExitGame({ props }) {
-  const {
-    friendsList,
-    setFriendInvited,
-    gameRoomName,
-    setGameRoomName,
-    setRenderStartingPlayer,
-    setIsNewGameStarted,
-  } = props;
+export default function ExitGame() {
   const [showConfirmMessage, setShowConfirmMessage] = useState(false);
   const [isGameLeft, setIsGameLeft] = useState(false);
-  const [leavingTimeout, setLeavingTimeout] = useState(0);
-  const { socket } = useGameContext();
+  const user = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
+  const [getFriendsDetails] = useGetFriendsDetailsMutation();
+  const [changeGameInProgress] = useChangeGameInProgressMutation();
 
-  useExitGame(
-    socket,
-    leavingTimeout,
-    setLeavingTimeout,
-    isGameLeft,
-    setIsGameLeft,
-    friendsList,
-    setRenderStartingPlayer,
-    setGameRoomName,
-    setFriendInvited,
-    setIsNewGameStarted
-  );
+  useEffect(() => {
+    if (isGameLeft) {
+      (async () => {
+        exitGameFunc(user, dispatch, getFriendsDetails, changeGameInProgress);
+      })();
+    }
+  }, [isGameLeft]);
 
   const leaveGameClickHandler = () => {
     setShowConfirmMessage(true);
@@ -45,7 +37,6 @@ export default function ExitGame({ props }) {
         <Confrim
           props={{
             setShowConfirmMessage,
-            gameRoomName,
             setIsGameLeft,
           }}
         />
