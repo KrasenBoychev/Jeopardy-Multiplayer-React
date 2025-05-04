@@ -1,26 +1,43 @@
-import { useAuthContext } from "../../../../../../contexts/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { selectRivalPlayer, updateRivalPlayer } from "../../../../gameSlice";
+import { selectCurrentUser } from "../../../../../authentication/authSlice";
+import { selectFriends } from "../../friendsList/friendsSlice";
+import { setSocketReq } from "../../../../../socket_connection/socketSlice";
+import toast from "react-hot-toast";
 
-export default function CancelGameInvitation({ socket, friendProps }) {
-  const { friendsList, friendInvited, setFriendInvited } = friendProps;
-  const { username } = useAuthContext();
+export default function CancelGameInvitation() {
+  const user = useSelector(selectCurrentUser);
+  const friends = useSelector(selectFriends);
+  const rivalPlayer = useSelector(selectRivalPlayer);
+  const dispatch = useDispatch();
 
-  const friendInvitedCancel = async () => {
-    const findFriend = friendsList.find(
-      (friend) => friend.username == friendInvited
-    );
+  const gameCancelationClickHandler = async () => {
+    const findFriend = friends.find((friend) => friend.username == rivalPlayer);
 
     if (findFriend && findFriend.online && !findFriend.gameInProgress) {
-      await socket.emit("setCancelGameInvitation", {
-        receiverSocketId: findFriend.socketId,
-        userUsername: username,
-      });
+      dispatch(
+        setSocketReq({
+          socketReqName: "setCancelGameInvitation",
+          socketData: {
+            receiverSocketId: findFriend.socketId,
+            username: user.username,
+          },
+        })
+      );
+    } else {
+      toast.error("Cannot start game with " + rivalPlayer);
     }
 
-    setFriendInvited(null);
+    dispatch(
+      updateRivalPlayer({ username: rivalPlayer, updateType: "remove" })
+    );
   };
 
   return (
-    <button className="game_room_cancel_btn" onClick={friendInvitedCancel}>
+    <button
+      className="game_room_cancel_btn"
+      onClick={gameCancelationClickHandler}
+    >
       Cancel
     </button>
   );
