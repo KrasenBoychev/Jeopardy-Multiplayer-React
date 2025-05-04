@@ -56,9 +56,11 @@ const gameSlice = createSlice({
     deleteGameDetails: (state, action) => {
       state.gameReqSentBy = [];
       state.rivalPlayer = null;
-      state.isNewGameStarted = false;
       state.firstPlayer = null;
       state.secondPlayer = null;
+      state.isNewGameStarted = false;
+      state.setStartGameDetails = null;
+      state.readyToPlay = null;
     },
   },
 });
