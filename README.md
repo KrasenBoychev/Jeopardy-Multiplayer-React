@@ -17,7 +17,7 @@ The project is in progress, so there is much more to come.
 
 ## Click the video below to watch the demo of the game:
 
-[![Watch the video](https://img.youtube.com/vi/IslKDdoyHCs/0.jpg)](https://studio.youtube.com/video/IslKDdoyHCs)
+[![Watch the video](https://img.youtube.com/vi/IslKDdoyHCs/0.jpg)](https://youtu.be/IslKDdoyHCs)
 
 ## Getting Started
 
