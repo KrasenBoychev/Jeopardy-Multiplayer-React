@@ -4,34 +4,53 @@ Jeopardy Multiplayer is a game that can be played by two players who are connect
 
 Also, there is an Admin account, so the owner of the game can create new categories and questions. The admin can play a game as well, but their score will not be shown in the Leaderboard. The purpose of that is the admin to be able to test the game and more specifically, whether all categories and questions render properly.
 
-The project is in progress - next step will be a player to send a game invitation and the other player to be able to accept or reject it. When this functionality is completed, there may be a friends list in every player's account, so the players don't have to type the username of their friends every time they want to play with them.
-All that will happen by using the Socket.io library.
+The project is in progress, so there is much more to come.
+
+## Features
+
+- ### Socket.IO
+- ### React Redux
+- ### React RTK Query
+- ### React Hooks and State
+- ### CSS Flexbox Layout
+- ### MongoDB
+
+## Click the video below to watch the demo of the website:
+
+[![Watch the video](https://img.youtube.com/vi/IslKDdoyHCs/0.jpg)](https://studio.youtube.com/video/IslKDdoyHCs)
 
 ## Getting Started
 
 ### Installing
 
-* Clone the repository or download all files.
+- Clone the repository or download all files.
 
 ### Executing program
-* Run Client
+
+- Run Client
+
 ```
 cd client
 ```
+
 ```
 npm install
 ```
+
 ```
 npm run dev
 ```
 
-* Run Server
+- Run Server
+
 ```
 cd server
 ```
+
 ```
 npm install
 ```
+
 ```
 npm start
 ```
