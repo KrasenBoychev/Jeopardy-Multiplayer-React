@@ -15,7 +15,7 @@ The project is in progress, so there is much more to come.
 - ### CSS Flexbox Layout
 - ### MongoDB
 
-## Click the video below to watch the demo of the website:
+## Click the video below to watch the demo of the game:
 
 [![Watch the video](https://img.youtube.com/vi/IslKDdoyHCs/0.jpg)](https://studio.youtube.com/video/IslKDdoyHCs)
 
