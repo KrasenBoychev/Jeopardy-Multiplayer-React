@@ -10,7 +10,7 @@ const {
   removeNotification,
   getUserByUsername,
 } = require("../services/user");
-const { friendDetails } = require("./data models/friendDetails");
+const { friendDetailsModel } = require("./data models/friendDetails");
 
 const friendsRouter = Router();
 
@@ -119,7 +119,7 @@ friendsRouter.post(
 
       const getFriendDetails = await getUserByUsername(friendUsername);
 
-      result = friendDetails(getFriendDetails);
+      result = friendDetailsModel(getFriendDetails);
 
       res.json(result);
     } catch (err) {
