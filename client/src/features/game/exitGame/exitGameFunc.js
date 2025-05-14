@@ -9,49 +9,40 @@ import { deleteGameDetails } from "../gameSlice";
 export default async function exitGameFunc(
   user,
   dispatch,
-  getFriendsDetails,
+  getOnlineFriends,
   changeGameInProgress
 ) {
   dispatch(updateGameInProgress());
   dispatch(deleteGameDetails());
   dispatch(deleteCategories());
   dispatch(deleteQuestions());
-  
+
   try {
     // update userGameInProgress in the db
     await changeGameInProgress();
 
     // get the friends again and set them in the redux store
-    const getFriendsServerRes = await getFriendsDetails(
+    const getOnlineFriendsServerRes = await getOnlineFriends(
       user.gameDetails.friendsList
     );
-    const friendsList = getFriendsServerRes.data;
+    const onlineFriends = getOnlineFriendsServerRes.data;
 
-    if (friendsList) {
-      dispatch(setFriends(friendsList));
-
-      const onlineFriends = friendsList.filter(
-        (friend) => friend.online === true
-      );
-
-      if (onlineFriends.length > 0) {
-        dispatch(
-          setSocketReq({
-            socketReqName: "sendUserStatus",
-            socketData: {
-              senderInfo: {
-                username: user.username,
-                socketId: user.gameDetails.socketId,
-              },
-              receiverFriends: onlineFriends,
+    if (onlineFriends) {
+      dispatch(
+        setSocketReq({
+          socketReqName: "sendExitUserStatus",
+          socketData: {
+            senderInfo: {
+              username: user.username,
+              socketId: user.gameDetails.socketId,
             },
-          })
-        );
-      }
+            receiverFriends: onlineFriends,
+          },
+        })
+      );
     }
   } catch (err) {
     toast.error("Exiting the game went wrong");
     console.log(err.message);
-    // window.location.reload();
   }
 }
