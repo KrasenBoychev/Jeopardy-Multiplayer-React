@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useSendFriendResMutation } from "../../game/01. play_page/children/friendsList/friendsApiSlice";
 import { setSocketReq } from "../../socket_connection/socketSlice";
-import { selectCurrentUser } from "../../authentication/authSlice";
+import { selectCurrentUser, updateFriendsList } from "../../authentication/authSlice";
 import { addNewFriend } from "../../game/01. play_page/children/friendsList/friendsSlice";
 import { useGetNotificationsQuery } from "../notificationsApiSlice";
 
@@ -41,8 +41,9 @@ export default function AcceptNotification({ notification }) {
             })
           );
         }
-
+      
         dispatch(addNewFriend(friendDetails));
+        dispatch(updateFriendsList(friendUsername))
       }
 
       refetch();
