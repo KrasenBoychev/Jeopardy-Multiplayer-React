@@ -22,6 +22,14 @@ function configSocket(server) {
       });
     });
 
+    socket.on("sendExitUserStatus", ({ senderInfo, receiverFriends }) => {
+      receiverFriends.forEach((friend) => {
+        io.to(friend.socketId).emit("getExitUserStatus", {
+          senderInfo,
+        });
+      });
+    });
+
     socket.on("setUpdateNotifications", ({ receiverSocketId }) => {
       io.to(receiverSocketId).emit("getUpdateNotifications", {});
     });
@@ -78,6 +86,16 @@ function configSocket(server) {
       });
     });
 
+    socket.on(
+      "sendCategorySelected",
+      ({ receiverSocketId, categorySelected, index }) => {
+        io.to(receiverSocketId).emit("getCategorySelected", {
+          categorySelected,
+          index,
+        });
+      }
+    );
+
     // socket.on(
     //   "setAcceptGameInvitation",
     //   ({ receiverSocketId, userUsername, roomName, playersInfo }) => {
@@ -97,12 +115,6 @@ function configSocket(server) {
 
     // socket.on("leaveRoom", ({ gameRoomName }) => {
     //   socket.leave(gameRoomName);
-    // });
-
-    // socket.on("sendCategorySelected", ({ receiverSocketId, socketData }) => {
-    //   io.to(receiverSocketId).emit("getCategorySelected", {
-    //     socketData,
-    //   });
     // });
 
     // socket.on("sendQuestions", ({ receiverSocketId, gameQuestions }) => {
