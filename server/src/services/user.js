@@ -29,6 +29,13 @@ async function findFriendsDetails(friendsList) {
   });
 }
 
+async function findOnlineFriends(friendsList) {
+  return await User.find({
+    username: { $in: friendsList },
+    "gameDetails.online": true,
+  });
+}
+
 async function addUsernameToFriendsList(userUsername, friendUsername) {
   return await User.updateOne(
     { username: userUsername },
@@ -82,6 +89,7 @@ module.exports = {
   getUserSocketId,
   getUserFriendsList,
   findFriendsDetails,
+  findOnlineFriends,
   addUsernameToFriendsList,
   getUserNotificationsList,
   addNotification,
