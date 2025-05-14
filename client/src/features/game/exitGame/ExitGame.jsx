@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useGetFriendsDetailsMutation } from "../01. play_page/children/friendsList/friendsApiSlice";
+import { useGetOnlineFriendsMutation } from "../01. play_page/children/friendsList/friendsApiSlice";
 import { selectCurrentUser } from "../../authentication/authSlice";
 import { useChangeGameInProgressMutation } from "../gameApiSlice";
 import exitGameFunc from "./exitGameFunc";
@@ -12,13 +12,13 @@ export default function ExitGame() {
   const [isGameLeft, setIsGameLeft] = useState(false);
   const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
-  const [getFriendsDetails] = useGetFriendsDetailsMutation();
+  const [getOnlineFriends] = useGetOnlineFriendsMutation();
   const [changeGameInProgress] = useChangeGameInProgressMutation();
 
   useEffect(() => {
     if (isGameLeft) {
       (async () => {
-        exitGameFunc(user, dispatch, getFriendsDetails, changeGameInProgress);
+        exitGameFunc(user, dispatch, getOnlineFriends, changeGameInProgress);
       })();
     }
   }, [isGameLeft]);
