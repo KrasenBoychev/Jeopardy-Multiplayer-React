@@ -7,8 +7,12 @@ import {
   updateFriendStatus,
 } from "../../game/01. play_page/children/friendsList/friendsSlice";
 import { useGetNotificationsQuery } from "../../../features/notifications/notificationsApiSlice";
-import { selectCurrentUser } from "../../authentication/authSlice";
 import {
+  selectCurrentUser,
+  updateFriendsList,
+} from "../../authentication/authSlice";
+import {
+  setActivePlayer,
   updateGameReqSentBy,
   updateIsNewGameStarted,
   updateReadyToPlay,
@@ -16,8 +20,8 @@ import {
   updateSetStartGameDetails,
   updateStartingPlayers,
 } from "../../game/gameSlice";
-import { setCategories } from "../../game/04. categories/categoriesSlice";
 import { setSocketReq } from "../socketSlice";
+import { setCategories } from "../../game/04. categories/categoriesSlice";
 
 export default function useListeners(socket) {
   const user = useSelector(selectCurrentUser);
@@ -28,6 +32,7 @@ export default function useListeners(socket) {
     if (!user.gameDetails.gameInProgress) {
       socket?.on("getFriendStatus", ({ senderInfo }) => {
         dispatch(updateFriendStatus(senderInfo));
+
         dispatch(
           updateGameReqSentBy({
             username: senderInfo.username,
@@ -44,12 +49,18 @@ export default function useListeners(socket) {
         );
       });
 
+      socket?.on("getExitUserStatus", ({ senderInfo }) => {
+        dispatch(updateFriendStatus(senderInfo));
+        dispatch(updateFriendGameInProgress(senderInfo.username));
+      });
+
       socket?.on("getUpdateNotifications", () => {
         refetch();
       });
 
       socket?.on("getFriendReqAccepted", ({ userDetails }) => {
         dispatch(addNewFriend(userDetails));
+        dispatch(updateFriendsList(userDetails.username));
         refetch();
       });
 
@@ -86,8 +97,9 @@ export default function useListeners(socket) {
           })
         );
 
-        dispatch(setCategories(gameDetails.newCategories));
         dispatch(updateReadyToPlay());
+        dispatch(setActivePlayer(gameDetails.firstPlayerDetails));
+        dispatch(setCategories(gameDetails.allCategories));
 
         dispatch(
           setSocketReq({
@@ -105,6 +117,9 @@ export default function useListeners(socket) {
 
       socket?.on("getExitGame", async ({ username }) => {
         toast.error(username + " exit the game. Press 'EXIT' to leave");
+        dispatch(
+          updateRivalPlayer({ username, socketId: "", updateType: "remove" })
+        );
       });
     }
   }, [socket]);
