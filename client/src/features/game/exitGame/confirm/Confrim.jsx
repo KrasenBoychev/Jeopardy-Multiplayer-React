@@ -15,15 +15,18 @@ export default function Confrim({ props }) {
   };
 
   const confirmLeavingClickHandler = async () => {
-    dispatch(
-      setSocketReq({
-        socketReqName: "setExitGame",
-        socketData: {
-          receiverSocketId: rivalPlayer.socketId,
-          username: user.username,
-        },
-      })
-    );
+    if (rivalPlayer) {
+      dispatch(
+        setSocketReq({
+          socketReqName: "setExitGame",
+          socketData: {
+            receiverSocketId: rivalPlayer.socketId,
+            username: user.username,
+          },
+        })
+      );
+    }
+
     setIsGameLeft(true);
   };
 
