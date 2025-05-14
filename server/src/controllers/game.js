@@ -15,21 +15,6 @@ const gameRouter = Router();
 gameRouter.get("/allCategories", async (req, res) => {
   try {
     let allCategories = await getAllCategories();
-
-    // const newCategories = [];
-    // for (let i = 0; i <= 3; i++) {
-    //   const randomCategory =
-    //     allCategories[Math.floor(Math.random() * allCategories.length)];
-
-    //   newCategories.push({
-    //     name: randomCategory.name,
-    //     selected: false,
-    //   });
-    //   allCategories = allCategories.filter(
-    //     (category) => category.name != randomCategory.name
-    //   );
-    // }
-
     res.json(allCategories);
   } catch (err) {
     const parsed = parseError(err);
