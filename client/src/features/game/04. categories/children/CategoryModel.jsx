@@ -1,57 +1,103 @@
-import { useAuthContext } from "../../../../contexts/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser } from "../../../authentication/authSlice";
+import {
+  selectActivePlayer,
+  selectRivalPlayer,
+  updateActivePlayer,
+} from "../../gameSlice";
+import {
+  defaultOption,
+  selectCategories,
+  selectCategoryCount,
+  selectGameCategories,
+  updateCategories,
+  updateCategoryCount,
+  updateGameCategories,
+} from "../categoriesSlice";
+import { setSocketReq } from "../../../socket_connection/socketSlice";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function CategoryModel({ props }) {
-  const {
-    categoryName,
-    categoryIndex,
-    currCategoryCount,
-    allCategories,
-    chosenOption,
-    selectQuestion,
-    activePlayer,
-    defaultOption,
-  } = props;
+  const { gameCategory, gameCategoryIndex } = props;
+  const [selectedCategory, setSelectedCategory] = useState(defaultOption);
+  const user = useSelector(selectCurrentUser);
+  const activePlayer = useSelector(selectActivePlayer);
+  const rivalPlayer = useSelector(selectRivalPlayer);
+  const categories = useSelector(selectCategories);
+  const categoryCount = useSelector(selectCategoryCount);
+  const dispatch = useDispatch();
+  const gameCategories = useSelector(selectGameCategories);
 
-  const { username } = useAuthContext();
+  const chosenOption = (e) => {
+    setSelectedCategory(e.target.value);
+  };
+
+  const selectCategoryClickHandler = () => {
+    dispatch(
+      updateGameCategories({
+        categoryName: selectedCategory,
+        index: categoryCount,
+      })
+    );
+    dispatch(updateCategories(selectedCategory));
+
+    dispatch(
+      setSocketReq({
+        socketReqName: "sendCategorySelected",
+        socketData: {
+          receiverSocketId: rivalPlayer.socketId,
+          categorySelected: selectedCategory,
+          index: categoryCount,
+        },
+      })
+    );
+
+    dispatch(updateActivePlayer());
+    dispatch(updateCategoryCount());
+  };
 
   return (
     <div
       className={
-        currCategoryCount > categoryIndex
+        categoryCount > gameCategoryIndex
           ? "chosen_category category_model"
-          : currCategoryCount == categoryIndex
+          : categoryCount == gameCategoryIndex
           ? "category_model"
           : "inactiveCat category_model"
       }
     >
-      {currCategoryCount == categoryIndex ? (
+      {categoryCount == gameCategoryIndex ? (
         <>
           <select
             name="category"
             id="category"
-            disabled={username === activePlayer ? false : true}
-            value={categoryName}
+            disabled={user.username === activePlayer.username ? false : true}
             onChange={chosenOption}
           >
-            {allCategories.map((category) => (
-              <option key={category} value={category}>
-                {category}
+            <option key={defaultOption} value={defaultOption}>
+              {defaultOption}
+            </option>
+            {categories.map((category) => (
+              <option key={category.name} value={category.name}>
+                {category.name}
               </option>
             ))}
           </select>
           <button
             disabled={
-              username === activePlayer && categoryName !== defaultOption
+              user.username === activePlayer.username &&
+              selectedCategory !== defaultOption
                 ? false
                 : true
             }
-            onClick={selectQuestion}
+            onClick={selectCategoryClickHandler}
           >
             Ready
           </button>
         </>
       ) : (
-        <p>{categoryName}</p>
+        <p>{gameCategory}</p>
       )}
     </div>
   );
