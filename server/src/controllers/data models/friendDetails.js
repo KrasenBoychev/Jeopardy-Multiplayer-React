@@ -1,4 +1,4 @@
-const friendDetails = (friend) => {
+const friendDetailsModel = (friend) => {
   return {
     username: friend.username,
     online: friend.gameDetails.online,
@@ -7,4 +7,11 @@ const friendDetails = (friend) => {
   };
 };
 
-module.exports = { friendDetails };
+const onlineFriendsModel = (friend) => {
+  return {
+    username: friend.username,
+    socketId: friend.gameDetails.socketId,
+  };
+};
+
+module.exports = { friendDetailsModel, onlineFriendsModel };
