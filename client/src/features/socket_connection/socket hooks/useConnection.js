@@ -7,7 +7,7 @@ import {
   updateOnlineStatus,
 } from "../../authentication/authSlice";
 import { useChangeOnlineStatusMutation } from "../socketApiSlice";
-import { useGetFriendsDetailsMutation } from "../../game/01. play_page/children/friendsList/friendsApiSlice";
+import { useGetOnlineFriendsMutation } from "../../game/01. play_page/children/friendsList/friendsApiSlice";
 import {
   deleteFriends,
   setFriends,
@@ -20,7 +20,7 @@ export default function useConnection(socketProps) {
   const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
   const [changeOnlineStatus] = useChangeOnlineStatusMutation();
-  const [getFriendsDetails] = useGetFriendsDetailsMutation();
+  const [getOnlineFriends] = useGetOnlineFriendsMutation();
 
   useEffect(() => {
     const newSocket = io(baseURL);
@@ -48,27 +48,19 @@ export default function useConnection(socketProps) {
 
       dispatch(updateOnlineStatus(socket.id));
 
-      const getFriendsServerRes = await getFriendsDetails(
+      const getOnlineFriendsServerRes = await getOnlineFriends(
         user.gameDetails.friendsList
       );
-      const friendsList = getFriendsServerRes.data;
+      const onlineFriends = getOnlineFriendsServerRes.data;
 
-      if (friendsList) {
-        dispatch(setFriends(friendsList));
-
-        const onlineFriends = friendsList.filter(
-          (friend) => friend.online === true
-        );
-
-        if (onlineFriends.length > 0) {
-          socket.emit("sendUserStatus", {
-            senderInfo: {
-              username: user.username,
-              socketId: socket.id,
-            },
-            receiverFriends: onlineFriends,
-          });
-        }
+      if (onlineFriends) {
+        socket.emit("sendUserStatus", {
+          senderInfo: {
+            username: user.username,
+            socketId: socket.id,
+          },
+          receiverFriends: onlineFriends,
+        });
       }
     });
   }, [socket]);
