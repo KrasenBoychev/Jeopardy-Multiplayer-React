@@ -4,33 +4,32 @@ import { deleteCredentials, selectCurrentUser } from "./authSlice";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useLogOutMutation } from "./authApiSlice";
-import { selectFriends } from "../game/01. play_page/children/friendsList/friendsSlice";
 import { useChangeOnlineStatusMutation } from "../socket_connection/socketApiSlice";
+import { useGetOnlineFriendsMutation } from "../game/01. play_page/children/friendsList/friendsApiSlice";
 
 export default function Logout({ socket }) {
-  const [logOut, { isLoading }] = useLogOutMutation();
-  const dispatch = useDispatch();
-  const [changeOnlineStatus] = useChangeOnlineStatusMutation();
-  const friends = useSelector(selectFriends);
   const user = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
+  const [logOut, { isLoading }] = useLogOutMutation();
+  const [changeOnlineStatus] = useChangeOnlineStatusMutation();
+  const [getOnlineFriends] = useGetOnlineFriendsMutation();
 
   useEffect(() => {
     (async function logout() {
       try {
-        if (friends.length > 0) {
-          const onlineFriends = friends.filter(
-            (friend) => friend.online === true
-          );
+        const getOnlineFriendsServerRes = await getOnlineFriends(
+          user.gameDetails.friendsList
+        );
+        const onlineFriends = getOnlineFriendsServerRes.data;
 
-          if (onlineFriends.length > 0) {
-            socket.emit("sendUserStatus", {
-              senderInfo: {
-                username: user.username,
-                socketId: "",
-              },
-              receiverFriends: onlineFriends,
-            });
-          }
+        if (onlineFriends) {
+          socket.emit("sendUserStatus", {
+            senderInfo: {
+              username: user.username,
+              socketId: "",
+            },
+            receiverFriends: onlineFriends,
+          });
         }
 
         await changeOnlineStatus({ username: user.username, socketId: "" });
