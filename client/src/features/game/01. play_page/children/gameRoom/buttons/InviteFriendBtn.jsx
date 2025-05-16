@@ -53,7 +53,7 @@ export default function InviteFriend() {
   const popupHeading = "Friends Online";
   const popupContent = (
     <ul>
-      {friends.map((friend) => {
+      {friends?.map((friend) => {
         if (
           friend.online &&
           !friend.gameInProgress &&

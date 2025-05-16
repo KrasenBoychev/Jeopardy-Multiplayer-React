@@ -10,8 +10,6 @@ const friendsSlice = createSlice({
     },
     updateFriendStatus: (state, action) => {
       const { username, socketId } = action.payload;
-      
-      console.log({ username, socketId });
 
       state.friends = state.friends.map((friend) => {
         if (friend.username == username) {

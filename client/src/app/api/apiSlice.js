@@ -1,5 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { setCredentials, deleteCredentials } from "../../features/authentication/authSlice";
+import {
+  setCredentials,
+  deleteCredentials,
+} from "../../features/authentication/authSlice";
 import { baseURL } from "./baseURL";
 
 const baseQuery = fetchBaseQuery({
@@ -40,7 +43,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
-  tagTypes: [],
+  tagTypes: ["FriendsList"],
   endpoints: (builder) => ({}),
 });
 

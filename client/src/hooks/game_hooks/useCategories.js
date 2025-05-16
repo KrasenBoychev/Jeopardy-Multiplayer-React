@@ -1,19 +1,10 @@
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
-
 import { getAllCategories, getQuestions } from "../../../api/game-api";
 import { points } from "../../common/gamePoints";
-import { useGameContext } from "../../contexts/GameContext";
-import { useAuthContext } from "../../contexts/AuthContext";
+
 
 export default function useCategories() {
-  const { username } = useAuthContext();
-  const { socket, friendUsername, friendSocketId, firstPlayerUsername } =
-    useGameContext();
-
   const defaultOption = "--- Choose Category ---";
 
-  const [activePlayer, setActivePlayer] = useState(firstPlayerUsername);
   const [currCategoryCount, setCurrCategoryCount] = useState(0);
   const [randomNumber, setRandomNumber] = useState(0);
   const [moveToNextPage, setMoveToNextPage] = useState(false);
