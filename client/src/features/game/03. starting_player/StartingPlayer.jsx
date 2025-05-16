@@ -1,23 +1,24 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectFirstPlayer } from "../gameSlice";
 import Categories from "../04. categories/Categories";
 import "./startingPlayer.css";
 import "../game.css";
-import { useGameContext } from "../../../contexts/GameContext";
 
 export default function StartingPlayer() {
-  const [categories, setCategories] = useState(false);
-  const { firstPlayerUsername } = useGameContext();
+  const firstPlayer = useSelector(selectFirstPlayer);
+  const [renderCategories, setRenderCategories] = useState(false);
 
   setTimeout(() => {
-    setCategories(true);
+    setRenderCategories(true);
   }, 2500);
 
-  return categories ? (
+  return renderCategories ? (
     <Categories />
   ) : (
     <>
       <div className="game_container">
-        <p className="starting_player">{firstPlayerUsername}</p>
+        <p className="starting_player">{firstPlayer.username}</p>
       </div>
     </>
   );
