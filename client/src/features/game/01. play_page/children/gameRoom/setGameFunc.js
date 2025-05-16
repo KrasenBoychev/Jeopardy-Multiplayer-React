@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import { updateGameInProgress } from "../../../../authentication/authSlice";
-import { updateStartingPlayers } from "../../../gameSlice";
+import { setActivePlayer, updateStartingPlayers } from "../../../gameSlice";
 import { setSocketReq } from "../../../../socket_connection/socketSlice";
 import { setCategories } from "../../../04. categories/categoriesSlice";
 
@@ -69,17 +69,20 @@ export function setPlayersDetails(user, rivalPlayer, dispatch) {
   return [firstPlayerDetails, secondPlayerDetails];
 }
 
-export async function setCategoriesFunc(
+export async function setDataToOtherPlayer(
   firstPlayerDetails,
   secondPlayerDetails,
   rivalPlayer,
-  newCategories,
   userSocketId,
+  getCategories,
   dispatch
 ) {
   try {
-    dispatch(setCategories(newCategories));
+    const allCategoriesServerRes = await getCategories();
+    const allCategories = allCategoriesServerRes.data;
 
+    dispatch(setCategories(allCategories));
+    dispatch(setActivePlayer(firstPlayerDetails));
     dispatch(
       setSocketReq({
         socketReqName: "sendGameDetails",
@@ -88,14 +91,14 @@ export async function setCategoriesFunc(
           gameDetails: {
             firstPlayerDetails,
             secondPlayerDetails,
-            newCategories,
             userSocketId,
+            allCategories,
           },
         },
       })
     );
   } catch (err) {
-    toast.error(`Cannot start game. Please try again later`);
+    toast.error("Cannot get categories");
     console.log(err.message);
   }
 }
