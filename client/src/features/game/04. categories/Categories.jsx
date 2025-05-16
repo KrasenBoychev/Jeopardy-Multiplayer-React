@@ -1,100 +1,69 @@
-import { useState } from "react";
-import { useGameContext } from "../../../contexts/GameContext";
-import useCategories from "../../../hooks/game_hooks/useCategories";
 import CategoryModel from "./children/CategoryModel";
 import CategoriesHeader from "./children/CategoriesHeader";
-import QuestionsOrResult from "../05. middlewares/QuestionsOrResult";
+// import QuestionsOrResult from "../05. middlewares/QuestionsOrResult";
 import "./categories.css";
 import "../game.css";
+import { useSelector } from "react-redux";
+import { selectCategories, selectGameCategories } from "./categoriesSlice";
 
 export default function Categories() {
-  const { socket, friendSocketId, friendUsername } = useGameContext();
-  const [currOption, setCurrOption] = useState("");
+  const categories = useSelector(selectCategories);
+  const gameCategories = useSelector(selectGameCategories);
 
-  const [
-    activePlayer,
-    setActivePlayer,
-    currCategoryCount,
-    setCurrCategoryCount,
-    moveToNextPage,
-    allCategories,
-    setAllCategories,
-    defaultOption,
-    questions,
-    setQuestions,
-    setRandomNumber,
-    categoriesNames,
-    setCategoriesNames,
-    setCallQuestions,
-  ] = useCategories();
+  // const selectQuestion = async () => {
+  //   if (currCategoryCount <= 3) {
+  //     const updateCategories = Array.from(allCategories);
+  //     const index = updateCategories.indexOf(currOption);
+  //     updateCategories.splice(index, 1);
+  //     setAllCategories(updateCategories);
 
-  const chosenOption = async (e) => {
-    const newArray = categoriesNames;
-    newArray.splice(currCategoryCount, 1, e.target.value);
-    setCategoriesNames(newArray);
-    setCurrOption(e.target.value);
-  };
+  //     const newCategoryCount = currCategoryCount + 1;
+  //     setCurrCategoryCount(newCategoryCount);
+  //     setActivePlayer(friendUsername);
 
-  const selectQuestion = async () => {
-    if (currCategoryCount <= 3) {
-      const updateCategories = Array.from(allCategories);
-      const index = updateCategories.indexOf(currOption);
-      updateCategories.splice(index, 1);
-      setAllCategories(updateCategories);
+  //     const socketData = {
+  //       categoriesNames,
+  //       newCategories: updateCategories,
+  //       newCategoryCount,
+  //     };
 
-      const newCategoryCount = currCategoryCount + 1;
-      setCurrCategoryCount(newCategoryCount);
-      setActivePlayer(friendUsername);
+  //     await socket.emit("sendCategorySelected", {
+  //       receiverSocketId: friendSocketId,
+  //       socketData,
+  //     });
 
-      const socketData = {
-        categoriesNames,
-        newCategories: updateCategories,
-        newCategoryCount,
-      };
-
-      await socket.emit("sendCategorySelected", {
-        receiverSocketId: friendSocketId,
-        socketData,
-      });
-
-      if (currCategoryCount == 3) {
-        const generateNumber = Math.random();
-        setRandomNumber(generateNumber);
-        setCallQuestions(true);
-      }
-    }
-  };
+  //     if (currCategoryCount == 3) {
+  //       const generateNumber = Math.random();
+  //       setRandomNumber(generateNumber);
+  //       setCallQuestions(true);
+  //     }
+  //   }
+  // };
 
   return (
     <>
-      {moveToNextPage ? (
+      {/* {moveToNextPage ? (
         <QuestionsOrResult
           props={{ activePlayer, setActivePlayer, questions, setQuestions }}
         />
-      ) : (
-        <div className="categories_page_wrapper">
-          <CategoriesHeader props={{ activePlayer, currCategoryCount }} />
-          <div className="categories_container">
-            {categoriesNames.map((categoryName, categoryIndex) => {
-              return (
-                <CategoryModel
-                  key={categoryIndex}
-                  props={{
-                    categoryName,
-                    categoryIndex,
-                    currCategoryCount,
-                    allCategories,
-                    chosenOption,
-                    selectQuestion,
-                    activePlayer,
-                    defaultOption,
-                  }}
-                />
-              );
-            })}
-          </div>
+      ) : ( */}
+      <div className="categories_page_wrapper">
+        <CategoriesHeader />
+        <div className="categories_container">
+          {gameCategories.map((gameCategory, gameCategoryIndex) => {
+            return (
+              <CategoryModel
+                key={gameCategoryIndex}
+                props={{
+                  gameCategory,
+                  gameCategoryIndex,
+                }}
+              />
+            );
+          })}
         </div>
-      )}
+      </div>
+      {/* )} */}
     </>
   );
 }
