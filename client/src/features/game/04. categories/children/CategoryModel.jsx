@@ -4,7 +4,7 @@ import {
   selectActivePlayer,
   selectRivalPlayer,
   updateActivePlayer,
-} from "../../gameSlice";
+} from "../../playersSlice";
 import {
   defaultOption,
   selectCategories,

@@ -7,9 +7,9 @@ import {
 import { selectCurrentUser } from "../../../../authentication/authSlice";
 import {
   selectIsNewGameStarted,
-  selectRivalPlayer,
   selectSetStartGameDetails,
 } from "../../../gameSlice";
+import { selectRivalPlayer } from "../../../playersSlice";
 import CancelGameInvitation from "./buttons/CancelGameInvitation";
 import InviteFriend from "./buttons/InviteFriendBtn";
 import { selectFriends } from "../friendsList/friendsSlice";

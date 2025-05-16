@@ -1,5 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
-import { selectReadyToPlay, setActivePlayer } from "../gameSlice";
+import { useSelector } from "react-redux";
+import { selectReadyToPlay } from "../gameSlice";
 import FriendsList from "./children/friendsList/FriendsList";
 import GameRoom from "./children/gameRoom/GameRoom";
 import Counter from "../02. counter/Counter";

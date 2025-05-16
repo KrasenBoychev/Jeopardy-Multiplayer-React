@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { selectFirstPlayer } from "../gameSlice";
+import { selectFirstPlayer } from "../playersSlice";
 import Categories from "../04. categories/Categories";
 import "./startingPlayer.css";
 import "../game.css";

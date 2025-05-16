@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../authentication/authSlice";
-import { selectRivalPlayer } from "../../gameSlice";
+import { selectRivalPlayer } from "../../playersSlice";
 import { setSocketReq } from "../../../socket_connection/socketSlice";
 import "./confirm.css";
 

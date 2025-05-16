@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../authentication/authSlice";
-import { selectActivePlayer } from "../../gameSlice";
+import { selectActivePlayer } from "../../playersSlice";
 import { selectCategoryCount } from "../categoriesSlice";
 
 export default function CategoriesHeader() {
