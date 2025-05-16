@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   useChangeGameInProgressMutation,
-  useGetCategoriesQuery,
+  useGetCategoriesMutation,
 } from "../../../gameApiSlice";
 import { selectCurrentUser } from "../../../../authentication/authSlice";
 import {
@@ -14,7 +14,7 @@ import CancelGameInvitation from "./buttons/CancelGameInvitation";
 import InviteFriend from "./buttons/InviteFriendBtn";
 import { selectFriends } from "../friendsList/friendsSlice";
 import {
-  setCategoriesFunc,
+  setDataToOtherPlayer,
   setGameInProgress,
   setPlayersDetails,
 } from "./setGameFunc";
@@ -27,8 +27,8 @@ export default function GameRoom() {
   const isNewGameStarted = useSelector(selectIsNewGameStarted);
   const setStartGameDetails = useSelector(selectSetStartGameDetails);
   const [changeGameInProgress] = useChangeGameInProgressMutation();
+  const [getCategories] = useGetCategoriesMutation();
   const dispatch = useDispatch();
-  const { data: newCategories } = useGetCategoriesQuery("getCategories");
 
   useEffect(() => {
     if (setStartGameDetails) {
@@ -44,12 +44,12 @@ export default function GameRoom() {
           rivalPlayer,
           dispatch
         );
-        await setCategoriesFunc(
+        setDataToOtherPlayer(
           firstPlayerDetails,
           secondPlayerDetails,
           rivalPlayer,
-          newCategories,
           user.gameDetails.socketId,
+          getCategories,
           dispatch
         );
       })();
