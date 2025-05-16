@@ -7,6 +7,7 @@ const gameSlice = createSlice({
     rivalPlayer: null,
     firstPlayer: null,
     secondPlayer: null,
+    activePlayer: null,
     isNewGameStarted: false,
     setStartGameDetails: false,
     readyToPlay: false,
@@ -29,7 +30,10 @@ const gameSlice = createSlice({
       const { username, socketId, updateType } = action.payload;
       if (updateType == "add") {
         state.rivalPlayer = { username, socketId };
-      } else if (username == state.rivalPlayer && updateType == "remove") {
+      } else if (
+        username == state.rivalPlayer?.username &&
+        updateType == "remove"
+      ) {
         state.rivalPlayer = null;
       }
     },
@@ -42,6 +46,16 @@ const gameSlice = createSlice({
       } else if (updateType == "remove") {
         state.firstPlayer = null;
         state.secondPlayer = null;
+      }
+    },
+    setActivePlayer: (state, action) => {
+      state.activePlayer = state.firstPlayer;
+    },
+    updateActivePlayer: (state, action) => {
+      if (state.activePlayer.username == state.firstPlayer.username) {
+        state.activePlayer = state.secondPlayer;
+      } else {
+        state.activePlayer = state.firstPlayer;
       }
     },
     updateIsNewGameStarted: (state, action) => {
@@ -58,6 +72,7 @@ const gameSlice = createSlice({
       state.rivalPlayer = null;
       state.firstPlayer = null;
       state.secondPlayer = null;
+      state.activePlayer = null;
       state.isNewGameStarted = false;
       state.setStartGameDetails = null;
       state.readyToPlay = null;
@@ -69,6 +84,8 @@ export const {
   updateGameReqSentBy,
   updateRivalPlayer,
   updateStartingPlayers,
+  setActivePlayer,
+  updateActivePlayer,
   updateIsNewGameStarted,
   updateSetStartGameDetails,
   updateReadyToPlay,
@@ -85,3 +102,4 @@ export const selectSecondPlayer = (state) => state.game.secondPlayer;
 export const selectSetStartGameDetails = (state) =>
   state.game.setStartGameDetails;
 export const selectReadyToPlay = (state) => state.game.readyToPlay;
+export const selectActivePlayer = (state) => state.game.activePlayer;
