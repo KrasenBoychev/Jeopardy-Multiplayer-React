@@ -1,8 +1,8 @@
-import { useSelector } from "react-redux";
-import { selectReadyToPlay } from "../gameSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectReadyToPlay, setActivePlayer } from "../gameSlice";
 import FriendsList from "./children/friendsList/FriendsList";
 import GameRoom from "./children/gameRoom/GameRoom";
-// import Counter from "../02. counter/Counter";
+import Counter from "../02. counter/Counter";
 import ExitGame from "../exitGame/ExitGame";
 // import StartGameWithOtherPlayer from "./children/startGameWithOtherPlayer/StartGameWithOtherPlayer";
 import "./playPage.css";
@@ -14,7 +14,7 @@ export default function PlayPage() {
     <>
       {readyToPlay ? (
         <>
-          {/* <Counter /> */}
+          <Counter />
           <ExitGame />
         </>
       ) : (
