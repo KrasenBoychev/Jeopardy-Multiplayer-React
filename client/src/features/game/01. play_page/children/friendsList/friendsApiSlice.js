@@ -10,6 +10,31 @@ export const friendsApiSlice = apiSlice.injectEndpoints({
           friendsList,
         },
       }),
+      // providesTags: (result, error, arg) => [
+      //   { type: "FriendsList", id: "LIST" },
+      //   ...result.ids.map((id) => ({ type: "FriendsList", id })),
+      // ],
+    }),
+    // getSingleFriend: builder.mutation({
+    //   query: (username) => ({
+    //     url: "/users/singleFriend",
+    //     method: "POST",
+    //     body: {
+    //       username,
+    //     },
+    //   }),
+    // invalidatesTags: (result, error, arg) => [
+    //   { type: "FriendsList", id: arg.id },
+    // ],
+    // }),
+    getOnlineFriends: builder.mutation({
+      query: (friendsList) => ({
+        url: "/users/onlineFriends",
+        method: "POST",
+        body: {
+          friendsList,
+        },
+      }),
     }),
     sendFriendReq: builder.mutation({
       query: (friendUsername) => ({
@@ -35,6 +60,7 @@ export const friendsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetFriendsDetailsMutation,
+  useGetOnlineFriendsMutation,
   useSendFriendReqMutation,
   useSendFriendResMutation,
 } = friendsApiSlice;
