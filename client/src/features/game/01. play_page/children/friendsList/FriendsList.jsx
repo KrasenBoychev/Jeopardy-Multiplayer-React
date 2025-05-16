@@ -1,13 +1,32 @@
-import { useSelector } from "react-redux";
-import { selectFriends } from "./friendsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectFriends, setFriends } from "./friendsSlice";
 import { selectGameReqSentBy } from "../../../gameSlice";
 import AddFriendBtn from "./children/AddFriendBtn";
 import GameReqBtns from "./children/GameReqBtns";
 import "./friendsList.css";
+import { useGetFriendsDetailsMutation } from "./friendsApiSlice";
+import { useEffect } from "react";
+import { selectCurrentUser } from "../../../../authentication/authSlice";
 
 export default function FriendsList() {
+  const user = useSelector(selectCurrentUser);
   const friends = useSelector(selectFriends);
   const gameReqSentBy = useSelector(selectGameReqSentBy);
+  const [getFriendsDetails, { isLoading }] = useGetFriendsDetailsMutation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    (async () => {
+      const getFriendsServerRes = await getFriendsDetails(
+        user.gameDetails.friendsList
+      );
+      const friendsList = getFriendsServerRes.data;
+
+      if (friendsList) {
+        dispatch(setFriends(friendsList));
+      }
+    })();
+  }, []);
 
   return (
     <div className="friends_list_wrapper">
