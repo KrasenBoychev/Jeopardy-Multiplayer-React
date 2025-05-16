@@ -18,6 +18,10 @@ const authSlice = createSlice({
       state.user.gameDetails.gameInProgress =
         !state.user.gameDetails.gameInProgress;
     },
+    updateFriendsList: (state, action) => {
+      const friendUsername = action.payload;
+      state.user.gameDetails.friendsList.push(friendUsername);
+    },
     deleteCredentials: (state, action) => {
       state.user = null;
       state.token = null;
@@ -29,6 +33,7 @@ export const {
   setCredentials,
   updateOnlineStatus,
   updateGameInProgress,
+  updateFriendsList,
   deleteCredentials,
 } = authSlice.actions;
 
