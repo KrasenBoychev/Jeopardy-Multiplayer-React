@@ -14,8 +14,20 @@ export const gameApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    getQuestions: builder.mutation({
+      query: (categoriesIDs) => ({
+        url: "game/questions",
+        method: "POST",
+        body: {
+          categoriesIDs,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useChangeGameInProgressMutation, useGetCategoriesMutation } =
-  gameApiSlice;
+export const {
+  useChangeGameInProgressMutation,
+  useGetCategoriesMutation,
+  useGetQuestionsMutation,
+} = gameApiSlice;
