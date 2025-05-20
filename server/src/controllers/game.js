@@ -6,7 +6,7 @@ const { parseError } = require("../util");
 const {
   getAllCategories,
   //   getCategory,
-  //   getQuestions,
+  getQuestion,
   //   updatePoints,
 } = require("../services/game");
 
@@ -32,17 +32,29 @@ gameRouter.get("/allCategories", async (req, res) => {
 //   }
 // });
 
-// gameRouter.get("/questions/:categoriesIDs", async (req, res) => {
-//   try {
-//     const categoriesIDs = req.params.categoriesIDs;
-//     const categoriesIDsArr = categoriesIDs.split(",");
-//     const data = await getQuestions(categoriesIDsArr);
-//     res.json(data);
-//   } catch (err) {
-//     const parsed = parseError(err);
-//     res.status(400).json({ code: 400, message: parsed.message });
-//   }
-// });
+gameRouter.post("/questions", async (req, res) => {
+  const allQuestions = [];
+
+  try {
+    const categoriesIDs = req.body.categoriesIDs;
+    const pointsList = [5, 10, 15, 20];
+
+    for (let c = 0; c < categoriesIDs.length; c++) {
+      for (let p = 0; p < pointsList.length; p++) {
+        let receivedQuestion = await getQuestion(
+          categoriesIDs[c],
+          pointsList[p]
+        );
+        allQuestions.push(receivedQuestion[0]);
+      }
+    }
+
+    res.json(allQuestions);
+  } catch (err) {
+    const parsed = parseError(err);
+    res.status(400).json({ code: 400, message: parsed.message });
+  }
+});
 
 // gameRouter.put(
 //   "/result/:userId",
