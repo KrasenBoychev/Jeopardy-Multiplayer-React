@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import {
-  updateCategories,
   updateCategoryCount,
   updateGameCategories,
 } from "../../game/04. categories/categoriesSlice";
-import { updateActivePlayer } from "../../game/gameSlice";
+import { updateActivePlayer } from "../../game/playersSlice";
 import { useDispatch } from "react-redux";
+import { setQuestions } from "../../game/06. questions/questionsSlice";
 
 export default function useGameListeners(socket) {
   const dispatch = useDispatch();
@@ -18,9 +18,13 @@ export default function useGameListeners(socket) {
           index,
         })
       );
-      dispatch(updateCategories(categorySelected));
       dispatch(updateActivePlayer());
       dispatch(updateCategoryCount());
     });
+
+     socket?.on("getQuestionsSelected", ({ questionsSelected }) => {
+      dispatch(setQuestions(questionsSelected));
+    });
+
   }, [socket]);
 }
