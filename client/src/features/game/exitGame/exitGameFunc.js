@@ -1,10 +1,10 @@
 import toast from "react-hot-toast";
 import { updateGameInProgress } from "../../authentication/authSlice";
 import { setSocketReq } from "../../socket_connection/socketSlice";
-import { setFriends } from "../01. play_page/children/friendsList/friendsSlice";
 import { deleteCategories } from "../04. categories/categoriesSlice";
 import { deleteQuestions } from "../06. questions/questionsSlice";
 import { deleteGameDetails } from "../gameSlice";
+import { deletePlayersDetails } from "../playersSlice";
 
 export default async function exitGameFunc(
   user,
@@ -14,6 +14,7 @@ export default async function exitGameFunc(
 ) {
   dispatch(updateGameInProgress());
   dispatch(deleteGameDetails());
+  dispatch(deletePlayersDetails());
   dispatch(deleteCategories());
   dispatch(deleteQuestions());
 
@@ -21,7 +22,6 @@ export default async function exitGameFunc(
     // update userGameInProgress in the db
     await changeGameInProgress();
 
-    // get the friends again and set them in the redux store
     const getOnlineFriendsServerRes = await getOnlineFriends(
       user.gameDetails.friendsList
     );
