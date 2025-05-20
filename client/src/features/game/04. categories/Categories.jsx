@@ -3,67 +3,88 @@ import CategoriesHeader from "./children/CategoriesHeader";
 // import QuestionsOrResult from "../05. middlewares/QuestionsOrResult";
 import "./categories.css";
 import "../game.css";
-import { useSelector } from "react-redux";
-import { selectCategories, selectGameCategories } from "./categoriesSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import {
+  selectCategories,
+  selectCategoryCount,
+  selectGameCategories,
+} from "./categoriesSlice";
+import { selectActivePlayer, selectRivalPlayer } from "../playersSlice";
+import { selectCurrentUser } from "../../authentication/authSlice";
+import { useGetQuestionsMutation } from "../gameApiSlice";
+import { selectQuestions, setQuestions } from "../06. questions/questionsSlice";
+import { setSocketReq } from "../../socket_connection/socketSlice";
 
 export default function Categories() {
   const categories = useSelector(selectCategories);
   const gameCategories = useSelector(selectGameCategories);
+  const categoriesCount = useSelector(selectCategoryCount);
+  const activePlayer = useSelector(selectActivePlayer);
+  const user = useSelector(selectCurrentUser);
+  const rivalPlayer = useSelector(selectRivalPlayer);
+  const questions = useSelector(selectQuestions);
+  const [getQuestions] = useGetQuestionsMutation();
+  const dispatch = useDispatch();
 
-  // const selectQuestion = async () => {
-  //   if (currCategoryCount <= 3) {
-  //     const updateCategories = Array.from(allCategories);
-  //     const index = updateCategories.indexOf(currOption);
-  //     updateCategories.splice(index, 1);
-  //     setAllCategories(updateCategories);
+  useEffect(() => {
+    (async () => {
+      if (categoriesCount == 4 && user.username == activePlayer.username) {
+        const categoriesIDs = [];
 
-  //     const newCategoryCount = currCategoryCount + 1;
-  //     setCurrCategoryCount(newCategoryCount);
-  //     setActivePlayer(friendUsername);
+        console.log({ categories });
 
-  //     const socketData = {
-  //       categoriesNames,
-  //       newCategories: updateCategories,
-  //       newCategoryCount,
-  //     };
+        console.log({ gameCategories });
 
-  //     await socket.emit("sendCategorySelected", {
-  //       receiverSocketId: friendSocketId,
-  //       socketData,
-  //     });
+        gameCategories.forEach((gameCategoryName) => {
+          const findCategory = categories.find(
+            (category) => category.name == gameCategoryName
+          );
 
-  //     if (currCategoryCount == 3) {
-  //       const generateNumber = Math.random();
-  //       setRandomNumber(generateNumber);
-  //       setCallQuestions(true);
-  //     }
-  //   }
-  // };
+          console.log({ findCategory });
+
+          categoriesIDs.push(findCategory._id);
+        });
+
+        const selectedQuestions = await getQuestions(categoriesIDs);
+        
+        dispatch(setQuestions(selectedQuestions.data));
+        dispatch(
+          setSocketReq({
+            socketReqName: "sendQuestionsSelected",
+            socketData: {
+              receiverSocketId: rivalPlayer.socketId,
+              questionsSelected: selectedQuestions.data,
+            },
+          })
+        );
+      }
+    })();
+  }, [categoriesCount]);
 
   return (
     <>
-      {/* {moveToNextPage ? (
-        <QuestionsOrResult
-          props={{ activePlayer, setActivePlayer, questions, setQuestions }}
-        />
-      ) : ( */}
-      <div className="categories_page_wrapper">
-        <CategoriesHeader />
-        <div className="categories_container">
-          {gameCategories.map((gameCategory, gameCategoryIndex) => {
-            return (
-              <CategoryModel
-                key={gameCategoryIndex}
-                props={{
-                  gameCategory,
-                  gameCategoryIndex,
-                }}
-              />
-            );
-          })}
+      {questions ? (
+        <div>Yeeee</div>
+      ) : (
+        // <QuestionsOrResult />
+        <div className="categories_page_wrapper">
+          <CategoriesHeader />
+          <div className="categories_container">
+            {gameCategories.map((gameCategory, gameCategoryIndex) => {
+              return (
+                <CategoryModel
+                  key={gameCategoryIndex}
+                  props={{
+                    gameCategory,
+                    gameCategoryIndex,
+                  }}
+                />
+              );
+            })}
+          </div>
         </div>
-      </div>
-      {/* )} */}
+      )}
     </>
   );
 }
