@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./api/apiSlice";
 import authReducer from "../features/authentication/authSlice";
 import socketReducer from "../features/socket_connection/socketSlice";
-import friendsReducer from "../features/game/01. play_page/children/friendsList/friendsSlice";
+import friendsReducer from "../features/game/01. play_page/children/friends_list/friendsSlice";
 import gameReducer from "../features/game/gameSlice";
 import playersReducer from "../features/game/playersSlice";
 import categoriesReducer from "../features/game/04. categories/categoriesSlice";

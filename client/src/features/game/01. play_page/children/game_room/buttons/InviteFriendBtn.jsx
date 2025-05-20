@@ -2,8 +2,9 @@ import toast from "react-hot-toast";
 import PopupComp from "../../../../../../components/popup/Popup";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../../../authentication/authSlice";
-import { selectFriends } from "../../friendsList/friendsSlice";
-import { selectGameReqSentBy, updateRivalPlayer } from "../../../../gameSlice";
+import { selectFriends } from "../../friends_list/friendsSlice";
+import { selectGameReqSentBy } from "../../../../gameSlice";
+import { updateRivalPlayer } from "../../../../playersSlice";
 import { setSocketReq } from "../../../../../socket_connection/socketSlice";
 
 export default function InviteFriend() {

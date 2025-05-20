@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { useSendFriendResMutation } from "../../game/01. play_page/children/friendsList/friendsApiSlice";
+import { useSendFriendResMutation } from "../../game/01. play_page/children/friends_list/friendsApiSlice";
 import { setSocketReq } from "../../socket_connection/socketSlice";
 import { useGetNotificationsQuery } from "../notificationsApiSlice";
 

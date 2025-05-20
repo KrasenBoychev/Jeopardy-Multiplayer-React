@@ -5,21 +5,23 @@ import {
   addNewFriend,
   updateFriendGameInProgress,
   updateFriendStatus,
-} from "../../game/01. play_page/children/friendsList/friendsSlice";
+} from "../../game/01. play_page/children/friends_list/friendsSlice";
 import { useGetNotificationsQuery } from "../../../features/notifications/notificationsApiSlice";
 import {
   selectCurrentUser,
   updateFriendsList,
 } from "../../authentication/authSlice";
 import {
-  setActivePlayer,
   updateGameReqSentBy,
   updateIsNewGameStarted,
   updateReadyToPlay,
-  updateRivalPlayer,
   updateSetStartGameDetails,
-  updateStartingPlayers,
 } from "../../game/gameSlice";
+import {
+  setActivePlayer,
+  updateRivalPlayer,
+  updateStartingPlayers,
+} from "../../game/playersSlice";
 import { setSocketReq } from "../socketSlice";
 import { setCategories } from "../../game/04. categories/categoriesSlice";
 

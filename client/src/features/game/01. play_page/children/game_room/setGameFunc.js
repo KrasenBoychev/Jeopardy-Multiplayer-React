@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import { updateGameInProgress } from "../../../../authentication/authSlice";
-import { setActivePlayer, updateStartingPlayers } from "../../../gameSlice";
+import { setActivePlayer, updateStartingPlayers } from "../../../playersSlice";
 import { setSocketReq } from "../../../../socket_connection/socketSlice";
 import { setCategories } from "../../../04. categories/categoriesSlice";
 

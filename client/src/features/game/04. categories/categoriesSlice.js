@@ -19,12 +19,6 @@ const categoriesSlice = createSlice({
       const allCategories = action.payload;
       state.categories = allCategories;
     },
-    updateCategories: (state, action) => {
-      const categoryName = action.payload;
-      state.categories = state.categories.filter(
-        (category) => category.name !== categoryName
-      );
-    },
     updateGameCategories: (state, action) => {
       const { categoryName, index } = action.payload;
       state.gameCategories.splice(index, 1, categoryName);
@@ -34,13 +28,19 @@ const categoriesSlice = createSlice({
     },
     deleteCategories: (state, action) => {
       state.categories = null;
+      state.gameCategories = [
+        defaultOption,
+        defaultOption,
+        defaultOption,
+        defaultOption,
+      ];
+      state.categoryCount = 0;
     },
   },
 });
 
 export const {
   setCategories,
-  updateCategories,
   updateGameCategories,
   updateCategoryCount,
   deleteCategories,

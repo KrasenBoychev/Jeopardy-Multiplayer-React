@@ -7,11 +7,11 @@ import {
   updateOnlineStatus,
 } from "../../authentication/authSlice";
 import { useChangeOnlineStatusMutation } from "../socketApiSlice";
-import { useGetOnlineFriendsMutation } from "../../game/01. play_page/children/friendsList/friendsApiSlice";
+import { useGetOnlineFriendsMutation } from "../../game/01. play_page/children/friends_list/friendsApiSlice";
 import {
   deleteFriends,
   setFriends,
-} from "../../game/01. play_page/children/friendsList/friendsSlice";
+} from "../../game/01. play_page/children/friends_list/friendsSlice";
 import { deleteSocket } from "../socketSlice";
 import { deleteGameDetails } from "../../game/gameSlice";
 

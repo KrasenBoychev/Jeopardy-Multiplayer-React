@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useGetOnlineFriendsMutation } from "../01. play_page/children/friendsList/friendsApiSlice";
+import { useGetOnlineFriendsMutation } from "../01. play_page/children/friends_list/friendsApiSlice";
 import { selectCurrentUser } from "../../authentication/authSlice";
 import { useChangeGameInProgressMutation } from "../gameApiSlice";
 import exitGameFunc from "./exitGameFunc";

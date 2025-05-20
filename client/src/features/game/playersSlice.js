@@ -60,7 +60,7 @@ export const {
 
 export default playersSlice.reducer;
 
-export const selectFirstPlayer = (state) => state.game.firstPlayer;
-export const selectSecondPlayer = (state) => state.game.secondPlayer;
-export const selectRivalPlayer = (state) => state.game.rivalPlayer;
-export const selectActivePlayer = (state) => state.game.activePlayer;
+export const selectFirstPlayer = (state) => state.players.firstPlayer;
+export const selectSecondPlayer = (state) => state.players.secondPlayer;
+export const selectRivalPlayer = (state) => state.players.rivalPlayer;
+export const selectActivePlayer = (state) => state.players.activePlayer;

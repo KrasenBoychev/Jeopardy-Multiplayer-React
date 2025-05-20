@@ -12,7 +12,7 @@ import {
 import { selectRivalPlayer } from "../../../playersSlice";
 import CancelGameInvitation from "./buttons/CancelGameInvitation";
 import InviteFriend from "./buttons/InviteFriendBtn";
-import { selectFriends } from "../friendsList/friendsSlice";
+import { selectFriends } from "../friends_list/friendsSlice";
 import {
   setDataToOtherPlayer,
   setGameInProgress,

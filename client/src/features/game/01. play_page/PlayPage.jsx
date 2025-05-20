@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { selectReadyToPlay } from "../gameSlice";
-import FriendsList from "./children/friendsList/FriendsList";
-import GameRoom from "./children/gameRoom/GameRoom";
+import FriendsList from "./children/friends_list/FriendsList";
+import GameRoom from "./children/game_room/GameRoom";
 import Counter from "../02. counter/Counter";
 import ExitGame from "../exitGame/ExitGame";
 // import StartGameWithOtherPlayer from "./children/startGameWithOtherPlayer/StartGameWithOtherPlayer";

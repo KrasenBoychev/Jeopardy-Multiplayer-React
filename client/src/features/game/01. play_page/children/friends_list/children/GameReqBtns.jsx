@@ -5,10 +5,10 @@ import { selectCurrentUser } from "../../../../../authentication/authSlice";
 import {
   updateGameReqSentBy,
   updateIsNewGameStarted,
-  updateRivalPlayer,
 } from "../../../../gameSlice";
+import { updateRivalPlayer } from "../../../../playersSlice";
 import { useChangeGameInProgressMutation } from "../../../../gameApiSlice";
-import { setGameInProgress } from "../../gameRoom/setGameFunc";
+import { setGameInProgress } from "../../game_room/setGameFunc";
 
 export default function GameReqBtns({ friendUsername }) {
   const user = useSelector(selectCurrentUser);
