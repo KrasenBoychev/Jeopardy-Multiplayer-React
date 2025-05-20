@@ -10,13 +10,11 @@ import {
   selectCategories,
   selectCategoryCount,
   selectGameCategories,
-  updateCategories,
   updateCategoryCount,
   updateGameCategories,
 } from "../categoriesSlice";
 import { setSocketReq } from "../../../socket_connection/socketSlice";
 import { useState } from "react";
-import toast from "react-hot-toast";
 
 export default function CategoryModel({ props }) {
   const { gameCategory, gameCategoryIndex } = props;
@@ -26,8 +24,8 @@ export default function CategoryModel({ props }) {
   const rivalPlayer = useSelector(selectRivalPlayer);
   const categories = useSelector(selectCategories);
   const categoryCount = useSelector(selectCategoryCount);
-  const dispatch = useDispatch();
   const gameCategories = useSelector(selectGameCategories);
+  const dispatch = useDispatch();
 
   const chosenOption = (e) => {
     setSelectedCategory(e.target.value);
@@ -40,7 +38,6 @@ export default function CategoryModel({ props }) {
         index: categoryCount,
       })
     );
-    dispatch(updateCategories(selectedCategory));
 
     dispatch(
       setSocketReq({
@@ -78,11 +75,14 @@ export default function CategoryModel({ props }) {
             <option key={defaultOption} value={defaultOption}>
               {defaultOption}
             </option>
-            {categories.map((category) => (
-              <option key={category.name} value={category.name}>
-                {category.name}
-              </option>
-            ))}
+            {categories.map(
+              (category) =>
+                !gameCategories.includes(category.name) && (
+                  <option key={category.name} value={category.name}>
+                    {category.name}
+                  </option>
+                )
+            )}
           </select>
           <button
             disabled={
