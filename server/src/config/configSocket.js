@@ -96,6 +96,15 @@ function configSocket(server) {
       }
     );
 
+    socket.on(
+      "sendQuestionsSelected",
+      ({ receiverSocketId, questionsSelected }) => {
+        io.to(receiverSocketId).emit("getQuestionsSelected", {
+          questionsSelected,
+        });
+      }
+    );
+
     // socket.on(
     //   "setAcceptGameInvitation",
     //   ({ receiverSocketId, userUsername, roomName, playersInfo }) => {
