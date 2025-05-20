@@ -1,8 +1,10 @@
+const { default: mongoose } = require("mongoose");
 const { Category } = require("../models/Category");
 const { Question } = require("../models/Question");
 const { User } = require("../models/User");
+const ObjectId = mongoose.Types.ObjectId;
 
-async function getAllCategories() {
+function getAllCategories() {
   return Category.find({}).lean();
 }
 
@@ -13,6 +15,13 @@ async function getAllCategories() {
 // async function getQuestions(categoriesIDs) {
 //   return Question.find({ categoryId: { $in: categoriesIDs } }).lean();
 // }
+
+function getQuestion(categoryId, points) {
+  return Question.aggregate([
+    { $match: { categoryId: new mongoose.Types.ObjectId(categoryId), points } },
+    { $sample: { size: 1 } },
+  ]);
+}
 
 // async function updatePoints(userId, data) {
 //   const record = await User.findById(userId);
@@ -32,5 +41,6 @@ module.exports = {
   getAllCategories,
   //   getCategory,
   //   getQuestions,
+  getQuestion,
   //   updatePoints,
 };
