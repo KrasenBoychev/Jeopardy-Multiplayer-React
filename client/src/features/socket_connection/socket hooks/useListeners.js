@@ -18,9 +18,8 @@ import {
   updateSetStartGameDetails,
 } from "../../game/gameSlice";
 import {
-  setActivePlayer,
   updateRivalPlayer,
-  updateStartingPlayers,
+  setFirstSecondActivePlayer,
 } from "../../game/playersSlice";
 import { setSocketReq } from "../socketSlice";
 import { setCategories } from "../../game/04. categories/categoriesSlice";
@@ -92,15 +91,13 @@ export default function useListeners(socket) {
 
       socket?.on("getGameDetails", ({ gameDetails }) => {
         dispatch(
-          updateStartingPlayers({
+          setFirstSecondActivePlayer({
             firstPlayerDetails: gameDetails.firstPlayerDetails,
             secondPlayerDetails: gameDetails.secondPlayerDetails,
-            updateType: "add",
           })
         );
 
         dispatch(updateReadyToPlay());
-        dispatch(setActivePlayer(gameDetails.firstPlayerDetails));
         dispatch(setCategories(gameDetails.allCategories));
 
         dispatch(

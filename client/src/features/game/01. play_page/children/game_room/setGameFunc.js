@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import { updateGameInProgress } from "../../../../authentication/authSlice";
-import { setActivePlayer, updateStartingPlayers } from "../../../playersSlice";
+import { setFirstSecondActivePlayer } from "../../../playersSlice";
 import { setSocketReq } from "../../../../socket_connection/socketSlice";
 import { setCategories } from "../../../04. categories/categoriesSlice";
 
@@ -59,10 +59,9 @@ export function setPlayersDetails(user, rivalPlayer, dispatch) {
   };
 
   dispatch(
-    updateStartingPlayers({
+    setFirstSecondActivePlayer({
       firstPlayerDetails,
       secondPlayerDetails,
-      updateType: "add",
     })
   );
 
@@ -82,7 +81,6 @@ export async function setDataToOtherPlayer(
     const allCategories = allCategoriesServerRes.data;
 
     dispatch(setCategories(allCategories));
-    dispatch(setActivePlayer(firstPlayerDetails));
     dispatch(
       setSocketReq({
         socketReqName: "sendGameDetails",
