@@ -33,6 +33,10 @@ const playersSlice = createSlice({
         state.activePlayer = state.firstPlayer;
       }
     },
+    updatePlayerPoints: (state, action) => {
+      const { player, pointsToAdd } = action.payload;
+      state[player].earnedPoints += pointsToAdd;
+    },
     deletePlayersDetails: (state, action) => {
       state.rivalPlayer = null;
       state.firstPlayer = null;
@@ -46,6 +50,7 @@ export const {
   setFirstSecondActivePlayer,
   updateRivalPlayer,
   updateActivePlayer,
+  updatePlayerPoints,
   deletePlayersDetails,
 } = playersSlice.actions;
 
