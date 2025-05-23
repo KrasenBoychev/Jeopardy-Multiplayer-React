@@ -9,6 +9,12 @@ const playersSlice = createSlice({
     activePlayer: null,
   },
   reducers: {
+    setFirstSecondActivePlayer: (state, action) => {
+      const { firstPlayerDetails, secondPlayerDetails } = action.payload;
+      state.firstPlayer = firstPlayerDetails;
+      state.secondPlayer = secondPlayerDetails;
+      state.activePlayer = firstPlayerDetails;
+    },
     updateRivalPlayer: (state, action) => {
       const { username, socketId, updateType } = action.payload;
       if (updateType == "add") {
@@ -19,20 +25,6 @@ const playersSlice = createSlice({
       ) {
         state.rivalPlayer = null;
       }
-    },
-    updateStartingPlayers: (state, action) => {
-      const { firstPlayerDetails, secondPlayerDetails, updateType } =
-        action.payload;
-      if (updateType == "add") {
-        state.firstPlayer = firstPlayerDetails;
-        state.secondPlayer = secondPlayerDetails;
-      } else if (updateType == "remove") {
-        state.firstPlayer = null;
-        state.secondPlayer = null;
-      }
-    },
-    setActivePlayer: (state, action) => {
-      state.activePlayer = state.firstPlayer;
     },
     updateActivePlayer: (state, action) => {
       if (state.activePlayer.username == state.firstPlayer.username) {
@@ -51,9 +43,8 @@ const playersSlice = createSlice({
 });
 
 export const {
+  setFirstSecondActivePlayer,
   updateRivalPlayer,
-  updateStartingPlayers,
-  setActivePlayer,
   updateActivePlayer,
   deletePlayersDetails,
 } = playersSlice.actions;
