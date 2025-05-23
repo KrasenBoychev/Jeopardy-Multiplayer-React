@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { updateGameInProgress } from "../../authentication/authSlice";
 import { setSocketReq } from "../../socket_connection/socketSlice";
 import { deleteCategories } from "../04. categories/categoriesSlice";
-import { deleteQuestions } from "../06. questions/questionsSlice";
+import { deleteQuestions } from "../05. questions/questionsSlice";
 import { deleteGameDetails } from "../gameSlice";
 import { deletePlayersDetails } from "../playersSlice";
 

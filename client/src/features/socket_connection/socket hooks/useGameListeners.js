@@ -5,7 +5,7 @@ import {
 } from "../../game/04. categories/categoriesSlice";
 import { updateActivePlayer } from "../../game/playersSlice";
 import { useDispatch } from "react-redux";
-import { setQuestions } from "../../game/06. questions/questionsSlice";
+import { setQuestions } from "../../game/05. questions/questionsSlice";
 
 export default function useGameListeners(socket) {
   const dispatch = useDispatch();

@@ -6,7 +6,7 @@ import friendsReducer from "../features/game/01. play_page/children/friends_list
 import gameReducer from "../features/game/gameSlice";
 import playersReducer from "../features/game/playersSlice";
 import categoriesReducer from "../features/game/04. categories/categoriesSlice";
-import questionsReducer from "../features/game/06. questions/questionsSlice";
+import questionsReducer from "../features/game/05. questions/questionsSlice";
 
 export const store = configureStore({
   reducer: {
