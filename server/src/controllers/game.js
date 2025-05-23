@@ -39,8 +39,8 @@ gameRouter.post("/questions", async (req, res) => {
     const categoriesIDs = req.body.categoriesIDs;
     const pointsList = [5, 10, 15, 20];
 
-    for (let c = 0; c < categoriesIDs.length; c++) {
-      for (let p = 0; p < pointsList.length; p++) {
+    for (let p = 0; p < pointsList.length; p++) {
+      for (let c = 0; c < categoriesIDs.length; c++) {
         let receivedQuestion = await getQuestion(
           categoriesIDs[c],
           pointsList[p]
