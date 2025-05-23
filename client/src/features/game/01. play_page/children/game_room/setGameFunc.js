@@ -44,6 +44,7 @@ export function setPlayersDetails(user, rivalPlayer, dispatch) {
 
   const firstPlayerDetails = {
     username: startingPlayer,
+    earnedPoints: 0,
     socketId:
       startingPlayer == user.username
         ? user.gameDetails.socketId
@@ -52,6 +53,7 @@ export function setPlayersDetails(user, rivalPlayer, dispatch) {
 
   const secondPlayerDetails = {
     username: otherPlayer,
+    earnedPoints: 0,
     socketId:
       otherPlayer == user.username
         ? user.gameDetails.socketId
