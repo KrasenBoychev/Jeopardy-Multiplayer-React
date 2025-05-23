@@ -1,10 +1,6 @@
-import CategoryModel from "./children/CategoryModel";
-import CategoriesHeader from "./children/CategoriesHeader";
-// import QuestionsOrResult from "../05. middlewares/QuestionsOrResult";
-import "./categories.css";
-import "../game.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { useGetQuestionsMutation } from "../gameApiSlice";
 import {
   selectCategories,
   selectCategoryCount,
@@ -12,9 +8,13 @@ import {
 } from "./categoriesSlice";
 import { selectActivePlayer, selectRivalPlayer } from "../playersSlice";
 import { selectCurrentUser } from "../../authentication/authSlice";
-import { useGetQuestionsMutation } from "../gameApiSlice";
-import { selectQuestions, setQuestions } from "../06. questions/questionsSlice";
+import { selectQuestions, setQuestions } from "../05. questions/questionsSlice";
 import { setSocketReq } from "../../socket_connection/socketSlice";
+import CategoriesHeader from "./children/CategoriesHeader";
+import CategoryModel from "./children/CategoryModel";
+import QuestionsMiddleware from "../05. questions/QuestionsMiddleware";
+import "./categories.css";
+import "../game.css";
 
 export default function Categories() {
   const categories = useSelector(selectCategories);
@@ -32,29 +32,27 @@ export default function Categories() {
       if (categoriesCount == 4 && user.username == activePlayer.username) {
         const categoriesIDs = [];
 
-        console.log({ categories });
-
-        console.log({ gameCategories });
-
         gameCategories.forEach((gameCategoryName) => {
           const findCategory = categories.find(
             (category) => category.name == gameCategoryName
           );
 
-          console.log({ findCategory });
-
           categoriesIDs.push(findCategory._id);
         });
 
         const selectedQuestions = await getQuestions(categoriesIDs);
-        
-        dispatch(setQuestions(selectedQuestions.data));
+        const transfromQuestions = selectedQuestions.data.map((question) => ({
+          ...question,
+          answered: false,
+        }));
+
+        dispatch(setQuestions(transfromQuestions));
         dispatch(
           setSocketReq({
             socketReqName: "sendQuestionsSelected",
             socketData: {
               receiverSocketId: rivalPlayer.socketId,
-              questionsSelected: selectedQuestions.data,
+              questionsSelected: transfromQuestions,
             },
           })
         );
@@ -65,9 +63,8 @@ export default function Categories() {
   return (
     <>
       {questions ? (
-        <div>Yeeee</div>
+        <QuestionsMiddleware />
       ) : (
-        // <QuestionsOrResult />
         <div className="categories_page_wrapper">
           <CategoriesHeader />
           <div className="categories_container">
