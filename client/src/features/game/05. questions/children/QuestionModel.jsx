@@ -1,27 +1,27 @@
 import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../authentication/authSlice";
-import { selectActivePlayer } from "../../playersSlice";
+import { selectActivePlayer, selectRivalPlayer } from "../../playersSlice";
 import "../questions.css";
-import { updateIsQuestionChosen } from "../questionsSlice";
+import { updateQuestionChosen } from "../questionsSlice";
+import { setSocketReq } from "../../../socket_connection/socketSlice";
 
 export default function QuestionModel({ question }) {
   const activePlayer = useSelector(selectActivePlayer);
+  const rivalPlayer = useSelector(selectRivalPlayer);
   const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
 
   const showQuestionClickHandler = async () => {
-    dispatch(updateIsQuestionChosen());
-    // if (questionAnswered) {
-    //   return;
-    // }
-    // setShowQuestion(true);
-    // setCurrCategory(categoryName);
-    // setCurrQuestion(question);
-    // await socket.emit("sendQuestionOpened", {
-    //   receiverSocketId: friendSocketId,
-    //   categoryName,
-    //   question,
-    // });
+    dispatch(updateQuestionChosen(question));
+    dispatch(
+      setSocketReq({
+        socketReqName: "sendQuestionChosen",
+        socketData: {
+          receiverSocketId: rivalPlayer.socketId,
+          questionChosen: question,
+        },
+      })
+    );
   };
 
   return (
