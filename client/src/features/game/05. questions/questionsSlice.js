@@ -2,27 +2,30 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const questionsSlice = createSlice({
   name: "questions",
-  initialState: { questions: null, isQuestionChosen: false },
+  initialState: {
+    questions: null,
+    questionChosen: null,
+  },
   reducers: {
     setQuestions: (state, action) => {
       const questions = action.payload;
       state.questions = questions;
     },
-    updateIsQuestionChosen: (state, action) => {
-      state.isQuestionChosen = !state.isQuestionChosen;
+    updateQuestionChosen: (state, action) => {
+      const question = action.payload;
+      state.questionChosen = question;
     },
     deleteQuestions: (state, action) => {
       state.questions = null;
-      state.isQuestionChosen = false;
+      state.questionChosen = null;
     },
   },
 });
 
-export const { setQuestions, updateIsQuestionChosen, deleteQuestions } =
+export const { setQuestions, updateQuestionChosen, deleteQuestions } =
   questionsSlice.actions;
 
 export default questionsSlice.reducer;
 
 export const selectQuestions = (state) => state.questions.questions;
-export const selectIsQuestionChosen = (state) =>
-  state.questions.isQuestionChosen;
+export const selectQuestionChosen = (state) => state.questions.questionChosen;
