@@ -105,46 +105,11 @@ function configSocket(server) {
       }
     );
 
-    // socket.on(
-    //   "setAcceptGameInvitation",
-    //   ({ receiverSocketId, userUsername, roomName, playersInfo }) => {
-    //     socket.join(roomName);
-
-    //     io.to(receiverSocketId).emit("getAcceptGameInvitation", {
-    //       senderUsername: userUsername,
-    //       roomName,
-    //       playersInfo,
-    //     });
-    //   }
-    // );
-
-    // socket.on("joinRoom", ({ gameRoomName }) => {
-    //   socket.join(gameRoomName);
-    // });
-
-    // socket.on("leaveRoom", ({ gameRoomName }) => {
-    //   socket.leave(gameRoomName);
-    // });
-
-    // socket.on("sendQuestions", ({ receiverSocketId, gameQuestions }) => {
-    //   io.to(receiverSocketId).emit("getQuestions", {
-    //     gameQuestions,
-    //   });
-    // });
-
-    // socket.on(
-    //   "sendQuestionOpened",
-    //   ({ receiverSocketId, categoryName, question }) => {
-    //     io.to(receiverSocketId).emit("getQuestionOpened", {
-    //       categoryName,
-    //       question,
-    //     });
-    //   }
-    // );
-
-    // socket.on("sendAnswerClicked", ({ receiverSocketId, answerChosen }) => {
-    //   io.to(receiverSocketId).emit("getAnswerClicked", { answerChosen });
-    // });
+    socket.on("sendQuestionChosen", ({ receiverSocketId, questionChosen }) => {
+      io.to(receiverSocketId).emit("getQuestionChosen", {
+        questionChosen,
+      });
+    });
 
     socket.on("disconnect", async () => {});
   });
