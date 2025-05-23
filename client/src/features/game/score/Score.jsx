@@ -1,5 +1,9 @@
+import { useSelector } from "react-redux";
+import { selectFirstPlayer, selectSecondPlayer } from "../playersSlice";
 
 export default function Score() {
+  const firstPlayer = useSelector(selectFirstPlayer);
+  const secondPlayer = useSelector(selectSecondPlayer);
 
   return (
     <section>
@@ -7,12 +11,12 @@ export default function Score() {
         <h3>Score</h3>
         <div className="players_points">
           <p className="points_first_player">
-            {/* <span>{firstPlayerUsername}:</span>
-            <span>{points.pointsFirstPlayer} points</span> */}
+            <span>{firstPlayer.username}:</span>
+            <span>{firstPlayer.earnedPoints} points</span>
           </p>
           <p className="points_second_player">
-            {/* <span>{secondPlayerUsername}:</span>
-            <span>{points.pointsSecondPlayer} points</span> */}
+            <span>{secondPlayer.username}:</span>
+            <span>{secondPlayer.earnedPoints} points</span>
           </p>
         </div>
       </div>
