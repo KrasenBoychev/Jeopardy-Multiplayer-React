@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { selectQuestionChosen } from "./questionsSlice";
 import { selectIsGameFinished } from "../gameSlice";
 import Questions from "./Questions";
+import Answers from "../06. answers/Answers";
 import Score from "../score/Score";
 import Timer from "../timer/Timer";
 
@@ -16,7 +17,7 @@ export default function QuestionsMiddleware() {
       ) : (
         <div className="questions_page_wrapper">
           <Score />
-          {questionChosen ? <div>answers</div> : <Questions />}
+          {questionChosen ? <Answers /> : <Questions />}
           <Timer />
         </div>
       )}
