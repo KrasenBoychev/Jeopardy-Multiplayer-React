@@ -33,7 +33,7 @@ export default function QuestionModel({ question }) {
           ? "question_box active_box"
           : "question_box inactive_box"
       }
-      disabled={user.username === activePlayer.username ? false : true}
+      disabled={user.username !== activePlayer.username || question.answered ? true : false}
       onClick={showQuestionClickHandler}
     >
       {question.points}
