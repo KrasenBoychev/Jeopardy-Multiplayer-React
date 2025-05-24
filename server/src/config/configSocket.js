@@ -111,6 +111,16 @@ function configSocket(server) {
       });
     });
 
+    socket.on(
+      "sendAnswerChosen",
+      ({ receiverSocketId, answer, setIsAnswerCorrect }) => {
+        io.to(receiverSocketId).emit("getAnswerChosen", {
+          answer,
+          setIsAnswerCorrect,
+        });
+      }
+    );
+
     socket.on("disconnect", async () => {});
   });
 }
