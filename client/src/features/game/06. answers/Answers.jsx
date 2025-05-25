@@ -45,7 +45,7 @@ export default function Answers() {
         dispatch(deleteAnswerDetails());
         dispatch(updateQuestionAnswered(question));
         dispatch(updateActivePlayer());
-      }, 3000);
+      }, 1000);
     }
   }, [isAnswerCorrect]);
 
