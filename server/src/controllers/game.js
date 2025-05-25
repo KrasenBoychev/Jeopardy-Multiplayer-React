@@ -7,7 +7,7 @@ const {
   getAllCategories,
   //   getCategory,
   getQuestion,
-  //   updatePoints,
+  updatePoints,
 } = require("../services/game");
 
 const gameRouter = Router();
@@ -56,29 +56,17 @@ gameRouter.post("/questions", async (req, res) => {
   }
 });
 
-// gameRouter.put(
-//   "/result/:userId",
-//   isUser(),
-//   body("points")
-//     .trim()
-//     .notEmpty()
-//     .isNumeric()
-//     .withMessage("Points should be a number"),
-//   async (req, res) => {
-//     try {
-//       const validation = validationResult(req);
+gameRouter.post("/recordPoints", isUser(), async (req, res) => {
+  try {
+    const username = req.user.username;
+    const points = req.body.points;
 
-//       if (validation.errors.length) {
-//         throw validation.errors;
-//       }
-
-//       const result = await updatePoints(req.params.userId, req.body);
-//       res.json(result);
-//     } catch (err) {
-//       const parsed = parseError(err);
-//       res.status(400).json({ code: 400, message: parsed.errors });
-//     }
-//   }
-// );
+    const result = await updatePoints(username, points);
+    res.json(result);
+  } catch (err) {
+    const parsed = parseError(err);
+    res.status(400).json({ code: 400, message: parsed.errors });
+  }
+});
 
 module.exports = { gameRouter };
