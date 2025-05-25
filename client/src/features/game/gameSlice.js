@@ -7,7 +7,6 @@ const gameSlice = createSlice({
     isNewGameStarted: false,
     setStartGameDetails: false,
     readyToPlay: false,
-    isGameFinished: false,
   },
   reducers: {
     updateGameReqSentBy: (state, action) => {
@@ -32,15 +31,11 @@ const gameSlice = createSlice({
     updateReadyToPlay: (state, action) => {
       state.readyToPlay = !state.readyToPlay;
     },
-    updateIsGameFinished: (state, action) => {
-      state.isGameFinished = !state.isGameFinished;
-    },
     deleteGameDetails: (state, action) => {
       state.gameReqSentBy = [];
       state.isNewGameStarted = false;
       state.setStartGameDetails = false;
       state.readyToPlay = false;
-      state.isGameFinished = false;
     },
   },
 });
@@ -50,7 +45,6 @@ export const {
   updateIsNewGameStarted,
   updateSetStartGameDetails,
   updateReadyToPlay,
-  updateIsGameFinished,
   deleteGameDetails,
 } = gameSlice.actions;
 
@@ -61,4 +55,3 @@ export const selectIsNewGameStarted = (state) => state.game.isNewGameStarted;
 export const selectSetStartGameDetails = (state) =>
   state.game.setStartGameDetails;
 export const selectReadyToPlay = (state) => state.game.readyToPlay;
-export const selectIsGameFinished = (state) => state.game.isGameFinished;
