@@ -3,7 +3,7 @@ import { selectActivePlayer } from "../../playersSlice";
 import { selectCurrentUser } from "../../../authentication/authSlice";
 import "../questions.css";
 
-export default function QuestionsHeader() {
+export default function QuestionsHeader({ isLoadingResult }) {
   const activePlayer = useSelector(selectActivePlayer);
   const user = useSelector(selectCurrentUser);
 
@@ -15,7 +15,9 @@ export default function QuestionsHeader() {
           : "player_categories"
       }
     >
-      {activePlayer.username} chooses question
+      {isLoadingResult
+        ? "Loading result..."
+        : `${activePlayer.username} chooses question`}
     </p>
   );
 }

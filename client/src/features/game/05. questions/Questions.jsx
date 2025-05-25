@@ -1,19 +1,17 @@
 import { useSelector } from "react-redux";
 import { selectQuestions } from "./questionsSlice";
-import { selectActivePlayer } from "../playersSlice";
 import { selectGameCategories } from "../04. categories/categoriesSlice";
 import QuestionModel from "./children/QuestionModel";
 import QuestionsHeader from "./children/QuestionsHeader";
 import "./questions.css";
 
-export default function Questions() {
+export default function Questions({ isLoadingResult }) {
   const questions = useSelector(selectQuestions);
   const gameCategories = useSelector(selectGameCategories);
-  const activePlayer = useSelector(selectActivePlayer);
 
   return (
     <section>
-      <QuestionsHeader activePlayer={activePlayer.username} />
+      <QuestionsHeader isLoadingResult={isLoadingResult} />
 
       <div className="categories_names">
         {gameCategories.map((categoryName) => {
