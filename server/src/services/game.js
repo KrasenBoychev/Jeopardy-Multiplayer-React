@@ -23,24 +23,17 @@ function getQuestion(categoryId, points) {
   ]);
 }
 
-// async function updatePoints(userId, data) {
-//   const record = await User.findById(userId);
-
-//   if (!record) {
-//     throw new ReferenceError('Record not found ' + userId);
-//   }
-
-//   record.points = Number(record.points) + Number(data.points);
-
-//   await record.save();
-
-//   return record.points;
-// }
+async function updatePoints(username, points) {
+  return await User.updateOne(
+    { username },
+    { $inc: { "gameDetails.points": points } }
+  );
+}
 
 module.exports = {
   getAllCategories,
   //   getCategory,
   //   getQuestions,
   getQuestion,
-  //   updatePoints,
+  updatePoints,
 };
