@@ -23,6 +23,15 @@ export const gameApiSlice = apiSlice.injectEndpoints({
         },
       }),
     }),
+    recordPlayerPoints: builder.mutation({
+      query: (points) => ({
+        url: "game/recordPoints",
+        method: "POST",
+        body: {
+          points,
+        },
+      }),
+    }),
   }),
 });
 
@@ -30,4 +39,5 @@ export const {
   useChangeGameInProgressMutation,
   useGetCategoriesMutation,
   useGetQuestionsMutation,
+  useRecordPlayerPointsMutation,
 } = gameApiSlice;
