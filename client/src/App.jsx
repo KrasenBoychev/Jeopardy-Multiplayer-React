@@ -3,9 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "./features/authentication/authSlice";
-import Home from "./features/main_pages/home_page/Home";
 import About from "./features/main_pages/about_page/About";
-import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import RequireAuth from "./features/authentication/RequireAuth";
 import Login from "./features/authentication/Login";
@@ -18,6 +16,9 @@ import Socket from "./features/socket_connection/Socket";
 import Notifications from "./features/notifications/Notifications";
 import PlayPage from "./features/game/01. play_page/PlayPage";
 import NotFound from "./features/main_pages/not_found_page/NotFound";
+import { NavbarMenu } from "./components/NavbarMenu";
+import { AboutPage } from "./features/main_pages/about_page/AboutPage";
+import { HomePageNotAuth } from "./features/main_pages/home_page/HomePageNotAuth";
 import "./App.css";
 
 function App() {
@@ -31,13 +32,13 @@ function App() {
 
       {user && !user.gameDetails.gameInProgress && <Notifications />}
 
-      {(!user || !user.gameDetails.gameInProgress) && <Header />}
+      {(!user || !user.gameDetails.gameInProgress) && <NavbarMenu />}
 
       <main>
         <Routes>
           {/* public routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
+          <Route path="/" element={<HomePageNotAuth />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
