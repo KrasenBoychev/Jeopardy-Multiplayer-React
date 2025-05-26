@@ -9,7 +9,6 @@
 .not-found-msg {
     font-size: 3rem;
     font-weight: bold;
-    color: var(--midnight-blue);
     text-transform: uppercase;
     word-spacing: 0.5cm;
     letter-spacing: 0.1cm;
@@ -25,5 +24,4 @@
 
 .not-found-link:hover {
     cursor: pointer;
-    color: var(--purple);
 }
