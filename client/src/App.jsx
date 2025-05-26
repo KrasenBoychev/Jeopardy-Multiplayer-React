@@ -1,13 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "./features/authentication/authSlice";
-import About from "./features/main_pages/about_page/About";
 import Footer from "./components/footer/Footer";
 import RequireAuth from "./features/authentication/RequireAuth";
-import Login from "./features/authentication/Login";
-import Register from "./features/authentication/Register";
 import Logout from "./features/authentication/Logout";
 // import Create from "./features/create/Create";
 // import CreateCategory from "./features/create/createCategory/CreateCategory";
@@ -19,6 +16,8 @@ import NotFound from "./features/main_pages/not_found_page/NotFound";
 import { NavbarMenu } from "./components/NavbarMenu";
 import { AboutPage } from "./features/main_pages/about_page/AboutPage";
 import { HomePageNotAuth } from "./features/main_pages/home_page/HomePageNotAuth";
+import { LoginForm } from "./features/authentication/LoginForm";
+import { RegisterForm } from "./features/authentication/RegisterForm";
 import "./App.css";
 
 function App() {
@@ -39,8 +38,10 @@ function App() {
           {/* public routes */}
           <Route path="/" element={<HomePageNotAuth />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+
+          {/* no auth routes */}
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/register" element={<RegisterForm />} />
 
           {/* protected routes */}
           <Route element={<RequireAuth />}>
