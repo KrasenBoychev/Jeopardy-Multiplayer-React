@@ -3,68 +3,34 @@
 
 @custom-variant dark (&:is(.dark *));
 
+#root {
+  min-height: 100vh;
+  max-width: 1920px;
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex-grow: 1;
+  display: flex;
+}
+
+main>div {
+  flex-grow: 1;
+}
+
 @theme inline {
   /* Configure your theme variables here */
   --font-display: "Inter", "sans-serif";
   --color-primary-500: oklch(0.84 0.18 117.33);
   --spacing: 0.25rem;
-}
-
-/* * {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-ul {
-  list-style-type: none;
-}
-
-#root {
-  min-height: 100vh;
-  max-width: 1920px;
-  width: 100%;
-  height: 100%;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  --midnight-blue: #0b1842;
-  --white: #ffffff;
-  --purple: #b651ff;
-  --denim-blue: #004bc4;
-  --baby-blue: #35eff4;
-}
-
-main {
-  flex-grow: 1;
-  display: flex;
-} */
-
-#root {
-  min-height: 100vh;
-  max-width: 1920px;
-  width: 100%;
-  height: 100%;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-main {
-  flex-grow: 1;
-  display: flex;
-}
-
-main > div {
-  flex-grow: 1;
-}
-
-@theme inline {
+  --shadow-input:
+    0px 2px 3px -1px rgba(0, 0, 0, 0.1),
+    0px 1px 0px 0px rgba(25, 28, 33, 0.02),
+    0px 0px 0px 1px rgba(25, 28, 33, 0.08);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
