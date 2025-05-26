@@ -62,10 +62,12 @@ async function removeNotification(userUsername, friendUsername, type) {
 }
 
 async function changeOnlineStatus(username, socketId) {
-  return await User.updateOne({ username }, [
+  const online = socketId == "" ? false : true;
+
+  return await User.findOneAndUpdate({ username }, [
     {
       $set: {
-        "gameDetails.online": { $not: "$gameDetails.online" },
+        "gameDetails.online": online,
         "gameDetails.socketId": socketId,
       },
     },
