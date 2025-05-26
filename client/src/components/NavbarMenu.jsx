@@ -4,6 +4,7 @@ import { HoveredLink, Menu, MenuItem, MenuItemLink } from "./ui/navbar-menu";
 import { cn } from "@/lib/utils";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../features/authentication/authSlice";
+import { Link } from "react-router-dom";
 
 export function NavbarMenu() {
   return (
@@ -22,18 +23,19 @@ function Navbar({ className }) {
       className={cn("fixed top-10 inset-x-0 max-w-2xl mx-auto z-50", className)}
     >
       <Menu setActive={setActive}>
-        <MenuItemLink href="/">Home</MenuItemLink>
-        <MenuItemLink href="/about">About</MenuItemLink>
+        <MenuItemLink to="/">Home</MenuItemLink>
+
+        <MenuItemLink to="/about">About</MenuItemLink>
         {user ? (
           <>
-            <MenuItemLink href="/play">Play</MenuItemLink>
-            <MenuItemLink href="/logout">Logout</MenuItemLink>
+            <MenuItemLink to="/play">Play</MenuItemLink>
+            <MenuItemLink to="/logout">Logout</MenuItemLink>
           </>
         ) : (
           <MenuItem setActive={setActive} active={active} item="Account">
             <div className="flex flex-col space-y-4 text-sm">
-              <HoveredLink href="/login">Login</HoveredLink>
-              <HoveredLink href="/register">Register</HoveredLink>
+              <HoveredLink to="/login">Login</HoveredLink>
+              <HoveredLink to="/register">Register</HoveredLink>
             </div>
           </MenuItem>
         )}
