@@ -12,3 +12,14 @@
    but the logic has to be reworked as well
 
 5. Rewrite all Create Components and the files connected with them using Typescript
+
+----------------------------------------------------------------------------------------
+
+UI Templates for Components: 
+
+Play Game - Gradient Animation
+   FriendList -> Input Btn - Placeholders and Vanish Input
+   GameRoom -> 3D Card Effect
+Result - Background Lines
+
+Loading Button - Moving Border
