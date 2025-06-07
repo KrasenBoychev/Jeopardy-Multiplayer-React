@@ -29,7 +29,7 @@ function App() {
       <Toaster />
       {user && <Socket socketProps={{ socket, setSocket }} />}
 
-      {user && !user.gameDetails.gameInProgress && <Notifications />}
+      {/* {user && !user.gameDetails.gameInProgress && <Notifications />} */}
 
       {(!user || !user.gameDetails.gameInProgress) && <NavbarMenu />}
 
