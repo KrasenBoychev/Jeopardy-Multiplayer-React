@@ -29,7 +29,7 @@ export default function CancelGameInvitation() {
 
   return (
     <button
-      className="game_room_cancel_btn"
+      className="bg-destructive text-sm p-2 rounded-xl text-white lowercase hover:cursor-pointer hover:font-bold"
       onClick={gameCancelationClickHandler}
     >
       Cancel
