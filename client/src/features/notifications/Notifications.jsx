@@ -39,20 +39,20 @@ export default function Notifications() {
   );
 }
 
-export const removeNotificationFromNotificationsList = () =>
-  // setNotificationsList,
-  // senderUsername,
-  // type
-  {
-    // setNotificationsList((prevNotifications) =>
-    //   prevNotifications.filter((notification) => {
-    //     return (
-    //       notification.username != senderUsername ||
-    //       (notification.username == senderUsername && notification.type != type)
-    //     );
-    //   })
-    // );
-  };
+// export const removeNotificationFromNotificationsList = () =>
+//   setNotificationsList,
+//   senderUsername,
+//   type
+//   {
+//     setNotificationsList((prevNotifications) =>
+//       prevNotifications.filter((notification) => {
+//         return (
+//           notification.username != senderUsername ||
+//           (notification.username == senderUsername && notification.type != type)
+//         );
+//       })
+//     );
+//   };
 
 // useEffect(() => {
 //   socket?.on("getNotification", ({ msg, data }) => {

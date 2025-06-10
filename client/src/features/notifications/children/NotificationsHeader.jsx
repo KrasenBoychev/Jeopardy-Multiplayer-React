@@ -11,11 +11,11 @@ export default function NotificationsHeader({ notificationsProps }) {
 
   const location = useLocation();
 
-  useEffect(() => {
-    if (notificationsOpened) {
-      setNotificationsOpened(!notificationsOpened);
-    }
-  }, [location]);
+  // useEffect(() => {
+  //   if (notificationsOpened) {
+  //     setNotificationsOpened(!notificationsOpened);
+  //   }
+  // }, [location]);
 
   const openNotifications = () => {
     setNotificationsOpened(!notificationsOpened);
@@ -32,7 +32,7 @@ export default function NotificationsHeader({ notificationsProps }) {
         }
         onClick={openNotifications}
       >
-        <i className="fa-solid fa-message"></i>
+        {/* <i className="fa-solid fa-message"></i> */}
         <p>{notifications?.length}</p>
       </div>
     );
