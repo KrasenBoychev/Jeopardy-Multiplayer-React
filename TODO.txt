@@ -17,9 +17,12 @@
 
 UI Templates for Components: 
 
-Play Game - Gradient Animation
+Play Game - Aurora Background
    FriendList -> Input Btn - Placeholders and Vanish Input
    GameRoom -> 3D Card Effect
+
+Categories, Question, Answers - Gradient Animation
+
 Result - Background Lines
 
 Loading Button - Moving Border
