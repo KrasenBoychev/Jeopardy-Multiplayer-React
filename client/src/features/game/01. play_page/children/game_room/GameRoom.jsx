@@ -19,6 +19,7 @@ import {
   setPlayersDetails,
 } from "./setGameFunc";
 import "./gameRoom.css";
+import { ThreeDCardDemo } from "./Card";
 
 export default function GameRoom() {
   const user = useSelector(selectCurrentUser);
@@ -58,9 +59,8 @@ export default function GameRoom() {
 
   return (
     <div className="game_room_wrapper">
-      <h3>Game Room</h3>
-      <div className="game_room_players">
-        <div className="game_room_player_name">
+      {/* <div className="game_room_players"> */}
+      {/* <div className="game_room_player_name">
           <p>{user.username}</p>
         </div>
         <div className="game_room_vs">
@@ -77,8 +77,12 @@ export default function GameRoom() {
               <InviteFriend />
             )}
           </p>
-        </div>
-      </div>
+        </div> */}
+      <ThreeDCardDemo player={user} />
+      <p className="text-white">VS</p>
+      <ThreeDCardDemo player={rivalPlayer} rivalPlayer={true} />
+
+      {/* </div> */}
       {isNewGameStarted && <p className="game_room_btn">Loading Game...</p>}
     </div>
   );
