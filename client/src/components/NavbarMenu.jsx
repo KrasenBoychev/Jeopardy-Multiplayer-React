@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../features/authentication/authSlice";
 import { Link } from "react-router-dom";
+import Notifications from "../features/notifications/Notifications";
 
 export function NavbarMenu() {
   return (
@@ -28,7 +29,9 @@ function Navbar({ className }) {
         <MenuItemLink to="/about">About</MenuItemLink>
         {user ? (
           <>
-            <MenuItemLink to="/play">Play</MenuItemLink>
+            <MenuItemLink to="/play">
+              Play <Notifications />
+            </MenuItemLink>
             <MenuItemLink to="/logout">Logout</MenuItemLink>
           </>
         ) : (
