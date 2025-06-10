@@ -1,18 +1,17 @@
 .notifications_header {
-    position: absolute;
+    /* position: absolute;
     top: 20px;
-    left: 130px;
-    width: 50px;
-    height: 20px;
-    color: var(--white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
+    left: 130px; */
+    /* width: 50px; */
+    /* height: 20px; */
+    padding: 1px 4px;
+    background-color: black;
+    color: white;
+    border-radius: 3px;
 }
 
 .notifications_unread {
-    color: red;
+    background-color: red;
 }
 
 .notifications_header:hover {
@@ -21,11 +20,11 @@
 
 .notifications_box_container {
     position: absolute;
-    top: 55px;
-    left: 0;
+    top: 63px;
+    right: 70px;
     padding: 10px 20px;
     color: var(--midnight-blue);
-    background-color: var(--white);
+    background-color: white;
     border-radius: 5px;
 }
 
