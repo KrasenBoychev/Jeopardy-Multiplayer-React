@@ -1,3 +1,7 @@
+- Try to move the useEffect hook from GameRoom to PlayPage, update the imports and try if it works
+
+--------------------------------------------------------------------------------------
+
 1. Try to use Redux management system:
    - better error handling for the game components
    
