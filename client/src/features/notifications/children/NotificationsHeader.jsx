@@ -11,11 +11,11 @@ export default function NotificationsHeader({ notificationsProps }) {
 
   const location = useLocation();
 
-  // useEffect(() => {
-  //   if (notificationsOpened) {
-  //     setNotificationsOpened(!notificationsOpened);
-  //   }
-  // }, [location]);
+  useEffect(() => {
+    if (notificationsOpened) {
+      setNotificationsOpened(!notificationsOpened);
+    }
+  }, [location]);
 
   const openNotifications = () => {
     setNotificationsOpened(!notificationsOpened);
