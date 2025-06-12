@@ -29,9 +29,11 @@ function Navbar({ className }) {
         <MenuItemLink to="/about">About</MenuItemLink>
         {user ? (
           <>
-            <MenuItemLink to="/play">
-              Play <Notifications />
-            </MenuItemLink>
+            <div className="flex items-start gap-1 ">
+              <MenuItemLink to="/play">Play</MenuItemLink>
+              <Notifications />
+            </div>
+
             <MenuItemLink to="/logout">Logout</MenuItemLink>
           </>
         ) : (
