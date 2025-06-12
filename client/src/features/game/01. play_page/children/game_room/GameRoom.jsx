@@ -59,31 +59,11 @@ export default function GameRoom() {
 
   return (
     <div className="game_room_wrapper">
-      {/* <div className="game_room_players"> */}
-      {/* <div className="game_room_player_name">
-          <p>{user.username}</p>
-        </div>
-        <div className="game_room_vs">
-          <p>VS</p>
-        </div>
-        <div className="game_room_player_name">
-          <p>
-            {rivalPlayer ? (
-              <>
-                {rivalPlayer.username}
-                {!isNewGameStarted && <CancelGameInvitation />}
-              </>
-            ) : (
-              <InviteFriend />
-            )}
-          </p>
-        </div> */}
       <ThreeDCardDemo player={user} />
       <p className="text-white">VS</p>
       <ThreeDCardDemo player={rivalPlayer} rivalPlayer={true} />
 
-      {/* </div> */}
-      {isNewGameStarted && <p className="game_room_btn">Loading Game...</p>}
+      {/* {isNewGameStarted && <p className="game_room_btn">Loading Game...</p>} */}
     </div>
   );
 }

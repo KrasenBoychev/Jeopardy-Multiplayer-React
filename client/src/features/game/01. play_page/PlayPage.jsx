@@ -1,16 +1,18 @@
 import { useSelector } from "react-redux";
-import { selectReadyToPlay } from "../gameSlice";
+import { selectIsNewGameStarted, selectReadyToPlay } from "../gameSlice";
 import { AuroraBackground } from "@/components/ui/aurora-background";
 import FriendsList from "./children/friends_list/FriendsList";
 import GameRoom from "./children/game_room/GameRoom";
 import Counter from "../02. counter/Counter";
 import ExitGame from "../exitGame/ExitGame";
 import { motion } from "motion/react";
+import { LoadingGame } from "./children/LoadingGame";
 // import StartGameWithOtherPlayer from "./children/startGameWithOtherPlayer/StartGameWithOtherPlayer";
 // import "./playPage.css";
 
 export default function PlayPage() {
   const readyToPlay = useSelector(selectReadyToPlay);
+  const isNewGameStarted = useSelector(selectIsNewGameStarted);
 
   return (
     <AuroraBackground>
@@ -24,24 +26,16 @@ export default function PlayPage() {
         }}
         className="relative w-[100%] flex gap-20 items-center justify-center px-4"
       >
-        {/* <div className="text-3xl md:text-7xl font-bold dark:text-white text-center">
-          Background lights are cool you know.
-        </div>
-        <div className="font-extralight text-base md:text-4xl dark:text-neutral-200 py-4">
-          And this, is chemical burn.
-        </div>
-        <button className="bg-black dark:bg-white rounded-full w-fit text-white dark:text-black px-4 py-2">
-          Debug now
-        </button> */}
-
-        {/* <section> */}
-          <GameRoom />
-        {/* </section> */}
-        {/* <section> */}
-          <FriendsList />
-          {/* Change the component to StartGameWithRandomPlayer - write the code for it */}
-          {/* <StartGameWithOtherPlayer /> */}
-        {/* </section> */}
+        {isNewGameStarted ? (
+          <LoadingGame />
+        ) : (
+          <>
+            <GameRoom />
+            <FriendsList />
+          </>
+        )}
+        {/* Change the component to StartGameWithRandomPlayer - write the code for it */}
+        {/* <StartGameWithOtherPlayer /> */}
       </motion.div>
     </AuroraBackground>
   );
