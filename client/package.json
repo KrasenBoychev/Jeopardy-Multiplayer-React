@@ -21,7 +21,7 @@
     "clsx": "^2.1.1",
     "formik": "^2.4.6",
     "lucide-react": "^0.511.0",
-    "motion": "^12.16.0",
+    "motion": "^12.17.0",
     "next": "^15.3.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -32,7 +32,7 @@
     "reactjs-popup": "^2.0.6",
     "simplex-noise": "^4.0.3",
     "socket.io-client": "^4.8.1",
-    "tailwind-merge": "^3.3.0",
+    "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.7",
     "typescript": "^5.8.2"
   },
