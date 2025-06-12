@@ -67,7 +67,8 @@ export const MenuItemLink = ({ children, ...rest }) => {
   return (
     <Link
       {...rest}
-      className="flex items-baseline gap-1 cursor-pointer text-black hover:opacity-[0.9] dark:text-white"
+      className="cursor-pointer text-black hover:opacity-[0.9] dark:text-white"
+      
     >
       {children}
     </Link>
