@@ -15,6 +15,7 @@ import CategoryModel from "./children/CategoryModel";
 import QuestionsMiddleware from "../05. questions/QuestionsMiddleware";
 import "./categories.css";
 import "../game.css";
+import ExitGame from "../exitGame/ExitGame";
 
 export default function Categories() {
   const categories = useSelector(selectCategories);
@@ -66,6 +67,7 @@ export default function Categories() {
         <QuestionsMiddleware />
       ) : (
         <div className="categories_page_wrapper">
+          <ExitGame />
           <CategoriesHeader />
           <div className="categories_container">
             {gameCategories.map((gameCategory, gameCategoryIndex) => {
