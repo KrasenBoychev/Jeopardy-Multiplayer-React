@@ -1,10 +1,10 @@
-- Try to move the useEffect hook from GameRoom to PlayPage, update the imports and try if it works
+- Update the style for the ExitGame.jsx pop up screen message
 
 --------------------------------------------------------------------------------------
 
 1. Try to use Redux management system:
    - better error handling for the game components
-   
+   - better error handling when fetching or posting data
    - create a Public Guard for Login and Register (after backend is completed);
 
 2. Try to rewrite all components and files using Typescript, 
@@ -24,6 +24,8 @@ UI Templates for Components:
 Play Game - Aurora Background
    FriendList -> Input Btn - Placeholders and Vanish Input
    GameRoom -> 3D Card Effect
+
+Starting Player - Lamp Effect
 
 Categories, Question, Answers - Gradient Animation
 
