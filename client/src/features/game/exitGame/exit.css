@@ -4,20 +4,21 @@
     right: 0;
     display: flex;
     justify-content: end;
-    background-color: var(--baby-blue);
+    /* background-color: var(--baby-blu; */
+    z-index: 1;
 }
 
 .exit-game-container p {
     margin: 5px;
-    padding: 10px;
-    font-size: 1rem;
-    color: var(--white);
-    background-color: var(--midnight-blue);
+    padding: 5px;
+    font-size: 0.7rem;
+    color: black;
+    background-color: white;
     border-radius: 5px;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 
 .exit-game-container p:hover {
     cursor: pointer;
-    background-color: var(--purple);
+    /* background-color: var(--purple); */
 }
