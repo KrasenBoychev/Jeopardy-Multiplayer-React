@@ -29,8 +29,6 @@ export default function GameReqBtns({ friendUsername }) {
       })
     );
 
-    dispatch(updateIsNewGameStarted());
-
     await setGameInProgress(
       user.username,
       friends,
@@ -46,6 +44,8 @@ export default function GameReqBtns({ friendUsername }) {
         },
       })
     );
+
+    dispatch(updateIsNewGameStarted());
   };
 
   const rejectGameReqClickHandler = () => {
@@ -74,11 +74,11 @@ export default function GameReqBtns({ friendUsername }) {
   return (
     <span className="friend_game_req">
       <i
-        className="fa-solid fa-circle-check"
+        className="fa-solid fa-circle-check text-green-500"
         onClick={acceptGameReqClickHandler}
       ></i>
       <i
-        className="fa-solid fa-circle-xmark"
+        className="fa-solid fa-circle-xmark text-destructive"
         onClick={rejectGameReqClickHandler}
       ></i>
     </span>
