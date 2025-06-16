@@ -97,17 +97,18 @@ export default function useListeners(socket) {
           })
         );
 
-        dispatch(updateReadyToPlay());
-        dispatch(setCategories(gameDetails.allCategories));
-
-        dispatch(
-          setSocketReq({
-            socketReqName: "setReadyToPlay",
-            socketData: {
-              receiverSocketId: gameDetails.userSocketId,
-            },
-          })
-        );
+        setTimeout(() => {
+          dispatch(updateReadyToPlay());
+          dispatch(setCategories(gameDetails.allCategories));
+          dispatch(
+            setSocketReq({
+              socketReqName: "setReadyToPlay",
+              socketData: {
+                receiverSocketId: gameDetails.userSocketId,
+              },
+            })
+          );
+        }, 2000);
       });
 
       socket?.on("getReadyToPlay", () => {
