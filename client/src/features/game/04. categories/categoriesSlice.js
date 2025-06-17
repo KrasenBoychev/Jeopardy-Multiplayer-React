@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const defaultOption = "--- Choose Category ---";
+export const defaultOption = "Choose Category";
 
 const categoriesSlice = createSlice({
   name: "categories",
