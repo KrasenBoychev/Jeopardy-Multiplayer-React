@@ -6,7 +6,7 @@
     width: 100vw;
     background-color: rgba(128, 128, 128, 0.696);
     opacity: 1;
-    z-index: 1;
+    z-index: 9999;
 }
 
 .confirm-message {
@@ -18,12 +18,16 @@
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 1.3px;
-    background-color: var(--white);
+    background-color: white;
     border: 2px solid var(--midnight-blue);
     border-radius: 5px;
     display: flex;
     flex-direction: column;
     gap: 40px;
+}
+
+.confirm-message > h2 {
+    font-size: 1.4rem;
 }
 
 .confirm-buttons {
@@ -32,26 +36,24 @@
 }
 
 .confirm-buttons button {
-    padding: 15px 60px;
-    font-size: 1.2rem;
+    padding: 8px 30px;
+    font-size: 1.1rem;
     font-weight: 600;
     text-transform: uppercase;
-    color: var(--white);
+    color: white;
     border: none;
     border-radius: 5px;
 }
 
 .confirm-buttons button:first-child {
-    background-color: var(--midnight-blue);
+    background-color: green;
 }
 
 .confirm-buttons button:last-child {
-    background-color: var(--purple);
+    background-color: red;
 }
 
 .confirm-buttons>button:hover {
     cursor: pointer;
-    color: var(--midnight-blue);
-    background-color: var(--baby-blue);
 }
 
