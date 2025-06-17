@@ -1,11 +1,14 @@
-import React from "react";
 import Popup from "reactjs-popup";
 import "./popup.css";
 
 export default function PopupComp({ openBtnName, heading, content }) {
   return (
     <Popup
-      trigger={<button className="button cursor-pointer bg-black text-white rounded-xl py-2 px-3">{openBtnName}</button>}
+      trigger={
+        <button className="button cursor-pointer bg-black text-white rounded-xl py-2 px-3">
+          {openBtnName}
+        </button>
+      }
       modal
       nested
     >
