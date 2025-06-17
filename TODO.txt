@@ -1,4 +1,6 @@
-- Update the style for the ExitGame.jsx pop up screen message
+- Continue with Questions.jsx - it needs to be completed
+
+- Delete the counter folder with its files
 
 --------------------------------------------------------------------------------------
 
