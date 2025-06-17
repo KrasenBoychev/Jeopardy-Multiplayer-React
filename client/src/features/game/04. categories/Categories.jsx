@@ -16,6 +16,8 @@ import QuestionsMiddleware from "../05. questions/QuestionsMiddleware";
 import "./categories.css";
 import "../game.css";
 import ExitGame from "../exitGame/ExitGame";
+import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
+import { CategoriesCards } from "./children/CategoriesCards";
 
 export default function Categories() {
   const categories = useSelector(selectCategories);
@@ -62,28 +64,33 @@ export default function Categories() {
   }, [categoriesCount]);
 
   return (
-    <>
-      {questions ? (
-        <QuestionsMiddleware />
-      ) : (
-        <div className="categories_page_wrapper">
-          <ExitGame />
-          <CategoriesHeader />
-          <div className="categories_container">
-            {gameCategories.map((gameCategory, gameCategoryIndex) => {
-              return (
-                <CategoryModel
-                  key={gameCategoryIndex}
-                  props={{
-                    gameCategory,
-                    gameCategoryIndex,
-                  }}
-                />
-              );
-            })}
-          </div>
+    <BackgroundGradientAnimation>
+      <>
+        <ExitGame />
+        <div className="absolute z-50 inset-0 flex items-center justify-center text-white px-4 text-3xl text-center md:text-4xl lg:text-7xl">
+          {questions ? (
+            <QuestionsMiddleware />
+          ) : (
+            <div className="categories_page_wrapper">
+              <CategoriesHeader />
+              <div className="categories_container">
+                <CategoriesCards />
+                {/* {gameCategories.map((gameCategory, gameCategoryIndex) => {
+                  return (
+                    // <CategoryModel
+                    //   key={gameCategoryIndex}
+                    //   props={{
+                    //     gameCategory,
+                    //     gameCategoryIndex,
+                    //   }}
+                    // />
+                  );
+                })} */}
+              </div>
+            </div>
+          )}
         </div>
-      )}
-    </>
+      </>
+    </BackgroundGradientAnimation>
   );
 }
