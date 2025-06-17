@@ -64,7 +64,9 @@ export default function CategoryModel({ props }) {
           : "inactiveCat category_model"
       }
     >
-      {categoryCount == gameCategoryIndex ? (
+      
+
+      {/* {categoryCount == gameCategoryIndex ? (
         <>
           <select
             name="category"
@@ -98,7 +100,7 @@ export default function CategoryModel({ props }) {
         </>
       ) : (
         <p>{gameCategory}</p>
-      )}
+      )} */}
     </div>
   );
 }
