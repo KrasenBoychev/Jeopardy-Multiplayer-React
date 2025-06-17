@@ -4,8 +4,7 @@
     right: 0;
     display: flex;
     justify-content: end;
-    /* background-color: var(--baby-blu; */
-    z-index: 1;
+    z-index: 9999;
 }
 
 .exit-game-container p {
