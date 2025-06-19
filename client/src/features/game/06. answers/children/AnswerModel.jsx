@@ -42,16 +42,12 @@ export default function AnswerModel({ answer }) {
 
   return (
     <button
-      disabled={
-        user.username != activePlayer.username || answerChosen ? true : false
-      }
-      onClick={answerQuestionClickHandler}
-      className={`answer_box 
-        ${
-          isAnswerCorrect == null &&
-          user.username === activePlayer.username &&
-          "answer_box_active"
-        }
+      className={`answer_box px-8 py-2 bg-black text-white text-sm rounded-md font-semibold opacity-60
+         ${
+           isAnswerCorrect == null &&
+           user.username === activePlayer.username &&
+           "answer_box_active opacity-100 hover:bg-ring/[0.8] hover:shadow-lg"
+         }
         ${
           isAnswerCorrect != null &&
           questionChosen.correctAnswer == answer &&
@@ -63,7 +59,11 @@ export default function AnswerModel({ answer }) {
           "answer_wrong"
         }
         ${isAnswerCorrect != null && answerChosen == answer && "answer_chosen"}
-      `}
+        `}
+      disabled={
+        user.username != activePlayer.username || answerChosen ? true : false
+      }
+      onClick={answerQuestionClickHandler}
     >
       {answer}
     </button>
