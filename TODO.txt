@@ -1,5 +1,5 @@
-- Restructure the Game components and check the rest of the folders what needs to be deleted
 - Complete the Create Components
+- Check for all folders what needs to be deleted
 --------------------------------------------------------------------------------------
 
 1. Redux management system:

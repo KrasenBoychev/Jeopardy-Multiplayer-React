@@ -2,18 +2,18 @@ import { useEffect } from "react";
 import {
   updateCategoryCount,
   updateGameCategories,
-} from "../../game/04. categories/categoriesSlice";
+} from "../../game/03. categories/categoriesSlice";
 import { updateActivePlayer } from "../../game/playersSlice";
 import { useDispatch } from "react-redux";
 import {
   setQuestions,
   updateQuestionChosen,
-} from "../../game/05. questions/questionsSlice";
+} from "../../game/04. questions/questionsSlice";
 import {
   deleteAnswerDetails,
   setAnswerChosen,
   updateIsAnswerCorrect,
-} from "../../game/06. answers/answerSlice";
+} from "../../game/05. answers/answerSlice";
 
 export default function useGameListeners(socket) {
   const dispatch = useDispatch();

@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { selectFirstPlayer, selectSecondPlayer } from "../playersSlice";
+import "../game.css";
 
 export default function Score() {
   const firstPlayer = useSelector(selectFirstPlayer);

@@ -19,5 +19,4 @@
 
 .exit-game-container p:hover {
     cursor: pointer;
-    /* background-color: var(--purple); */
 }

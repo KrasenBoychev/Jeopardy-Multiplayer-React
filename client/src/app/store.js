@@ -2,12 +2,12 @@ import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./api/apiSlice";
 import authReducer from "../features/authentication/authSlice";
 import socketReducer from "../features/socket_connection/socketSlice";
-import friendsReducer from "../features/game/01. play_page/children/friends_list/friendsSlice";
+import friendsReducer from "../features/game/01. play_page/friends_list/friendsSlice";
 import gameReducer from "../features/game/gameSlice";
 import playersReducer from "../features/game/playersSlice";
-import categoriesReducer from "../features/game/04. categories/categoriesSlice";
-import questionsReducer from "../features/game/05. questions/questionsSlice";
-import answerReducer from "../features/game/06. answers/answerSlice";
+import categoriesReducer from "../features/game/03. categories/categoriesSlice";
+import questionsReducer from "../features/game/04. questions/questionsSlice";
+import answerReducer from "../features/game/05. answers/answerSlice";
 
 export const store = configureStore({
   reducer: {

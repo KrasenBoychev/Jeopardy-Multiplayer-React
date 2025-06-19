@@ -5,7 +5,7 @@ import {
   addNewFriend,
   updateFriendGameInProgress,
   updateFriendStatus,
-} from "../../game/01. play_page/children/friends_list/friendsSlice";
+} from "../../game/01. play_page/friends_list/friendsSlice";
 import { useGetNotificationsQuery } from "../../../features/notifications/notificationsApiSlice";
 import {
   selectCurrentUser,
@@ -22,7 +22,7 @@ import {
   setFirstSecondActivePlayer,
 } from "../../game/playersSlice";
 import { setSocketReq } from "../socketSlice";
-import { setCategories } from "../../game/04. categories/categoriesSlice";
+import { setCategories } from "../../game/03. categories/categoriesSlice";
 
 export default function useListeners(socket) {
   const user = useSelector(selectCurrentUser);

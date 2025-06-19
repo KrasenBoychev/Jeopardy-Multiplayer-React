@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useLogOutMutation } from "./authApiSlice";
 import { useChangeOnlineStatusMutation } from "../socket_connection/socketApiSlice";
-import { useGetOnlineFriendsMutation } from "../game/01. play_page/children/friends_list/friendsApiSlice";
+import { useGetOnlineFriendsMutation } from "../game/01. play_page/friends_list/friendsApiSlice";
 
 export default function Logout({ socket }) {
   const user = useSelector(selectCurrentUser);
