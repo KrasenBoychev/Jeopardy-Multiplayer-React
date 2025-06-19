@@ -9,11 +9,12 @@ export default function QuestionsHeader({ isLoadingResult }) {
 
   return (
     <p
-      className={
-        user.username === activePlayer.username
-          ? "active_player player_categories"
-          : "player_categories"
-      }
+      className={`bg-clip-text text-transparent drop-shadow-2xl bg-gradient-to-b from-white/80 to-white/20 uppercase text-5xl font-bold 
+        ${
+          user.username == activePlayer.username
+            ? "active_player"
+            : "inactive_player"
+        }`}
     >
       {isLoadingResult
         ? "Loading result..."

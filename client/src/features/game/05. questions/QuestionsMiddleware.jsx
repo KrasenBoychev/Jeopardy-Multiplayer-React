@@ -7,7 +7,6 @@ import { useRecordPlayerPointsMutation } from "../gameApiSlice";
 import Questions from "./Questions";
 import Answers from "../06. answers/Answers";
 import Score from "../score/Score";
-import Timer from "../timer/Timer";
 import ResultGame from "../07. final_result/ResultGame";
 
 export default function QuestionsMiddleware() {
@@ -61,7 +60,6 @@ export default function QuestionsMiddleware() {
           ) : (
             <Questions isLoadingResult={isLoadingResult} />
           )}
-          <Timer />
         </div>
       )}
     </>
