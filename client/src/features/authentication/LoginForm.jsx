@@ -57,16 +57,16 @@ export function LoginForm() {
       } else if (err.status === 401) {
         toast.error("Unauthorized");
       } else if (err.status === 403) {
-        toast.error("Incorrect email or password");
+        toast.error(err.data.message);
       } else {
         toast.error("Login Failed");
       }
     }
   };
   return (
-    <div className="flex-column self-center">
+    <div className="flex-column self-center bg-black">
       <div className="shadow-input m-auto w-full max-w-md mt-25 mb-10 rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
-        <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
+        <h2 className="text-center text-xl font-bold text-neutral-800 dark:text-neutral-200">
           {isLoading ? "Loading...." : "Welcome to the Jeopardy World"}
         </h2>
         <form className="mt-8" onSubmit={handleSubmit}>
