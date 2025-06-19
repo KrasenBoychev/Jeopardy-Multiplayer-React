@@ -1,36 +1,11 @@
-- Continue with Questions.jsx - it needs to be completed
-
-- Delete the counter folder with its files
-
+- Restructure the Game components and check the rest of the folders what needs to be deleted
+- Complete the Create Components
 --------------------------------------------------------------------------------------
 
-1. Try to use Redux management system:
+1. Redux management system:
    - better error handling for the game components
    - better error handling when fetching or posting data
    - create a Public Guard for Login and Register (after backend is completed);
 
-2. Try to rewrite all components and files using Typescript, 
-   excluding all Create Components and the files connected with them
-
-3. When working over better UI, use the following library: https://ui.aceternity.com/
-
 4. Based on the UI, rework CreateQuestion.jsx - it needs to be devided to simplier components, 
    but the logic has to be reworked as well
-
-5. Rewrite all Create Components and the files connected with them using Typescript
-
-----------------------------------------------------------------------------------------
-
-UI Templates for Components: 
-
-Play Game - Aurora Background
-   FriendList -> Input Btn - Placeholders and Vanish Input
-   GameRoom -> 3D Card Effect
-
-Starting Player - Lamp Effect
-
-Categories, Question, Answers - Gradient Animation
-
-Result - Background Lines
-
-Loading Button - Moving Border
