@@ -21,15 +21,16 @@ export default function AnswersHeader() {
   return (
     <>
       <p
-        className={
+        className={`bg-clip-text text-transparent drop-shadow-2xl bg-gradient-to-b from-white/80 to-white/20 uppercase text-5xl font-bold 
+        ${
           isAnswerCorrect == null
             ? user.username === activePlayer.username
-              ? "player_categories active_player"
-              : "player_categories"
+              ? "active_player"
+              : "inactive_player"
             : isAnswerCorrect
-            ? "player_categories answer_correct"
-            : "player_categories answer_wrong"
-        }
+            ? "answer_correct"
+            : "answer_wrong"
+        }`}
       >
         {isAnswerCorrect == null
           ? `${activePlayer.username} answers question`
@@ -37,12 +38,6 @@ export default function AnswersHeader() {
           ? "Correct Answer"
           : "Wrong Answer"}
       </p>
-
-      <div className="show_question_category">
-        <h3>
-          {findCategoryName.name} - {question.points} points
-        </h3>
-      </div>
     </>
   );
 }
