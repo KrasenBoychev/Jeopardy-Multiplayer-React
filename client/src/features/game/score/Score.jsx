@@ -11,11 +11,11 @@ export default function Score() {
         <h3>Score</h3>
         <div className="players_points">
           <p className="points_first_player">
-            <span>{firstPlayer.username}:</span>
+            <span>{firstPlayer.username}</span>
             <span>{firstPlayer.earnedPoints} points</span>
           </p>
           <p className="points_second_player">
-            <span>{secondPlayer.username}:</span>
+            <span>{secondPlayer.username}</span>
             <span>{secondPlayer.earnedPoints} points</span>
           </p>
         </div>

@@ -75,17 +75,6 @@ export default function Categories() {
               <CategoriesHeader />
               <div className="categories_container">
                 <CategoriesCards />
-                {/* {gameCategories.map((gameCategory, gameCategoryIndex) => {
-                  return (
-                    // <CategoryModel
-                    //   key={gameCategoryIndex}
-                    //   props={{
-                    //     gameCategory,
-                    //     gameCategoryIndex,
-                    //   }}
-                    // />
-                  );
-                })} */}
               </div>
             </div>
           )}

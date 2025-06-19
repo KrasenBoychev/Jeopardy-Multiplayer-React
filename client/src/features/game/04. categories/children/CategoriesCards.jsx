@@ -50,7 +50,7 @@ export function CategoriesCards() {
     dispatch(updateCategoryCount());
   };
 
-  const openBtnName = "OPEN";
+  const openBtnName = "CHOOSE";
   const popupHeading = "Choose Category";
   const popupContent = (
     <ul>
