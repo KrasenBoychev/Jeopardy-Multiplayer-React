@@ -6,13 +6,17 @@ export function ThreeDCardDemo({ player, rivalPlayer }) {
   return (
     <CardContainer className="inter-var">
       <CardBody
-        className={`flex flex-col items-center align-center bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-white/[0.1] w-auto sm:w-[15rem] h-80 rounded-xl ${
-          player ? "p-4" : "py-2 px-4"
-        } border`}
+        className={`flex flex-col items-center align-center relative group/card border-white/[0.1] w-auto sm:w-[15rem] h-80 rounded-xl bg-no-repeat 
+             ${
+               rivalPlayer || !player
+                 ? "bg-gradient-to-r from-pink-500 via-violet-500 to-purple-500"
+                 : "bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500"
+             }
+             ${player ? "p-4" : "py-2 px-4"} border`}
       >
         <CardItem
           translateZ="50"
-          className="py-30 text-xl font-bold text-neutral-600 dark:text-white"
+          className="py-30 text-2xl font-bold text-white"
         >
           {player ? player.username : <InviteFriend />}
         </CardItem>
