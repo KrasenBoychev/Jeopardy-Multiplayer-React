@@ -1,6 +1,8 @@
 import { useSelector } from "react-redux";
-import "./resultGame.css";
 import { selectFirstPlayer, selectSecondPlayer } from "../playersSlice";
+import { BackgroundLines } from "@/components/ui/background-lines";
+import { ColourfulText } from "@/components/ui/colourful-text";
+import "./resultGame.css";
 
 export default function ResultGame() {
   const firstPlayer = useSelector(selectFirstPlayer);
@@ -8,14 +10,20 @@ export default function ResultGame() {
 
   return (
     <>
-      <div className="result_game_container">
-        <p className="result_winner answer_correct">
-          {firstPlayer.earnedPoints == secondPlayer.earnedPoints
-            ? `${firstPlayer.username} and ${secondPlayer.username} share the first place!`
-            : firstPlayer.earnedPoints > secondPlayer.earnedPoints
-            ? `Congratulations ${firstPlayer.username}!`
-            : `Congratulations ${secondPlayer.username}!`}
-        </p>
+      <BackgroundLines className="flex items-center justify-center gap-20 w-full flex-col px-4">
+        <div className="w-full flex items-center justify-center relative overflow-hidden">
+          <h1 className="text-2xl md:text-5xl lg:text-7xl font-bold text-center text-white uppercase relative z-2 font-sans">
+            <ColourfulText
+              text={
+                firstPlayer.earnedPoints == secondPlayer.earnedPoints
+                  ? `points shared`
+                  : firstPlayer.earnedPoints > secondPlayer.earnedPoints
+                  ? `${firstPlayer.username} is the winner`
+                  : `${secondPlayer.username} is the winner`
+              }
+            />
+          </h1>
+        </div>
         <div className="final_result">
           <p>Final Result</p>
           <p className="final_players">
@@ -30,7 +38,7 @@ export default function ResultGame() {
             </span>
           </p>
         </div>
-      </div>
+      </BackgroundLines>
     </>
   );
 }
