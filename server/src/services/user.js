@@ -11,7 +11,7 @@ async function getUserByUsername(username) {
 
 async function getTopPlayers() {
   return await User.find({ _id: { $nin: [adminId] } })
-    .sort({ points: -1 })
+    .sort({ "gameDetails.points": -1 })
     .limit(10);
 }
 
