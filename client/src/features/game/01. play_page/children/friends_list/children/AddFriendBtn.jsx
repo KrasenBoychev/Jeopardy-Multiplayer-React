@@ -21,6 +21,9 @@ export default function AddFriendBtn() {
     } else if (addFriendUsername == user.username) {
       toast.error("Cannot add yourself");
       return;
+    } else if (addFriendUsername == "admin") {
+      toast.error(addFriendUsername + " does not exist");
+      return;
     }
 
     if (friends.length > 0) {
