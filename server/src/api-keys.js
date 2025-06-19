@@ -1,3 +1,3 @@
-const adminId = "66cb5ecfe65e43087b6443c1";
+const adminId = "6853e6d72c14943a0e19728e";
 
 module.exports = { adminId };
