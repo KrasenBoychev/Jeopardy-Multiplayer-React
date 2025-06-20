@@ -4,8 +4,8 @@ import { HoveredLink, Menu, MenuItem, MenuItemLink } from "./ui/navbar-menu";
 import { cn } from "@/lib/utils";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../features/authentication/authSlice";
-import { Link } from "react-router-dom";
 import Notifications from "../features/notifications/Notifications";
+import { adminId } from "../app/credentials";
 
 export function NavbarMenu() {
   return (
@@ -33,7 +33,9 @@ function Navbar({ className }) {
               <MenuItemLink to="/play">Play</MenuItemLink>
               <Notifications />
             </div>
-
+            {user.userId == adminId && (
+              <MenuItemLink to="/create">Create</MenuItemLink>
+            )}
             <MenuItemLink to="/logout">Logout</MenuItemLink>
           </>
         ) : (
