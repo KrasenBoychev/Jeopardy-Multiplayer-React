@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import "./create.css";
 
 export default function Create() {
   const navigate = useNavigate();
 
   const createCategoryHandler = () => {
-    navigate("/createCategory");
+    navigate("/createCatAndQ");
   };
 
   const createQuestionHandler = () => {
@@ -13,7 +14,7 @@ export default function Create() {
   };
 
   return (
-    <main>
+    <BackgroundBeamsWithCollision>
       <div className="create-container">
         <section>
           <p onClick={createCategoryHandler}>
@@ -24,6 +25,6 @@ export default function Create() {
           <p onClick={createQuestionHandler}>Create Question only</p>
         </section>
       </div>
-    </main>
+    </BackgroundBeamsWithCollision>
   );
 }
