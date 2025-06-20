@@ -19,8 +19,8 @@
     text-transform: uppercase;
     text-align: center;
     line-height: 40px;
-    color: var(--white);
-    background-color: var(--midnight-blue);
+    color: white;
+    background-color: black;
     border-radius: 10px;
     display: flex;
     justify-content: center;
@@ -29,7 +29,7 @@
 
 .create-container section p:hover {
     cursor: pointer;
-    background-color: var(--purple);
+    border: 3px solid var(--chart-1);
 }
 .category-select {
     width: 100%;
@@ -91,7 +91,8 @@
 }
 
 .false {
-    background-color: red;
+    /* background-color: red; */
+    border: 2px solid red;
 }
 
 .question-btns {
