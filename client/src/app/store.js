@@ -8,6 +8,7 @@ import playersReducer from "../features/game/playersSlice";
 import categoriesReducer from "../features/game/03. categories/categoriesSlice";
 import questionsReducer from "../features/game/04. questions/questionsSlice";
 import answerReducer from "../features/game/05. answers/answerSlice";
+import createItemsReducer from "../features/create/createSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     categories: categoriesReducer,
     questions: questionsReducer,
     answer: answerReducer,
+    createItems: createItemsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),
