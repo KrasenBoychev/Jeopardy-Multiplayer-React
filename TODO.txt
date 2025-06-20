@@ -7,5 +7,7 @@
    - better error handling when fetching or posting data
    - create a Public Guard for Login and Register (after backend is completed);
 
-4. Based on the UI, rework CreateQuestion.jsx - it needs to be devided to simplier components, 
+2. Based on the UI, rework CreateQuestion.jsx - it needs to be devided to simplier components, 
    but the logic has to be reworked as well
+
+3. Fix the backend - keep the user logged in when the page is refreshed
