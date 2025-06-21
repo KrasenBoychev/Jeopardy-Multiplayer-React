@@ -1,4 +1,6 @@
 - Complete the Create Components
+   - do a different check for the category field when admin creates cat + questions
+   - check if the default value for the correct answer works
 - Check for all folders what needs to be deleted
 --------------------------------------------------------------------------------------
 
