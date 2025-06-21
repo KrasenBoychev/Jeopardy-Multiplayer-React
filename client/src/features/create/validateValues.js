@@ -1,6 +1,3 @@
-// import toast from "react-hot-toast";
-// import { points } from "../../game/gamePoints";
-
 export const gamePoints = ["5", "10", "15", "20"];
 export const correctAnswerValues = [
   "Answer 1",
@@ -9,81 +6,98 @@ export const correctAnswerValues = [
   "Answer 4",
 ];
 
-// export function validateValues(values, errors, category, allCategories) {
-//   if (!category) {
-//     const categoryNames = allCategories.map((c) => c.name);
+const checkCategoryField = (category, allCategoriesNames) => {
+  if (!allCategoriesNames.includes(category)) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
-//     if (
-//       !categoryNames.includes(values.category) ||
-//       values.category == "--- Choose Category ---"
-//     ) {
-//       errors.category = "Category should be chosen from the drop down list";
-//     }
-//   }
+const checkPointsField = (points) => {
+  if (!gamePoints.includes(points)) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
-//   if (
-//     !points.includes(values.points) ||
-//     values.points == "--- Choose Points ---"
-//   ) {
-//     errors.points = "Points should be chosen from the drop down list";
-//   }
+const checkQuestionOrAnswerField = (element) => {
+  if (element.trim() == "") {
+    return true;
+  } else {
+    return false;
+  }
+};
 
-//   if (!values.name) {
-//     errors.name = "Name is required";
-//   }
+const checkCorrectAnswerField = (correctAnswer) => {
+  if (!correctAnswerValues.includes(correctAnswer)) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
-//   if (!values.answerOne) {
-//     errors.answerOne = "Answer One is required";
-//   }
+export const setNewFormValues = (
+  setFormValues,
+  elementChanged,
+  newContent,
+  allCategoriesNames
+) => {
+  setFormValues((prev) => {
+    let newValues = Object.assign({}, prev);
+    newValues[`${elementChanged}`].content = newContent;
 
-//   if (!values.answerTwo) {
-//     errors.answerTwo = "Answer Two is required";
-//   }
+    let isError;
 
-//   if (!values.answerThree) {
-//     errors.answerThree = "Answer Three is required";
-//   }
+    switch (elementChanged) {
+      case "category":
+        isError = checkCategoryField(newContent, allCategoriesNames);
+        break;
+      case "points":
+        isError = checkPointsField(newContent);
+        break;
+      case "question":
+        isError = checkQuestionOrAnswerField(newContent);
+        break;
+      case "answerOne":
+        isError = checkQuestionOrAnswerField(newContent);
+        break;
+      case "answerTwo":
+        isError = checkQuestionOrAnswerField(newContent);
+        break;
+      case "answerThree":
+        isError = checkQuestionOrAnswerField(newContent);
+        break;
+      case "answerFour":
+        isError = checkQuestionOrAnswerField(newContent);
+        break;
+      case "correctAnswer":
+        isError = checkCorrectAnswerField(newContent);
+        break;
+    }
 
-//   if (!values.answerFour) {
-//     errors.answerFour = "Answer Four is required";
-//   }
-// }
+    if (isError) {
+      newValues[`${elementChanged}`].error = true;
+    } else {
+      newValues[`${elementChanged}`].error = false;
+    }
 
-// export function checkTrueAnswer(answersCorrectValues, values) {
-//   let isTrue = true;
-//   let correctAnswerValue;
-//   let correctIndex;
+    return newValues;
+  });
+};
 
-//   if (!answersCorrectValues.includes("true")) {
-//     isTrue = false;
-//     toast.error("Choose correct answer");
-
-//   } else {
-//     let repeatedTrueValues = 0;
-
-//     for (let i = 0; i < answersCorrectValues.length; i++) {
-//       if (answersCorrectValues[i] == "true") {
-//         repeatedTrueValues++;
-//         correctIndex = i;
-//       }
-//     }
-
-//     if (repeatedTrueValues > 1) {
-//       isTrue = false;
-//       toast.error("Choose ONLY ONE correct answer");
-//     }
-
-//     if (isTrue) {
-//       const answers = {
-//         0: values.answerOne,
-//         1: values.answerTwo,
-//         2: values.answerThree,
-//         3: values.answerFour,
-//       };
-
-//       correctAnswerValue = answers[correctIndex];
-//     }
-//   }
-
-//   return isTrue ? correctAnswerValue : false;
-// }
+export function validateAllValues(
+  formValues,
+  setFormValues,
+  allCategoriesNames
+) {
+  Object.keys(formValues).forEach((element) => {
+    setNewFormValues(
+      setFormValues,
+      element,
+      formValues[`${element}`].content,
+      allCategoriesNames
+    );
+  });
+}
