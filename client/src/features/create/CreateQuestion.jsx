@@ -13,7 +13,12 @@ import {
   selectCreateItemsAllValues,
   selectCurrentPage,
 } from "./createSlice";
-import { correctAnswerValues, gamePoints } from "./validateValues";
+import {
+  correctAnswerValues,
+  gamePoints,
+  setNewFormValues,
+  validateAllValues,
+} from "./validateValues";
 import { useGetCategoriesMutation } from "../game/gameApiSlice";
 import "./create.css";
 
@@ -21,6 +26,7 @@ export default function CreateQuestion() {
   const [categoryOptions, setCategoryOptions] = useState(null);
   const [pointsOptions, setPointsOptions] = useState(null);
   const [correctAnswerOptions, setCorrectAnswerOptions] = useState(null);
+  const [allCategoriesNames, setAllCategoriesNames] = useState([]);
   const categoryName = useSelector(selectCategoryName);
   const currentPage = useSelector(selectCurrentPage);
   const createItemsAllValues = useSelector(selectCreateItemsAllValues);
@@ -74,6 +80,11 @@ export default function CreateQuestion() {
       (async () => {
         try {
           const getAllCategories = await getCategories();
+          const categoryNamesOnly = getAllCategories.data.map(
+            (category) => category.name
+          );
+          setAllCategoriesNames(categoryNamesOnly);
+
           const createCategoryOptions = (
             <>
               <option value="selectOption"> - Select - </option>
@@ -121,48 +132,30 @@ export default function CreateQuestion() {
     const elementChanged = e.target.id;
     const newContent = e.target.value;
 
-    setFormValues((prev) => {
-      let newValues = Object.assign({}, prev);
-      newValues[`${elementChanged}`].content = newContent;
-
-      if (
-        elementChanged == "category" ||
-        elementChanged == "points" ||
-        elementChanged == "correctAnswer"
-      ) {
-        if (newContent == "selectOption") {
-          newValues[`${elementChanged}`].error = true;
-        } else {
-          newValues[`${elementChanged}`].error = false;
-        }
-      } else {
-        if (newContent == "") {
-          newValues[`${elementChanged}`].error = true;
-        } else {
-          newValues[`${elementChanged}`].error = false;
-        }
-      }
-
-      return newValues;
-    });
+    setNewFormValues(
+      setFormValues,
+      elementChanged,
+      newContent,
+      allCategoriesNames
+    );
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    validateAllValues(formValues, setFormValues, allCategoriesNames);
+
     let areFormValuesValid = true;
-    for (const value in formValues) {
-      if (value.error) {
+
+    Object.values(formValues).forEach((element) => {
+      if (element.error) {
         areFormValuesValid = false;
       }
-    }
+    });
+
     if (!areFormValuesValid) {
       return;
     }
-
-    // Check the values as well
-
-    // Check if the default value for the correct answer works
 
     console.log("yeee");
 
