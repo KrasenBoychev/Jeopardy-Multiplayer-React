@@ -1,346 +1,199 @@
-// import { useNavigate } from "react-router-dom";
-// import { toast } from "react-hot-toast";
-// import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import { selectCategoryName, selectCurrentPage } from "../createSlice";
+import {
+  correctAnswerValues,
+  gamePoints,
+  setNewFormValues,
+  validateAllValues,
+} from "./validateValues";
+import useCreateQuestion from "./useCreateQuestion";
+import "../create.css";
 
-// import { createQuestion } from "../../../../api/create-api";
+export default function CreateQuestion() {
+  const categoryName = useSelector(selectCategoryName);
+  const currentPage = useSelector(selectCurrentPage);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-// import useCreateQuestion from "../../../hooks/useCreateQuestion";
+  const [allCategoriesNames, formValues, setFormValues] = useCreateQuestion();
 
-// import { points } from "../../../common/gamePoints";
-// import { checkTrueAnswer, validateValues } from "./validationForm";
+  const handleInput = (e) => {
+    const elementChanged = e.target.id;
+    const newContent = e.target.value;
 
-// export default function CreateQuestion({ props }) {
-//   const {
-//     category,
-//     question,
-//     setQuestion,
-//     move,
-//     setMove,
-//     setRecordCategoryAndQuestions,
-//   } = props;
+    setNewFormValues(
+      setFormValues,
+      elementChanged,
+      newContent,
+      allCategoriesNames,
+      categoryName,
+      currentPage
+    );
+  };
 
-//   const [answersCorrectValues, setAnswersCorrectValues, allCategories] =
-//     useCreateQuestion(category, question);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-//   const navigate = useNavigate();
+    const areFormValuesValid = validateAllValues(
+      formValues,
+      setFormValues,
+      allCategoriesNames,
+      categoryName,
+      currentPage
+    );
 
-//   const changeCorrectAnswer = (e) => {
-//     const clickedAnswer = Number(e.target.id.split("-")[1]);
+    if (!areFormValuesValid) {
+      return;
+    }
 
-//     const copyValues = answersCorrectValues.map((value, index) => {
-//       if (clickedAnswer == index) {
-//         return (answersCorrectValues[index] = "true");
-//       } else {
-//         return (answersCorrectValues[index] = "false");
-//       }
-//     });
+    console.log("yeee");
 
-//     setAnswersCorrectValues(copyValues);
-//   };
+    try {
+    } catch (err) {}
+  };
 
-//   return (
-//     <div className="authentication-container">
-//       <div className="authentication-wrapper">
-//         <h1>Category Question</h1>
-//         <Formik
-//           initialValues={
-//             category
-//               ? {
-//                   name: question.name,
-//                   points: question.points,
-//                   answerOne: question.answers.answerOne,
-//                   answerTwo: question.answers.answerTwo,
-//                   answerThree: question.answers.answerThree,
-//                   answerFour: question.answers.answerFour,
-//                 }
-//               : {
-//                   category: "--- Choose Category ---",
-//                   points: "--- Choose Points ---",
-//                   name: "",
-//                   answerOne: "",
-//                   answerTwo: "",
-//                   answerThree: "",
-//                   answerFour: "",
-//                 }
-//           }
-//           validate={(values) => {
-//             const errors = {};
+  return (
+    <div className="flex-column self-center bg-black pt-25 pb-10">
+      <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8">
+        <h2 className="text-center text-xl font-bold text-neutral-800 dark:text-neutral-200 uppercase">
+          Create Question
+        </h2>
+        <form className="my-8" onSubmit={handleSubmit}>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="category">Category</Label>
+            {currentPage > 0 ? (
+              <Input
+                id="category"
+                type="text"
+                className="uppercase"
+                disabled
+                value={formValues.category.content}
+              />
+            ) : (
+              <Select
+                name="category"
+                id="category"
+                className={formValues.category.error == true && "false"}
+                optionsArray={allCategoriesNames}
+                onChange={handleInput}
+              />
+            )}
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="points">Points</Label>
+            {currentPage > 0 ? (
+              <Input
+                id="points"
+                type="text"
+                className="uppercase"
+                disabled
+                value={formValues.points.content}
+              />
+            ) : (
+              <Select
+                name="points"
+                id="points"
+                className={formValues.points.error == true && "false"}
+                optionsArray={gamePoints}
+                onChange={handleInput}
+              />
+            )}
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="question">Question</Label>
+            <Input
+              id="question"
+              type="text"
+              className={formValues.question.error == true && "false"}
+              value={formValues.question.content}
+              onChange={handleInput}
+            />
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="answerOne">Answer 1</Label>
+            <Input
+              id="answerOne"
+              type="text"
+              className={formValues.answerOne.error == true && "false"}
+              value={formValues.answerOne.content}
+              onChange={handleInput}
+            />
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="answerTwo">Answer 2</Label>
+            <Input
+              id="answerTwo"
+              type="text"
+              className={formValues.answerTwo.error == true && "false"}
+              value={formValues.answerTwo.content}
+              onChange={handleInput}
+            />
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="answerThree">Answer 3</Label>
+            <Input
+              id="answerThree"
+              type="text"
+              className={formValues.answerThree.error == true && "false"}
+              value={formValues.answerThree.content}
+              onChange={handleInput}
+            />
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-8">
+            <Label htmlFor="answerFour">Answer 4</Label>
+            <Input
+              id="answerFour"
+              type="text"
+              className={formValues.answerFour.error == true && "false"}
+              value={formValues.answerFour.content}
+              onChange={handleInput}
+            />
+          </LabelInputContainer>
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="correctAnswer">Correct Answer</Label>
+            <Select
+              name="correctAnswer"
+              id="correctAnswer"
+              className={formValues.correctAnswer.error == true && "false"}
+              optionsArray={correctAnswerValues}
+              default={formValues.correctAnswer?.content}
+              onChange={handleInput}
+            />
+          </LabelInputContainer>
 
-//             validateValues(values, errors, category, allCategories);
+          <button
+            className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+            type="submit"
+          >
+            Sign up &rarr;
+            <BottomGradient />
+          </button>
 
-//             return errors;
-//           }}
-//           onSubmit={async (values) => {
-//             const correctAnswerValue = checkTrueAnswer(
-//               answersCorrectValues,
-//               values
-//             );
-//             if (!correctAnswerValue) {
-//               return;
-//             }
+          {/* <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" /> */}
+        </form>
+      </div>
+    </div>
+  );
+}
 
-//             if (category) {
-//               setQuestion({
-//                 name: values.name,
-//                 points: values.points,
-//                 answers: {
-//                   answerOne: values.answerOne,
-//                   answerTwo: values.answerTwo,
-//                   answerThree: values.answerThree,
-//                   answerFour: values.answerFour,
-//                 },
-//                 correctAnswer: correctAnswerValue,
-//                 correctIndex: answersCorrectValues.indexOf("true"),
-//               });
+const BottomGradient = () => {
+  return (
+    <>
+      <span className="absolute inset-x-0 -bottom-px block h-px w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-0 transition duration-500 group-hover/btn:opacity-100" />
+      <span className="absolute inset-x-10 -bottom-px mx-auto block h-px w-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-0 blur-sm transition duration-500 group-hover/btn:opacity-100" />
+    </>
+  );
+};
 
-//               if (setMove) {
-//                 setMove((oldValue) => oldValue + 1);
-//               }
-
-//               if (setRecordCategoryAndQuestions) {
-//                 setRecordCategoryAndQuestions(true);
-//               }
-//             } else {
-//               const selectedCategory = allCategories.filter(
-//                 (c) => c.name == values.category
-//               );
-
-//               try {
-//                 await createQuestion(
-//                   {
-//                     name: values.name,
-//                     points: values.points,
-//                     answers: {
-//                       answerOne: values.answerOne,
-//                       answerTwo: values.answerTwo,
-//                       answerThree: values.answerThree,
-//                       answerFour: values.answerFour,
-//                     },
-//                     correctAnswer: correctAnswerValue,
-//                   },
-//                   selectedCategory[0]._id
-//                 );
-
-//                 navigate("/");
-//               } catch (error) {
-//                 return toast.error(error.message);
-//               }
-//             }
-//           }}
-//         >
-//           {({ isSubmitting }) => (
-//             <Form className="authentication-form">
-//               {move ? (
-//                 <div className="authentication-input category-span">
-//                   {category}
-//                 </div>
-//               ) : (
-//                 <>
-//                   <Field
-//                     as="select"
-//                     name="category"
-//                     className="authentication-input category-select"
-//                   >
-//                     <option value="chooseCategory">
-//                       --- Choose Category ---
-//                     </option>
-//                     {allCategories.map((eachCategory) => {
-//                       return (
-//                         <option
-//                           key={eachCategory.name}
-//                           value={eachCategory.name}
-//                         >
-//                           {eachCategory.name}
-//                         </option>
-//                       );
-//                     })}
-//                   </Field>
-//                   <ErrorMessage
-//                     name="category"
-//                     component="div"
-//                     className="authentication-error"
-//                   />
-//                 </>
-//               )}
-
-//               {category ? (
-//                 <Field
-//                   type="number"
-//                   name="points"
-//                   disabled={true}
-//                   className="authentication-input category-span"
-//                 />
-//               ) : (
-//                 <Field
-//                   as="select"
-//                   name="points"
-//                   className="authentication-input category-select"
-//                 >
-//                   {question && question.points ? (
-//                     <option value={question.points}>{question.points}</option>
-//                   ) : (
-//                     <option value="choosePoints">--- Choose Points ---</option>
-//                   )}
-//                   {points.map((point) => {
-//                     return (
-//                       <option key={point} value={point}>
-//                         {point}
-//                       </option>
-//                     );
-//                   })}
-//                 </Field>
-//               )}
-//               <ErrorMessage
-//                 name="points"
-//                 component="div"
-//                 className="authentication-error"
-//               />
-
-//               <Field
-//                 as="textarea"
-//                 name="name"
-//                 placeholder="Question Name"
-//                 className="authentication-input textarea-question"
-//               />
-//               <ErrorMessage
-//                 name="name"
-//                 component="div"
-//                 className="authentication-error"
-//               />
-//               <p className="create-questions-paragraph">
-//                 Choose the correct answer by clicking the button next to it
-//               </p>
-
-//               <div className="create-question-wrapper">
-//                 <Field
-//                   type="text"
-//                   name="answerOne"
-//                   placeholder="Answer One"
-//                   className="create-question-input"
-//                 />
-//                 <button
-//                   type="button"
-//                   id="correct-0"
-//                   className={
-//                     answersCorrectValues[0] == "true"
-//                       ? "create-question-button true"
-//                       : "create-question-button false"
-//                   }
-//                   onClick={changeCorrectAnswer}
-//                 >
-//                   {answersCorrectValues[0]}
-//                 </button>
-//               </div>
-//               <ErrorMessage
-//                 name="answerOne"
-//                 component="div"
-//                 className="authentication-error"
-//               />
-
-//               <div className="create-question-wrapper">
-//                 <Field
-//                   type="text"
-//                   name="answerTwo"
-//                   placeholder="Answer Two"
-//                   className="create-question-input"
-//                 />
-//                 <button
-//                   type="button"
-//                   id="correct-1"
-//                   className={
-//                     answersCorrectValues[1] == "true"
-//                       ? "create-question-button true"
-//                       : "create-question-button false"
-//                   }
-//                   onClick={changeCorrectAnswer}
-//                 >
-//                   {answersCorrectValues[1]}
-//                 </button>
-//               </div>
-//               <ErrorMessage
-//                 name="answerTwo"
-//                 component="div"
-//                 className="authentication-error"
-//               />
-
-//               <div className="create-question-wrapper">
-//                 <Field
-//                   type="text"
-//                   name="answerThree"
-//                   placeholder="Answer Three"
-//                   className="create-question-input"
-//                 />
-//                 <button
-//                   type="button"
-//                   id="correct-2"
-//                   className={
-//                     answersCorrectValues[2] == "true"
-//                       ? "create-question-button true"
-//                       : "create-question-button false"
-//                   }
-//                   onClick={changeCorrectAnswer}
-//                 >
-//                   {answersCorrectValues[2]}
-//                 </button>
-//               </div>
-//               <ErrorMessage
-//                 name="answerThree"
-//                 component="div"
-//                 className="authentication-error"
-//               />
-
-//               <div className="create-question-wrapper">
-//                 <Field
-//                   type="text"
-//                   name="answerFour"
-//                   placeholder="Answer Four"
-//                   className="create-question-input"
-//                 />
-//                 <button
-//                   type="button"
-//                   id="correct-3"
-//                   className={
-//                     answersCorrectValues[3] == "true"
-//                       ? "create-question-button true"
-//                       : "create-question-button false"
-//                   }
-//                   onClick={changeCorrectAnswer}
-//                 >
-//                   {answersCorrectValues[3]}
-//                 </button>
-//               </div>
-//               <ErrorMessage
-//                 name="answerFour"
-//                 component="div"
-//                 className="authentication-error"
-//               />
-
-//               <div className="question-btns">
-//                 {move && (
-//                   <button
-//                     onClick={() => setMove((oldValue) => oldValue - 1)}
-//                     className="authentication-form-button"
-//                   >
-//                     {move == 1 ? "Edit Category" : "Previous Question"}
-//                   </button>
-//                 )}
-
-//                 <button
-//                   type="submit"
-//                   className="authentication-form-button"
-//                   disabled={isSubmitting}
-//                 >
-//                   {move
-//                     ? move == 4
-//                       ? "Record Category and Questions"
-//                       : "Next Question"
-//                     : "Record Question"}
-//                 </button>
-//               </div>
-//             </Form>
-//           )}
-//         </Formik>
-//       </div>
-//     </div>
-//   );
-// }
+const LabelInputContainer = ({ children, className }) => {
+  return (
+    <div className={cn("flex w-full flex-col space-y-2", className)}>
+      {children}
+    </div>
+  );
+};
