@@ -1,10 +1,16 @@
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import { selectCategoryName, selectCurrentPage } from "../createSlice";
+import {
+  goToNextPage,
+  goToPreviousPage,
+  selectCategoryName,
+  selectCreateItemsAllValues,
+  selectCurrentPage,
+  setQuestionDetails,
+} from "../createSlice";
 import {
   correctAnswerValues,
   gamePoints,
@@ -17,9 +23,8 @@ import "../create.css";
 export default function CreateQuestion() {
   const categoryName = useSelector(selectCategoryName);
   const currentPage = useSelector(selectCurrentPage);
+  const createItemsAllValues = useSelector(selectCreateItemsAllValues);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const [allCategoriesNames, formValues, setFormValues] = useCreateQuestion();
 
   const handleInput = (e) => {
@@ -36,7 +41,12 @@ export default function CreateQuestion() {
     );
   };
 
-  const handleSubmit = async (e) => {
+  const handlePreviousPage = (e) => {
+    e.preventDefault();
+    dispatch(goToPreviousPage());
+  };
+
+  const handleNextPageAndSubmit = async (e) => {
     e.preventDefault();
 
     const areFormValuesValid = validateAllValues(
@@ -51,10 +61,20 @@ export default function CreateQuestion() {
       return;
     }
 
-    console.log("yeee");
+    const questionNumber = Object.keys(createItemsAllValues)[currentPage];
+    const questionDetails = {
+      categoryName: formValues.category.content,
+      points: formValues.points.content,
+      questionName: formValues.question.content,
+      answerOne: formValues.answerOne.content,
+      answerTwo: formValues.answerTwo.content,
+      answerThree: formValues.answerThree.content,
+      answerFour: formValues.answerFour.content,
+      correctAnswer: formValues.correctAnswer.content,
+    };
 
-    try {
-    } catch (err) {}
+    dispatch(setQuestionDetails({ questionNumber, questionDetails }));
+    dispatch(goToNextPage());
   };
 
   return (
@@ -63,7 +83,7 @@ export default function CreateQuestion() {
         <h2 className="text-center text-xl font-bold text-neutral-800 dark:text-neutral-200 uppercase">
           Create Question
         </h2>
-        <form className="my-8" onSubmit={handleSubmit}>
+        <form className="my-8">
           <LabelInputContainer className="mb-4">
             <Label htmlFor="category">Category</Label>
             {currentPage > 0 ? (
@@ -165,17 +185,32 @@ export default function CreateQuestion() {
               onChange={handleInput}
             />
           </LabelInputContainer>
+          <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
+        </form>
+
+        <div className={`mt-10 ${currentPage > 0 && "flex gap-10"}`}>
+          {currentPage > 0 && (
+            <button
+              className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+              onClick={handlePreviousPage}
+            >
+              Previous Page
+              <BottomGradient />
+            </button>
+          )}
 
           <button
             className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
-            type="submit"
+            onClick={handleNextPageAndSubmit}
           >
-            Sign up &rarr;
+            {currentPage == 0
+              ? "Save Question"
+              : currentPage > 0 && currentPage <= 3
+              ? "Next Page"
+              : "Save Category and Questions"}
             <BottomGradient />
           </button>
-
-          {/* <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" /> */}
-        </form>
+        </div>
       </div>
     </div>
   );
