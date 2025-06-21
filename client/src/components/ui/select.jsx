@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { useMotionTemplate, useMotionValue, motion } from "motion/react";
 
 const Select = React.forwardRef(
-  ({ className, type, name, id, options, ...props }, ref) => {
+  ({ className, type, name, id, optionsArray, ...props }, ref) => {
     const radius = 100; // change this to increase the rdaius of the hover effect
     const [visible, setVisible] = React.useState(false);
 
@@ -42,7 +42,14 @@ const Select = React.forwardRef(
           ref={ref}
           {...props}
         >
-          {options}
+          <>
+            <option value="selectOption"> - Select - </option>
+            {optionsArray.map((value) => (
+              <option key={value} value={value}>
+                {value}
+              </option>
+            ))}
+          </>
         </select>
       </motion.div>
     );
