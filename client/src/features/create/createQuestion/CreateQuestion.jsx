@@ -19,36 +19,53 @@ import {
 } from "./validateValues";
 import useCreateQuestion from "./useCreateQuestion";
 import "../create.css";
+import { useState } from "react";
 
-export default function CreateQuestion() {
+export default function CreateQuestion({
+  formInitialValues,
+  setMoveToNextQuestion,
+}) {
+  console.log(formInitialValues);
+
+  const [formValues, setFormValues] = useState({
+    category: { content: formInitialValues.categoryName, error: false },
+    points: { content: formInitialValues.points, error: false },
+    question: { content: formInitialValues.questionName, error: false },
+    answerOne: { content: formInitialValues.answerOne, error: false },
+    answerTwo: { content: formInitialValues.answerTwo, error: false },
+    answerThree: { content: formInitialValues.answerThree, error: false },
+    answerFour: { content: formInitialValues.answerFour, error: false },
+    correctAnswer: { content: formInitialValues.correctAnswer, error: false },
+  });
   const categoryName = useSelector(selectCategoryName);
   const currentPage = useSelector(selectCurrentPage);
   const createItemsAllValues = useSelector(selectCreateItemsAllValues);
   const dispatch = useDispatch();
-  const [allCategoriesNames, formValues, setFormValues] = useCreateQuestion();
+  const allCategoriesNames = useCreateQuestion();
 
   const handleInput = (e) => {
     const elementChanged = e.target.id;
     const newContent = e.target.value;
+    const copyFormValues = Object.assign({}, formValues);
 
-    setNewFormValues(
-      setFormValues,
+    const newValues = setNewFormValues(
+      copyFormValues,
       elementChanged,
       newContent,
       allCategoriesNames,
       categoryName,
       currentPage
     );
+
+    setFormValues(newValues);
   };
 
-  const handlePreviousPage = (e) => {
-    e.preventDefault();
+  const handlePreviousPage = () => {
+    setMoveToNextQuestion(false);
     dispatch(goToPreviousPage());
   };
 
-  const handleNextPageAndSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleNextPageAndSubmit = async () => {
     const areFormValuesValid = validateAllValues(
       formValues,
       setFormValues,
@@ -73,8 +90,15 @@ export default function CreateQuestion() {
       correctAnswer: formValues.correctAnswer.content,
     };
 
-    dispatch(setQuestionDetails({ questionNumber, questionDetails }));
-    dispatch(goToNextPage());
+    if (currentPage == 0) {
+      // record single question
+    } else if (currentPage > 0 && currentPage <= 3) {
+      setMoveToNextQuestion(false);
+      dispatch(setQuestionDetails({ questionNumber, questionDetails }));
+      dispatch(goToNextPage());
+    } else if (currentPage == 4) {
+      // record cat and questions
+    }
   };
 
   return (
@@ -92,13 +116,13 @@ export default function CreateQuestion() {
                 type="text"
                 className="uppercase"
                 disabled
-                value={formValues.category.content}
+                value={formValues?.category?.content}
               />
             ) : (
               <Select
                 name="category"
                 id="category"
-                className={formValues.category.error == true && "false"}
+                className={formValues.category?.error == true && "false"}
                 optionsArray={allCategoriesNames}
                 onChange={handleInput}
               />
@@ -181,7 +205,7 @@ export default function CreateQuestion() {
               id="correctAnswer"
               className={formValues.correctAnswer.error == true && "false"}
               optionsArray={correctAnswerValues}
-              default={formValues.correctAnswer?.content}
+              value={formValues.correctAnswer.content}
               onChange={handleInput}
             />
           </LabelInputContainer>
