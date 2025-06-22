@@ -44,11 +44,21 @@ const Select = React.forwardRef(
         >
           <>
             <option value="selectOption"> - Select - </option>
-            {optionsArray.map((value) => (
-              <option key={value} value={value}>
-                {value}
-              </option>
-            ))}
+            {optionsArray.map((value) => {
+              if (typeof value === "string") {
+                return (
+                  <option key={value} value={value}>
+                    {value}
+                  </option>
+                );
+              } else {
+                return (
+                  <option key={value.optionValue} value={value.optionValue}>
+                    {value.text}
+                  </option>
+                );
+              }
+            })}
           </>
         </select>
       </motion.div>
