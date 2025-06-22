@@ -1,8 +1,7 @@
 - Complete the Create Components
-   - question details should show when "Previous Page" is clicked
    - category name should show when "Previous Page" is clicked
-   - formValues set to empty strings byy default - they don't update. 
-         Try to give a certain value to CreateQuestion from the parent component.
+   - complete the server requests when a question or cat and questions must be recorded
+
 - Check for all folders what needs to be deleted
 --------------------------------------------------------------------------------------
 
