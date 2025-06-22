@@ -22,6 +22,7 @@ import CreateCatAndQMiddleware from "./features/create/CreateCatAndQMiddleware";
 import CreateQuestion from "./features/create/createQuestion/CreateQuestion";
 import NotFound from "./features/main_pages/not_found_page/NotFound";
 import "./App.css";
+import { singleQuestionInitialValues } from "./features/create/createQuestion/initialValues";
 
 function App() {
   const user = useSelector(selectCurrentUser);
@@ -59,7 +60,14 @@ function App() {
               path="/createCatAndQ"
               element={<CreateCatAndQMiddleware />}
             />
-            <Route path="/createQuestion" element={<CreateQuestion />} />
+            <Route
+              path="/createQuestion"
+              element={
+                <CreateQuestion
+                  formInitialValues={singleQuestionInitialValues()}
+                />
+              }
+            />
           </Route>
 
           <Route path="*" element={<NotFound />} />
