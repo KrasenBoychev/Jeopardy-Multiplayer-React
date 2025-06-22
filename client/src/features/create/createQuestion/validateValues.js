@@ -1,9 +1,9 @@
 export const gamePoints = ["5", "10", "15", "20"];
 export const correctAnswerValues = [
-  "Answer 1",
-  "Answer 2",
-  "Answer 3",
-  "Answer 4",
+  { optionValue: "answerOne", text: "Answer 1" },
+  { optionValue: "answerTwo", text: "Answer 2" },
+  { optionValue: "answerThree", text: "Answer 3" },
+  { optionValue: "answerFour", text: "Answer 4" },
 ];
 
 export function validateAllValues(
@@ -13,9 +13,11 @@ export function validateAllValues(
   categoryName,
   currentPage
 ) {
+  const copyFormValues = Object.assign({}, formValues);
+
   Object.keys(formValues).forEach((element) => {
     setNewFormValues(
-      setFormValues,
+      copyFormValues,
       element,
       formValues[`${element}`].content,
       allCategoriesNames,
@@ -24,9 +26,11 @@ export function validateAllValues(
     );
   });
 
+  setFormValues(copyFormValues);
+
   let areFormValuesValid = true;
 
-  Object.values(formValues).forEach((element) => {
+  Object.values(copyFormValues).forEach((element) => {
     if (element.error) {
       areFormValuesValid = false;
     }
@@ -36,59 +40,52 @@ export function validateAllValues(
 }
 
 export const setNewFormValues = (
-  setFormValues,
+  copyFormValues,
   elementChanged,
   newContent,
   allCategoriesNames,
   categoryName,
   currentPage
 ) => {
-  setFormValues((prev) => {
-    let newValues = Object.assign({}, prev);
-    newValues[`${elementChanged}`].content = newContent;
+  copyFormValues[`${elementChanged}`].content = newContent;
 
-    let isError;
+  let isError;
 
-    switch (elementChanged) {
-      case "category":
-        isError = checkCategoryField(
-          newContent,
-          allCategoriesNames,
-          categoryName,
-          currentPage
-        );
-        break;
-      case "points":
-        isError = checkPointsField(newContent);
-        break;
-      case "question":
-        isError = checkQuestionOrAnswerField(newContent);
-        break;
-      case "answerOne":
-        isError = checkQuestionOrAnswerField(newContent);
-        break;
-      case "answerTwo":
-        isError = checkQuestionOrAnswerField(newContent);
-        break;
-      case "answerThree":
-        isError = checkQuestionOrAnswerField(newContent);
-        break;
-      case "answerFour":
-        isError = checkQuestionOrAnswerField(newContent);
-        break;
-      case "correctAnswer":
-        isError = checkCorrectAnswerField(newContent);
-        break;
-    }
+  switch (elementChanged) {
+    case "category":
+      isError = checkCategoryField(
+        newContent,
+        allCategoriesNames,
+        categoryName,
+        currentPage
+      );
+      break;
+    case "points":
+      isError = checkPointsField(newContent);
+      break;
+    case "question":
+      isError = checkQuestionOrAnswerField(newContent);
+      break;
+    case "answerOne":
+      isError = checkQuestionOrAnswerField(newContent);
+      break;
+    case "answerTwo":
+      isError = checkQuestionOrAnswerField(newContent);
+      break;
+    case "answerThree":
+      isError = checkQuestionOrAnswerField(newContent);
+      break;
+    case "answerFour":
+      isError = checkQuestionOrAnswerField(newContent);
+      break;
+    case "correctAnswer":
+      isError = checkCorrectAnswerField(newContent);
+      break;
+  }
 
-    if (isError) {
-      newValues[`${elementChanged}`].error = true;
-    } else {
-      newValues[`${elementChanged}`].error = false;
-    }
+  copyFormValues[`${elementChanged}`].error = isError;
 
-    return newValues;
-  });
+  return copyFormValues;
 };
 
 const checkCategoryField = (
@@ -129,7 +126,8 @@ const checkQuestionOrAnswerField = (element) => {
 };
 
 const checkCorrectAnswerField = (correctAnswer) => {
-  if (!correctAnswerValues.includes(correctAnswer)) {
+  const optionValues = correctAnswerValues.map((value) => value.optionValue);
+  if (!optionValues.includes(correctAnswer)) {
     return true;
   } else {
     return false;
