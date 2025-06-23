@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "./features/authentication/authSlice";
+import { singleQuestionInitialValues } from "./features/create/createQuestion/initialValues";
 import Footer from "./components/footer/Footer";
 import {
   RequireAuthGuard,
@@ -22,7 +23,6 @@ import CreateCatAndQMiddleware from "./features/create/CreateCatAndQMiddleware";
 import CreateQuestion from "./features/create/createQuestion/CreateQuestion";
 import NotFound from "./features/main_pages/not_found_page/NotFound";
 import "./App.css";
-import { singleQuestionInitialValues } from "./features/create/createQuestion/initialValues";
 
 function App() {
   const user = useSelector(selectCurrentUser);
