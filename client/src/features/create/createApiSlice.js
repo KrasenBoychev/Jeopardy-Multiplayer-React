@@ -2,14 +2,24 @@ import { apiSlice } from "../../app/api/apiSlice";
 
 export const createApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    // register: builder.mutation({
-    //   query: (credentials) => ({
-    //     url: "/auth/register",
-    //     method: "POST",
-    //     body: { ...credentials },
-    //   }),
-    // }),
+    recordSingleQuestion: builder.mutation({
+      query: (questionDetails) => ({
+        url: "/create/singleQuestion",
+        method: "POST",
+        body: { questionDetails },
+      }),
+    }),
+    recordCategoryAndQuestions: builder.mutation({
+      query: (items) => ({
+        url: "/create/categoryAndQuestions",
+        method: "POST",
+        body: { items },
+      }),
+    }),
   }),
 });
 
-export const {} = createApiSlice;
+export const {
+  useRecordSingleQuestionMutation,
+  useRecordCategoryAndQuestionsMutation,
+} = createApiSlice;
