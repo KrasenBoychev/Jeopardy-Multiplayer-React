@@ -29,6 +29,20 @@ export default function CreateCatAndQMiddleware() {
       setTimeout(() => {
         setMoveToNextQuestion(true);
       }, 500);
+    } else if (currentPage == 5) {
+      (async () => {
+        try {
+          const items = Object.entries(createItemsAllValues);
+          await recordCategoryAndQuestions(items);
+          toast.success("Category and its questions saved successfully!");
+        } catch (err) {
+          toast.error(
+            "Category and its questions was not saved! Please try again."
+          );
+        }
+        dispatch(deleteItems());
+        navigate("/create");
+      })();
     }
   }, [currentPage]);
 
