@@ -1,42 +1,47 @@
-// const { Category } = require('../models/Category');
-// const { Question } = require('../models/Question');
+const { Category } = require("../models/Category");
+const { Question } = require("../models/Question");
 
-// async function createCategoryService(data) {
-//   const existingCategory = await Category.findOne({ name: data.name });
+async function getCategoryId(categoryName) {
+  return await Category.find({ categoryName }).distinct("_id");
+}
 
-//   if (existingCategory) {
-//     throw new Error(`${data.name} category name is already in use`);
-//   }
+async function recordCategory(categoryName) {
+  const existingCategory = await Category.findOne({ name: categoryName });
 
-//   const record = new Category({
-//     name: data.name
-//   });
+  if (existingCategory) {
+    throw new Error(`${categoryName} category name is already in use`);
+  }
 
-//   await record.save();
+  const record = new Category({
+    name: categoryName,
+  });
 
-//   return record;
-// }
+  await record.save();
 
-// async function createQuestionService(data, categoryId) {
-//   const record = new Question({
-//     name: data.name,
-//     points: Number(data.points),
-//     answers: {
-//         answerOne: data.answers.answerOne,
-//         answerTwo: data.answers.answerTwo,
-//         answerThree: data.answers.answerThree,
-//         answerFour: data.answers.answerFour,
-//     },
-//     correctAnswer: data.correctAnswer,
-//     categoryId
-//   });
+  return record;
+}
 
-//   await record.save();
+async function recordQuestion(questionDetails, categoryId) {
+  const record = new Question({
+    name: questionDetails.name,
+    points: Number(questionDetails.points),
+    answers: {
+      answerOne: questionDetails.answerOne,
+      answerTwo: questionDetails.answerTwo,
+      answerThree: questionDetails.answerThree,
+      answerFour: questionDetails.answerFour,
+    },
+    correctAnswer: questionDetails.correctAnswer,
+    categoryId,
+  });
 
-//   return record;
-// }
+  await record.save();
 
-// module.exports = {
-//   createCategoryService,
-//   createQuestionService
-// };
+  return record;
+}
+
+module.exports = {
+  getCategoryId,
+  recordCategory,
+  recordQuestion,
+};
