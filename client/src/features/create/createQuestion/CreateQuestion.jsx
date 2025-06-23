@@ -1,9 +1,12 @@
+import { useState, useNavigate } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import {
+  deleteItems,
   goToNextPage,
   goToPreviousPage,
   selectCategoryName,
@@ -18,15 +21,16 @@ import {
   validateAllValues,
 } from "./validateValues";
 import useCreateQuestion from "./useCreateQuestion";
+import {
+  useRecordCategoryAndQuestionsMutation,
+  useRecordSingleQuestionMutation,
+} from "../createApiSlice";
 import "../create.css";
-import { useState } from "react";
 
 export default function CreateQuestion({
   formInitialValues,
   setMoveToNextQuestion,
 }) {
-  console.log(formInitialValues);
-
   const [formValues, setFormValues] = useState({
     category: { content: formInitialValues.categoryName, error: false },
     points: { content: formInitialValues.points, error: false },
@@ -42,6 +46,10 @@ export default function CreateQuestion({
   const createItemsAllValues = useSelector(selectCreateItemsAllValues);
   const dispatch = useDispatch();
   const allCategoriesNames = useCreateQuestion();
+  const [recordSingleQuestion, { isLoading }] =
+    useRecordSingleQuestionMutation();
+  const [recordCategoryAndQuestions] = useRecordCategoryAndQuestionsMutation();
+  const navigate = useNavigate();
 
   const handleInput = (e) => {
     const elementChanged = e.target.id;
@@ -78,7 +86,6 @@ export default function CreateQuestion({
       return;
     }
 
-    const questionNumber = Object.keys(createItemsAllValues)[currentPage];
     const questionDetails = {
       categoryName: formValues.category.content,
       points: formValues.points.content,
@@ -87,17 +94,26 @@ export default function CreateQuestion({
       answerTwo: formValues.answerTwo.content,
       answerThree: formValues.answerThree.content,
       answerFour: formValues.answerFour.content,
-      correctAnswer: formValues.correctAnswer.content,
+      correctAnswer: formValues[`${formValues.correctAnswer.content}`].content,
     };
 
     if (currentPage == 0) {
-      // record single question
+      // add a DotSpinner to the save button
+      // try if everything works
+      try {
+        await recordSingleQuestion(questionDetails);
+        toast.success("Question saved successfully!");
+      } catch (err) {
+        toast.error("Question was not saved! Please try again.");
+      }
+      navigate("/create");
     } else if (currentPage > 0 && currentPage <= 3) {
+      const questionNumber = Object.keys(createItemsAllValues)[currentPage];
       setMoveToNextQuestion(false);
       dispatch(setQuestionDetails({ questionNumber, questionDetails }));
       dispatch(goToNextPage());
     } else if (currentPage == 4) {
-      // record cat and questions
+      dispatch(goToNextPage());
     }
   };
 
@@ -107,7 +123,7 @@ export default function CreateQuestion({
         <h2 className="text-center text-xl font-bold text-neutral-800 dark:text-neutral-200 uppercase">
           Create Question
         </h2>
-        <form className="my-8">
+        <form className="my-8" disabled={isLoading && true}>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="category">Category</Label>
             {currentPage > 0 ? (
@@ -226,9 +242,12 @@ export default function CreateQuestion({
           <button
             className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
             onClick={handleNextPageAndSubmit}
+            disabled={isLoading && true}
           >
             {currentPage == 0
-              ? "Save Question"
+              ? isLoading
+                ? ""
+                : "Save Question"
               : currentPage > 0 && currentPage <= 3
               ? "Next Page"
               : "Save Category and Questions"}

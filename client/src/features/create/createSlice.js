@@ -25,7 +25,12 @@ const createItemsSlice = createSlice({
       state.currentPage = state.currentPage - 1;
     },
     deleteItems: (state, action) => {
-      // TODO
+      state.categoryName = "";
+      state.questionOne = null;
+      state.questionTwo = null;
+      state.questionThree = null;
+      state.questionFour = null;
+      state.currentPage = 0;
     },
   },
 });
