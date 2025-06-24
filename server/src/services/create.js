@@ -2,7 +2,7 @@ const { Category } = require("../models/Category");
 const { Question } = require("../models/Question");
 
 async function getCategoryId(categoryName) {
-  return await Category.find({ categoryName }).distinct("_id");
+  return await Category.find({ name: categoryName }).distinct("_id");
 }
 
 async function recordCategory(categoryName) {
@@ -23,7 +23,7 @@ async function recordCategory(categoryName) {
 
 async function recordQuestion(questionDetails, categoryId) {
   const record = new Question({
-    name: questionDetails.name,
+    name: questionDetails.questionName,
     points: Number(questionDetails.points),
     answers: {
       answerOne: questionDetails.answerOne,
@@ -31,7 +31,7 @@ async function recordQuestion(questionDetails, categoryId) {
       answerThree: questionDetails.answerThree,
       answerFour: questionDetails.answerFour,
     },
-    correctAnswer: questionDetails.correctAnswer,
+    correctAnswer: questionDetails[`${questionDetails.correctAnswer}`],
     categoryId,
   });
 
