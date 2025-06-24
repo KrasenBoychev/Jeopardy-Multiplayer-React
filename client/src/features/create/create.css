@@ -29,8 +29,9 @@
 
 .create-container section p:hover {
     cursor: pointer;
-    border: 3px solid var(--chart-1);
+    background-color: var(--chart-3);
 }
+
 .category-select {
     width: 100%;
     text-align: center;
