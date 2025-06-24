@@ -2,14 +2,14 @@ import { gamePoints } from "./validateValues";
 
 export const singleQuestionInitialValues = () => {
   return {
-    categoryName: null,
-    points: null,
+    categoryName: "",
+    points: "",
     questionName: "",
     answerOne: "",
     answerTwo: "",
     answerThree: "",
     answerFour: "",
-    correctAnswer: null,
+    correctAnswer: "",
   };
 };
 
