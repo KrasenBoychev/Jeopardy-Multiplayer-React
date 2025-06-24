@@ -1,7 +1,5 @@
 - Complete the Create Components
-   - category name should show when "Previous Page" is clicked
-   - complete the server requests when a question or cat and questions must be recorded
-
+   - when goes to Previous Page ask to save the current details
 - Check for all folders what needs to be deleted
 --------------------------------------------------------------------------------------
 
