@@ -16,6 +16,7 @@ createRouter.post("/singleQuestion", isAdmin(), async (req, res) => {
     const categoryId = await getCategoryId(
       req.body.questionDetails.categoryName
     );
+
     const result = await recordQuestion(req.body.questionDetails, categoryId);
     res.json(result);
   } catch (err) {
@@ -26,12 +27,13 @@ createRouter.post("/singleQuestion", isAdmin(), async (req, res) => {
 
 createRouter.post("/categoryAndQuestions", isAdmin(), async (req, res) => {
   try {
-    const items = req.body;
-    const createCategory = await recordCategory(items.categoryName);
+    const items = req.body.items;
+    const categoryName = items[0][1];
+    const createCategory = await recordCategory(categoryName);
 
     let result;
     for (let i = 1; i <= 4; i++) {
-      result = await recordQuestion(items[i], createCategory._id);
+      result = await recordQuestion(items[i][1], createCategory._id);
     }
     res.json(result);
   } catch (err) {
