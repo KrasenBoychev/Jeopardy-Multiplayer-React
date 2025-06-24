@@ -1,4 +1,5 @@
-import { useState, useNavigate } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { cn } from "@/lib/utils";
@@ -48,7 +49,6 @@ export default function CreateQuestion({
   const allCategoriesNames = useCreateQuestion();
   const [recordSingleQuestion, { isLoading }] =
     useRecordSingleQuestionMutation();
-  const [recordCategoryAndQuestions] = useRecordCategoryAndQuestionsMutation();
   const navigate = useNavigate();
 
   const handleInput = (e) => {
@@ -94,25 +94,25 @@ export default function CreateQuestion({
       answerTwo: formValues.answerTwo.content,
       answerThree: formValues.answerThree.content,
       answerFour: formValues.answerFour.content,
-      correctAnswer: formValues[`${formValues.correctAnswer.content}`].content,
+      correctAnswer: formValues.correctAnswer.content,
     };
 
     if (currentPage == 0) {
       // add a DotSpinner to the save button
       // try if everything works
-      try {
-        await recordSingleQuestion(questionDetails);
-        toast.success("Question saved successfully!");
-      } catch (err) {
-        toast.error("Question was not saved! Please try again.");
-      }
-      navigate("/create");
-    } else if (currentPage > 0 && currentPage <= 3) {
+      setTimeout(async () => {
+        try {
+          await recordSingleQuestion(questionDetails);
+          toast.success("Question saved successfully!");
+        } catch (err) {
+          toast.error("Question was not saved! Please try again.");
+        }
+        navigate("/create");
+      }, 5000);
+    } else if (currentPage > 0 && currentPage <= 4) {
       const questionNumber = Object.keys(createItemsAllValues)[currentPage];
       setMoveToNextQuestion(false);
       dispatch(setQuestionDetails({ questionNumber, questionDetails }));
-      dispatch(goToNextPage());
-    } else if (currentPage == 4) {
       dispatch(goToNextPage());
     }
   };
@@ -123,7 +123,7 @@ export default function CreateQuestion({
         <h2 className="text-center text-xl font-bold text-neutral-800 dark:text-neutral-200 uppercase">
           Create Question
         </h2>
-        <form className="my-8" disabled={isLoading && true}>
+        <form className="my-8">
           <LabelInputContainer className="mb-4">
             <Label htmlFor="category">Category</Label>
             {currentPage > 0 ? (
@@ -132,13 +132,13 @@ export default function CreateQuestion({
                 type="text"
                 className="uppercase"
                 disabled
-                value={formValues?.category?.content}
+                value={formValues.category.content}
               />
             ) : (
               <Select
                 name="category"
                 id="category"
-                className={formValues.category?.error == true && "false"}
+                className={formValues.category.error == true && "false"}
                 optionsArray={allCategoriesNames}
                 onChange={handleInput}
               />
@@ -231,7 +231,7 @@ export default function CreateQuestion({
         <div className={`mt-10 ${currentPage > 0 && "flex gap-10"}`}>
           {currentPage > 0 && (
             <button
-              className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+              className="group/btn relative block h-10 w-full rounded-md cursor-pointer bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
               onClick={handlePreviousPage}
             >
               Previous Page
@@ -240,9 +240,9 @@ export default function CreateQuestion({
           )}
 
           <button
-            className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+            className="group/btn relative block h-10 w-full rounded-md cursor-pointer bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
             onClick={handleNextPageAndSubmit}
-            disabled={isLoading && true}
+            disabled={isLoading ? true : false}
           >
             {currentPage == 0
               ? isLoading

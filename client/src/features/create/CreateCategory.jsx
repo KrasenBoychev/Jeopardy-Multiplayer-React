@@ -1,6 +1,7 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   goToNextPage,
+  selectCategoryName,
   setCategoryName,
 } from "./createSlice";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
@@ -8,6 +9,7 @@ import { useState } from "react";
 
 export default function CreateCategory() {
   const [categoryNameValue, setCategoryNameValue] = useState("");
+  const categoryName = useSelector(selectCategoryName);
   const dispatch = useDispatch();
 
   const placeholders = ["What will be the new category called?"];
@@ -37,6 +39,7 @@ export default function CreateCategory() {
         placeholders={placeholders}
         onChange={handleChange}
         onSubmit={onSubmit}
+        initialValue={categoryName}
       />
     </div>
   );

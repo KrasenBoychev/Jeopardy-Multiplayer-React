@@ -1,5 +1,6 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  deleteItems,
   selectCategoryName,
   selectCreateItemsAllValues,
   selectCurrentPage,
@@ -8,6 +9,9 @@ import CreateCategory from "./CreateCategory";
 import CreateQuestion from "./createQuestion/CreateQuestion";
 import { useEffect, useState } from "react";
 import { multipleQuestionsInitialValues } from "./createQuestion/initialValues";
+import { useRecordCategoryAndQuestionsMutation } from "./createApiSlice";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateCatAndQMiddleware() {
   const [formInitialValues, setFormInitialValues] = useState({});
@@ -15,6 +19,9 @@ export default function CreateCatAndQMiddleware() {
   const currentPage = useSelector(selectCurrentPage);
   const createItemsAllValues = useSelector(selectCreateItemsAllValues);
   const categoryName = useSelector(selectCategoryName);
+  const [recordCategoryAndQuestions] = useRecordCategoryAndQuestionsMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (currentPage > 0 && currentPage <= 4) {
@@ -28,7 +35,7 @@ export default function CreateCatAndQMiddleware() {
 
       setTimeout(() => {
         setMoveToNextQuestion(true);
-      }, 500);
+      }, 200);
     } else if (currentPage == 5) {
       (async () => {
         try {
@@ -49,13 +56,17 @@ export default function CreateCatAndQMiddleware() {
   return (
     <>
       {currentPage == 0 && <CreateCategory />}
-      {currentPage > 0 && currentPage <= 4 && moveToNextQuestion ? (
-        <CreateQuestion
-          formInitialValues={formInitialValues}
-          setMoveToNextQuestion={setMoveToNextQuestion}
-        />
+      {currentPage > 0 && currentPage <= 4 ? (
+        moveToNextQuestion ? (
+          <CreateQuestion
+            formInitialValues={formInitialValues}
+            setMoveToNextQuestion={setMoveToNextQuestion}
+          />
+        ) : (
+          "Loading..."
+        ) // DotLoader
       ) : (
-        "Loading..." // DotLoader
+        ""
       )}
       {currentPage == 5 && "Result Component with Dot Loader"}
       {/* import DotLoader from "react-spinners/DotLoader"; */}
