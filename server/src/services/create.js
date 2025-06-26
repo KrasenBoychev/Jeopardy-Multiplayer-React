@@ -5,13 +5,12 @@ async function getCategoryId(categoryName) {
   return await Category.find({ name: categoryName }).distinct("_id");
 }
 
-async function recordCategory(categoryName) {
+async function checkCategory(categoryName) {
   const existingCategory = await Category.findOne({ name: categoryName });
+  return existingCategory;
+}
 
-  if (existingCategory) {
-    throw new Error(`${categoryName} category name is already in use`);
-  }
-
+async function recordCategory(categoryName) {
   const record = new Category({
     name: categoryName,
   });
@@ -19,6 +18,11 @@ async function recordCategory(categoryName) {
   await record.save();
 
   return record;
+}
+
+async function checkQuestion(questionName) {
+  const existingQuestion = await Question.findOne({ name: questionName });
+  return existingQuestion;
 }
 
 async function recordQuestion(questionDetails, categoryId) {
@@ -42,6 +46,8 @@ async function recordQuestion(questionDetails, categoryId) {
 
 module.exports = {
   getCategoryId,
+  checkCategory,
+  checkQuestion,
   recordCategory,
   recordQuestion,
 };
