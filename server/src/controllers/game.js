@@ -1,11 +1,9 @@
 const { Router } = require("express");
-const { body, validationResult } = require("express-validator");
 const { isUser } = require("../middlewares/guards");
 const { parseError } = require("../util");
 
 const {
   getAllCategories,
-  //   getCategory,
   getQuestion,
   updatePoints,
 } = require("../services/game");
@@ -21,16 +19,6 @@ gameRouter.get("/allCategories", async (req, res) => {
     res.status(400).json({ code: 400, message: parsed.message });
   }
 });
-
-// gameRouter.get("/category/:categoryName", async (req, res) => {
-//   try {
-//     const data = await getCategory(req.params.categoryName);
-//     res.json(data);
-//   } catch (err) {
-//     const parsed = parseError(err);
-//     res.status(400).json({ code: 400, message: parsed.message });
-//   }
-// });
 
 gameRouter.post("/questions", async (req, res) => {
   const allQuestions = [];
