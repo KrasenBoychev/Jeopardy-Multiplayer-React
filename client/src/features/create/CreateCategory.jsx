@@ -1,30 +1,47 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
 import {
+  deleteItems,
   goToNextPage,
   selectCategoryName,
   setCategoryName,
 } from "./createSlice";
+import { useCheckIfCategoryExistsMutation } from "./createApiSlice";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
-import { useState } from "react";
 
 export default function CreateCategory() {
   const [categoryNameValue, setCategoryNameValue] = useState("");
   const categoryName = useSelector(selectCategoryName);
+  const [checkIfCategoryExists] = useCheckIfCategoryExistsMutation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const placeholders = ["What will be the new category called?"];
 
   const handleChange = (e) => {
     setCategoryNameValue(e.target.value);
   };
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     if (categoryNameValue.trim() == "") {
       return;
     }
 
-    // Check if this category exists - if yes show error msg
+    try {
+      const response = await checkIfCategoryExists(categoryNameValue.trim());
+
+      if (response.data) {
+        toast.error(categoryNameValue + " already exists");
+        return;
+      }
+    } catch (err) {
+      toast.error("Something went wrong! Please refresh the page.");
+      dispatch(deleteItems());
+      navigate("/create");
+    }
 
     dispatch(setCategoryName(categoryNameValue.trim()));
     dispatch(goToNextPage());
