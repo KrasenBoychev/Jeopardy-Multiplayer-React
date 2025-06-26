@@ -9,10 +9,8 @@ export default function Notifications() {
 
   const {
     data: notifications,
-    isLoading,
     isSuccess,
     isError,
-    error,
   } = useGetNotificationsQuery("getNotifications", {
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true,
@@ -23,6 +21,7 @@ export default function Notifications() {
       <NotificationsHeader
         notificationsProps={{
           isSuccess,
+          isError,
           notifications,
           notificationsOpened,
           setNotificationsOpened,
@@ -32,6 +31,7 @@ export default function Notifications() {
         <NotificationsBody
           notificationsProps={{
             isSuccess,
+            isError,
             notifications,
             setNotificationsOpened,
           }}

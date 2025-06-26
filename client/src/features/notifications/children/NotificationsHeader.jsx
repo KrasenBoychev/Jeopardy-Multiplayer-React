@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 export default function NotificationsHeader({ notificationsProps }) {
   const {
     isSuccess,
+    isError,
     notifications,
     notificationsOpened,
     setNotificationsOpened,
@@ -32,8 +33,10 @@ export default function NotificationsHeader({ notificationsProps }) {
         }
         onClick={openNotifications}
       >
-        {/* <i className="fa-solid fa-message"></i> */}
-        <p>{notifications?.length}</p>
+        <p>
+          {isSuccess && notifications?.length}
+          {isError && "!"}
+        </p>
       </div>
     );
   }
