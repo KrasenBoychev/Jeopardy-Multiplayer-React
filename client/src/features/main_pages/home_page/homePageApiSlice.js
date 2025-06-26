@@ -2,13 +2,10 @@ import { apiSlice } from "../../../app/api/apiSlice";
 
 export const homePageApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getTopPlayers: builder.mutation({
-      query: () => ({
-        url: "/users/topPlayers",
-        method: "GET",
-      }),
+    getTopPlayers: builder.query({
+      query: () => "/users/topPlayers",
     }),
   }),
 });
 
-export const { useGetTopPlayersMutation } = homePageApiSlice;
+export const { useGetTopPlayersQuery } = homePageApiSlice;
