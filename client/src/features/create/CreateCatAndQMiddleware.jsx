@@ -1,77 +1,63 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { DotLoader } from "react-spinners";
 import {
   deleteItems,
-  selectCategoryName,
   selectCreateItemsAllValues,
   selectCurrentPage,
 } from "./createSlice";
+import { useRecordCategoryAndQuestionsMutation } from "./createApiSlice";
 import CreateCategory from "./CreateCategory";
 import CreateQuestion from "./createQuestion/CreateQuestion";
-import { useEffect, useState } from "react";
-import { multipleQuestionsInitialValues } from "./createQuestion/initialValues";
-import { useRecordCategoryAndQuestionsMutation } from "./createApiSlice";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
 export default function CreateCatAndQMiddleware() {
-  const [formInitialValues, setFormInitialValues] = useState({});
-  const [moveToNextQuestion, setMoveToNextQuestion] = useState(false);
+  const [errorCurrPage, setErrorCurrPage] = useState(false);
   const currentPage = useSelector(selectCurrentPage);
   const createItemsAllValues = useSelector(selectCreateItemsAllValues);
-  const categoryName = useSelector(selectCategoryName);
   const [recordCategoryAndQuestions] = useRecordCategoryAndQuestionsMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (currentPage > 0 && currentPage <= 4) {
-      setFormInitialValues(
-        multipleQuestionsInitialValues(
-          createItemsAllValues,
-          currentPage,
-          categoryName
-        )
-      );
+    if (errorCurrPage) {
+      toast.error("Something went wrong! Refresh the page and try again.");
+      dispatch(deleteItems());
+      navigate("/create");
+    }
 
-      setTimeout(() => {
-        setMoveToNextQuestion(true);
-      }, 200);
-    } else if (currentPage == 5) {
+    if (currentPage == 5) {
       (async () => {
         try {
           const items = Object.entries(createItemsAllValues);
-          await recordCategoryAndQuestions(items);
-          toast.success("Category and its questions saved successfully!");
+          const result = await recordCategoryAndQuestions(items);
+
+          if (result.error) {
+            toast.error("Saving failed! Refresh the page and try again.");
+          } else {
+            toast.success("Saved successfully!");
+          }
         } catch (err) {
-          toast.error(
-            "Category and its questions was not saved! Please try again."
-          );
+          toast.error("Saving failed! Refresh the page and try again.");
         }
+
         dispatch(deleteItems());
         navigate("/create");
       })();
     }
-  }, [currentPage]);
+  }, [errorCurrPage, currentPage]);
 
   return (
     <>
       {currentPage == 0 && <CreateCategory />}
-      {currentPage > 0 && currentPage <= 4 ? (
-        moveToNextQuestion ? (
-          <CreateQuestion
-            formInitialValues={formInitialValues}
-            setMoveToNextQuestion={setMoveToNextQuestion}
-          />
-        ) : (
-          "Loading..."
-        ) // DotLoader
-      ) : (
-        ""
+      {currentPage > 0 && currentPage <= 4 && <CreateQuestion />}
+      {currentPage == 5 && (
+        <div className="grow-1 self-center">
+          <DotLoader className="mx-auto" />
+        </div>
       )}
-      {currentPage == 5 && "Result Component with Dot Loader"}
-      {/* import DotLoader from "react-spinners/DotLoader"; */}
-      {(currentPage < 0 || currentPage > 5) &&
-        "Error Component - delete redux values and navigate"}
+      {(currentPage < 0 || currentPage > 5) && setErrorCurrPage(true)}
     </>
   );
 }
