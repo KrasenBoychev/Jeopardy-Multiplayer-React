@@ -64,7 +64,7 @@ export function LoginForm() {
     }
   };
   return (
-    <div className="flex-column self-center bg-black">
+    <div className="flex-column content-center bg-black">
       <div className="shadow-input m-auto w-full max-w-md mt-25 mb-10 rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
         <h2 className="text-center text-xl font-bold text-neutral-800 dark:text-neutral-200">
           {isLoading ? "Logging in...." : "Welcome to the Jeopardy World"}
