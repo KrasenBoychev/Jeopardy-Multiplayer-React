@@ -1,5 +1,5 @@
 Now:
-- Check for all folders what needs to be deleted
+   - finish the Notifications Btns and Socket components rendering logic based on RTK queries hooks
 --------------------------------------------------------------------------------------
 Later:
 1. Redux management system:
