@@ -1,18 +1,19 @@
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCredentials, selectCurrentUser } from "./authSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { DotLoader } from "react-spinners";
+import { deleteCredentials, selectCurrentUser } from "./authSlice";
 import { useLogOutMutation } from "./authApiSlice";
 import { useChangeOnlineStatusMutation } from "../socket_connection/socketApiSlice";
 import { useGetOnlineFriendsMutation } from "../game/01. play_page/friends_list/friendsApiSlice";
 
 export default function Logout({ socket }) {
   const user = useSelector(selectCurrentUser);
-  const dispatch = useDispatch();
-  const [logOut, { isLoading }] = useLogOutMutation();
+  const [logOut, { isSuccess }] = useLogOutMutation();
   const [changeOnlineStatus] = useChangeOnlineStatusMutation();
   const [getOnlineFriends] = useGetOnlineFriendsMutation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     (async function logout() {
@@ -37,10 +38,20 @@ export default function Logout({ socket }) {
         await logOut();
         dispatch(deleteCredentials());
       } catch (err) {
-        toast.error("Logout Failed");
+        toast.error("Logout Failed. Please refresh the page");
       }
     })();
   }, []);
 
-  return <Navigate to="/" />;
+  return (
+    <>
+      {!isSuccess ? (
+        <div className="grow-1 self-center">
+          <DotLoader className="mx-auto" />
+        </div>
+      ) : (
+        <Navigate to="/" />
+      )}
+    </>
+  );
 }
