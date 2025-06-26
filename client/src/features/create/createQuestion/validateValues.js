@@ -133,3 +133,19 @@ const checkCorrectAnswerField = (correctAnswer) => {
     return false;
   }
 };
+
+export const checkQuestionNames = (
+  questionName,
+  createItemsAllValues,
+  currentPage
+) => {
+  const questionsNames = Object.values(createItemsAllValues)
+    .slice(1, currentPage)
+    .map((question) => question.questionName);
+
+  if (questionsNames.includes(questionName)) {
+    return { result: true, error: `${questionName} already exists` };
+  } else {
+    return { result: false };
+  }
+};
