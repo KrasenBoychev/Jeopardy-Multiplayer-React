@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { DotLoader } from "react-spinners";
 import {
   deleteItems,
   selectCreateItemsAllValues,
@@ -11,6 +10,7 @@ import {
 import { useRecordCategoryAndQuestionsMutation } from "./createApiSlice";
 import CreateCategory from "./CreateCategory";
 import CreateQuestion from "./createQuestion/CreateQuestion";
+import Loader from "../../components/Loader";
 
 export default function CreateCatAndQMiddleware() {
   const [errorCurrPage, setErrorCurrPage] = useState(false);
@@ -52,11 +52,7 @@ export default function CreateCatAndQMiddleware() {
     <>
       {currentPage == 0 && <CreateCategory />}
       {currentPage > 0 && currentPage <= 4 && <CreateQuestion />}
-      {currentPage == 5 && (
-        <div className="grow-1 self-center">
-          <DotLoader className="mx-auto" />
-        </div>
-      )}
+      {currentPage == 5 && <Loader />}
       {(currentPage < 0 || currentPage > 5) && setErrorCurrPage(true)}
     </>
   );

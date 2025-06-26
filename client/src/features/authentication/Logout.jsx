@@ -1,12 +1,12 @@
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
-import { DotLoader } from "react-spinners";
 import { deleteCredentials, selectCurrentUser } from "./authSlice";
 import { useLogOutMutation } from "./authApiSlice";
 import { useChangeOnlineStatusMutation } from "../socket_connection/socketApiSlice";
 import { useGetOnlineFriendsMutation } from "../game/01. play_page/friends_list/friendsApiSlice";
+import Loader from "../../components/Loader";
 
 export default function Logout({ socket }) {
   const user = useSelector(selectCurrentUser);
@@ -43,15 +43,5 @@ export default function Logout({ socket }) {
     })();
   }, []);
 
-  return (
-    <>
-      {!isSuccess ? (
-        <div className="grow-1 self-center">
-          <DotLoader className="mx-auto" />
-        </div>
-      ) : (
-        <Navigate to="/" />
-      )}
-    </>
-  );
+  return <>{!isSuccess ? <Loader /> : <Navigate to="/" />}</>;
 }
