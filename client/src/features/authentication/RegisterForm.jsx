@@ -85,7 +85,7 @@ export function RegisterForm() {
         toast.error("Missing Username or Password");
       } else if (err.status === 401) {
         toast.error("Unauthorized");
-      } else if (err.status === 403) {    
+      } else if (err.status === 403) {
         toast.error(err.data.message);
       } else {
         toast.error("Register Failed");
@@ -96,7 +96,7 @@ export function RegisterForm() {
     <div className="flex-column self-center bg-black">
       <div className="shadow-input m-auto w-full max-w-md mt-25 mb-10 rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
         <h2 className="text-center text-xl font-bold text-neutral-800 dark:text-neutral-200">
-          {isLoading ? "Loading...." : "Welcome to the Jeopardy World"}
+          {isLoading ? "Registering...." : "Welcome to the Jeopardy World"}
         </h2>
         <form className="mt-8" onSubmit={handleSubmit}>
           <LabelInputContainer className="mb-4">
@@ -146,6 +146,7 @@ export function RegisterForm() {
           <button
             className="group/btn relative block h-10 w-full cursor-pointer rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
             type="submit"
+            disabled={isLoading ? true : false}
           >
             Register &rarr;
             <BottomGradient />
