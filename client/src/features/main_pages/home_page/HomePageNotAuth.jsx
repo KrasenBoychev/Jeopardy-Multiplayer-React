@@ -34,14 +34,7 @@ export function HomePageNotAuth() {
           </div>
         )}
 
-        {user && (
-          <>
-            <h3 className="text-green-500 text-sm md:text-3xl max-w-xl mt-11 text-center font-bold uppercase">
-              Leaderboard
-            </h3>
-            <TopPlayers />
-          </>
-        )}
+        {user && <TopPlayers />}
       </Vortex>
     </div>
   );
