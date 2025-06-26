@@ -1,4 +1,4 @@
-const { Schema, model, Types } = require('mongoose');
+const { Schema, model, Types } = require("mongoose");
 
 const QuestionSchema = new Schema({
   name: {
@@ -34,11 +34,11 @@ const QuestionSchema = new Schema({
   },
   categoryId: {
     type: Types.ObjectId,
-    ref: 'Category',
+    ref: "Category",
   },
 });
 
-const Question = model('questions', QuestionSchema);
+const Question = model("questions", QuestionSchema);
 Question.createIndexes();
 
 module.exports = { Question };
