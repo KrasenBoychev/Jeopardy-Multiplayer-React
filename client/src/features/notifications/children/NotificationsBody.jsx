@@ -1,15 +1,19 @@
+import { useRef } from "react";
+import { useOutsideClick } from "../../../hooks/use-outside-click";
+import { notifTypes } from "../notificationsType";
 import AcceptNotification from "../buttons/AcceptNotification";
 import ReadNotification from "../buttons/ReadNotification";
 import RejectNotification from "../buttons/RejectNotification";
-import { notifTypes } from "../notificationsType";
 
 export default function NotificationsBody({ notificationsProps }) {
   const { isSuccess, notifications } = notificationsProps;
+  const ref = useRef();
+  useOutsideClick(ref, () => notificationsProps.setNotificationsOpened(false));
 
   let content;
   if (isSuccess) {
     content = (
-      <div className="notifications_box_container">
+      <div className="notifications_box_container" ref={ref}>
         {notifications.length > 0 ? (
           <ul>
             {notifications.map((notification) => {

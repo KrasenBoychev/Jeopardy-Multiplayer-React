@@ -33,6 +33,7 @@ export default function Notifications() {
           notificationsProps={{
             isSuccess,
             notifications,
+            setNotificationsOpened,
           }}
         />
       )}
