@@ -75,6 +75,7 @@ export function RegisterForm() {
         password: passwordRef.current.value,
       }).unwrap();
 
+      localStorage.setItem("auth", JSON.stringify(userData));
       dispatch(setCredentials(userData));
       navigate("/");
     } catch (err) {

@@ -35,6 +35,7 @@ export default function Logout({ socket }) {
 
         await changeOnlineStatus({ username: user.username, socketId: "" });
 
+        localStorage.removeItem("auth");
         await logOut();
         dispatch(deleteCredentials());
       } catch (err) {

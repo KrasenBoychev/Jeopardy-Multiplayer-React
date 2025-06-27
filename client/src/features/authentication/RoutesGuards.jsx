@@ -28,6 +28,7 @@ export function NoAuthGuard() {
 export function AdminGuard() {
   const token = useSelector(selectCurrentToken);
   const user = useSelector(selectCurrentUser);
+  const location = useLocation();
 
   return token && user.userId == adminId ? (
     <Outlet />
