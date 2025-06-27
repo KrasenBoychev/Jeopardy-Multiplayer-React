@@ -5,7 +5,7 @@ import {
 } from "../notificationsApiSlice";
 
 export default function ReadNotification({ notification }) {
-  const [removeNotification] = useRemoveNotificationMutation();
+  const [removeNotification, { isLoading }] = useRemoveNotificationMutation();
   const { refetch } = useGetNotificationsQuery("getNotifications");
 
   const readNotificationClickHandler = async () => {
@@ -24,6 +24,7 @@ export default function ReadNotification({ notification }) {
     <button
       className="notification_btn_read"
       onClick={readNotificationClickHandler}
+      disabled={isLoading ? true : false}
     >
       Mark as read
     </button>

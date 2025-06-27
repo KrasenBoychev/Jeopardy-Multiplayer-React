@@ -10,7 +10,6 @@ import {
   updateQuestionChosen,
 } from "../../game/04. questions/questionsSlice";
 import {
-  deleteAnswerDetails,
   setAnswerChosen,
   updateIsAnswerCorrect,
 } from "../../game/05. answers/answerSlice";

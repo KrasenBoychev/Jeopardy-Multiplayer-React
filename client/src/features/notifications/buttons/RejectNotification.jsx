@@ -6,7 +6,7 @@ import { useGetNotificationsQuery } from "../notificationsApiSlice";
 
 export default function RejectNotification({ notification }) {
   const dispatch = useDispatch();
-  const [sendFriendRes] = useSendFriendResMutation();
+  const [sendFriendRes, { isLoading }] = useSendFriendResMutation();
   const { refetch } = useGetNotificationsQuery("getNotifications");
 
   const rejectNotificationClickHandler = async () => {
@@ -44,6 +44,7 @@ export default function RejectNotification({ notification }) {
     <button
       className="notification_btn_reject"
       onClick={rejectNotificationClickHandler}
+      disabled={isLoading ? true : false}
     >
       Reject
     </button>

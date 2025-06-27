@@ -2,14 +2,17 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useSendFriendResMutation } from "../../game/01. play_page/friends_list/friendsApiSlice";
 import { setSocketReq } from "../../socket_connection/socketSlice";
-import { selectCurrentUser, updateFriendsList } from "../../authentication/authSlice";
+import {
+  selectCurrentUser,
+  updateFriendsList,
+} from "../../authentication/authSlice";
 import { addNewFriend } from "../../game/01. play_page/friends_list/friendsSlice";
 import { useGetNotificationsQuery } from "../notificationsApiSlice";
 
 export default function AcceptNotification({ notification }) {
   const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
-  const [sendFriendRes] = useSendFriendResMutation();
+  const [sendFriendRes, { isLoading }] = useSendFriendResMutation();
   const { refetch } = useGetNotificationsQuery("getNotifications");
 
   const acceptNotificationClickHandler = async () => {
@@ -41,9 +44,9 @@ export default function AcceptNotification({ notification }) {
             })
           );
         }
-      
+
         dispatch(addNewFriend(friendDetails));
-        dispatch(updateFriendsList(friendUsername))
+        dispatch(updateFriendsList(friendUsername));
       }
 
       refetch();
@@ -57,6 +60,7 @@ export default function AcceptNotification({ notification }) {
     <button
       className="notification_btn_accept"
       onClick={acceptNotificationClickHandler}
+      disabled={isLoading ? true : false}
     >
       Accept
     </button>
