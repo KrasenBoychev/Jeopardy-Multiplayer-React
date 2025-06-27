@@ -44,11 +44,13 @@ export default function PlayPage() {
           changeGameInProgress,
           dispatch
         );
+
         const [firstPlayerDetails, secondPlayerDetails] = setPlayersDetails(
           user,
           rivalPlayer,
           dispatch
         );
+
         setDataToOtherPlayer(
           firstPlayerDetails,
           secondPlayerDetails,

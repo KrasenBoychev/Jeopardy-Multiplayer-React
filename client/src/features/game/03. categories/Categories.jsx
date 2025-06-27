@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
 import { useGetQuestionsMutation } from "../gameApiSlice";
 import {
   selectCategories,
@@ -41,22 +42,29 @@ export default function Categories() {
           categoriesIDs.push(findCategory._id);
         });
 
-        const selectedQuestions = await getQuestions(categoriesIDs);
-        const transfromQuestions = selectedQuestions.data.map((question) => ({
-          ...question,
-          answered: false,
-        }));
+        try {
+          const selectedQuestions = await getQuestions(categoriesIDs);
+          const transformQuestions = selectedQuestions.data.map((question) => ({
+            ...question,
+            answered: false,
+          }));
 
-        dispatch(setQuestions(transfromQuestions));
-        dispatch(
-          setSocketReq({
-            socketReqName: "sendQuestionsSelected",
-            socketData: {
-              receiverSocketId: rivalPlayer.socketId,
-              questionsSelected: transfromQuestions,
-            },
-          })
-        );
+          dispatch(setQuestions(transformQuestions));
+          dispatch(
+            setSocketReq({
+              socketReqName: "sendQuestionsSelected",
+              socketData: {
+                receiverSocketId: rivalPlayer.socketId,
+                questionsSelected: transformQuestions,
+              },
+            })
+          );
+        } catch (err) {
+          toast.error(
+            "Connecting to the server failed! Please refresh the page."
+          );
+          console.log(err.message);
+        }
       }
     })();
   }, [categoriesCount]);

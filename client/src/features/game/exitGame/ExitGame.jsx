@@ -18,7 +18,12 @@ export default function ExitGame() {
   useEffect(() => {
     if (isGameLeft) {
       (async () => {
-        exitGameFunc(user, dispatch, getOnlineFriends, changeGameInProgress);
+        await exitGameFunc(
+          user,
+          dispatch,
+          getOnlineFriends,
+          changeGameInProgress
+        );
       })();
     }
   }, [isGameLeft]);

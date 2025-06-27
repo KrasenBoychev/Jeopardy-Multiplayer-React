@@ -12,7 +12,8 @@ export default function FriendsList() {
   const user = useSelector(selectCurrentUser);
   const friends = useSelector(selectFriends);
   const gameReqSentBy = useSelector(selectGameReqSentBy);
-  const [getFriendsDetails, { isLoading }] = useGetFriendsDetailsMutation();
+  const [getFriendsDetails, { isLoading, isSuccess, isError }] =
+    useGetFriendsDetailsMutation();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,7 +32,8 @@ export default function FriendsList() {
   return (
     <div className="friends_list_wrapper">
       <h3>Friends List</h3>
-      {friends.length > 0 ? (
+      {isLoading && <p>Loading friends status...</p>}
+      {isSuccess && friends.length > 0 && (
         <ul>
           {friends.map((friend) => {
             return (
@@ -61,9 +63,11 @@ export default function FriendsList() {
             );
           })}
         </ul>
-      ) : (
+      )}
+      {isSuccess && friends.length == 0 && (
         <p>Invite friends and earn points!</p>
       )}
+      {isError && <p>Can't load friends list!</p>}
       <AddFriendBtn />
     </div>
   );

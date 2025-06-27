@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { selectQuestionChosen, selectQuestions } from "./questionsSlice";
 import { selectCurrentUser } from "../../authentication/authSlice";
 import { selectFirstPlayer, selectSecondPlayer } from "../playersSlice";
@@ -35,15 +36,22 @@ export default function QuestionsMiddleware() {
         if (areAllQuestionsAnswered) {
           setIsLoadingResult(true);
 
-          if (user.username == firstPlayer.username) {
-            await recordPlayerPoints(firstPlayer.earnedPoints);
-          } else {
-            await recordPlayerPoints(secondPlayer.earnedPoints);
-          }
+          try {
+            if (user.username == firstPlayer.username) {
+              await recordPlayerPoints(firstPlayer.earnedPoints);
+            } else {
+              await recordPlayerPoints(secondPlayer.earnedPoints);
+            }
 
-          setTimeout(() => {
-            setIsGameFinished(true);
-          }, 2000);
+            setTimeout(() => {
+              setIsGameFinished(true);
+            }, 2000);
+          } catch (err) {
+            toast.error(
+              "Connecting to the server failed! Please refresh the page."
+            );
+            console.log(err.message);
+          }
         }
       }
     })();

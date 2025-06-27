@@ -29,8 +29,6 @@ export async function setGameInProgress(
   } catch (err) {
     toast.error("Cannot start new game");
     console.log(err.message);
-
-    //isNewGameStarted false and send socket req to let the other player
   }
 }
 
@@ -98,7 +96,7 @@ export async function setDataToOtherPlayer(
       })
     );
   } catch (err) {
-    toast.error("Cannot get categories");
+    toast.error("Starting the game failed! Refresh the page and try again.");
     console.log(err.message);
   }
 }

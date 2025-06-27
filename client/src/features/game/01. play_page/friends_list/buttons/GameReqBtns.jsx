@@ -13,10 +13,18 @@ import { setGameInProgress } from "../../game_room/setGameFunc";
 export default function GameReqBtns({ friendUsername }) {
   const user = useSelector(selectCurrentUser);
   const friends = useSelector(selectFriends);
-  const [changeGameInProgress] = useChangeGameInProgressMutation();
+  const [changeGameInProgress, { isLoading }] =
+    useChangeGameInProgressMutation();
   const dispatch = useDispatch();
 
   const acceptGameReqClickHandler = async () => {
+    await setGameInProgress(
+      user.username,
+      friends,
+      changeGameInProgress,
+      dispatch
+    );
+
     const findFriend = friends.find(
       (friend) => friend.username == friendUsername
     );
@@ -27,13 +35,6 @@ export default function GameReqBtns({ friendUsername }) {
         socketId: findFriend.socketId,
         updateType: "add",
       })
-    );
-
-    await setGameInProgress(
-      user.username,
-      friends,
-      changeGameInProgress,
-      dispatch
     );
 
     dispatch(
@@ -73,14 +74,20 @@ export default function GameReqBtns({ friendUsername }) {
 
   return (
     <span className="friend_game_req">
-      <i
-        className="fa-solid fa-circle-check text-green-500"
-        onClick={acceptGameReqClickHandler}
-      ></i>
-      <i
-        className="fa-solid fa-circle-xmark text-destructive"
-        onClick={rejectGameReqClickHandler}
-      ></i>
+      {isLoading ? (
+        <p className="text-sm">Connecting...</p>
+      ) : (
+        <>
+          <i
+            className="fa-solid fa-circle-check text-green-500"
+            onClick={acceptGameReqClickHandler}
+          ></i>
+          <i
+            className="fa-solid fa-circle-xmark text-destructive"
+            onClick={rejectGameReqClickHandler}
+          ></i>
+        </>
+      )}
     </span>
   );
 }

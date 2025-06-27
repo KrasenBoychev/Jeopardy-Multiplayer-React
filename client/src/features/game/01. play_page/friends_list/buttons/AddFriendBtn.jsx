@@ -11,7 +11,7 @@ export default function AddFriendBtn() {
   const [addFriendUsername, setAddFriendUsername] = useState("");
   const user = useSelector(selectCurrentUser);
   const friends = useSelector(selectFriends);
-  const [sendFriendReq] = useSendFriendReqMutation();
+  const [sendFriendReq, { isLoading }] = useSendFriendReqMutation();
   const { data: notifications } = useGetNotificationsQuery("getNotifications");
   const dispatch = useDispatch();
 
@@ -82,7 +82,12 @@ export default function AddFriendBtn() {
           setAddFriendUsername(event.target.value);
         }}
       />
-      <button onClick={sendFriendInvitation}>Add Friend</button>
+      <button
+        onClick={sendFriendInvitation}
+        disabled={isLoading ? true : false}
+      >
+        Add Friend
+      </button>
     </p>
   );
 }
