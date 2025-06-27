@@ -1,11 +1,11 @@
 Now:
-   - finish the Notifications Btns and Socket components rendering logic based on RTK queries hooks
+ - Error Boundary
+
 --------------------------------------------------------------------------------------
 Later:
-1. Redux management system:
-   - better error handling for the game components
-   - better error handling when fetching or posting data
 
 2. Fix the backend - keep the user logged in when the page is refreshed
 
 3. Create a Public Guard for Login and Register (after backend is completed);
+
+4. Add categories and questions.
