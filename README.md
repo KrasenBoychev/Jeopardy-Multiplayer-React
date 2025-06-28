@@ -4,20 +4,18 @@ Jeopardy Multiplayer is a game that can be played by two players who are connect
 
 Also, there is an Admin account, so the owner of the game can create new categories and questions. The admin can play a game as well, but their score will not be shown in the Leaderboard. The purpose of that is the admin to be able to test the game and more specifically, whether all categories and questions render properly.
 
-The project is in progress, so there is much more to come.
-
 ## Features
 
 - ### Socket.IO
 - ### React Redux
 - ### React RTK Query
 - ### React Hooks and State
-- ### CSS Flexbox Layout
+- ### Tailwind Components
 - ### MongoDB
 
 ## Click the video below to watch the demo of the game:
 
-[![Watch the video](https://img.youtube.com/vi/IslKDdoyHCs/0.jpg)](https://youtu.be/IslKDdoyHCs)
+[![Watch the video](https://img.youtube.com/vi/KD0SuQKmQEA/0.jpg)](https://youtu.be/KD0SuQKmQEA)
 
 ## Getting Started
 
