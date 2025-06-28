@@ -1,15 +1,25 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { deleteItems } from "./createSlice";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { deleteItems, selectResponseMsg } from "./createSlice";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import "./create.css";
 
 export default function Create() {
+  const responseMsg = useSelector(selectResponseMsg);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (responseMsg.status) {
+      if (responseMsg.status == "success") {
+        toast.success(responseMsg.msg);
+      } else if ((responseMsg.status = "error")) {
+        toast.error(responseMsg.msg);
+      }
+    }
+
     dispatch(deleteItems());
   }, []);
 
