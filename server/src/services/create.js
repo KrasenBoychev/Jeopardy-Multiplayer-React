@@ -12,7 +12,7 @@ async function checkCategory(categoryName) {
 
 async function recordCategory(categoryName) {
   const record = new Category({
-    name: categoryName,
+    name: categoryName.trim(),
   });
 
   await record.save();
@@ -27,15 +27,15 @@ async function checkQuestion(questionName) {
 
 async function recordQuestion(questionDetails, categoryId) {
   const record = new Question({
-    name: questionDetails.questionName,
+    name: questionDetails.questionName.trim(),
     points: Number(questionDetails.points),
     answers: {
-      answerOne: questionDetails.answerOne,
-      answerTwo: questionDetails.answerTwo,
-      answerThree: questionDetails.answerThree,
-      answerFour: questionDetails.answerFour,
+      answerOne: questionDetails.answerOne.trim(),
+      answerTwo: questionDetails.answerTwo.trim(),
+      answerThree: questionDetails.answerThree.trim(),
+      answerFour: questionDetails.answerFour.trim(),
     },
-    correctAnswer: questionDetails[`${questionDetails.correctAnswer}`],
+    correctAnswer: questionDetails[`${questionDetails.correctAnswer}`].trim(),
     categoryId,
   });
 

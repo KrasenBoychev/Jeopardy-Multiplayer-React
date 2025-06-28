@@ -26,7 +26,7 @@ createRouter.post("/checkCategory", isAdmin(), async (req, res) => {
 
 createRouter.post("/checkQuestion", isAdmin(), async (req, res) => {
   try {
-    const questionName = req.body.questionName.toLowerCase();
+    const questionName = req.body.questionName;
     const result = await checkQuestion(questionName);
     res.json(result);
   } catch (err) {
