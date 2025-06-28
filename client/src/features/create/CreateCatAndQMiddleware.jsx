@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import toast from "react-hot-toast";
 import {
-  deleteItems,
   selectCreateItemsAllValues,
   selectCurrentPage,
+  setResponseMsg,
 } from "./createSlice";
 import { useRecordCategoryAndQuestionsMutation } from "./createApiSlice";
 import CreateCategory from "./CreateCategory";
@@ -22,8 +21,13 @@ export default function CreateCatAndQMiddleware() {
 
   useEffect(() => {
     if (errorCurrPage) {
-      toast.error("Something went wrong! Refresh the page and try again.");
-      dispatch(deleteItems());
+      dispatch(
+        setResponseMsg({
+          status: "error",
+          msg: "Something went wrong! Refresh the page and try again.",
+        })
+      );
+ 
       navigate("/create");
     }
 
@@ -34,15 +38,29 @@ export default function CreateCatAndQMiddleware() {
           const result = await recordCategoryAndQuestions(items);
 
           if (result.error) {
-            toast.error("Saving failed! Refresh the page and try again.");
+            dispatch(
+              setResponseMsg({
+                status: "error",
+                msg: "Saving failed! Refresh the page and try again.",
+              })
+            );
           } else {
-            toast.success("Saved successfully!");
+            dispatch(
+              setResponseMsg({
+                status: "success",
+                msg: "Saved successfully!",
+              })
+            );
           }
         } catch (err) {
-          toast.error("Saving failed! Refresh the page and try again.");
+          dispatch(
+            setResponseMsg({
+              status: "error",
+              msg: "Saving failed! Refresh the page and try again.",
+            })
+          );
         }
 
-        dispatch(deleteItems());
         navigate("/create");
       })();
     }

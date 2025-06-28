@@ -8,15 +8,16 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import {
-  deleteItems,
   goToNextPage,
   goToPreviousPage,
   selectCategoryName,
   selectCreateItemsAllValues,
   selectCurrentPage,
   setQuestionDetails,
+  setResponseMsg,
 } from "../createSlice";
 import {
+  checkAnswersValues,
   checkQuestionNames,
   correctAnswerValues,
   gamePoints,
@@ -108,9 +109,26 @@ export default function CreateQuestion() {
         return;
       }
     } catch (err) {
-      toast.error("Something went wrong! Please refresh the page.");
-      dispatch(deleteItems());
+      dispatch(
+        setResponseMsg({
+          status: "error",
+          msg: "Something went wrong! Please refresh the page.",
+        })
+      );
+
       navigate("/create");
+    }
+
+    const answerValuesCheck = checkAnswersValues([
+      formValues.answerOne.content.trim(),
+      formValues.answerTwo.content.trim(),
+      formValues.answerThree.content.trim(),
+      formValues.answerFour.content.trim(),
+    ]);
+
+    if (answerValuesCheck) {
+      toast.error("Answers must be different!");
+      return;
     }
 
     const questionDetails = {
@@ -128,12 +146,21 @@ export default function CreateQuestion() {
       setRecordQuestion(true);
       try {
         await recordSingleQuestion(questionDetails);
-        toast.success("Saved successfully!");
+        dispatch(
+          setResponseMsg({
+            status: "success",
+            msg: "Saved successfully!",
+          })
+        );
       } catch (err) {
-        toast.error("Saving failed! Refresh the page and try again.");
+        dispatch(
+          setResponseMsg({
+            status: "error",
+            msg: "Saving failed! Refresh the page and try again.",
+          })
+        );
       }
 
-      dispatch(deleteItems());
       navigate("/create");
     } else if (currentPage > 0 && currentPage <= 4) {
       const questionNumber = Object.keys(createItemsAllValues)[currentPage];
