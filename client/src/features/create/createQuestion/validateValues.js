@@ -149,3 +149,21 @@ export const checkQuestionNames = (
     return { result: false };
   }
 };
+
+export const checkAnswersValues = (answersArr) => {
+  let result = false;
+
+  answersArr.forEach((answer, index) => {
+    const otherValuesArr = answersArr.filter((value, valueIndex) => {
+      if (valueIndex !== index) {
+        return value;
+      }
+    });
+
+    if (otherValuesArr.includes(answer)) {
+      result = true;
+    }
+  });
+
+  return result;
+};
