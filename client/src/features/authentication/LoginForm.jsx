@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "./authSlice";
 import toast from "react-hot-toast";
 
-export function LoginForm() {
+export function LoginForm({ setRenderAuthForm }) {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const [formErrors, setFormErrors] = useState({
@@ -65,14 +65,16 @@ export function LoginForm() {
     }
   };
   return (
-    <div className="flex-column content-center bg-black">
-      <div className="shadow-input m-auto w-full max-w-md mt-25 mb-10 rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
-        <h2 className="text-center text-xl font-bold text-neutral-800 dark:text-neutral-200">
-          {isLoading ? "Logging in...." : "Welcome to the Jeopardy World"}
+    <div className="flex flex-col content-center w-[420px]">
+      <div className="shadow-input m-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
+        <h2 className="text-center text-xl font-bold text-neutral-800 dark:text-neutral-200 uppercase">
+          {isLoading ? "Logging in...." : "Account"}
         </h2>
         <form className="mt-8" onSubmit={handleSubmit}>
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="email">Email Address</Label>
+            <Label htmlFor="email" className="pl-1">
+              Email Address
+            </Label>
             <Input
               className={formErrors.email && "border-2 border-chart-1"}
               id="email"
@@ -83,7 +85,9 @@ export function LoginForm() {
             />
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password" className="pl-1">
+              Password
+            </Label>
             <Input
               className={formErrors.password && "border-2 border-chart-1"}
               id="password"
@@ -108,9 +112,12 @@ export function LoginForm() {
           <div className="text-center">
             <p>
               Do not have an account yet?{" "}
-              <Link to="/register" className="cursor-pointer hover:underline">
+              <span
+                onClick={() => setRenderAuthForm("register")}
+                className="cursor-pointer text-chart-3 hover:underline"
+              >
                 Click here to register
-              </Link>
+              </span>
             </p>
           </div>
         </form>

@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "./authSlice";
 import toast from "react-hot-toast";
 
-export function RegisterForm() {
+export function RegisterForm({ setRenderAuthForm }) {
   const emailRef = useRef(null);
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
@@ -94,56 +94,69 @@ export function RegisterForm() {
     }
   };
   return (
-    <div className="flex-column content-center bg-black">
-      <div className="shadow-input m-auto w-full max-w-md mt-25 mb-10 rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
-        <h2 className="text-center text-xl font-bold text-neutral-800 dark:text-neutral-200">
-          {isLoading ? "Registering...." : "Welcome to the Jeopardy World"}
+    <div className="flex flex-col content-center max-w-[600px] w-full">
+      <div className="shadow-input m-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8 dark:bg-black">
+        <h2 className="text-center text-xl font-bold text-neutral-800 dark:text-neutral-200 uppercase">
+          {isLoading ? "Registering...." : "Account"}
         </h2>
         <form className="mt-8" onSubmit={handleSubmit}>
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="email">Email Address</Label>
-            <Input
-              className={formErrors.email && "border-2 border-chart-1"}
-              id="email"
-              placeholder="example@example.com"
-              type="email"
-              ref={emailRef}
-              onChange={handleInput}
-            />
-          </LabelInputContainer>
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="username">Username</Label>
-            <Input
-              className={formErrors.username && "border-2 border-chart-1"}
-              id="username"
-              placeholder="10 symbols max"
-              type="text"
-              ref={usernameRef}
-              onChange={handleInput}
-            />
-          </LabelInputContainer>
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="password">Password</Label>
-            <Input
-              className={formErrors.password && "border-2 border-chart-1"}
-              id="password"
-              placeholder="3 symbols min"
-              type="password"
-              ref={passwordRef}
-              onChange={handleInput}
-            />
-          </LabelInputContainer>
-          <LabelInputContainer className="mb-4">
-            <Label htmlFor="repeatPass">Repeat Password</Label>
-            <Input
-              className={formErrors.repeatPass && "border-2 border-chart-1"}
-              id="repeatPass"
-              placeholder="••••••••"
-              type="password"
-              ref={repeatPassRef}
-              onChange={handleInput}
-            />
-          </LabelInputContainer>
+          <div className="flex gap-2 mb-2">
+            <LabelInputContainer className="mb-4">
+              <Label htmlFor="email" className="pl-1">
+                Email Address
+              </Label>
+              <Input
+                className={formErrors.email && "border-2 border-chart-1"}
+                id="email"
+                placeholder="example@example.com"
+                type="email"
+                ref={emailRef}
+                onChange={handleInput}
+              />
+            </LabelInputContainer>
+            <LabelInputContainer className="mb-4">
+              <Label htmlFor="username" className="pl-1">
+                Username
+              </Label>
+              <Input
+                className={formErrors.username && "border-2 border-chart-1"}
+                id="username"
+                placeholder="10 symbols max"
+                type="text"
+                maxLength={10}
+                ref={usernameRef}
+                onChange={handleInput}
+              />
+            </LabelInputContainer>
+          </div>
+          <div className="flex gap-2 mb-2">
+            <LabelInputContainer className="mb-4">
+              <Label htmlFor="password" className="pl-1">
+                Password
+              </Label>
+              <Input
+                className={formErrors.password && "border-2 border-chart-1"}
+                id="password"
+                placeholder="3 symbols min"
+                type="password"
+                ref={passwordRef}
+                onChange={handleInput}
+              />
+            </LabelInputContainer>
+            <LabelInputContainer className="mb-4">
+              <Label htmlFor="repeatPass" className="pl-1">
+                Repeat Password
+              </Label>
+              <Input
+                className={formErrors.repeatPass && "border-2 border-chart-1"}
+                id="repeatPass"
+                placeholder="••••••••"
+                type="password"
+                ref={repeatPassRef}
+                onChange={handleInput}
+              />
+            </LabelInputContainer>
+          </div>
           <button
             className="group/btn relative block h-10 w-full cursor-pointer rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
             type="submit"
@@ -158,9 +171,12 @@ export function RegisterForm() {
           <div className="text-center">
             <p>
               Already registered?{" "}
-              <Link to="/login" className="cursor-pointer hover:underline">
+              <span
+                onClick={() => setRenderAuthForm("login")}
+                className="cursor-pointer text-chart-3 hover:underline"
+              >
                 Click here to login
-              </Link>
+              </span>
             </p>
           </div>
         </form>
