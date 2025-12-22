@@ -4,18 +4,17 @@ import { Toaster } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "./features/authentication/authSlice";
 import { singleQuestionInitialValues } from "./features/create/createQuestion/initialValues";
-import Footer from "./components/footer/Footer";
+import Footer from "./components/Footer";
 import {
   RequireAuthGuard,
   NoAuthGuard,
   AdminGuard,
 } from "./features/authentication/RoutesGuards";
-import { LoginForm } from "./features/authentication/LoginForm";
-import { RegisterForm } from "./features/authentication/RegisterForm";
 import Logout from "./features/authentication/Logout";
-import { NavbarMenu } from "./components/NavbarMenu";
-import { HomePageNotAuth } from "./features/main_pages/home_page/HomePageNotAuth";
-import { AboutPage } from "./features/main_pages/about_page/AboutPage";
+import Nav from "./components/Nav";
+import HomePageNoAuth from "./features/main_pages/home_page/HomePageNoAuth";
+import HomePageAuth from "./features/main_pages/home_page/HomePageAuth";
+import AboutPage from "./features/main_pages/about_page/AboutPage";
 import Socket from "./features/socket_connection/Socket";
 import PlayPage from "./features/game/01. play_page/PlayPage";
 import Create from "./features/create/Create";
@@ -32,23 +31,22 @@ function App() {
     <>
       <Toaster />
       {user && <Socket socketProps={{ socket, setSocket }} />}
-
-      {(!user || !user.gameDetails.gameInProgress) && <NavbarMenu />}
+      {user && !user.gameDetails.gameInProgress && <Nav />}
 
       <main>
         <Routes>
           {/* public routes */}
-          <Route path="/" element={<HomePageNotAuth />} />
+          <Route path="/" element={<HomePageNoAuth />} />
           <Route path="/about" element={<AboutPage />} />
 
           {/* no auth routes */}
           <Route element={<NoAuthGuard />}>
-            <Route path="/login" element={<LoginForm />} />
-            <Route path="/register" element={<RegisterForm />} />
+            {/* <Route path="/" element={<HomePageNoAuth />} /> */}
           </Route>
 
           {/* protected routes */}
           <Route element={<RequireAuthGuard />}>
+            {/* <Route path="/" element={<HomePageAuth />} /> */}
             <Route path="/play" element={<PlayPage />} />
             <Route path="/logout" element={<Logout socket={socket} />} />
           </Route>
