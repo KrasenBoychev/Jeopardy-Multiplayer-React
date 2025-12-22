@@ -1,13 +1,14 @@
 .notifications_header {
-    padding: 1px 4px;
-    font-size: 0.6rem;
-    background-color: black;
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
     color: white;
-    border-radius: 3px;
 }
 
 .notifications_unread {
-    background-color: red;
+    color: red;
 }
 
 .notifications_header:hover {
@@ -16,6 +17,7 @@
 
 .notifications_box_container {
     position: absolute;
+    width: max-content;
     top: 63px;
     right: 70px;
     padding: 10px 20px;
