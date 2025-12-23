@@ -12,8 +12,6 @@ import {
 } from "./features/authentication/RoutesGuards";
 import Logout from "./features/authentication/Logout";
 import Nav from "./components/Nav";
-import HomePageNoAuth from "./features/main_pages/home_page/HomePageNoAuth";
-import HomePageAuth from "./features/main_pages/home_page/HomePageAuth";
 import AboutPage from "./features/main_pages/about_page/AboutPage";
 import Socket from "./features/socket_connection/Socket";
 import PlayPage from "./features/game/01. play_page/PlayPage";
@@ -21,6 +19,7 @@ import Create from "./features/create/Create";
 import CreateCatAndQMiddleware from "./features/create/CreateCatAndQMiddleware";
 import CreateQuestion from "./features/create/createQuestion/CreateQuestion";
 import NotFound from "./features/main_pages/not_found_page/NotFound";
+import HomePageMiddleware from "./features/main_pages/home_page/HomePageMiddleware";
 import "./App.css";
 
 function App() {
@@ -36,17 +35,14 @@ function App() {
       <main>
         <Routes>
           {/* public routes */}
-          <Route path="/" element={<HomePageNoAuth />} />
+          <Route path="/" element={<HomePageMiddleware />} />
           <Route path="/about" element={<AboutPage />} />
 
           {/* no auth routes */}
-          <Route element={<NoAuthGuard />}>
-            {/* <Route path="/" element={<HomePageNoAuth />} /> */}
-          </Route>
+          <Route element={<NoAuthGuard />}></Route>
 
           {/* protected routes */}
           <Route element={<RequireAuthGuard />}>
-            {/* <Route path="/" element={<HomePageAuth />} /> */}
             <Route path="/play" element={<PlayPage />} />
             <Route path="/logout" element={<Logout socket={socket} />} />
           </Route>

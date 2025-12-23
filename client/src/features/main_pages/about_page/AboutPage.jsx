@@ -1,7 +1,5 @@
 "use client";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
-import { SquareArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 const firstParagraph = `First of all, the player has to create an account. Then the player can click "Play" and write the username of the player they want to play with. After both of the players are connected, the game will start. `;
 const secondParagraphFirstPart = `The game will randomly generate the username of the player who will start first. After that, the same player will be able to choose a category that equals to certain amount of points. `;
@@ -17,17 +15,5 @@ const words =
   secondParagraphFourthPart;
 
 export default function AboutPage() {
-  const navigate = useNavigate();
-  return (
-    <>
-      <SquareArrowLeft
-        className="absolute top-4 left-4 cursor-pointer"
-        color="white"
-        width={35}
-        height={35}
-        onClick={() => navigate("/")}
-      />
-      <TextGenerateEffect words={words} />;
-    </>
-  );
+  return <TextGenerateEffect words={words} />;
 }
