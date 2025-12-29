@@ -73,19 +73,19 @@ export default function GameReqBtns({ friendUsername }) {
   };
 
   return (
-    <span className="friend_game_req">
+    <span className="flex items-center gap-2">
       {isLoading ? (
         <p className="text-sm">Connecting...</p>
       ) : (
         <>
           <i
-            className="fa-solid fa-circle-check text-green-500"
+            className="fa-solid fa-circle-check text-green-500 cursor-pointer hover:text-white"
             onClick={acceptGameReqClickHandler}
-          ></i>
+          />
           <i
-            className="fa-solid fa-circle-xmark text-destructive"
+            className="fa-solid fa-circle-xmark text-destructive cursor-pointer hover:text-white"
             onClick={rejectGameReqClickHandler}
-          ></i>
+          />
         </>
       )}
     </span>

@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { motion } from "motion/react";
 import {
   selectIsNewGameStarted,
   selectReadyToPlay,
@@ -18,11 +17,10 @@ import {
   setGameInProgress,
   setPlayersDetails,
 } from "./game_room/setGameFunc";
-import { AuroraBackground } from "@/components/ui/aurora-background";
 import { LoadingGame } from "./LoadingGame";
 import StartingPlayer from "../02. starting_player/StartingPlayer";
 import FriendsList from "./friends_list/FriendsList";
-import GameRoom from "./game_room/GameRoom";
+import { GameCard } from "./game_room/GameCard";
 
 export default function PlayPage() {
   const readyToPlay = useSelector(selectReadyToPlay);
@@ -66,27 +64,19 @@ export default function PlayPage() {
   return (
     <>
       {!readyToPlay ? (
-        <AuroraBackground>
-          <motion.div
-            initial={{ opacity: 0.0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: 0.3,
-              duration: 0.8,
-              ease: "easeInOut",
-            }}
-            className="relative w-[100%] flex gap-20 items-center justify-center px-4"
-          >
-            {isNewGameStarted ? (
-              <LoadingGame />
-            ) : (
-              <>
-                <GameRoom />
+        <div className="flex-1 flex flex-col px-4 bg-[url(room.png)] bg-cover bg-center">
+          {isNewGameStarted ? (
+            <LoadingGame />
+          ) : (
+            <>
+              <div className="flex-1"></div>
+              <div className="flex-1 flex gap-110">
                 <FriendsList />
-              </>
-            )}
-          </motion.div>
-        </AuroraBackground>
+                <GameCard player={rivalPlayer} rivalPlayer={true} />
+              </div>
+            </>
+          )}
+        </div>
       ) : (
         <StartingPlayer />
       )}

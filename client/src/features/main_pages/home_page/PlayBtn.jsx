@@ -6,10 +6,10 @@ import { motion } from "motion/react";
 
 export default function PlayBtn() {
   const navigate = useNavigate();
-
+  const colors = ["rgba(255, 255, 255, 1)", "rgba(255, 185, 0, 1)"];
   return (
     <div
-      className="flex-1 cursor-pointer flex shadow-[0_0_10px_rgba(254,154,0)] hover:shadow-[0_0_20px_rgba(254,154,0)] rounded-lg uppercase m-auto h-[50vh] overflow-hidden"
+      className="flex-1 cursor-pointer flex shadow-[0_0_15px_rgba(254,154,0)] hover:shadow-[0_0_30px_rgba(254,154,0)] rounded-lg uppercase m-auto h-[40vh] overflow-hidden"
       onClick={() => navigate("/play")}
     >
       <AuroraBackground className="flex-1">
@@ -21,16 +21,14 @@ export default function PlayBtn() {
             duration: 0.8,
             ease: "easeInOut",
           }}
-          className="flex-1 flex flex-col gap-10"
+          className="flex-1 flex content-center self-center font-bold text-[100px]"
         >
-          <div className="flex-1 content-end self-center font-bold text-[100px] ">
-            <ColourfulText text="Play" className="uppercase tracking-widest" />
-          </div>
-          <div className="flex-1 flex self-center">
-            <Play width={60} height={60} color="#ffb900" />
-            <Play width={60} height={60} color="#009488" />
-            <Play width={60} height={60} color="#e7000b" />
-          </div>
+          <ColourfulText
+            text="Play"
+            colors={colors}
+            component={<Play width={50} height={50} />}
+            className="uppercase tracking-widest"
+          />
         </motion.div>
       </AuroraBackground>
     </div>

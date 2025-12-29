@@ -6,7 +6,6 @@ import { selectCurrentUser } from "../../../authentication/authSlice";
 import { useGetFriendsDetailsMutation } from "./friendsApiSlice";
 import AddFriendBtn from "./buttons/AddFriendBtn";
 import GameReqBtns from "./buttons/GameReqBtns";
-import "./friendsList.css";
 
 export default function FriendsList() {
   const user = useSelector(selectCurrentUser);
@@ -30,45 +29,45 @@ export default function FriendsList() {
   }, []);
 
   return (
-    <div className="friends_list_wrapper">
-      <h3>Friends List</h3>
-      {isLoading && <p>Loading friends status...</p>}
-      {isSuccess && friends.length > 0 && (
-        <ul>
-          {friends.map((friend) => {
-            return (
-              <li
-                key={friend.username}
-                className={
-                  friend.gameInProgress
-                    ? "friend_game_in_progress"
-                    : friend.online
-                    ? "friend_online"
-                    : "friend_offline"
-                }
-              >
-                <span className="friend_username">{friend.username}</span>
-                {gameReqSentBy.includes(friend.username) ? (
-                  <GameReqBtns friendUsername={friend.username} />
-                ) : (
-                  <span className="friend_status">
-                    {friend.online && !friend.gameInProgress && "Online"}
-                    {friend.online &&
-                      friend.gameInProgress &&
-                      "Game in progress"}
-                    {!friend.online && "Offline"}
-                  </span>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      )}
-      {isSuccess && friends.length == 0 && (
-        <p>Invite friends and earn points!</p>
-      )}
-      {isError && <p>Can't load friends list!</p>}
-      <AddFriendBtn />
+    <div className="flex-1 m-auto flex justify-end">
+      <div className="flex flex-col w-[300px] h-[400px] justify-between gap-2 text-white rounded-md p-[10px] shadow-[0_0_40px] shadow-chart-2 bg-[#00000090]">
+        <h3 className="pb-2 text-[18px] text-center border-b-[1px] border-b-chart-2 uppercase font-bold">
+          Friends List
+        </h3>
+        {isLoading && <p>Loading friends status...</p>}
+        {isSuccess && friends.length > 0 && (
+          <ul className="custom-scroll-container flex flex-col flex-1 px-2 gap-1 text-[17px]">
+            {friends.map((friend) => {
+              return (
+                <li
+                  key={friend.username}
+                  className="flex justify-between gap-2"
+                >
+                  <span>{friend.username}</span>
+                  {gameReqSentBy.includes(friend.username) ? (
+                    <GameReqBtns friendUsername={friend.username} />
+                  ) : (
+                    <span
+                      className={`w-5 h-5 rounded-full ${
+                        friend.gameInProgress
+                          ? "bg-chart-5"
+                          : friend.online
+                          ? "bg-green-500"
+                          : "bg-destructive"
+                      }`}
+                    />
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        {isSuccess && friends.length == 0 && (
+          <p className="text-center">Invite friends and earn points!</p>
+        )}
+        {isError && <p className="text-center">Can't load friends list!</p>}
+        <AddFriendBtn />
+      </div>
     </div>
   );
 }

@@ -73,21 +73,23 @@ export default function AddFriendBtn() {
   };
 
   return (
-    <p className="add_friend">
+    <div className="flex gap-2 pt-2.5 border-t-[1px] border-t-chart-2">
       <input
+        className="w-[180px] px-1"
         type="text"
-        placeholder="Friend Username"
+        placeholder="Type username..."
         value={addFriendUsername}
         onChange={(event) => {
           setAddFriendUsername(event.target.value);
         }}
       />
       <button
+        className="flex-1 bg-chart-2 rounded-md py-[2px] px-[4px] text-[12px] uppercase cursor-pointer hover:text-black"
         onClick={sendFriendInvitation}
         disabled={isLoading ? true : false}
       >
-        Add Friend
+        add friend
       </button>
-    </p>
+    </div>
   );
 }
