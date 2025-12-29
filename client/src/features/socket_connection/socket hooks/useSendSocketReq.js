@@ -7,10 +7,12 @@ export default function useSendSocketReq(socket) {
   const socketData = useSelector(selectSocketData);
 
   useEffect(() => {
-    if (socketReqName) {
-      (async () => {
-        await socket.emit(socketReqName, socketData);
-      })();
+    if (socketReqName && socket && typeof socket.emit === "function") {
+      try {
+        socket.emit(socketReqName, socketData);
+      } catch (e) {
+        // ignore emit errors
+      }
     }
-  }, [socketReqName, socketData]);
+  }, [socketReqName, socketData, socket]);
 }

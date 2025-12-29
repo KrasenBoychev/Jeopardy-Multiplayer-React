@@ -27,40 +27,58 @@ export default function useConnection(socketProps) {
 
     newSocket.emit("newUserConnected", {});
 
-    return async () => {
+    return () => {
       dispatch(deleteGameDetails());
       dispatch(deleteFriends());
       dispatch(deleteSocket());
 
-      socket?.removeAllListeners();
-      socket?.disconnect;
+      // remove listeners and properly disconnect the socket we created
+      try {
+        newSocket.removeAllListeners();
+        newSocket.disconnect();
+      } catch (e) {
+        // ignore errors during cleanup
+      }
+
       setSocket(null);
     };
   }, []);
 
   useEffect(() => {
-    socket?.on("setConnectedUser", async () => {
-      await changeOnlineStatus({
-        username: user.username,
-        socketId: socket.id,
-      });
+    if (!socket || !user) return;
 
-      dispatch(updateOnlineStatus(socket.id));
-
-      const getOnlineFriendsServerRes = await getOnlineFriends(
-        user.gameDetails.friendsList
-      );
-      const onlineFriends = getOnlineFriendsServerRes.data;
-
-      if (onlineFriends) {
-        socket.emit("sendUserStatus", {
-          senderInfo: {
-            username: user.username,
-            socketId: socket.id,
-          },
-          receiverFriends: onlineFriends,
+    const handleSetConnectedUser = async () => {
+      try {
+        await changeOnlineStatus({
+          username: user.username,
+          socketId: socket.id,
         });
+
+        dispatch(updateOnlineStatus(socket.id));
+
+        const getOnlineFriendsServerRes = await getOnlineFriends(
+          user.gameDetails.friendsList
+        );
+        const onlineFriends = getOnlineFriendsServerRes.data;
+
+        if (onlineFriends) {
+          socket.emit("sendUserStatus", {
+            senderInfo: {
+              username: user.username,
+              socketId: socket.id,
+            },
+            receiverFriends: onlineFriends,
+          });
+        }
+      } catch (e) {
+        // noop
       }
-    });
-  }, [socket]);
+    };
+
+    socket.on("setConnectedUser", handleSetConnectedUser);
+
+    return () => {
+      socket.off("setConnectedUser", handleSetConnectedUser);
+    };
+  }, [socket, user, changeOnlineStatus, getOnlineFriends, dispatch]);
 }

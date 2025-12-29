@@ -10,5 +10,5 @@ export default function Socket({ socketProps }) {
   useListeners(socket);
   useGameListeners(socket);
   useSendSocketReq(socket);
-  return;
+  return null;
 }

@@ -18,7 +18,9 @@ export default function useGameListeners(socket) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    socket?.on("getCategorySelected", ({ categorySelected, index }) => {
+    if (!socket) return;
+
+    const handleGetCategorySelected = ({ categorySelected, index }) => {
       dispatch(
         updateGameCategories({
           categoryName: categorySelected,
@@ -27,19 +29,31 @@ export default function useGameListeners(socket) {
       );
       dispatch(updateActivePlayer());
       dispatch(updateCategoryCount());
-    });
+    };
 
-    socket?.on("getQuestionsSelected", ({ questionsSelected }) => {
+    const handleGetQuestionsSelected = ({ questionsSelected }) => {
       dispatch(setQuestions(questionsSelected));
-    });
+    };
 
-    socket?.on("getQuestionChosen", ({ questionChosen }) => {
+    const handleGetQuestionChosen = ({ questionChosen }) => {
       dispatch(updateQuestionChosen(questionChosen));
-    });
+    };
 
-    socket?.on("getAnswerChosen", ({ answer, setIsAnswerCorrect }) => {
+    const handleGetAnswerChosen = ({ answer, setIsAnswerCorrect }) => {
       dispatch(setAnswerChosen(answer));
       dispatch(updateIsAnswerCorrect(setIsAnswerCorrect));
-    });
+    };
+
+    socket.on("getCategorySelected", handleGetCategorySelected);
+    socket.on("getQuestionsSelected", handleGetQuestionsSelected);
+    socket.on("getQuestionChosen", handleGetQuestionChosen);
+    socket.on("getAnswerChosen", handleGetAnswerChosen);
+
+    return () => {
+      socket.off("getCategorySelected", handleGetCategorySelected);
+      socket.off("getQuestionsSelected", handleGetQuestionsSelected);
+      socket.off("getQuestionChosen", handleGetQuestionChosen);
+      socket.off("getAnswerChosen", handleGetAnswerChosen);
+    };
   }, [socket]);
 }

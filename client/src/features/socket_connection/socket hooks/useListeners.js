@@ -30,97 +30,125 @@ export default function useListeners(socket) {
   const { refetch } = useGetNotificationsQuery("getNotifications");
 
   useEffect(() => {
-    if (!user.gameDetails.gameInProgress) {
-      socket?.on("getFriendStatus", ({ senderInfo }) => {
-        dispatch(updateFriendStatus(senderInfo));
+    if (!socket || user?.gameDetails?.gameInProgress) return;
 
-        dispatch(
-          updateGameReqSentBy({
-            username: senderInfo.username,
-            updateType: "remove",
-          })
-        );
+    const handleGetFriendStatus = ({ senderInfo }) => {
+      dispatch(updateFriendStatus(senderInfo));
 
-        dispatch(
-          updateRivalPlayer({
-            username: senderInfo.username,
-            socketId: "",
-            updateType: "remove",
-          })
-        );
-      });
+      dispatch(
+        updateGameReqSentBy({
+          username: senderInfo.username,
+          updateType: "remove",
+        })
+      );
 
-      socket?.on("getExitUserStatus", ({ senderInfo }) => {
-        dispatch(updateFriendStatus(senderInfo));
-        dispatch(updateFriendGameInProgress(senderInfo.username));
-      });
+      dispatch(
+        updateRivalPlayer({
+          username: senderInfo.username,
+          socketId: "",
+          updateType: "remove",
+        })
+      );
+    };
 
-      socket?.on("getUpdateNotifications", () => {
-        refetch();
-      });
+    const handleGetExitUserStatus = ({ senderInfo }) => {
+      dispatch(updateFriendStatus(senderInfo));
+      dispatch(updateFriendGameInProgress(senderInfo.username));
+    };
 
-      socket?.on("getFriendReqAccepted", ({ userDetails }) => {
-        dispatch(addNewFriend(userDetails));
-        dispatch(updateFriendsList(userDetails.username));
-        refetch();
-      });
+    const handleGetUpdateNotifications = () => {
+      refetch();
+    };
 
-      socket?.on("receiveGameReq", ({ username }) => {
-        dispatch(updateGameReqSentBy({ username, updateType: "add" }));
-      });
+    const handleGetFriendReqAccepted = ({ userDetails }) => {
+      dispatch(addNewFriend(userDetails));
+      dispatch(updateFriendsList(userDetails.username));
+      refetch();
+    };
 
-      socket?.on("receiveRejectGameRes", ({ username }) => {
-        dispatch(
-          updateRivalPlayer({ username, socketId: "", updateType: "remove" })
-        );
-        toast.error(username + " rejected your game request");
-      });
+    const handleReceiveGameReq = ({ username }) => {
+      dispatch(updateGameReqSentBy({ username, updateType: "add" }));
+    };
 
-      socket?.on("getCancelGameInvitation", ({ username }) => {
-        dispatch(updateGameReqSentBy({ username, updateType: "remove" }));
-      });
+    const handleReceiveRejectGameRes = ({ username }) => {
+      dispatch(
+        updateRivalPlayer({ username, socketId: "", updateType: "remove" })
+      );
+      toast.error(username + " rejected your game request");
+    };
 
-      socket?.on("getAcceptGameRes", () => {
-        dispatch(updateIsNewGameStarted());
-        dispatch(updateSetStartGameDetails());
-      });
+    const handleGetCancelGameInvitation = ({ username }) => {
+      dispatch(updateGameReqSentBy({ username, updateType: "remove" }));
+    };
 
-      socket?.on("getFriendGameInProgress", ({ username }) => {
-        dispatch(updateFriendGameInProgress(username));
-      });
+    const handleGetAcceptGameRes = () => {
+      dispatch(updateIsNewGameStarted());
+      dispatch(updateSetStartGameDetails());
+    };
 
-      socket?.on("getGameDetails", ({ gameDetails }) => {
-        dispatch(
-          setFirstSecondActivePlayer({
-            firstPlayerDetails: gameDetails.firstPlayerDetails,
-            secondPlayerDetails: gameDetails.secondPlayerDetails,
-          })
-        );
+    const handleGetFriendGameInProgress = ({ username }) => {
+      dispatch(updateFriendGameInProgress(username));
+    };
 
-        setTimeout(() => {
-          dispatch(updateReadyToPlay());
-          dispatch(setCategories(gameDetails.allCategories));
-          dispatch(
-            setSocketReq({
-              socketReqName: "setReadyToPlay",
-              socketData: {
-                receiverSocketId: gameDetails.userSocketId,
-              },
-            })
-          );
-        }, 2000);
-      });
+    const handleGetGameDetails = ({ gameDetails }) => {
+      dispatch(
+        setFirstSecondActivePlayer({
+          firstPlayerDetails: gameDetails.firstPlayerDetails,
+          secondPlayerDetails: gameDetails.secondPlayerDetails,
+        })
+      );
 
-      socket?.on("getReadyToPlay", () => {
+      setTimeout(() => {
         dispatch(updateReadyToPlay());
-      });
-
-      socket?.on("getExitGame", async ({ username }) => {
-        toast.error(username + " exit the game. Press 'EXIT' to leave");
+        dispatch(setCategories(gameDetails.allCategories));
         dispatch(
-          updateRivalPlayer({ username, socketId: "", updateType: "remove" })
+          setSocketReq({
+            socketReqName: "setReadyToPlay",
+            socketData: {
+              receiverSocketId: gameDetails.userSocketId,
+            },
+          })
         );
-      });
-    }
+      }, 2000);
+    };
+
+    const handleGetReadyToPlay = () => {
+      dispatch(updateReadyToPlay());
+    };
+
+    const handleGetExitGame = async ({ username }) => {
+      toast.error(username + " exit the game. Press 'EXIT' to leave");
+      dispatch(
+        updateRivalPlayer({ username, socketId: "", updateType: "remove" })
+      );
+    };
+
+    socket.on("getFriendStatus", handleGetFriendStatus);
+    socket.on("getExitUserStatus", handleGetExitUserStatus);
+    socket.on("getUpdateNotifications", handleGetUpdateNotifications);
+    socket.on("getFriendReqAccepted", handleGetFriendReqAccepted);
+    socket.on("receiveGameReq", handleReceiveGameReq);
+    socket.on("receiveRejectGameRes", handleReceiveRejectGameRes);
+    socket.on("getCancelGameInvitation", handleGetCancelGameInvitation);
+    socket.on("getAcceptGameRes", handleGetAcceptGameRes);
+    socket.on("getFriendGameInProgress", handleGetFriendGameInProgress);
+    socket.on("getGameDetails", handleGetGameDetails);
+    socket.on("getReadyToPlay", handleGetReadyToPlay);
+    socket.on("getExitGame", handleGetExitGame);
+
+    return () => {
+      socket.off("getFriendStatus", handleGetFriendStatus);
+      socket.off("getExitUserStatus", handleGetExitUserStatus);
+      socket.off("getUpdateNotifications", handleGetUpdateNotifications);
+      socket.off("getFriendReqAccepted", handleGetFriendReqAccepted);
+      socket.off("receiveGameReq", handleReceiveGameReq);
+      socket.off("receiveRejectGameRes", handleReceiveRejectGameRes);
+      socket.off("getCancelGameInvitation", handleGetCancelGameInvitation);
+      socket.off("getAcceptGameRes", handleGetAcceptGameRes);
+      socket.off("getFriendGameInProgress", handleGetFriendGameInProgress);
+      socket.off("getGameDetails", handleGetGameDetails);
+      socket.off("getReadyToPlay", handleGetReadyToPlay);
+      socket.off("getExitGame", handleGetExitGame);
+    };
   }, [socket]);
 }
