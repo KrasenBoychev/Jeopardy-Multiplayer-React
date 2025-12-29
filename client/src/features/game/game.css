@@ -1,19 +1,9 @@
 .game_container {
-  padding-bottom: 20px;
-  flex-grow: 1;
-  align-content: center;
-  justify-items: center;
-  background-color: var(--baby-blue);
-}
-
-.game_room_wrapper {
-  width: fit-content;
-  font-size: 2rem;
-  border-radius: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
+    padding-bottom: 20px;
+    flex-grow: 1;
+    align-content: center;
+    justify-items: center;
+    background-color: var(--baby-blue);
 }
 
 .categories_page_wrapper {
@@ -130,9 +120,9 @@
 }
 
 .active_player {
-  color: yellowgreen;
+    color: yellowgreen;
 }
 
 .inactive_player {
-  color: red;
+    color: red;
 }
