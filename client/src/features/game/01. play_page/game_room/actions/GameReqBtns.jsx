@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setSocketReq } from "../../../../socket_connection/socketSlice";
-import { selectFriends } from "../friendsSlice";
+import { selectFriends } from "../../friends_list/friendsSlice";
 import { selectCurrentUser } from "../../../../authentication/authSlice";
 import {
   updateGameReqSentBy,
@@ -8,7 +8,7 @@ import {
 } from "../../../gameSlice";
 import { updateRivalPlayer } from "../../../playersSlice";
 import { useChangeGameInProgressMutation } from "../../../gameApiSlice";
-import { setGameInProgress } from "../../game_room/setGameFunc";
+import { setGameInProgress } from "../setGameFunc";
 
 export default function GameReqBtns({ friendUsername }) {
   const user = useSelector(selectCurrentUser);
@@ -73,9 +73,9 @@ export default function GameReqBtns({ friendUsername }) {
   };
 
   return (
-    <span className="flex items-center gap-2">
+    <div className="flex items-center gap-2">
       {isLoading ? (
-        <p className="text-sm">Connecting...</p>
+        <span className="text-sm">Connecting...</span>
       ) : (
         <>
           <i
@@ -88,6 +88,6 @@ export default function GameReqBtns({ friendUsername }) {
           />
         </>
       )}
-    </span>
+    </div>
   );
 }

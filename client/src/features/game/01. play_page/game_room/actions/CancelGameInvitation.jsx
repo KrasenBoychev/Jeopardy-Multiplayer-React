@@ -28,11 +28,19 @@ export default function CancelGameInvitation() {
   };
 
   return (
-    <button
-      className="bg-destructive text-sm p-2 rounded-xl text-white lowercase hover:cursor-pointer hover:font-bold z-9999"
-      onClick={gameCancelationClickHandler}
-    >
-      Cancel
-    </button>
+    <>
+      <h3 className="pb-2 text-[18px] text-center border-b-[1px] border-b-chart-5 uppercase font-bold">
+        Waiting for opponent...
+      </h3>
+      <p className="flex-1 self-center content-center text-[40px]">
+        {rivalPlayer.username}
+      </p>
+      <button
+        className="bg-destructive text-sm p-2 rounded-xl text-white lowercase cursor-pointer hover:text-black"
+        onClick={gameCancelationClickHandler}
+      >
+        Cancel
+      </button>
+    </>
   );
 }

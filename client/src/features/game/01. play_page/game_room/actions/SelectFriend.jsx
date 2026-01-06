@@ -1,20 +1,22 @@
 import { useDispatch, useSelector } from "react-redux";
-import toast from "react-hot-toast";
 import { selectCurrentUser } from "../../../../authentication/authSlice";
 import { selectFriends } from "../../friends_list/friendsSlice";
 import { selectGameReqSentBy } from "../../../gameSlice";
 import { updateRivalPlayer } from "../../../playersSlice";
 import { setSocketReq } from "../../../../socket_connection/socketSlice";
-import PopupComp from "../../../../../components/popup/Popup";
+import toast from "react-hot-toast";
+import GameReqBtns from "./GameReqBtns";
 
-export default function InviteFriend() {
+export default function SelectFriend({ friend }) {
   const user = useSelector(selectCurrentUser);
   const friends = useSelector(selectFriends);
   const gameReqSentBy = useSelector(selectGameReqSentBy);
   const dispatch = useDispatch();
 
-  const inviteFriendToGameRoomClickHandler = async (e) => {
-    const friendUsername = e.target.id;
+  const inviteFriendClickHandler = async (friendUsername) => {
+    if (gameReqSentBy.includes(friendUsername)) {
+      return;
+    }
 
     const findFriend = friends.find(
       (friend) => friend.username == friendUsername
@@ -50,37 +52,20 @@ export default function InviteFriend() {
     }
   };
 
-  const openBtnName = "+";
-  const popupHeading = "Friends Online";
-  const popupContent = (
-    <ul>
-      {friends?.map((friend) => {
-        if (
-          friend.online &&
-          !friend.gameInProgress &&
-          !gameReqSentBy.includes(friend.username)
-        ) {
-          return (
-            <li
-              key={friend.username}
-              id={friend.username}
-              onClick={inviteFriendToGameRoomClickHandler}
-            >
-              {friend.username}
-            </li>
-          );
-        }
-      })}
-    </ul>
-  );
-
   return (
-    <>
-      <PopupComp
-        openBtnName={openBtnName}
-        heading={popupHeading}
-        content={popupContent}
-      />
-    </>
+    <li
+      className={`flex justify-between gap-2 cursor-pointer rounded-sm ${
+        !gameReqSentBy.includes(friend.username) &&
+        "hover:bg-white hover:text-black"
+      }`}
+      onClick={() => inviteFriendClickHandler(friend.username)}
+    >
+      <div className="flex flex-1">
+        <span className="flex-1 text-center">{friend.username}</span>
+        {gameReqSentBy.includes(friend.username) && (
+          <GameReqBtns friendUsername={friend.username} />
+        )}
+      </div>
+    </li>
   );
 }

@@ -70,9 +70,9 @@ export default function PlayPage() {
           ) : (
             <>
               <div className="flex-1"></div>
-              <div className="flex-1 flex gap-110">
+              <div className="flex-1 flex gap-110 pb-5">
                 <FriendsList />
-                <GameCard player={rivalPlayer} rivalPlayer={true} />
+                <GameCard />
               </div>
             </>
           )}

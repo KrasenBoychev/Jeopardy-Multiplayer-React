@@ -1,32 +1,35 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectFriends, setFriends } from "./friendsSlice";
-import { selectGameReqSentBy } from "../../gameSlice";
 import { selectCurrentUser } from "../../../authentication/authSlice";
 import { useGetFriendsDetailsMutation } from "./friendsApiSlice";
-import AddFriendBtn from "./buttons/AddFriendBtn";
-import GameReqBtns from "./buttons/GameReqBtns";
+import AddFriendBtn from "./AddFriendBtn";
+import React from "react";
 
-export default function FriendsList() {
+function FriendsListInner() {
   const user = useSelector(selectCurrentUser);
   const friends = useSelector(selectFriends);
-  const gameReqSentBy = useSelector(selectGameReqSentBy);
   const [getFriendsDetails, { isLoading, isSuccess, isError }] =
     useGetFriendsDetailsMutation();
   const dispatch = useDispatch();
 
   useEffect(() => {
+    let mounted = true;
     (async () => {
       const getFriendsServerRes = await getFriendsDetails(
         user.gameDetails.friendsList
       );
       const friendsList = getFriendsServerRes.data;
 
-      if (friendsList) {
+      if (mounted && friendsList) {
         dispatch(setFriends(friendsList));
       }
     })();
-  }, []);
+
+    return () => {
+      mounted = false;
+    };
+  }, [getFriendsDetails, user, dispatch]);
 
   return (
     <div className="flex-1 m-auto flex justify-end">
@@ -37,29 +40,23 @@ export default function FriendsList() {
         {isLoading && <p>Loading friends status...</p>}
         {isSuccess && friends.length > 0 && (
           <ul className="custom-scroll-container flex flex-col flex-1 px-2 gap-1 text-[17px]">
-            {friends.map((friend) => {
-              return (
-                <li
-                  key={friend.username}
-                  className="flex justify-between gap-2"
-                >
-                  <span>{friend.username}</span>
-                  {gameReqSentBy.includes(friend.username) ? (
-                    <GameReqBtns friendUsername={friend.username} />
-                  ) : (
-                    <span
-                      className={`w-5 h-5 rounded-full ${
-                        friend.gameInProgress
-                          ? "bg-chart-5"
-                          : friend.online
-                          ? "bg-green-500"
-                          : "bg-destructive"
-                      }`}
-                    />
-                  )}
-                </li>
-              );
-            })}
+            {friends.map((friend) => (
+              <li
+                key={friend.username}
+                className="flex justify-between gap-2 items-center"
+              >
+                <span>{friend.username}</span>
+                <span
+                  className={`w-5 h-5 rounded-full ${
+                    friend.gameInProgress
+                      ? "bg-chart-5"
+                      : friend.online
+                      ? "bg-green-500"
+                      : "bg-destructive"
+                  }`}
+                />
+              </li>
+            ))}
           </ul>
         )}
         {isSuccess && friends.length == 0 && (
@@ -71,3 +68,5 @@ export default function FriendsList() {
     </div>
   );
 }
+
+export default React.memo(FriendsListInner);
