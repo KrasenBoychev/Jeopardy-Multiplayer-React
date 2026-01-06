@@ -5,8 +5,8 @@ export default function NotificationsHeader({ notificationsProps }) {
   if (isSuccess) {
     content = (
       <div
-        className={`notifications_header ${
-          notifications?.length > 0 && "notifications_unread"
+        className={`absolute top-0 right-0 text-[12px] font-bold cursor-pointer ${
+          notifications?.length > 0 ? "text-destructive" : "text-white"
         }`}
       >
         {isSuccess && notifications?.length}

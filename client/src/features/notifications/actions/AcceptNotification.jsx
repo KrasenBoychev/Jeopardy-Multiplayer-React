@@ -58,7 +58,7 @@ export default function AcceptNotification({ notification }) {
 
   return (
     <button
-      className="notification_btn_accept"
+      className="text-[13px] px-2 py-1 bg-green-500 text-white rounded-lg cursor-pointer hover:text-black"
       onClick={acceptNotificationClickHandler}
       disabled={isLoading ? true : false}
     >

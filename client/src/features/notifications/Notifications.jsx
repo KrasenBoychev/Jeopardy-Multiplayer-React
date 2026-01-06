@@ -2,10 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { useGetNotificationsQuery } from "./notificationsApiSlice";
-import NotificationsHeader from "./children/NotificationsHeader";
-import NotificationsBody from "./children/NotificationsBody";
+import NotificationsHeader from "./NotificationsHeader";
+import NotificationsBody from "./NotificationsBody";
 import { Bell } from "lucide-react";
-import "./notifications.css";
 
 export default function Notifications() {
   const [notificationsOpened, setNotificationsOpened] = useState(false);
@@ -29,7 +28,7 @@ export default function Notifications() {
   }, [location]);
 
   return (
-    <div ref={ref} className="">
+    <div ref={ref}>
       <div
         className="relative cursor-pointer pr-2.5"
         onClick={() =>

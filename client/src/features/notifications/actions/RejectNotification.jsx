@@ -42,7 +42,7 @@ export default function RejectNotification({ notification }) {
   };
   return (
     <button
-      className="notification_btn_reject"
+      className="text-[13px] px-2 py-1 bg-destructive text-white rounded-lg cursor-pointer hover:text-black"
       onClick={rejectNotificationClickHandler}
       disabled={isLoading ? true : false}
     >
