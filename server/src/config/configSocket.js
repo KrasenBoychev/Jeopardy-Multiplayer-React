@@ -1,5 +1,5 @@
 const { Server } = require("socket.io");
-// const { removeOnlineUser } = require("../services/onlineUsers");
+const jwt = require("jsonwebtoken");
 
 function configSocket(server) {
   const io = new Server(server, {
@@ -9,26 +9,64 @@ function configSocket(server) {
     },
   });
 
+  const activeUsers = new Map();
+
   io.on("connection", (socket) => {
-    socket.on("newUserConnected", () => {
-      io.to(socket.id).emit("setConnectedUser", {});
+    socket.on("identify", (username) => {
+      activeUsers.set(socket.id, {
+        username: username,
+        status: "Online",
+      });
+
+      // Notify others that a specific named user joined
+      io.emit("user_list_update", Array.from(activeUsers));
     });
 
-    socket.on("sendUserStatus", ({ senderInfo, receiverFriends }) => {
-      receiverFriends.forEach((friend) => {
-        io.to(friend.socketId).emit("getFriendStatus", {
-          senderInfo,
+    socket.on("start_game", ({ targetUserId }) => {
+      const roomId = `room-${socket.id}-${targetUserId}`;
+      const targetSocket = [...io.sockets.sockets.values()].find(
+        (s) => s.id === targetUserId
+      );
+
+      if (targetSocket) {
+        // 1. Join both players to the room
+        socket.join(roomId);
+        targetSocket.join(roomId);
+
+        // 3. Update status safely
+        if (activeUsers.has(socket.id)) {
+          activeUsers.get(socket.id).status = "In Game";
+        }
+        if (activeUsers.has(targetSocket.id)) {
+          activeUsers.get(targetSocket.id).status = "In Game";
+        }
+
+        // 3. Notify the two players the game has started
+        io.to(roomId).emit("game_started", {
+          roomId,
+          players: [socket.username, targetSocket.username],
         });
-      });
+
+        // 4. Notify everyone else to update their UI (e.g., gray out their names)
+        io.emit("user_list_update", Array.from(activeUsers));
+      }
     });
 
-    socket.on("sendExitUserStatus", ({ senderInfo, receiverFriends }) => {
-      receiverFriends.forEach((friend) => {
-        io.to(friend.socketId).emit("getExitUserStatus", {
-          senderInfo,
-        });
-      });
-    });
+    // socket.on("sendUserStatus", ({ senderInfo, receiverFriends }) => {
+    //   receiverFriends.forEach((friend) => {
+    //     io.to(friend.socketId).emit("getFriendStatus", {
+    //       senderInfo,
+    //     });
+    //   });
+    // });
+
+    // socket.on("sendExitUserStatus", ({ senderInfo, receiverFriends }) => {
+    //   receiverFriends.forEach((friend) => {
+    //     io.to(friend.socketId).emit("getExitUserStatus", {
+    //       senderInfo,
+    //     });
+    //   });
+    // });
 
     socket.on("setUpdateNotifications", ({ receiverSocketId }) => {
       io.to(receiverSocketId).emit("getUpdateNotifications", {});
@@ -121,7 +159,32 @@ function configSocket(server) {
       }
     );
 
-    socket.on("disconnect", async () => {});
+    // socket.on("disconnect", (reason) => {
+    //   console.log(`User ${socket.id} disconnected due to: ${reason}`);
+    //   socket.broadcast.emit("user_left", { userId: socket.id });
+    // });
+
+    // 2. Handle Disconnect
+    socket.on("disconnect", () => {
+      // const username = activeUsers.get(socket.id);
+      // if (username) {
+      //   console.log(`${username} left the building.`);
+      //   activeUsers.delete(socket.id); // Remove from map
+
+      const userRooms = Array.from(socket.rooms);
+      userRooms.forEach((room) => {
+        if (room.startsWith("room-")) {
+          // Notify the opponent left in this specific room
+          socket.to(room).emit("opponent_disconnected");
+        }
+      });
+
+      activeUsers.delete(socket.id);
+
+      // Send the updated list of remaining names to everyone
+      io.emit("user_list_update", Array.from(activeUsers));
+      // }
+    });
   });
 }
 
