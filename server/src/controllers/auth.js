@@ -19,11 +19,13 @@ authRouter.post(
         userId: result._id,
         email: result.email,
         username: result.username,
-        gameDetails: result.gameDetails,
-        notificationsList: result.notificationsList,
       };
 
-      const accessToken = createToken(result.email, result.username, result._id);
+      const accessToken = createToken(
+        result.email,
+        result.username,
+        result._id
+      );
 
       res.json({
         user,
@@ -69,11 +71,13 @@ authRouter.post(
         userId: result._id,
         email: result.email,
         username: result.username,
-        gameDetails: result.gameDetails,
-        notificationsList: result.notificationsList,
       };
 
-      const accessToken = createToken(result.email, result.username, result._id);
+      const accessToken = createToken(
+        result.email,
+        result.username,
+        result._id
+      );
 
       res.json({
         user,
