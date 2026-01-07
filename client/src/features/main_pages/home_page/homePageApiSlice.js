@@ -5,7 +5,11 @@ export const homePageApiSlice = apiSlice.injectEndpoints({
     getTopPlayers: builder.query({
       query: () => "/users/topPlayers",
     }),
+    getUserPoints: builder.query({
+      query: () => "/users/points",
+    }),
   }),
 });
 
-export const { useGetTopPlayersQuery } = homePageApiSlice;
+export const { useGetTopPlayersQuery, useGetUserPointsQuery } =
+  homePageApiSlice;
