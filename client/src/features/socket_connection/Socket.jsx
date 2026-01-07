@@ -1,12 +1,40 @@
-import useConnection from "./socket hooks/useConnection";
+import { useEffect, useState } from "react";
 import useGameListeners from "./socket hooks/useGameListeners";
 import useListeners from "./socket hooks/useListeners";
 import useSendSocketReq from "./socket hooks/useSendSocketReq";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteSocketDetails, setSocketDetails } from "./socketSlice";
+import { io } from "socket.io-client";
+import { baseURL } from "../../app/api/baseURL";
+import { selectCurrentUser } from "../authentication/authSlice";
+import { selectPlayers, setPlayers } from "../game/gameSlice";
 
 export default function Socket({ socketProps }) {
-  const { socket } = socketProps;
+  const { socket, setSocket } = socketProps;
+  const user = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
 
-  useConnection(socketProps);
+  useEffect(() => {
+    const newSocket = io(baseURL);
+    setSocket(newSocket);
+
+    newSocket.emit("identify", user.username);
+    newSocket.on("user_list_update", (allPlayers) => {
+      dispatch(setPlayers(allPlayers));
+    });
+
+    return () => {
+      newSocket.off("user_list_update");
+      dispatch(deleteSocketDetails());
+      try {
+        newSocket.removeAllListeners();
+        newSocket.disconnect();
+      } catch (e) {
+        // ignore errors during cleanup
+      }
+    };
+  }, []);
+
   useListeners(socket);
   useGameListeners(socket);
   useSendSocketReq(socket);
