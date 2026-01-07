@@ -15,25 +15,8 @@ async function getTopPlayers() {
     .limit(10);
 }
 
-async function getUserSocketId(username) {
-  return await User.find({ username }).distinct("gameDetails.socketId");
-}
-
 async function getUserFriendsList(username) {
   return await User.find({ username }).distinct("gameDetails.friendsList");
-}
-
-async function findFriendsDetails(friendsList) {
-  return await User.find({
-    username: { $in: friendsList },
-  });
-}
-
-async function findOnlineFriends(friendsList) {
-  return await User.find({
-    username: { $in: friendsList },
-    "gameDetails.online": true,
-  });
 }
 
 async function addUsernameToFriendsList(userUsername, friendUsername) {
@@ -61,41 +44,13 @@ async function removeNotification(userUsername, friendUsername, type) {
   );
 }
 
-async function changeOnlineStatus(username, socketId) {
-  const online = socketId == "" ? false : true;
-
-  return await User.findOneAndUpdate({ username }, [
-    {
-      $set: {
-        "gameDetails.online": online,
-        "gameDetails.socketId": socketId,
-      },
-    },
-  ]);
-}
-
-async function updateGameInProgress(username) {
-  return await User.updateOne({ username }, [
-    {
-      $set: {
-        "gameDetails.gameInProgress": { $not: "$gameDetails.gameInProgress" },
-      },
-    },
-  ]);
-}
-
 module.exports = {
   getUserByEmail,
   getUserByUsername,
   getTopPlayers,
-  getUserSocketId,
   getUserFriendsList,
-  findFriendsDetails,
-  findOnlineFriends,
   addUsernameToFriendsList,
   getUserNotificationsList,
   addNotification,
   removeNotification,
-  changeOnlineStatus,
-  updateGameInProgress,
 };
