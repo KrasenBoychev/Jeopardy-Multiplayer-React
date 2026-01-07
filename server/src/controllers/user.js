@@ -3,18 +3,9 @@ const { body } = require("express-validator");
 const { parseError } = require("../util");
 const {
   getTopPlayers,
-  findFriendsDetails,
-  findOnlineFriends,
   getUserNotificationsList,
   removeNotification,
-  changeOnlineStatus,
-  updateGameInProgress,
-  getUserByUsername,
 } = require("../services/user");
-const {
-  friendDetailsModel,
-  onlineFriendsModel,
-} = require("./data models/friendDetails");
 
 const userRouter = Router();
 
@@ -22,55 +13,6 @@ userRouter.get("/topPlayers", async (req, res) => {
   try {
     const data = await getTopPlayers();
     res.json(data);
-  } catch (err) {
-    const parsed = parseError(err);
-    res.status(400).json({ code: 400, message: parsed.message });
-  }
-});
-
-userRouter.post("/friendsDetails", async (req, res) => {
-  try {
-    const friendsDetails = await findFriendsDetails(req.body.friendsList);
-
-    if (friendsDetails.length > 0) {
-      const detailsToBeSent = friendsDetails.map((friend) => {
-        return friendDetailsModel(friend);
-      });
-
-      res.json(detailsToBeSent);
-    } else {
-      res.json(null);
-    }
-  } catch (err) {
-    const parsed = parseError(err);
-    res.status(400).json({ code: 400, message: parsed.message });
-  }
-});
-
-userRouter.post("/onlineFriends", async (req, res) => {
-  try {
-    const onlineFriends = await findOnlineFriends(req.body.friendsList);
-
-    if (onlineFriends.length > 0) {
-      const detailsToBeSent = onlineFriends.map((friend) => {
-        return onlineFriendsModel(friend);
-      });
-
-      res.json(detailsToBeSent);
-    } else {
-      res.json(null);
-    }
-  } catch (err) {
-    const parsed = parseError(err);
-    res.status(400).json({ code: 400, message: parsed.message });
-  }
-});
-
-userRouter.post("/singleFriend", async (req, res) => {
-  try {
-    const singleFriend = await getUserByUsername(req.body.username);
-    const dataTobeSent = friendDetailsModel(singleFriend);
-    res.json(dataTobeSent);
   } catch (err) {
     const parsed = parseError(err);
     res.status(400).json({ code: 400, message: parsed.message });
@@ -110,29 +52,5 @@ userRouter.post(
     }
   }
 );
-
-userRouter.post("/changeOnlineStatus", async (req, res) => {
-  try {
-    const result = await changeOnlineStatus(
-      req.body.username,
-      req.body.socketId
-    );
-    res.json(result);
-  } catch (err) {
-    const parsed = parseError(err);
-    res.status(400).json({ code: 400, message: parsed.message });
-  }
-});
-
-userRouter.post("/gameInProgress", async (req, res) => {
-  try {
-    const username = req.user.username;
-    const result = await updateGameInProgress(username);
-    res.json(result);
-  } catch (err) {
-    const parsed = parseError(err);
-    res.status(400).json({ code: 400, message: parsed.message });
-  }
-});
 
 module.exports = { userRouter };
