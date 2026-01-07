@@ -30,7 +30,7 @@ function App() {
     <>
       <Toaster />
       {user && <Socket socketProps={{ socket, setSocket }} />}
-      {user && !user.gameDetails.gameInProgress && <Nav />}
+      {user && <Nav />}
 
       <main>
         <Routes>
@@ -68,7 +68,7 @@ function App() {
         </Routes>
       </main>
 
-      {(!user || !user.gameDetails.gameInProgress) && <Footer />}
+      <Footer />
     </>
   );
 }
