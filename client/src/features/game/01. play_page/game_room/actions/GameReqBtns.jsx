@@ -1,52 +1,50 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setSocketReq } from "../../../../socket_connection/socketSlice";
-import { selectFriends } from "../../friends_list/friendsSlice";
+// import { selectFriends } from "../../friends_list/friendsSlice";
 import { selectCurrentUser } from "../../../../authentication/authSlice";
 import {
   updateGameReqSentBy,
   updateIsNewGameStarted,
 } from "../../../gameSlice";
 import { updateRivalPlayer } from "../../../playersSlice";
-import { useChangeGameInProgressMutation } from "../../../gameApiSlice";
-import { setGameInProgress } from "../setGameFunc";
+import { useGetFriendsListQuery } from "../../friends_list/friendsApiSlice";
+// import { useChangeGameInProgressMutation } from "../../../gameApiSlice";
+// import { setGameInProgress } from "../setGameFunc";
 
 export default function GameReqBtns({ friendUsername }) {
   const user = useSelector(selectCurrentUser);
-  const friends = useSelector(selectFriends);
-  const [changeGameInProgress, { isLoading }] =
-    useChangeGameInProgressMutation();
+  // const friends = useSelector(selectFriends);
+  // const [changeGameInProgress, { isLoading }] =
+  //   useChangeGameInProgressMutation();
+
   const dispatch = useDispatch();
 
   const acceptGameReqClickHandler = async () => {
-    await setGameInProgress(
-      user.username,
-      friends,
-      changeGameInProgress,
-      dispatch
-    );
-
-    const findFriend = friends.find(
-      (friend) => friend.username == friendUsername
-    );
-
-    dispatch(
-      updateRivalPlayer({
-        username: findFriend.username,
-        socketId: findFriend.socketId,
-        updateType: "add",
-      })
-    );
-
-    dispatch(
-      setSocketReq({
-        socketReqName: "sendAcceptGameRes",
-        socketData: {
-          receiverSocketId: findFriend.socketId,
-        },
-      })
-    );
-
-    dispatch(updateIsNewGameStarted());
+    // await setGameInProgress(
+    //   user.username,
+    //   friends,
+    //   changeGameInProgress,
+    //   dispatch
+    // );
+    // const findFriend = friends.find(
+    //   (friend) => friend.username == friendUsername
+    // );
+    // dispatch(
+    //   updateRivalPlayer({
+    //     username: findFriend.username,
+    //     socketId: findFriend.socketId,
+    //     updateType: "add",
+    //   })
+    // );
+    // dispatch(
+    //   setSocketReq({
+    //     socketReqName: "sendAcceptGameRes",
+    //     socketData: {
+    //       receiverSocketId: findFriend.socketId,
+    //     },
+    //   })
+    // );
+    // dispatch(updateIsNewGameStarted());
   };
 
   const rejectGameReqClickHandler = () => {
