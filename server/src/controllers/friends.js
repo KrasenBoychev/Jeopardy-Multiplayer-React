@@ -74,9 +74,6 @@ friendsRouter.post(
         if (response.matchedCount == 0) {
           result.status = "error";
           result.msg = friendUsername + " does not exist";
-        } else {
-          const friendSocketId = await getUserSocketId(friendUsername);
-          result.friendSocketId = friendSocketId[0];
         }
       }
 
@@ -117,11 +114,7 @@ friendsRouter.post(
       await removeNotification(userUsername, friendUsername, "addFriendReq");
       await addNotification(friendUsername, newNotification);
 
-      const getFriendDetails = await getUserByUsername(friendUsername);
-
-      result = friendDetailsModel(getFriendDetails);
-
-      res.json(result);
+      res.json("successfully sent the friend response");
     } catch (err) {
       const parsed = parseError(err);
       res.status(400).json({ code: 400, message: parsed.message });
