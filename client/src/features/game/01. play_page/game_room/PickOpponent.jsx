@@ -1,23 +1,24 @@
 import { useSelector } from "react-redux";
-import { selectFriends } from "../friends_list/friendsSlice";
 import { useState, useMemo } from "react";
 import SelectFriend from "./actions/SelectFriend";
+import { selectPlayers } from "../../gameSlice";
+import { useGetFriendsListQuery } from "../friends_list/friendsApiSlice";
 
 export default function PickOpponent() {
-  const friends = useSelector(selectFriends);
   const [searchInput, setSearchInput] = useState("");
+  const players = useSelector(selectPlayers);
+  const { data: friendsList } = useGetFriendsListQuery("getFriendsList");
 
   const onlineFriends = useMemo(() => {
-    if (!friends) return [];
-    return friends.filter(
-      (friend) => friend.online === true && !friend.gameInProgress
+    return players.filter((player) =>
+      friendsList.find((friend) => player[1].username == friend)
     );
-  }, [friends]);
+  }, [players, friendsList]);
 
   const filteredFriends = useMemo(() => {
     if (!searchInput) return onlineFriends;
     return onlineFriends.filter((friend) =>
-      friend.username.startsWith(searchInput)
+      friend[1].username.startsWith(searchInput)
     );
   }, [searchInput, onlineFriends]);
   return (
@@ -29,7 +30,7 @@ export default function PickOpponent() {
         <ul className="custom-scroll-container flex flex-col flex-1 px-2 gap-1 text-[17px]">
           {filteredFriends.length > 0 ? (
             filteredFriends.map((friend) => (
-              <SelectFriend friend={friend} key={friend.username} />
+              <SelectFriend friend={friend} key={friend[1].username} />
             ))
           ) : (
             <p className="flex-1 self-center content-center">

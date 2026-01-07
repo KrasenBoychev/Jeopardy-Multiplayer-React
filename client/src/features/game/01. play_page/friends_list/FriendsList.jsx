@@ -1,35 +1,17 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { selectFriends, setFriends } from "./friendsSlice";
-import { selectCurrentUser } from "../../../authentication/authSlice";
-import { useGetFriendsDetailsMutation } from "./friendsApiSlice";
+import { useSelector } from "react-redux";
+import { useGetFriendsListQuery } from "./friendsApiSlice";
 import AddFriendBtn from "./AddFriendBtn";
 import React from "react";
+import { selectPlayers } from "../../gameSlice";
 
 function FriendsListInner() {
-  const user = useSelector(selectCurrentUser);
-  const friends = useSelector(selectFriends);
-  const [getFriendsDetails, { isLoading, isSuccess, isError }] =
-    useGetFriendsDetailsMutation();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      const getFriendsServerRes = await getFriendsDetails(
-        user.gameDetails.friendsList
-      );
-      const friendsList = getFriendsServerRes.data;
-
-      if (mounted && friendsList) {
-        dispatch(setFriends(friendsList));
-      }
-    })();
-
-    return () => {
-      mounted = false;
-    };
-  }, [getFriendsDetails, user, dispatch]);
+  const players = useSelector(selectPlayers);
+  const {
+    data: friendsList,
+    isLoading,
+    isSuccess,
+    isError,
+  } = useGetFriendsListQuery("getFriendsList");
 
   return (
     <div className="flex-1 m-auto flex justify-end">
@@ -38,34 +20,41 @@ function FriendsListInner() {
           Friends List
         </h3>
         {isLoading && <p>Loading friends status...</p>}
-        {isSuccess && friends.length > 0 && (
+        {isSuccess && friendsList.length > 0 && (
           <ul className="custom-scroll-container flex flex-col flex-1 px-2 gap-1 text-[17px]">
-            {friends.map((friend) => (
+            {friendsList.map((friend) => (
               <li
-                key={friend.username}
+                key={friend}
                 className="flex justify-between gap-2 items-center"
               >
-                <span>{friend.username}</span>
-                <span
-                  className={`w-5 h-5 rounded-full ${
-                    friend.gameInProgress
-                      ? "bg-chart-5"
-                      : friend.online
-                      ? "bg-green-500"
-                      : "bg-destructive"
-                  }`}
-                />
+                <span>{friend}</span>
+                <PlayerStatus friend={friend} players={players} />
               </li>
             ))}
           </ul>
         )}
-        {isSuccess && friends.length == 0 && (
+        {isSuccess && friendsList.length == 0 && (
           <p className="text-center">Invite friends and earn points!</p>
         )}
         {isError && <p className="text-center">Can't load friends list!</p>}
         <AddFriendBtn />
       </div>
     </div>
+  );
+}
+
+function PlayerStatus({ friend, players }) {
+  const findPlayer = players.find((player) => player[1].username === friend);
+  return (
+    <span
+      className={`w-5 h-5 rounded-full ${
+        findPlayer
+          ? findPlayer[1].status === "Online"
+            ? "bg-green-500"
+            : "bg-chart-5"
+          : "bg-destructive"
+      }`}
+    />
   );
 }
 

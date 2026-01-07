@@ -2,17 +2,21 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import { selectCurrentUser } from "../../../authentication/authSlice";
-import { selectFriends } from "./friendsSlice";
-import { useSendFriendReqMutation } from "./friendsApiSlice";
+import {
+  useGetFriendsListQuery,
+  useSendFriendReqMutation,
+} from "./friendsApiSlice";
 import { useGetNotificationsQuery } from "../../../notifications/notificationsApiSlice";
 import { setSocketReq } from "../../../socket_connection/socketSlice";
+import { selectPlayers } from "../../gameSlice";
 
 export default function AddFriendBtn() {
   const [addFriendUsername, setAddFriendUsername] = useState("");
   const user = useSelector(selectCurrentUser);
-  const friends = useSelector(selectFriends);
-  const [sendFriendReq, { isLoading }] = useSendFriendReqMutation();
+  const players = useSelector(selectPlayers);
+  const { data: friendsList } = useGetFriendsListQuery("getFriendsList");
   const { data: notifications } = useGetNotificationsQuery("getNotifications");
+  const [sendFriendReq, { isLoading }] = useSendFriendReqMutation();
   const dispatch = useDispatch();
 
   const sendFriendInvitation = async () => {
@@ -26,9 +30,9 @@ export default function AddFriendBtn() {
       return;
     }
 
-    if (friends.length > 0) {
-      const findFriend = friends.find(
-        (friend) => friend.username == addFriendUsername
+    if (friendsList.length > 0) {
+      const findFriend = friendsList.find(
+        (friend) => friend == addFriendUsername
       );
       if (findFriend) {
         toast.error(addFriendUsername + " is in your Friends List");
@@ -56,12 +60,18 @@ export default function AddFriendBtn() {
       if (result.status == "error") {
         toast.error(result.msg);
       } else if (result.status == "success") {
-        dispatch(
-          setSocketReq({
-            socketReqName: "setUpdateNotifications",
-            socketData: { receiverSocketId: result.friendSocketId },
-          })
+        const findPlayer = players.find(
+          (player) => player[1].username == addFriendUsername
         );
+
+        if (findPlayer) {
+          dispatch(
+            setSocketReq({
+              socketReqName: "setUpdateNotifications",
+              socketData: { receiverSocketId: findPlayer[0] },
+            })
+          );
+        }
 
         toast.success("Friend request sent to " + addFriendUsername);
         setAddFriendUsername("");
