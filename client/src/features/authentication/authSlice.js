@@ -14,19 +14,6 @@ const authSlice = createSlice({
       state.user = user;
       state.token = accessToken;
     },
-    updateOnlineStatus: (state, action) => {
-      const socketId = action.payload;
-      state.user.gameDetails.socketId = socketId;
-      state.user.gameDetails.online = !state.user.gameDetails.online;
-    },
-    updateGameInProgress: (state, action) => {
-      state.user.gameDetails.gameInProgress =
-        !state.user.gameDetails.gameInProgress;
-    },
-    updateFriendsList: (state, action) => {
-      const friendUsername = action.payload;
-      state.user.gameDetails.friendsList.push(friendUsername);
-    },
     deleteCredentials: (state, action) => {
       state.user = null;
       state.token = null;
@@ -34,13 +21,7 @@ const authSlice = createSlice({
   },
 });
 
-export const {
-  setCredentials,
-  updateOnlineStatus,
-  updateGameInProgress,
-  updateFriendsList,
-  deleteCredentials,
-} = authSlice.actions;
+export const { setCredentials, deleteCredentials } = authSlice.actions;
 
 export default authSlice.reducer;
 
