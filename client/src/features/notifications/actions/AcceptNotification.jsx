@@ -2,15 +2,14 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useSendFriendResMutation } from "../../game/01. play_page/friends_list/friendsApiSlice";
 import { setSocketReq } from "../../socket_connection/socketSlice";
-import {
-  selectCurrentUser,
-  updateFriendsList,
-} from "../../authentication/authSlice";
+import { selectCurrentUser } from "../../authentication/authSlice";
 import { addNewFriend } from "../../game/01. play_page/friends_list/friendsSlice";
 import { useGetNotificationsQuery } from "../notificationsApiSlice";
+import { selectPlayers } from "../../game/gameSlice";
 
 export default function AcceptNotification({ notification }) {
   const user = useSelector(selectCurrentUser);
+  const players = useSelector(selectPlayers);
   const dispatch = useDispatch();
   const [sendFriendRes, { isLoading }] = useSendFriendResMutation();
   const { refetch } = useGetNotificationsQuery("getNotifications");
@@ -21,32 +20,30 @@ export default function AcceptNotification({ notification }) {
 
     try {
       if (notificationType == "addFriendReq") {
-        const sendFriendResServerRes = await sendFriendRes({
+        await sendFriendRes({
           friendUsername,
           response: "accepted",
         });
 
-        const friendDetails = sendFriendResServerRes.data;
+        const findPlayer = players.find(
+          (player) => player[1].username == friendUsername
+        );
 
-        if (friendDetails.online === true) {
+        if (findPlayer && findPlayer[1].status == "Online") {
           dispatch(
             setSocketReq({
               socketReqName: "setFriendReqAccepted",
               socketData: {
-                receiverSocketId: friendDetails.socketId,
+                receiverSocketId: findPlayer[0],
                 userDetails: {
                   username: user.username,
-                  online: user.gameDetails.online,
-                  socketId: user.gameDetails.socketId,
-                  gameInProgress: user.gameDetails.gameInProgress,
                 },
               },
             })
           );
         }
 
-        dispatch(addNewFriend(friendDetails));
-        dispatch(updateFriendsList(friendUsername));
+        dispatch(addNewFriend(friendUsername));
       }
 
       refetch();

@@ -1,10 +1,12 @@
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useSendFriendResMutation } from "../../game/01. play_page/friends_list/friendsApiSlice";
 import { setSocketReq } from "../../socket_connection/socketSlice";
 import { useGetNotificationsQuery } from "../notificationsApiSlice";
+import { selectPlayers } from "../../game/gameSlice";
 
 export default function RejectNotification({ notification }) {
+  const players = useSelector(selectPlayers);
   const dispatch = useDispatch();
   const [sendFriendRes, { isLoading }] = useSendFriendResMutation();
   const { refetch } = useGetNotificationsQuery("getNotifications");
@@ -15,19 +17,21 @@ export default function RejectNotification({ notification }) {
 
     try {
       if (notificationType == "addFriendReq") {
-        const sendFriendResServerRes = await sendFriendRes({
+        await sendFriendRes({
           friendUsername,
           response: "rejected",
         });
 
-        const friendDetails = sendFriendResServerRes.data;
+        const findPlayer = players.find(
+          (player) => player[1].username == friendUsername
+        );
 
-        if (friendDetails.online === true) {
+        if (findPlayer && findPlayer[1].status == "Online") {
           dispatch(
             setSocketReq({
               socketReqName: "setUpdateNotifications",
               socketData: {
-                receiverSocketId: friendDetails.socketId,
+                receiverSocketId: findPlayer[0],
               },
             })
           );
