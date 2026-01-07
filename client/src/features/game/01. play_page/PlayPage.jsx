@@ -10,13 +10,12 @@ import {
   useGetCategoriesMutation,
 } from "../gameApiSlice";
 import { selectCurrentUser } from "../../authentication/authSlice";
-import { selectFriends } from "./friends_list/friendsSlice";
 import { selectRivalPlayer } from "../playersSlice";
-import {
-  setDataToOtherPlayer,
-  setGameInProgress,
-  setPlayersDetails,
-} from "./game_room/setGameFunc";
+// import {
+//   setDataToOtherPlayer,
+//   setGameInProgress,
+//   setPlayersDetails,
+// } from "./game_room/setGameFunc";
 import { LoadingGame } from "./LoadingGame";
 import StartingPlayer from "../02. starting_player/StartingPlayer";
 import FriendsList from "./friends_list/FriendsList";
@@ -25,7 +24,6 @@ import { GameCard } from "./game_room/GameCard";
 export default function PlayPage() {
   const readyToPlay = useSelector(selectReadyToPlay);
   const user = useSelector(selectCurrentUser);
-  const friends = useSelector(selectFriends);
   const rivalPlayer = useSelector(selectRivalPlayer);
   const isNewGameStarted = useSelector(selectIsNewGameStarted);
   const setStartGameDetails = useSelector(selectSetStartGameDetails);
@@ -34,31 +32,29 @@ export default function PlayPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (setStartGameDetails) {
-      (async () => {
-        await setGameInProgress(
-          user.username,
-          friends,
-          changeGameInProgress,
-          dispatch
-        );
-
-        const [firstPlayerDetails, secondPlayerDetails] = setPlayersDetails(
-          user,
-          rivalPlayer,
-          dispatch
-        );
-
-        setDataToOtherPlayer(
-          firstPlayerDetails,
-          secondPlayerDetails,
-          rivalPlayer,
-          user.gameDetails.socketId,
-          getCategories,
-          dispatch
-        );
-      })();
-    }
+    // if (setStartGameDetails) {
+    //   (async () => {
+    //     await setGameInProgress(
+    //       user.username,
+    //       friends,
+    //       changeGameInProgress,
+    //       dispatch
+    //     );
+    //     const [firstPlayerDetails, secondPlayerDetails] = setPlayersDetails(
+    //       user,
+    //       rivalPlayer,
+    //       dispatch
+    //     );
+    //     setDataToOtherPlayer(
+    //       firstPlayerDetails,
+    //       secondPlayerDetails,
+    //       rivalPlayer,
+    //       user.gameDetails.socketId,
+    //       getCategories,
+    //       dispatch
+    //     );
+    //   })();
+    // }
   }, [setStartGameDetails]);
 
   return (
