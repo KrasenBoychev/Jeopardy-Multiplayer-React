@@ -4,13 +4,10 @@ const { parseError } = require("../util");
 const {
   getUserFriendsList,
   getUserNotificationsList,
-  getUserSocketId,
   addUsernameToFriendsList,
   addNotification,
   removeNotification,
-  getUserByUsername,
 } = require("../services/user");
-const { friendDetailsModel } = require("./data models/friendDetails");
 
 const friendsRouter = Router();
 
