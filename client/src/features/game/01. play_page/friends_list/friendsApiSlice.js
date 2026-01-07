@@ -2,23 +2,8 @@ import { apiSlice } from "../../../../app/api/apiSlice";
 
 export const friendsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getFriendsDetails: builder.mutation({
-      query: (friendsList) => ({
-        url: "/users/friendsDetails",
-        method: "POST",
-        body: {
-          friendsList,
-        },
-      }),
-    }),
-    getOnlineFriends: builder.mutation({
-      query: (friendsList) => ({
-        url: "/users/onlineFriends",
-        method: "POST",
-        body: {
-          friendsList,
-        },
-      }),
+    getFriendsList: builder.query({
+      query: () => "/friends/getFriendsList",
     }),
     sendFriendReq: builder.mutation({
       query: (friendUsername) => ({
@@ -43,8 +28,7 @@ export const friendsApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetFriendsDetailsMutation,
-  useGetOnlineFriendsMutation,
+  useGetFriendsListQuery,
   useSendFriendReqMutation,
   useSendFriendResMutation,
 } = friendsApiSlice;
