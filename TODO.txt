@@ -3,9 +3,3 @@ App.jsx:
 
 Sockets:
  - When a user disconnects, check if the user has another active token - in case the user is logged in a few different tabs
-
-Home Page:
- - The leaderboard should have numbers with black rounded background and white number
-
-About Page:
- - Rename to "Game Rules" and text size has to be bigger
