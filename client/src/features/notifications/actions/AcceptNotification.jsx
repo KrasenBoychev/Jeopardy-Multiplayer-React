@@ -1,18 +1,21 @@
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { useSendFriendResMutation } from "../../game/01. play_page/friends_list/friendsApiSlice";
+import {
+  useGetFriendsListQuery,
+  useSendFriendResMutation,
+} from "../../game/01. play_page/friends_list/friendsApiSlice";
 import { setSocketReq } from "../../socket_connection/socketSlice";
-import { selectCurrentUser } from "../../authentication/authSlice";
-import { addNewFriend } from "../../game/01. play_page/friends_list/friendsSlice";
 import { useGetNotificationsQuery } from "../notificationsApiSlice";
 import { selectPlayers } from "../../game/gameSlice";
 
 export default function AcceptNotification({ notification }) {
-  const user = useSelector(selectCurrentUser);
   const players = useSelector(selectPlayers);
   const dispatch = useDispatch();
   const [sendFriendRes, { isLoading }] = useSendFriendResMutation();
-  const { refetch } = useGetNotificationsQuery("getNotifications");
+  const { refetch: refetchNotifications } =
+    useGetNotificationsQuery("getNotifications");
+  const { refetch: refetchFriendsList } =
+    useGetFriendsListQuery("getFriendsList");
 
   const acceptNotificationClickHandler = async () => {
     const friendUsername = notification.sentBy;
@@ -35,18 +38,14 @@ export default function AcceptNotification({ notification }) {
               socketReqName: "setFriendReqAccepted",
               socketData: {
                 receiverSocketId: findPlayer[0],
-                userDetails: {
-                  username: user.username,
-                },
               },
             })
           );
         }
 
-        dispatch(addNewFriend(friendUsername));
+        refetchFriendsList();
+        refetchNotifications();
       }
-
-      refetch();
     } catch (error) {
       toast.error("Cannot accept the notification");
       console.log(error.message);
