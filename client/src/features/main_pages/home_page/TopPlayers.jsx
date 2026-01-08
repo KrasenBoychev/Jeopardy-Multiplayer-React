@@ -40,12 +40,28 @@ export function TopPlayers() {
                     key={`card-${card.username}-${id}`}
                     className="p-4 flex flex-col md:flex-row justify-between items-center mt-3 bg-neutral-50 rounded-xl"
                   >
-                    <div className="flex gap-4 flex-col md:flex-row ">
-                      <motion.p>{index + 1}.</motion.p>
+                    <div className="flex gap-4 flex-col md:flex-row items-center">
+                      <motion.p
+                        className={`${
+                          index < 3 ? "font-bold" : "font-normal"
+                        } ${
+                          index == 0
+                            ? "bg-chart-5"
+                            : index == 1
+                            ? "bg-chart-2"
+                            : index == 2
+                            ? "bg-chart-3"
+                            : "bg-black"
+                        } text-white rounded-full w-8 h-8 flex items-center justify-center`}
+                      >
+                        {index + 1}
+                      </motion.p>
                       <div className="">
                         <motion.h3
                           layoutId={`title-${card.username}-${id}`}
-                          className="font-medium text-neutral-800 dark:text-neutral-200 text-center md:text-left"
+                          className={`${
+                            index < 3 ? "font-bold" : "font-medium"
+                          } text-neutral-800 dark:text-neutral-200 text-center md:text-left`}
                         >
                           {card.username}
                         </motion.h3>
