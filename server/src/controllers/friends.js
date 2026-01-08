@@ -11,6 +11,16 @@ const {
 
 const friendsRouter = Router();
 
+friendsRouter.get("/getFriendsList", async (req, res) => {
+  try {
+    const data = await getUserFriendsList(req.user.username);
+    res.json(data);
+  } catch (err) {
+    const parsed = parseError(err);
+    res.status(400).json({ code: 400, message: parsed.message });
+  }
+});
+
 friendsRouter.post(
   "/sendFriendReq",
   body("friendUsername").trim(),
