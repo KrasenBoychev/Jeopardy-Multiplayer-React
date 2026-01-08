@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useGameListeners from "./socket hooks/useGameListeners";
 import useListeners from "./socket hooks/useListeners";
 import useSendSocketReq from "./socket hooks/useSendSocketReq";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteSocketDetails, setSocketDetails } from "./socketSlice";
+import { deleteSocketReqDetails } from "./socketSlice";
 import { io } from "socket.io-client";
 import { baseURL } from "../../app/api/baseURL";
 import { selectCurrentUser } from "../authentication/authSlice";
@@ -25,7 +25,7 @@ export default function Socket({ socketProps }) {
 
     return () => {
       newSocket.off("user_list_update");
-      dispatch(deleteSocketDetails());
+      dispatch(deleteSocketReqDetails());
       try {
         newSocket.removeAllListeners();
         newSocket.disconnect();

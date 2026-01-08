@@ -9,14 +9,14 @@ const socketSlice = createSlice({
       state.socketReqName = socketReqName;
       state.socketData = socketData;
     },
-    deleteSocket: (state, action) => {
+    deleteSocketReqDetails: (state, action) => {
       state.socketReqName = null;
       state.socketData = null;
     },
   },
 });
 
-export const { setSocketReq, deleteSocket } = socketSlice.actions;
+export const { setSocketReq, deleteSocketReqDetails } = socketSlice.actions;
 
 export default socketSlice.reducer;
 
