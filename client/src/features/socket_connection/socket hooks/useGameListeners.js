@@ -13,6 +13,7 @@ import {
   setAnswerChosen,
   updateIsAnswerCorrect,
 } from "../../game/05. answers/answerSlice";
+import { setPlayers } from "../../game/gameSlice";
 
 export default function useGameListeners(socket) {
   const dispatch = useDispatch();
@@ -48,6 +49,14 @@ export default function useGameListeners(socket) {
     socket.on("getQuestionsSelected", handleGetQuestionsSelected);
     socket.on("getQuestionChosen", handleGetQuestionChosen);
     socket.on("getAnswerChosen", handleGetAnswerChosen);
+    socket.on("game_started", (data) => {
+      console.log(`Joined room: ${data.roomId}`);
+      // Navigate to /game/:roomId
+    });
+
+    socket.on("user_list_update", (updatedPlayers) => {
+      dispatch(setPlayers(updatedPlayers)); // Users will now have a 'status' property
+    });
 
     return () => {
       socket.off("getCategorySelected", handleGetCategorySelected);
