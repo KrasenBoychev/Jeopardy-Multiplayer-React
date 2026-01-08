@@ -72,10 +72,8 @@ function configSocket(server) {
       io.to(receiverSocketId).emit("getUpdateNotifications", {});
     });
 
-    socket.on("setFriendReqAccepted", ({ receiverSocketId, userDetails }) => {
-      io.to(receiverSocketId).emit("getFriendReqAccepted", {
-        userDetails,
-      });
+    socket.on("setFriendReqAccepted", ({ receiverSocketId }) => {
+      io.to(receiverSocketId).emit("getFriendReqAccepted", {});
     });
 
     socket.on("sendGameReq", ({ receiverSocketId, username }) => {
