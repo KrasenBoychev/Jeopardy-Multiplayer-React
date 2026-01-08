@@ -3,6 +3,7 @@ const { body } = require("express-validator");
 const { parseError } = require("../util");
 const {
   getTopPlayers,
+  getUserPoints,
   getUserNotificationsList,
   removeNotification,
 } = require("../services/user");
@@ -12,6 +13,16 @@ const userRouter = Router();
 userRouter.get("/topPlayers", async (req, res) => {
   try {
     const data = await getTopPlayers();
+    res.json(data);
+  } catch (err) {
+    const parsed = parseError(err);
+    res.status(400).json({ code: 400, message: parsed.message });
+  }
+});
+
+userRouter.get("/points", async (req, res) => {
+  try {
+    const data = await getUserPoints(req.user.username);
     res.json(data);
   } catch (err) {
     const parsed = parseError(err);
