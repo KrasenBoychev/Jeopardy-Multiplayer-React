@@ -1,16 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import {
-  addNewFriend,
-  updateFriendGameInProgress,
-  updateFriendStatus,
-} from "../../game/01. play_page/friends_list/friendsSlice";
 import { useGetNotificationsQuery } from "../../../features/notifications/notificationsApiSlice";
-import {
-  selectCurrentUser,
-  updateFriendsList,
-} from "../../authentication/authSlice";
+import { selectCurrentUser } from "../../authentication/authSlice";
 import {
   updateGameReqSentBy,
   updateIsNewGameStarted,
@@ -23,17 +15,21 @@ import {
 } from "../../game/playersSlice";
 import { setSocketReq } from "../socketSlice";
 import { setCategories } from "../../game/03. categories/categoriesSlice";
+import { useGetFriendsListQuery } from "../../game/01. play_page/friends_list/friendsApiSlice";
 
 export default function useListeners(socket) {
   const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
-  const { refetch } = useGetNotificationsQuery("getNotifications");
+  const { refetch: refetchNotifications } =
+    useGetNotificationsQuery("getNotifications");
+  const { refetch: refetchFriendsList } =
+    useGetFriendsListQuery("getFriendsList");
 
   useEffect(() => {
     if (!socket || user?.gameDetails?.gameInProgress) return;
 
     const handleGetFriendStatus = ({ senderInfo }) => {
-      dispatch(updateFriendStatus(senderInfo));
+      // dispatch(updateFriendStatus(senderInfo));
 
       dispatch(
         updateGameReqSentBy({
@@ -52,18 +48,17 @@ export default function useListeners(socket) {
     };
 
     const handleGetExitUserStatus = ({ senderInfo }) => {
-      dispatch(updateFriendStatus(senderInfo));
-      dispatch(updateFriendGameInProgress(senderInfo.username));
+      // dispatch(updateFriendStatus(senderInfo));
+      // dispatch(updateFriendGameInProgress(senderInfo.username));
     };
 
     const handleGetUpdateNotifications = () => {
-      refetch();
+      refetchNotifications();
     };
 
-    const handleGetFriendReqAccepted = ({ userDetails }) => {
-      dispatch(addNewFriend(userDetails));
-      dispatch(updateFriendsList(userDetails.username));
-      refetch();
+    const handleGetFriendReqAccepted = () => {
+      refetchFriendsList();
+      refetchNotifications();
     };
 
     const handleReceiveGameReq = ({ username }) => {
@@ -87,7 +82,7 @@ export default function useListeners(socket) {
     };
 
     const handleGetFriendGameInProgress = ({ username }) => {
-      dispatch(updateFriendGameInProgress(username));
+      // dispatch(updateFriendGameInProgress(username));
     };
 
     const handleGetGameDetails = ({ gameDetails }) => {
@@ -123,6 +118,10 @@ export default function useListeners(socket) {
       );
     };
 
+    const handleOfflineUser = (data) => {
+      console.log(data);
+    };
+
     socket.on("getFriendStatus", handleGetFriendStatus);
     socket.on("getExitUserStatus", handleGetExitUserStatus);
     socket.on("getUpdateNotifications", handleGetUpdateNotifications);
@@ -135,6 +134,7 @@ export default function useListeners(socket) {
     socket.on("getGameDetails", handleGetGameDetails);
     socket.on("getReadyToPlay", handleGetReadyToPlay);
     socket.on("getExitGame", handleGetExitGame);
+    socket.on("user_left", handleOfflineUser);
 
     return () => {
       socket.off("getFriendStatus", handleGetFriendStatus);
@@ -149,6 +149,7 @@ export default function useListeners(socket) {
       socket.off("getGameDetails", handleGetGameDetails);
       socket.off("getReadyToPlay", handleGetReadyToPlay);
       socket.off("getExitGame", handleGetExitGame);
+      socket.off("user_left");
     };
   }, [socket]);
 }
