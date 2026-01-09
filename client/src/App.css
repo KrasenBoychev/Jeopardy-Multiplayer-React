@@ -12,6 +12,7 @@
   margin: auto;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 main {
@@ -31,7 +32,7 @@ main>div {
 
   /* Firefox support */
   scrollbar-width: thin;
-  scrollbar-color: #009689 #e0e0e0;
+  scrollbar-color: #009689 transparent;
 }
 
 /* Chrome, Edge, and Safari support */
@@ -40,12 +41,12 @@ main>div {
 }
 
 .custom-scroll-container::-webkit-scrollbar-track {
-  background: #e0e0e0;
-  border-radius: 10px;
+  background: transparent;
 }
 
 .custom-scroll-container::-webkit-scrollbar-thumb {
   background: #009689;
+  background-clip: content-box;
   border-radius: 10px;
 }
 
