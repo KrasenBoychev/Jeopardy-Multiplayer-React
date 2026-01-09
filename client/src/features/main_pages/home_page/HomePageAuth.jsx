@@ -9,7 +9,7 @@ export default function HomePageAuth() {
   return (
     <div className="flex flex-1 flex-col items-center justify-center px-2 md:px-10 pb-4 bg-[url(world_map.png)] max-h-full bg-cover bg-center">
       <section className="flex flex-col items-center justify-center">
-        <h2 className="text-white mt-15 w-full text-2xl md:text-6xl font-bold text-center uppercase tracking-wider [word-spacing:8px] font-[Pacifico]">
+        <h2 className="text-white mt-15 w-full text-2xl text-6xl font-bold text-center uppercase tracking-wider [word-spacing:8px] font-[Pacifico] max-[1800px]:text-5xl max-[1600px]:text-4xl max-[1400px]:text-3xl">
           Welcome {user.username}
         </h2>
         <UserPoints />

@@ -9,7 +9,7 @@ export default function UserPoints() {
   } = useGetUserPointsQuery("getUserPoints");
   return (
     <p
-      className={`shadow-lg shadow-chart-4 text-sm md:text-2xl max-w-xl mt-6 text-center uppercase bg-black p-3 rounded-lg ${
+      className={`shadow-lg shadow-chart-4 text-2xl max-w-xl mt-6 text-center uppercase bg-black p-3 rounded-lg max-[1800px]:text-xl max-[1600px]:text-lg max-[1400px]:text-sm ${
         isError ? "text-destructive" : "text-white"
       }`}
     >

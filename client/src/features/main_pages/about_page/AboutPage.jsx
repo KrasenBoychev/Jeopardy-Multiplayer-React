@@ -17,7 +17,7 @@ const words =
 export default function AboutPage() {
   return (
     <div className="flex bg-chart-3 items-center justify-center">
-      <div className="flex max-w-[70vw] max-h-[70vh] bg-white rounded-lg text-black shadow-[inset_5px_5px_5px_5px_#000000]">
+      <div className="custom-scroll-container flex max-w-[70vw] max-h-[70vh] bg-white rounded-lg text-black shadow-[inset_5px_5px_5px_5px_#000000]">
         <TextGenerateEffect words={words} />
       </div>
     </div>
