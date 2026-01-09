@@ -7,7 +7,7 @@ export default function NotificationsBody({ notificationsProps }) {
   const { isSuccess, isError, notifications } = notificationsProps;
 
   let content = (
-    <div className="absolute max-w-max top-[63px] right-[70px] py-3 px-2 bg-white rounded-md">
+    <div className="absolute max-w-max top-[63px] right-[70px] py-3 px-2 bg-white rounded-md max-[1600px]:top-[55px] max-[1600px]:right-[60px] max-[1400px]:top-[50px] max-[1400px]:right-[50px] shadow-lg z-30">
       {isSuccess && notifications.length > 0 ? (
         <ul className="custom-scroll-container max-h-[150px] overflow-auto h-auto flex flex-col gap-3 px-2">
           {notifications.map((notification, index) => {
@@ -16,7 +16,7 @@ export default function NotificationsBody({ notificationsProps }) {
                 key={notification.type + notification.sentBy + index}
                 className="flex justify-between items-center gap-3 p-2 bg-[#00000020] rounded-md"
               >
-                <p className="w-max">
+                <p className="w-max text-[18px] max-[1800px]:text-[16px] max-[1600px]:text-[14px] max-[1400px]:text-[12px]">
                   <span className="font-bold">{notification.sentBy}</span>
                   {notifTypes[notification.type].content}
                 </p>
@@ -35,9 +35,15 @@ export default function NotificationsBody({ notificationsProps }) {
           })}
         </ul>
       ) : (
-        <p className="w-max">There are no notifications at the moment</p>
+        <p className="w-max text-[18px] max-[1800px]:text-[16px] max-[1600px]:text-[14px] max-[1400px]:text-[12px]">
+          There are no notifications at the moment
+        </p>
       )}
-      {isError && <p className="w-max">Cannot load notifications!</p>}
+      {isError && (
+        <p className="w-max text-[18px] max-[1800px]:text-[16px] max-[1600px]:text-[14px] max-[1400px]:text-[12px]">
+          Cannot load notifications!
+        </p>
+      )}
     </div>
   );
 

@@ -13,7 +13,12 @@ export default function Nav() {
     <div className="absolute top-0 right-0 z-20">
       <Menu>
         <MenuItemLink to="/">
-          <House width={25} height={25} color="white" />
+          <House
+            width={25}
+            height={25}
+            color="white"
+            className="max-[1600px]:w-[20px] max-[1600px]:h-[20px] max-[1400px]:w-[15px] max-[1400px]:h-[15px]"
+          />
         </MenuItemLink>
 
         <Notifications />
@@ -24,7 +29,12 @@ export default function Nav() {
           </MenuItemLink>
         )}
         <MenuItemLink to="/logout">
-          <LogOut width={25} height={25} color="white" />
+          <LogOut
+            width={25}
+            height={25}
+            color="white"
+            className="max-[1600px]:w-[20px] max-[1600px]:h-[20px] max-[1400px]:w-[15px] max-[1400px]:h-[15px]"
+          />
         </MenuItemLink>
       </Menu>
     </div>

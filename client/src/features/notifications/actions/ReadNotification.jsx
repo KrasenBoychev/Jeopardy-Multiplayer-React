@@ -22,7 +22,7 @@ export default function ReadNotification({ notification }) {
   };
   return (
     <button
-      className="w-max text-[13px] px-2 py-1 bg-chart-5 text-white rounded-lg cursor-pointer hover:text-black"
+      className="w-max text-[13px] px-2 py-1 bg-chart-5 text-white rounded-lg cursor-pointer hover:text-black max-[1800px]:text-[11px] max-1600px:text-[9px] max-1400px:text-[7px]"
       onClick={readNotificationClickHandler}
       disabled={isLoading ? true : false}
     >

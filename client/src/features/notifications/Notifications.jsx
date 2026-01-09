@@ -30,7 +30,7 @@ export default function Notifications() {
   return (
     <div ref={ref}>
       <div
-        className="relative cursor-pointer pr-2.5"
+        className="relative flex items-start cursor-pointer"
         onClick={() =>
           setNotificationsOpened(notificationsOpened ? false : true)
         }
@@ -41,6 +41,7 @@ export default function Notifications() {
           color={`${
             notifications && notifications.length > 0 ? "red" : "white"
           }`}
+          className="max-[1600px]:w-[20px] max-[1600px]:h-[20px] max-[1400px]:w-[15px] max-[1400px]:h-[15px]"
         />
         <NotificationsHeader
           notificationsProps={{

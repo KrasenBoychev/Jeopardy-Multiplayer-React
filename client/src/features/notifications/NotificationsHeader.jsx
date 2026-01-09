@@ -5,7 +5,7 @@ export default function NotificationsHeader({ notificationsProps }) {
   if (isSuccess) {
     content = (
       <div
-        className={`absolute top-0 right-0 text-[12px] font-bold cursor-pointer ${
+        className={`flex-1 text-[12px] font-bold cursor-pointer max-[1600px]:text-[10px] max-[1400px]:text-[8px] ${
           notifications?.length > 0 ? "text-destructive" : "text-white"
         }`}
       >
