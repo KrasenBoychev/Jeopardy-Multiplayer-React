@@ -66,7 +66,7 @@ export default function PlayPage() {
           ) : (
             <>
               <div className="flex-1"></div>
-              <div className="flex-1 flex gap-110 pb-5">
+              <div className="flex-1 flex gap-110 pb-8 max-[1600px]:gap-95 max-[1400px]:gap-80">
                 <FriendsList />
                 <GameCard />
               </div>

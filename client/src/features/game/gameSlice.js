@@ -37,6 +37,7 @@ const gameSlice = createSlice({
       state.isNewGameStarted = false;
       state.setStartGameDetails = false;
       state.readyToPlay = false;
+      state.players = [];
     },
     setPlayers: (state, action) => {
       state.players = action.payload;

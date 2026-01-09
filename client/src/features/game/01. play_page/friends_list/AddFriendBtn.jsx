@@ -85,7 +85,7 @@ export default function AddFriendBtn() {
   return (
     <div className="flex gap-2 pt-2.5 border-t-[1px] border-t-chart-2">
       <input
-        className="w-[180px] px-1"
+        className="w-[180px] px-1 text-[15px] max-[1600px]:text-[13px] max-[1400px]:text-[11px] max-[1600px]:w-[150px] max-[1400px]:w-[100px]"
         type="text"
         placeholder="Type username..."
         value={addFriendUsername}
@@ -94,7 +94,7 @@ export default function AddFriendBtn() {
         }}
       />
       <button
-        className="flex-1 bg-chart-2 rounded-md py-[2px] px-[4px] text-[12px] uppercase cursor-pointer hover:text-black"
+        className="flex-1 bg-chart-2 rounded-md py-[2px] px-[4px] text-[12px] uppercase cursor-pointer hover:text-black max-[1600px]:text-[11px] max-[1400px]:text-[10px]"
         onClick={sendFriendInvitation}
         disabled={isLoading ? true : false}
       >
