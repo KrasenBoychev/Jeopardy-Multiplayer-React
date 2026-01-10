@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "./features/authentication/authSlice";
+import { selectIsNewGameStarted } from "./features/game/gameSlice";
 import { singleQuestionInitialValues } from "./features/create/createQuestion/initialValues";
 import Footer from "./components/Footer";
 import {
@@ -24,19 +25,20 @@ import "./App.css";
 
 function App() {
   const user = useSelector(selectCurrentUser);
+  const isNewGameStarted = useSelector(selectIsNewGameStarted);
   const [socket, setSocket] = useState(null);
 
   return (
     <>
       <Toaster />
       {user && <Socket socketProps={{ socket, setSocket }} />}
-      {user && <Nav />}
+      {user && !isNewGameStarted && <Nav />}
 
       <main>
         <Routes>
           {/* public routes */}
           <Route path="/" element={<HomePageMiddleware />} />
-          <Route path="/about" element={<AboutPage />} />
+          {!isNewGameStarted && <Route path="/about" element={<AboutPage />} />}
 
           {/* no auth routes */}
           <Route element={<NoAuthGuard />}></Route>
@@ -68,7 +70,7 @@ function App() {
         </Routes>
       </main>
 
-      <Footer />
+      {!isNewGameStarted && <Footer />}
     </>
   );
 }

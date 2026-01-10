@@ -5,4 +5,3 @@ Sockets:
  - When a user disconnects, check if the user has another active token - in case the user is logged in a few different tabs
 
  Play Page:
-  - the communication between the players has to be updated when inviting and starting a game

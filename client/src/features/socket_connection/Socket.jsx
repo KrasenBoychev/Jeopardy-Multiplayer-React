@@ -7,7 +7,7 @@ import { deleteSocketReqDetails } from "./socketSlice";
 import { io } from "socket.io-client";
 import { baseURL } from "../../app/api/baseURL";
 import { selectCurrentUser } from "../authentication/authSlice";
-import { selectPlayers, setPlayers } from "../game/gameSlice";
+import { setActiveFriends } from "../game/gameSlice";
 
 export default function Socket({ socketProps }) {
   const { socket, setSocket } = socketProps;
@@ -19,8 +19,8 @@ export default function Socket({ socketProps }) {
     setSocket(newSocket);
 
     newSocket.emit("identify", user.username);
-    newSocket.on("user_list_update", (allPlayers) => {
-      dispatch(setPlayers(allPlayers));
+    newSocket.on("user_list_update", (activeFriends) => {
+      dispatch(setActiveFriends(activeFriends));
     });
 
     return () => {

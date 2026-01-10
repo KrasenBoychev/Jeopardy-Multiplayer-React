@@ -6,7 +6,7 @@ import {
   selectCreateItemsAllValues,
   selectCurrentPage,
 } from "../createSlice";
-import { useGetCategoriesMutation } from "../../game/gameApiSlice";
+import { useGetCategoriesQuery } from "../../game/gameApiSlice";
 import { multipleQuestionsInitialValues } from "./initialValues";
 
 export function useCreateQuestion() {
@@ -25,7 +25,7 @@ export function useCreateQuestion() {
   });
   const [allCategoriesNames, setAllCategoriesNames] = useState([]);
   const currentPage = useSelector(selectCurrentPage);
-  const [getCategories] = useGetCategoriesMutation();
+  const { data: getCategories } = useGetCategoriesQuery("getCategories");
   const createItemsAllValues = useSelector(selectCreateItemsAllValues);
   const categoryName = useSelector(selectCategoryName);
 

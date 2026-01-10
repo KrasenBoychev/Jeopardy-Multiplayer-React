@@ -6,10 +6,10 @@ import {
 } from "../../game/01. play_page/friends_list/friendsApiSlice";
 import { setSocketReq } from "../../socket_connection/socketSlice";
 import { useGetNotificationsQuery } from "../notificationsApiSlice";
-import { selectPlayers } from "../../game/gameSlice";
+import { selectActiveFriends } from "../../game/gameSlice";
 
 export default function AcceptNotification({ notification }) {
-  const players = useSelector(selectPlayers);
+  const activeFriends = useSelector(selectActiveFriends);
   const dispatch = useDispatch();
   const [sendFriendRes, { isLoading }] = useSendFriendResMutation();
   const { refetch: refetchNotifications } =
@@ -28,14 +28,14 @@ export default function AcceptNotification({ notification }) {
           response: "accepted",
         });
 
-        const findPlayer = players.find(
-          (player) => player[1].username == friendUsername
+        const findPlayer = activeFriends.find(
+          (friend) => friend[1].username == friendUsername
         );
 
         if (findPlayer && findPlayer[1].status == "Online") {
           dispatch(
             setSocketReq({
-              socketReqName: "setFriendReqAccepted",
+              socketReqName: "set_friend_req_accepted",
               socketData: {
                 receiverSocketId: findPlayer[0],
               },

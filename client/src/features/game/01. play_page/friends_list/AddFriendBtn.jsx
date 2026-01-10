@@ -8,12 +8,12 @@ import {
 } from "./friendsApiSlice";
 import { useGetNotificationsQuery } from "../../../notifications/notificationsApiSlice";
 import { setSocketReq } from "../../../socket_connection/socketSlice";
-import { selectPlayers } from "../../gameSlice";
+import { selectActiveFriends } from "../../gameSlice";
 
 export default function AddFriendBtn() {
   const [addFriendUsername, setAddFriendUsername] = useState("");
   const user = useSelector(selectCurrentUser);
-  const players = useSelector(selectPlayers);
+  const activeFriends = useSelector(selectActiveFriends);
   const { data: friendsList } = useGetFriendsListQuery("getFriendsList");
   const { data: notifications } = useGetNotificationsQuery("getNotifications");
   const [sendFriendReq, { isLoading }] = useSendFriendReqMutation();
@@ -60,14 +60,14 @@ export default function AddFriendBtn() {
       if (result.status == "error") {
         toast.error(result.msg);
       } else if (result.status == "success") {
-        const findPlayer = players.find(
-          (player) => player[1].username == addFriendUsername
+        const findPlayer = activeFriends.find(
+          (friend) => friend[1].username == addFriendUsername
         );
 
         if (findPlayer) {
           dispatch(
             setSocketReq({
-              socketReqName: "setUpdateNotifications",
+              socketReqName: "set_update_notifications",
               socketData: { receiverSocketId: findPlayer[0] },
             })
           );

@@ -2,10 +2,10 @@ import { useSelector } from "react-redux";
 import { useGetFriendsListQuery } from "./friendsApiSlice";
 import AddFriendBtn from "./AddFriendBtn";
 import React from "react";
-import { selectPlayers } from "../../gameSlice";
+import { selectActiveFriends } from "../../gameSlice";
 
 function FriendsListInner() {
-  const players = useSelector(selectPlayers);
+  const activeFriends = useSelector(selectActiveFriends);
   const {
     data: friendsList,
     isLoading,
@@ -33,7 +33,7 @@ function FriendsListInner() {
                 className="flex justify-between gap-2 items-center"
               >
                 <span>{friend}</span>
-                <PlayerStatus friend={friend} players={players} />
+                <PlayerStatus friend={friend} activeFriends={activeFriends} />
               </li>
             ))}
           </ul>
@@ -54,13 +54,15 @@ function FriendsListInner() {
   );
 }
 
-function PlayerStatus({ friend, players }) {
-  const findPlayer = players.find((player) => player[1].username === friend);
+function PlayerStatus({ friend, activeFriends }) {
+  const findFriend = activeFriends.find(
+    (activeFriend) => activeFriend[1].username === friend
+  );
   return (
     <span
       className={`w-5 h-5 rounded-full ${
-        findPlayer
-          ? findPlayer[1].status === "Online"
+        findFriend
+          ? findFriend[1].status === "Online"
             ? "bg-green-500"
             : "bg-chart-5"
           : "bg-destructive"

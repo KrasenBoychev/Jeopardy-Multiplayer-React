@@ -1,21 +1,24 @@
 import { useSelector } from "react-redux";
 import { useState, useMemo } from "react";
 import SelectFriend from "./actions/SelectFriend";
-import { selectPlayers } from "../../gameSlice";
+import { selectActiveFriends } from "../../gameSlice";
 import { useGetFriendsListQuery } from "../friends_list/friendsApiSlice";
 
 export default function PickOpponent() {
   const [searchInput, setSearchInput] = useState("");
-  const players = useSelector(selectPlayers);
+  const activeFriends = useSelector(selectActiveFriends);
   const { data: friendsList, isSuccess } =
     useGetFriendsListQuery("getFriendsList");
 
   const onlineFriends = useMemo(() => {
     if (!isSuccess) return [];
-    return players.filter((player) =>
-      friendsList.find((friend) => player[1].username == friend)
+    return activeFriends.filter((friend) =>
+      friendsList.find(
+        (friendName) =>
+          friend[1].username == friendName && friend[1].status === "Online"
+      )
     );
-  }, [players, friendsList]);
+  }, [activeFriends, friendsList]);
 
   const filteredFriends = useMemo(() => {
     if (!searchInput) return onlineFriends;
@@ -42,7 +45,7 @@ export default function PickOpponent() {
         </ul>
       ) : (
         <p className="flex-1 self-center content-center text-[17px] max-[1600px]:text-[15px] max-[1400px]:text-[13px]">
-          No online friends
+          No online or available friends
         </p>
       )}
 

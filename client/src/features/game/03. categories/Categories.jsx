@@ -54,7 +54,7 @@ export default function Categories() {
             setSocketReq({
               socketReqName: "sendQuestionsSelected",
               socketData: {
-                receiverSocketId: rivalPlayer.socketId,
+                receiverSocketId: rivalPlayer[0],
                 questionsSelected: transformQuestions,
               },
             })
