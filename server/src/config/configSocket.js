@@ -18,7 +18,6 @@ function configSocket(server) {
         status: "Online",
       });
 
-      // Notify others that a specific named user joined
       io.emit("user_list_update", Array.from(activeUsers));
     });
 
@@ -29,11 +28,9 @@ function configSocket(server) {
       );
 
       if (targetSocket) {
-        // 1. Join both players to the room
         socket.join(roomId);
         targetSocket.join(roomId);
 
-        // 3. Update status safely
         if (activeUsers.has(socket.id)) {
           activeUsers.get(socket.id).status = "In Game";
         }
@@ -41,10 +38,23 @@ function configSocket(server) {
           activeUsers.get(targetSocket.id).status = "In Game";
         }
 
+        let players = [
+          { username: socket.username, socketId: socket.id, earnedPoints: 0 },
+          {
+            username: targetSocket.username,
+            socketId: targetSocket.id,
+            earnedPoints: 0,
+          },
+        ];
+
+        if (Math.random() > 0.5) {
+          [players[0], players[1]] = [players[1], players[0]];
+        }
+
         // 3. Notify the two players the game has started
         io.to(roomId).emit("game_started", {
           roomId,
-          players: [socket.username, targetSocket.username],
+          players,
         });
 
         // 4. Notify everyone else to update their UI (e.g., gray out their names)
@@ -52,73 +62,38 @@ function configSocket(server) {
       }
     });
 
-    // socket.on("sendUserStatus", ({ senderInfo, receiverFriends }) => {
-    //   receiverFriends.forEach((friend) => {
-    //     io.to(friend.socketId).emit("getFriendStatus", {
-    //       senderInfo,
-    //     });
-    //   });
-    // });
-
-    // socket.on("sendExitUserStatus", ({ senderInfo, receiverFriends }) => {
-    //   receiverFriends.forEach((friend) => {
-    //     io.to(friend.socketId).emit("getExitUserStatus", {
-    //       senderInfo,
-    //     });
-    //   });
-    // });
-
-    socket.on("setUpdateNotifications", ({ receiverSocketId }) => {
-      io.to(receiverSocketId).emit("getUpdateNotifications", {});
+    socket.on("set_update_notifications", ({ receiverSocketId }) => {
+      io.to(receiverSocketId).emit("get_update_notifications", {});
     });
 
-    socket.on("setFriendReqAccepted", ({ receiverSocketId }) => {
-      io.to(receiverSocketId).emit("getFriendReqAccepted", {});
+    socket.on("set_friend_req_accepted", ({ receiverSocketId }) => {
+      io.to(receiverSocketId).emit("get_friend_req_accepted", {});
     });
 
-    socket.on("sendGameReq", ({ receiverSocketId, username }) => {
-      io.to(receiverSocketId).emit("receiveGameReq", {
+    socket.on("send_game_req", ({ receiverSocketId, username }) => {
+      io.to(receiverSocketId).emit("receive_game_req", {
         username,
       });
     });
 
-    socket.on("sendRejectGameRes", ({ receiverSocketId, username }) => {
-      io.to(receiverSocketId).emit("receiveRejectGameRes", {
+    socket.on("send_reject_game_res", ({ receiverSocketId, username }) => {
+      io.to(receiverSocketId).emit("receive_reject_game_res", {
         username,
       });
     });
 
-    socket.on("setCancelGameInvitation", ({ receiverSocketId, username }) => {
-      io.to(receiverSocketId).emit("getCancelGameInvitation", {
-        username,
-      });
-    });
-
-    socket.on("sendAcceptGameRes", ({ receiverSocketId }) => {
-      io.to(receiverSocketId).emit("getAcceptGameRes", {});
-    });
-
-    socket.on("sendFriendGameInProgress", ({ receiverFriends, username }) => {
-      receiverFriends.forEach((friend) => {
-        io.to(friend.socketId).emit("getFriendGameInProgress", {
+    socket.on(
+      "set_cancel_game_invitation",
+      ({ receiverSocketId, username }) => {
+        io.to(receiverSocketId).emit("get_cancel_game_invitation", {
           username,
         });
-      });
-    });
+      }
+    );
 
-    socket.on("sendGameDetails", ({ receiverSocketId, gameDetails }) => {
-      io.to(receiverSocketId).emit("getGameDetails", {
-        gameDetails,
-      });
-    });
-
-    socket.on("setReadyToPlay", ({ receiverSocketId }) => {
-      io.to(receiverSocketId).emit("getReadyToPlay", {});
-    });
-
-    socket.on("setExitGame", ({ receiverSocketId, username }) => {
-      io.to(receiverSocketId).emit("getExitGame", {
-        username,
+    socket.on("send_categories", ({ roomId, allCategories }) => {
+      io.to(roomId).emit("get_categories", {
+        allCategories,
       });
     });
 
@@ -157,31 +132,30 @@ function configSocket(server) {
       }
     );
 
-    // socket.on("disconnect", (reason) => {
-    //   console.log(`User ${socket.id} disconnected due to: ${reason}`);
-    //   socket.broadcast.emit("user_left", { userId: socket.id });
-    // });
+    socket.on("leave_game", ({ roomId }) => {
+      socket.leave(roomId);
 
-    // 2. Handle Disconnect
-    socket.on("disconnect", () => {
-      // const username = activeUsers.get(socket.id);
-      // if (username) {
-      //   console.log(`${username} left the building.`);
-      //   activeUsers.delete(socket.id); // Remove from map
+      if (activeUsers.has(socket.id)) {
+        activeUsers.get(socket.id).status = "Online";
+      }
 
+      socket.to(roomId).emit("opponent_left");
+
+      io.emit("user_list_update", Array.from(activeUsers));
+    });
+
+    socket.on("disconnecting", () => {
       const userRooms = Array.from(socket.rooms);
+
       userRooms.forEach((room) => {
         if (room.startsWith("room-")) {
-          // Notify the opponent left in this specific room
           socket.to(room).emit("opponent_disconnected");
         }
       });
 
       activeUsers.delete(socket.id);
 
-      // Send the updated list of remaining names to everyone
       io.emit("user_list_update", Array.from(activeUsers));
-      // }
     });
   });
 }
