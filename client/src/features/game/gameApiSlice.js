@@ -2,17 +2,8 @@ import { apiSlice } from "../../app/api/apiSlice";
 
 export const gameApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    changeGameInProgress: builder.mutation({
-      query: () => ({
-        url: "/users/gameInProgress",
-        method: "POST",
-      }),
-    }),
-    getCategories: builder.mutation({
-      query: () => ({
-        url: "game/allCategories",
-        method: "GET",
-      }),
+    getCategories: builder.query({
+      query: () => "game/allCategories",
     }),
     getQuestions: builder.mutation({
       query: (categoriesIDs) => ({
@@ -36,8 +27,7 @@ export const gameApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useChangeGameInProgressMutation,
-  useGetCategoriesMutation,
+  useGetCategoriesQuery,
   useGetQuestionsMutation,
   useRecordPlayerPointsMutation,
 } = gameApiSlice;

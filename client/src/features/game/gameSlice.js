@@ -3,13 +3,15 @@ import { createSlice } from "@reduxjs/toolkit";
 const gameSlice = createSlice({
   name: "game",
   initialState: {
+    activeFriends: [],
     gameReqSentBy: [],
     isNewGameStarted: false,
-    setStartGameDetails: false,
     readyToPlay: false,
-    players: [],
   },
   reducers: {
+    setActiveFriends: (state, action) => {
+      state.activeFriends = action.payload;
+    },
     updateGameReqSentBy: (state, action) => {
       const { username, updateType } = action.payload;
 
@@ -26,39 +28,29 @@ const gameSlice = createSlice({
     updateIsNewGameStarted: (state, action) => {
       state.isNewGameStarted = !state.isNewGameStarted;
     },
-    updateSetStartGameDetails: (state, action) => {
-      state.setStartGameDetails = !state.setStartGameDetails;
-    },
     updateReadyToPlay: (state, action) => {
       state.readyToPlay = !state.readyToPlay;
     },
     deleteGameDetails: (state, action) => {
       state.gameReqSentBy = [];
       state.isNewGameStarted = false;
-      state.setStartGameDetails = false;
       state.readyToPlay = false;
-      state.players = [];
-    },
-    setPlayers: (state, action) => {
-      state.players = action.payload;
+      state.activeFriends = [];
     },
   },
 });
 
 export const {
+  setActiveFriends,
   updateGameReqSentBy,
   updateIsNewGameStarted,
-  updateSetStartGameDetails,
   updateReadyToPlay,
   deleteGameDetails,
-  setPlayers,
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
 
 export const selectGameReqSentBy = (state) => state.game.gameReqSentBy;
 export const selectIsNewGameStarted = (state) => state.game.isNewGameStarted;
-export const selectSetStartGameDetails = (state) =>
-  state.game.setStartGameDetails;
 export const selectReadyToPlay = (state) => state.game.readyToPlay;
-export const selectPlayers = (state) => state.game.players;
+export const selectActiveFriends = (state) => state.game.activeFriends;
