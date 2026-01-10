@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import {
+  setCategories,
   updateCategoryCount,
   updateGameCategories,
 } from "../../game/03. categories/categoriesSlice";
-import { updateActivePlayer } from "../../game/playersSlice";
+import { setPlayersAndRoom, updateActivePlayer } from "../../game/playersSlice";
 import { useDispatch } from "react-redux";
 import {
   setQuestions,
@@ -13,7 +14,11 @@ import {
   setAnswerChosen,
   updateIsAnswerCorrect,
 } from "../../game/05. answers/answerSlice";
-import { setPlayers } from "../../game/gameSlice";
+import {
+  updateIsNewGameStarted,
+  updateReadyToPlay,
+} from "../../game/gameSlice";
+import toast from "react-hot-toast";
 
 export default function useGameListeners(socket) {
   const dispatch = useDispatch();
@@ -45,20 +50,38 @@ export default function useGameListeners(socket) {
       dispatch(updateIsAnswerCorrect(setIsAnswerCorrect));
     };
 
+    const handleGameStarted = ({ roomId, players }) => {
+      dispatch(setPlayersAndRoom({ ...players, roomId }));
+      dispatch(updateIsNewGameStarted());
+    };
+
+    const handleOpponentLeft = () => {
+      toast.error("Your opponent has left the game.");
+    };
+
+    const handleOpponentDisconnected = () => {
+      toast.error("Your opponent has disconnected from the game.");
+      console.log("Opponent disconnected");
+    };
+
+    const handleSetGameCategories = ({ allCategories }) => {
+      dispatch(setCategories(allCategories));
+      dispatch(updateReadyToPlay());
+    };
+
+    socket.on("game_started", handleGameStarted);
+    socket.on("opponent_left", handleOpponentLeft);
+    socket.on("opponent_disconnected", handleOpponentDisconnected);
+    socket.on("get_categories", handleSetGameCategories);
     socket.on("getCategorySelected", handleGetCategorySelected);
     socket.on("getQuestionsSelected", handleGetQuestionsSelected);
     socket.on("getQuestionChosen", handleGetQuestionChosen);
     socket.on("getAnswerChosen", handleGetAnswerChosen);
-    socket.on("game_started", (data) => {
-      console.log(`Joined room: ${data.roomId}`);
-      // Navigate to /game/:roomId
-    });
-
-    socket.on("user_list_update", (updatedPlayers) => {
-      dispatch(setPlayers(updatedPlayers)); // Users will now have a 'status' property
-    });
 
     return () => {
+      socket.off("game_started", handleGameStarted);
+      socket.off("opponent_disconnected", handleOpponentDisconnected);
+      socket.off("get_categories", handleSetGameCategories);
       socket.off("getCategorySelected", handleGetCategorySelected);
       socket.off("getQuestionsSelected", handleGetQuestionsSelected);
       socket.off("getQuestionChosen", handleGetQuestionChosen);
