@@ -1,5 +1,10 @@
 const { Server } = require("socket.io");
 const jwt = require("jsonwebtoken");
+const {
+  getAllCategories,
+  getQuestion,
+  updatePoints,
+} = require("../services/game");
 
 function configSocket(server) {
   const io = new Server(server, {
@@ -10,6 +15,7 @@ function configSocket(server) {
   });
 
   const activeUsers = new Map();
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   io.on("connection", (socket) => {
     socket.on("identify", (username) => {
@@ -21,7 +27,7 @@ function configSocket(server) {
       io.emit("user_list_update", Array.from(activeUsers));
     });
 
-    socket.on("start_game", ({ targetUserId }) => {
+    socket.on("start_game", async ({ targetUserId }) => {
       const roomId = `room-${socket.id}-${targetUserId}`;
       const targetSocket = [...io.sockets.sockets.values()].find(
         (s) => s.id === targetUserId
@@ -39,9 +45,13 @@ function configSocket(server) {
         }
 
         let players = [
-          { username: socket.username, socketId: socket.id, earnedPoints: 0 },
           {
-            username: targetSocket.username,
+            username: activeUsers.get(socket.id).username,
+            socketId: socket.id,
+            earnedPoints: 0,
+          },
+          {
+            username: activeUsers.get(targetSocket.id).username,
             socketId: targetSocket.id,
             earnedPoints: 0,
           },
@@ -59,6 +69,23 @@ function configSocket(server) {
 
         // 4. Notify everyone else to update their UI (e.g., gray out their names)
         io.emit("user_list_update", Array.from(activeUsers));
+
+        // 5. Send categories to both players
+        try {
+          const allCategories = await getAllCategories();
+
+          await delay(2000);
+
+          io.to(roomId).emit("get_categories", {
+            allCategories,
+          });
+        } catch (error) {
+          console.error("Database error:", error);
+          socket.emit(
+            "game_error_message",
+            "Could not fetch data. You will be redirected automatically"
+          );
+        }
       }
     });
 
@@ -91,44 +118,93 @@ function configSocket(server) {
       }
     );
 
-    socket.on("send_categories", ({ roomId, allCategories }) => {
-      io.to(roomId).emit("get_categories", {
-        allCategories,
+    socket.on(
+      "send_category_selected",
+      async ({ roomId, selectedCategory, selectedCategoriesIDs }) => {
+        io.to(roomId).emit("get_category_selected", {
+          selectedCategory: selectedCategory,
+        });
+
+        if (selectedCategoriesIDs) {
+          const allQuestions = [];
+          const pointsList = [5, 10, 15, 20];
+
+          try {
+            for (let p = 0; p < pointsList.length; p++) {
+              for (let c = 0; c < selectedCategoriesIDs.length; c++) {
+                const receivedQuestion = await getQuestion(
+                  selectedCategoriesIDs[c],
+                  pointsList[p]
+                );
+
+                allQuestions.push(receivedQuestion[0]);
+              }
+            }
+
+            const transformQuestions = allQuestions.map((question) => ({
+              ...question,
+              answered: false,
+            }));
+
+            await delay(2000);
+
+            io.to(roomId).emit("get_questions_selected", {
+              transformQuestions,
+            });
+          } catch (error) {
+            console.error("Database error:", error);
+            socket.emit(
+              "game_error_message",
+              "Could not fetch data. You will be redirected automatically"
+            );
+          }
+        }
+      }
+    );
+
+    socket.on("send_question_chosen", ({ roomId, question }) => {
+      io.to(roomId).emit("get_question_chosen", {
+        question,
       });
     });
 
     socket.on(
-      "sendCategorySelected",
-      ({ receiverSocketId, categorySelected, index }) => {
-        io.to(receiverSocketId).emit("getCategorySelected", {
-          categorySelected,
-          index,
-        });
-      }
-    );
-
-    socket.on(
-      "sendQuestionsSelected",
-      ({ receiverSocketId, questionsSelected }) => {
-        io.to(receiverSocketId).emit("getQuestionsSelected", {
-          questionsSelected,
-        });
-      }
-    );
-
-    socket.on("sendQuestionChosen", ({ receiverSocketId, questionChosen }) => {
-      io.to(receiverSocketId).emit("getQuestionChosen", {
+      "send_answer_chosen",
+      ({
+        roomId,
+        answer,
+        setIsAnswerCorrect,
+        playerToUpdate,
+        pointsToAdd,
         questionChosen,
-      });
-    });
-
-    socket.on(
-      "sendAnswerChosen",
-      ({ receiverSocketId, answer, setIsAnswerCorrect }) => {
-        io.to(receiverSocketId).emit("getAnswerChosen", {
+      }) => {
+        io.to(roomId).emit("get_answer_chosen", {
           answer,
           setIsAnswerCorrect,
+          playerToUpdate,
+          pointsToAdd,
+          questionChosen,
         });
+      }
+    );
+
+    socket.on(
+      "send_game_result",
+      async ({ roomId, firstPlayer, secondPlayer }) => {
+        try {
+          await updatePoints(firstPlayer.username, firstPlayer.earnedPoints);
+          await updatePoints(secondPlayer.username, secondPlayer.earnedPoints);
+
+          await delay(2000);
+
+          io.to(roomId).emit("get_game_result", {});
+        } catch (error) {
+          console.error("Database error:", error);
+          socket.emit(
+            "game_error_message",
+            "Could not fetch data. You will be redirected automatically"
+          );
+        }
       }
     );
 
