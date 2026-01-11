@@ -1,12 +1,7 @@
 const { Router } = require("express");
-const { isUser } = require("../middlewares/guards");
 const { parseError } = require("../util");
 
-const {
-  getAllCategories,
-  getQuestion,
-  updatePoints,
-} = require("../services/game");
+const { getAllCategories, getQuestion } = require("../services/game");
 
 const gameRouter = Router();
 
@@ -41,19 +36,6 @@ gameRouter.post("/questions", async (req, res) => {
   } catch (err) {
     const parsed = parseError(err);
     res.status(400).json({ code: 400, message: parsed.message });
-  }
-});
-
-gameRouter.post("/recordPoints", isUser(), async (req, res) => {
-  try {
-    const username = req.user.username;
-    const points = req.body.points;
-
-    const result = await updatePoints(username, points);
-    res.json(result);
-  } catch (err) {
-    const parsed = parseError(err);
-    res.status(400).json({ code: 400, message: parsed.errors });
   }
 });
 
