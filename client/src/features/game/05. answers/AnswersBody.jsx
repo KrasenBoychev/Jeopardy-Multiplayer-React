@@ -1,19 +1,19 @@
 import { useDispatch, useSelector } from "react-redux";
-import { selectActivePlayer, selectRivalPlayer } from "../playersSlice";
+import {
+  selectActivePlayer,
+  selectFirstPlayer,
+  selectRoomId,
+} from "../playersSlice";
 import { selectCurrentUser } from "../../authentication/authSlice";
 import { selectQuestionChosen } from "../04. questions/questionsSlice";
-import {
-  selectAnswerChosen,
-  selectIsAnswerCorrect,
-  setAnswerChosen,
-  updateIsAnswerCorrect,
-} from "./answerSlice";
+import { selectAnswerChosen, selectIsAnswerCorrect } from "./answerSlice";
 import { setSocketReq } from "../../socket_connection/socketSlice";
 import "./answers.css";
 
 export default function AnswersBody({ answer }) {
-  const rivalPlayer = useSelector(selectRivalPlayer);
+  const roomId = useSelector(selectRoomId);
   const activePlayer = useSelector(selectActivePlayer);
+  const firstPlayer = useSelector(selectFirstPlayer);
   const user = useSelector(selectCurrentUser);
   const questionChosen = useSelector(selectQuestionChosen);
   const answerChosen = useSelector(selectAnswerChosen);
@@ -22,19 +22,30 @@ export default function AnswersBody({ answer }) {
 
   const answerQuestionClickHandler = async () => {
     let setIsAnswerCorrect = false;
+    let playerToUpdate = null;
+    let pointsToAdd = 0;
+
     if (questionChosen.correctAnswer == answer) {
       setIsAnswerCorrect = true;
+
+      playerToUpdate =
+        activePlayer.username == firstPlayer.username
+          ? "firstPlayer"
+          : "secondPlayer";
+
+      pointsToAdd = questionChosen.points;
     }
 
-    dispatch(updateIsAnswerCorrect(setIsAnswerCorrect));
-    dispatch(setAnswerChosen(answer));
     dispatch(
       setSocketReq({
-        socketReqName: "sendAnswerChosen",
+        socketReqName: "send_answer_chosen",
         socketData: {
-          receiverSocketId: rivalPlayer.socketId,
+          roomId,
           answer,
           setIsAnswerCorrect,
+          playerToUpdate,
+          pointsToAdd,
+          questionChosen,
         },
       })
     );
