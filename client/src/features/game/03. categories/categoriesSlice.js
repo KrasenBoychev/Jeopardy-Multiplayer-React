@@ -20,8 +20,8 @@ const categoriesSlice = createSlice({
       state.categories = allCategories;
     },
     updateGameCategories: (state, action) => {
-      const { categoryName, index } = action.payload;
-      state.gameCategories.splice(index, 1, categoryName);
+      const selectedCategory = action.payload;
+      state.gameCategories.splice(state.categoryCount, 1, selectedCategory);
     },
     updateCategoryCount: (state, action) => {
       state.categoryCount = state.categoryCount + 1;

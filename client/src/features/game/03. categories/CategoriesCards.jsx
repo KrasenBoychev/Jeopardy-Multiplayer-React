@@ -3,17 +3,11 @@ import {
   selectCategories,
   selectCategoryCount,
   selectGameCategories,
-  updateCategoryCount,
-  updateGameCategories,
 } from "./categoriesSlice";
 import { selectCurrentUser } from "../../authentication/authSlice";
-import {
-  selectActivePlayer,
-  selectRivalPlayer,
-  updateActivePlayer,
-} from "../playersSlice";
+import { selectActivePlayer, selectRoomId } from "../playersSlice";
 import { setSocketReq } from "../../socket_connection/socketSlice";
-import { Card } from "@/components/ui/focus-cards";
+import Card from "./Card";
 import PopupComp from "../../../components/popup/Popup";
 
 export function CategoriesCards() {
@@ -22,32 +16,33 @@ export function CategoriesCards() {
   const categoryCount = useSelector(selectCategoryCount);
   const user = useSelector(selectCurrentUser);
   const activePlayer = useSelector(selectActivePlayer);
-  const rivalPlayer = useSelector(selectRivalPlayer);
+  const roomId = useSelector(selectRoomId);
   const dispatch = useDispatch();
 
-  const selectCategoryClickHandler = (e) => {
-    const selectedCategory = e.target.id;
+  const getGameCategoriesIDs = (selectedCategory) => {
+    const categoriesIDs = [selectedCategory.id];
 
-    dispatch(
-      updateGameCategories({
-        categoryName: selectedCategory,
-        index: categoryCount,
-      })
-    );
+    gameCategories.forEach((gameCategory, index) => {
+      if (index < 3) {
+        categoriesIDs.push(gameCategory.id);
+      }
+    });
 
+    return categoriesIDs;
+  };
+
+  const selectCategoryClickHandler = (selectedCategory) => {
     dispatch(
       setSocketReq({
-        socketReqName: "sendCategorySelected",
+        socketReqName: "send_category_selected",
         socketData: {
-          receiverSocketId: rivalPlayer.socketId,
-          categorySelected: selectedCategory,
-          index: categoryCount,
+          roomId,
+          selectedCategory,
+          selectedCategoriesIDs:
+            categoryCount == 3 ? getGameCategoriesIDs(selectedCategory) : null,
         },
       })
     );
-
-    dispatch(updateActivePlayer());
-    dispatch(updateCategoryCount());
   };
 
   const openBtnName = "CHOOSE";
@@ -55,12 +50,21 @@ export function CategoriesCards() {
   const popupContent = (
     <ul>
       {categories?.map((category) => {
-        if (!gameCategories.includes(category.name)) {
+        if (
+          !gameCategories.find(
+            (gameCategory) => gameCategory.name === category.name
+          )
+        ) {
           return (
             <li
               key={category.name}
               id={category.name}
-              onClick={selectCategoryClickHandler}
+              onClick={() =>
+                selectCategoryClickHandler({
+                  id: category._id,
+                  name: category.name,
+                })
+              }
             >
               {category.name}
             </li>
