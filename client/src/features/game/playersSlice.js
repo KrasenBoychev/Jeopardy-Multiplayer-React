@@ -11,18 +11,17 @@ const playersSlice = createSlice({
   },
   reducers: {
     setPlayersAndRoom: (state, action) => {
-      const { firstPlayerDetails, secondPlayerDetails, roomId } =
-        action.payload;
-      state.firstPlayer = firstPlayerDetails;
-      state.secondPlayer = secondPlayerDetails;
-      state.activePlayer = firstPlayerDetails;
+      const { roomId, players } = action.payload;
+      state.firstPlayer = players[0];
+      state.secondPlayer = players[1];
+      state.activePlayer = players[0];
       state.roomId = roomId;
     },
     setRivalPlayer: (state, action) => {
       state.rivalPlayer = action.payload;
     },
     updateActivePlayer: (state, action) => {
-      if (state.activePlayer[1].username == state.firstPlayer[1].username) {
+      if (state.activePlayer.username == state.firstPlayer.username) {
         state.activePlayer = state.secondPlayer;
       } else {
         state.activePlayer = state.firstPlayer;
