@@ -31,7 +31,6 @@ export const LampContainer = ({ children, className }) => {
         className
       )}
     >
-      <ExitGame />
       <motion.div className="mt-10 z-1 text-2xl text-cyan-400 uppercase letter-wide">
         The game will start
       </motion.div>
