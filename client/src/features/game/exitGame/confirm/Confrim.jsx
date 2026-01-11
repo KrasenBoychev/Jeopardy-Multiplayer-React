@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { selectCurrentUser } from "../../../authentication/authSlice";
-import { selectRivalPlayer } from "../../playersSlice";
+import { deletePlayersDetails, selectRoomId } from "../../playersSlice";
 import { setSocketReq } from "../../../socket_connection/socketSlice";
 import "./confirm.css";
+import { deleteGameDetails } from "../../gameSlice";
+import { deleteCategories } from "../../03. categories/categoriesSlice";
+import { deleteQuestions } from "../../04. questions/questionsSlice";
 
-export default function Confrim({ props }) {
-  const { setShowConfirmMessage, setIsGameLeft } = props;
-  const user = useSelector(selectCurrentUser);
-  const rivalPlayer = useSelector(selectRivalPlayer);
+export default function Confrim({ setShowConfirmMessage }) {
+  const roomId = useSelector(selectRoomId);
   const dispatch = useDispatch();
 
   const declineLeavingClickHandler = () => {
@@ -15,18 +15,19 @@ export default function Confrim({ props }) {
   };
 
   const confirmLeavingClickHandler = async () => {
-    // if (rivalPlayer) {
-    //   dispatch(
-    //     setSocketReq({
-    //       socketReqName: "setExitGame",
-    //       socketData: {
-    //         receiverSocketId: rivalPlayer.socketId,
-    //         username: user.username,
-    //       },
-    //     })
-    //   );
-    // }
-    // setIsGameLeft(true);
+    dispatch(
+      setSocketReq({
+        socketReqName: "leave_game",
+        socketData: {
+          roomId,
+        },
+      })
+    );
+
+    dispatch(deleteGameDetails());
+    dispatch(deletePlayersDetails());
+    dispatch(deleteCategories());
+    dispatch(deleteQuestions());
   };
 
   return (
