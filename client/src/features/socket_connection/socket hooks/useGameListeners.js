@@ -1,22 +1,32 @@
 import { useEffect } from "react";
 import {
+  deleteCategories,
   setCategories,
   updateCategoryCount,
   updateGameCategories,
 } from "../../game/03. categories/categoriesSlice";
-import { setPlayersAndRoom, updateActivePlayer } from "../../game/playersSlice";
+import {
+  deletePlayersDetails,
+  setPlayersAndRoom,
+  updateActivePlayer,
+  updatePlayerPoints,
+} from "../../game/playersSlice";
 import { useDispatch } from "react-redux";
 import {
+  deleteQuestions,
   setQuestions,
+  updateQuestionAnswered,
   updateQuestionChosen,
 } from "../../game/04. questions/questionsSlice";
 import {
+  deleteAnswerDetails,
   setAnswerChosen,
   updateIsAnswerCorrect,
 } from "../../game/05. answers/answerSlice";
 import {
+  deleteGameDetails,
+  updateIsGameCompleted,
   updateIsNewGameStarted,
-  updateReadyToPlay,
 } from "../../game/gameSlice";
 import toast from "react-hot-toast";
 
@@ -26,33 +36,20 @@ export default function useGameListeners(socket) {
   useEffect(() => {
     if (!socket) return;
 
-    const handleGetCategorySelected = ({ categorySelected, index }) => {
-      dispatch(
-        updateGameCategories({
-          categoryName: categorySelected,
-          index,
-        })
-      );
-      dispatch(updateActivePlayer());
-      dispatch(updateCategoryCount());
-    };
-
-    const handleGetQuestionsSelected = ({ questionsSelected }) => {
-      dispatch(setQuestions(questionsSelected));
-    };
-
-    const handleGetQuestionChosen = ({ questionChosen }) => {
-      dispatch(updateQuestionChosen(questionChosen));
-    };
-
-    const handleGetAnswerChosen = ({ answer, setIsAnswerCorrect }) => {
-      dispatch(setAnswerChosen(answer));
-      dispatch(updateIsAnswerCorrect(setIsAnswerCorrect));
-    };
-
     const handleGameStarted = ({ roomId, players }) => {
-      dispatch(setPlayersAndRoom({ ...players, roomId }));
+      dispatch(setPlayersAndRoom({ roomId, players }));
       dispatch(updateIsNewGameStarted());
+    };
+
+    const handleGameErrorMessage = (message) => {
+      toast.error(message);
+
+      setTimeout(() => {
+        dispatch(deleteGameDetails());
+        dispatch(deletePlayersDetails());
+        dispatch(deleteCategories());
+        dispatch(deleteQuestions());
+      }, 2000);
     };
 
     const handleOpponentLeft = () => {
@@ -61,31 +58,78 @@ export default function useGameListeners(socket) {
 
     const handleOpponentDisconnected = () => {
       toast.error("Your opponent has disconnected from the game.");
-      console.log("Opponent disconnected");
     };
 
     const handleSetGameCategories = ({ allCategories }) => {
       dispatch(setCategories(allCategories));
-      dispatch(updateReadyToPlay());
+    };
+
+    const handleGetCategorySelected = ({ selectedCategory }) => {
+      dispatch(updateGameCategories(selectedCategory));
+      dispatch(updateActivePlayer());
+      dispatch(updateCategoryCount());
+    };
+
+    const handleGetQuestionsSelected = ({ transformQuestions }) => {
+      dispatch(setQuestions(transformQuestions));
+    };
+
+    const handleGetQuestionChosen = ({ question }) => {
+      dispatch(updateQuestionChosen(question));
+    };
+
+    const handleGetAnswerChosen = ({
+      answer,
+      setIsAnswerCorrect,
+      playerToUpdate,
+      pointsToAdd,
+      questionChosen,
+    }) => {
+      if (setIsAnswerCorrect) {
+        dispatch(
+          updatePlayerPoints({
+            player: playerToUpdate,
+            pointsToAdd,
+          })
+        );
+      }
+
+      dispatch(setAnswerChosen(answer));
+      dispatch(updateIsAnswerCorrect(setIsAnswerCorrect));
+
+      setTimeout(() => {
+        dispatch(updateQuestionChosen(null));
+        dispatch(deleteAnswerDetails());
+        dispatch(updateQuestionAnswered(questionChosen));
+        dispatch(updateActivePlayer());
+      }, 1000);
+    };
+
+    const handleGetGameResult = () => {
+      dispatch(updateIsGameCompleted());
     };
 
     socket.on("game_started", handleGameStarted);
+    socket.on("game_error_message", handleGameErrorMessage);
     socket.on("opponent_left", handleOpponentLeft);
     socket.on("opponent_disconnected", handleOpponentDisconnected);
     socket.on("get_categories", handleSetGameCategories);
-    socket.on("getCategorySelected", handleGetCategorySelected);
-    socket.on("getQuestionsSelected", handleGetQuestionsSelected);
-    socket.on("getQuestionChosen", handleGetQuestionChosen);
-    socket.on("getAnswerChosen", handleGetAnswerChosen);
+    socket.on("get_category_selected", handleGetCategorySelected);
+    socket.on("get_questions_selected", handleGetQuestionsSelected);
+    socket.on("get_question_chosen", handleGetQuestionChosen);
+    socket.on("get_answer_chosen", handleGetAnswerChosen);
+    socket.on("get_game_result", handleGetGameResult);
 
     return () => {
       socket.off("game_started", handleGameStarted);
       socket.off("opponent_disconnected", handleOpponentDisconnected);
+      socket.off("game_error_message", handleGameErrorMessage);
       socket.off("get_categories", handleSetGameCategories);
-      socket.off("getCategorySelected", handleGetCategorySelected);
-      socket.off("getQuestionsSelected", handleGetQuestionsSelected);
-      socket.off("getQuestionChosen", handleGetQuestionChosen);
-      socket.off("getAnswerChosen", handleGetAnswerChosen);
+      socket.off("get_category_selected", handleGetCategorySelected);
+      socket.off("get_questions_selected", handleGetQuestionsSelected);
+      socket.off("get_question_chosen", handleGetQuestionChosen);
+      socket.off("get_answer_chosen", handleGetAnswerChosen);
+      socket.off("get_game_result", handleGetGameResult);
     };
   }, [socket]);
 }
