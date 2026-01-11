@@ -1,24 +1,22 @@
 import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../authentication/authSlice";
-import { selectActivePlayer, selectRivalPlayer } from "../playersSlice";
-import { updateQuestionChosen } from "./questionsSlice";
+import { selectActivePlayer, selectRoomId } from "../playersSlice";
 import { setSocketReq } from "../../socket_connection/socketSlice";
 import "../game.css";
 
 export default function QuestionsBody({ question }) {
   const activePlayer = useSelector(selectActivePlayer);
-  const rivalPlayer = useSelector(selectRivalPlayer);
+  const roomId = useSelector(selectRoomId);
   const user = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
 
   const showQuestionClickHandler = async () => {
-    dispatch(updateQuestionChosen(question));
     dispatch(
       setSocketReq({
-        socketReqName: "sendQuestionChosen",
+        socketReqName: "send_question_chosen",
         socketData: {
-          receiverSocketId: rivalPlayer.socketId,
-          questionChosen: question,
+          roomId,
+          question,
         },
       })
     );

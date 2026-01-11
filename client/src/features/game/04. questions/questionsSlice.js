@@ -5,6 +5,7 @@ const questionsSlice = createSlice({
   initialState: {
     questions: null,
     questionChosen: null,
+    questionsAnswered: 0,
   },
   reducers: {
     setQuestions: (state, action) => {
@@ -17,6 +18,7 @@ const questionsSlice = createSlice({
     },
     updateQuestionAnswered: (state, action) => {
       const questionToUpdate = action.payload;
+      state.questionsAnswered += 1;
       state.questions = state.questions.map((question) => {
         if (question._id == questionToUpdate._id) {
           question.answered = true;
@@ -27,6 +29,7 @@ const questionsSlice = createSlice({
     deleteQuestions: (state, action) => {
       state.questions = null;
       state.questionChosen = null;
+      state.questionsAnswered = 0;
     },
   },
 });
@@ -42,3 +45,5 @@ export default questionsSlice.reducer;
 
 export const selectQuestions = (state) => state.questions.questions;
 export const selectQuestionChosen = (state) => state.questions.questionChosen;
+export const selectQuestionsAnswered = (state) =>
+  state.questions.questionsAnswered;

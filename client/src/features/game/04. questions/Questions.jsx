@@ -5,19 +5,19 @@ import QuestionsBody from "./QuestionsBody";
 import QuestionsHeader from "./QuestionsHeader";
 import "../game.css";
 
-export default function Questions({ isLoadingResult }) {
+export default function Questions() {
   const questions = useSelector(selectQuestions);
   const gameCategories = useSelector(selectGameCategories);
 
   return (
     <section>
-      <QuestionsHeader isLoadingResult={isLoadingResult} />
+      <QuestionsHeader />
 
       <div className="categories_names">
-        {gameCategories.map((categoryName) => {
+        {gameCategories.map((category) => {
           return (
-            <div key={categoryName} className="category_box">
-              {categoryName}
+            <div key={category.name} className="category_box">
+              {category.name}
             </div>
           );
         })}

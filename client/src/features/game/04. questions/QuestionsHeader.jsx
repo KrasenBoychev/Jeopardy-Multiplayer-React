@@ -2,10 +2,12 @@ import { useSelector } from "react-redux";
 import { selectActivePlayer } from "../playersSlice";
 import { selectCurrentUser } from "../../authentication/authSlice";
 import "../game.css";
+import { selectQuestionsAnswered } from "./questionsSlice";
 
-export default function QuestionsHeader({ isLoadingResult }) {
+export default function QuestionsHeader() {
   const activePlayer = useSelector(selectActivePlayer);
   const user = useSelector(selectCurrentUser);
+  const questionsAnswered = useSelector(selectQuestionsAnswered);
 
   return (
     <p
@@ -16,7 +18,7 @@ export default function QuestionsHeader({ isLoadingResult }) {
             : "inactive_player"
         }`}
     >
-      {isLoadingResult
+      {questionsAnswered == 16
         ? "Loading result..."
         : `${activePlayer.username} chooses question`}
     </p>
