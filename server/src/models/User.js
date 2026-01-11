@@ -24,18 +24,6 @@ const UserSchema = new Schema({
       type: Array,
       default: [],
     },
-    online: {
-      type: Boolean,
-      default: false,
-    },
-    socketId: {
-      type: String,
-      default: "",
-    },
-    gameInProgress: {
-      type: Boolean,
-      default: false,
-    },
   },
   notificationsList: {
     type: Array,
