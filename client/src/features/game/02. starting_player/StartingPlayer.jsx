@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectFirstPlayer } from "../playersSlice";
 import Categories from "../03. categories/Categories";
-import "../game.css";
 
 export default function StartingPlayer() {
   const [isVisible, setIsVisible] = useState(false);
@@ -44,7 +43,7 @@ export default function StartingPlayer() {
             Game will start
           </p>
           <div style={style}>
-            <p className="text-5xl max-[1600px]:text-4xl max-[1400px]:text-3xl">
+            <p className="text-chart-4 text-5xl max-[1600px]:text-4xl max-[1400px]:text-3xl">
               {firstPlayer.username}
             </p>
           </div>
