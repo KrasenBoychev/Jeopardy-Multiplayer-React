@@ -2,8 +2,6 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../authentication/authSlice";
 import { selectActivePlayer } from "../playersSlice";
 import { selectIsAnswerCorrect } from "./answerSlice";
-import "./answers.css";
-import "../game.css";
 
 export default function AnswersHeader() {
   const activePlayer = useSelector(selectActivePlayer);
@@ -13,16 +11,16 @@ export default function AnswersHeader() {
   return (
     <>
       <p
-        className={`bg-clip-text text-transparent drop-shadow-2xl bg-gradient-to-b from-white/80 to-white/20 uppercase text-5xl font-bold 
+        className={`uppercase text-5xl font-bold bg-[#00000099] px-4 py-2 rounded-md
         ${
           isAnswerCorrect == null
             ? user.username === activePlayer.username
-              ? "active_player"
-              : "inactive_player"
+              ? "text-active-player"
+              : "text-destructive"
             : isAnswerCorrect
-            ? "answer_correct"
-            : "answer_wrong"
-        }`}
+            ? "bg-active-player"
+            : "bg-destructive"
+        } max-[1600px]:text-4xl max-[1400px]:text-3xl`}
       >
         {isAnswerCorrect == null
           ? `${activePlayer.username} answers question`

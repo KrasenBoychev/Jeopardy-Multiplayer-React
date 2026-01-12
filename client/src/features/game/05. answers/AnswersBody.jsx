@@ -8,7 +8,6 @@ import { selectCurrentUser } from "../../authentication/authSlice";
 import { selectQuestionChosen } from "../04. questions/questionsSlice";
 import { selectAnswerChosen, selectIsAnswerCorrect } from "./answerSlice";
 import { setSocketReq } from "../../socket_connection/socketSlice";
-import "./answers.css";
 
 export default function AnswersBody({ answer }) {
   const roomId = useSelector(selectRoomId);
@@ -53,24 +52,29 @@ export default function AnswersBody({ answer }) {
 
   return (
     <button
-      className={`answer_box px-8 py-2 bg-black text-white text-sm rounded-md font-semibold opacity-60
+      className={`px-4 py-3 text-white text-[20px] text-left rounded-sm font-semibold opacity-50
+         ${isAnswerCorrect == null && "bg-black"}
          ${
            isAnswerCorrect == null &&
            user.username === activePlayer.username &&
-           "answer_box_active opacity-100 hover:bg-ring/[0.8] hover:shadow-lg"
+           "opacity-100 cursor-pointer hover:shadow-[inset_0_0_10px_orange]"
          }
         ${
           isAnswerCorrect != null &&
           questionChosen.correctAnswer == answer &&
-          "answer_correct"
+          "bg-active-player"
         }
         ${
           isAnswerCorrect != null &&
           questionChosen.correctAnswer != answer &&
-          "answer_wrong"
+          "bg-destructive"
         }
-        ${isAnswerCorrect != null && answerChosen == answer && "answer_chosen"}
-        `}
+        ${
+          isAnswerCorrect != null &&
+          answerChosen == answer &&
+          "border border-solid border-white"
+        }
+        max-[1800px]:text-[19px] max-[1600px]:text-[18px] max-[1400px]:text-[17px] `}
       disabled={
         user.username != activePlayer.username || answerChosen ? true : false
       }
