@@ -1,11 +1,9 @@
 import { useSelector } from "react-redux";
 import { selectQuestions } from "../04. questions/questionsSlice";
-import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation";
 import QuestionsMiddleware from "../04. questions/QuestionsMiddleware";
 import ExitGame from "../exitGame/ExitGame";
 import CategoriesHeader from "./CategoriesHeader";
 import { CategoriesCards } from "./CategoriesCards";
-import "../game.css";
 
 export default function Categories() {
   const questions = useSelector(selectQuestions);
@@ -17,9 +15,9 @@ export default function Categories() {
         {questions ? (
           <QuestionsMiddleware />
         ) : (
-          <div className="categories_page_wrapper">
+          <div className="flex flex-col items-center gap-12">
             <CategoriesHeader />
-            <div className="categories_container">
+            <div className="w-[800px]">
               <CategoriesCards />
             </div>
           </div>

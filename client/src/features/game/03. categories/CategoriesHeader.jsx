@@ -10,12 +10,14 @@ export default function CategoriesHeader() {
 
   return (
     <p
-      className={`bg-clip-text text-transparent drop-shadow-2xl bg-gradient-to-b from-white/80 to-white/20 uppercase text-5xl font-bold 
+      className={`uppercase text-5xl font-bold bg-[#00000099] px-4 py-2 rounded-md
         ${
-          user.username == activePlayer.username && categoriesCount <= 3
-            ? "active_player"
-            : "inactive_player"
-        }`}
+          categoriesCount > 3
+            ? "text-chart-5"
+            : user.username == activePlayer.username
+            ? "text-active-player"
+            : "text-destructive"
+        } max-[1600px]:text-4xl max-[1400px]:text-3xl`}
     >
       {categoriesCount <= 3
         ? `${activePlayer.username} chooses category`

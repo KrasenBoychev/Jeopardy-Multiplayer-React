@@ -1,5 +1,4 @@
 "use client";
-import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 
 export default function Card({
@@ -13,7 +12,7 @@ export default function Card({
   return (
     <div
       className={cn(
-        "rounded-lg relative bg-gray-100 dark:bg-neutral-900 overflow-hidden h-40 md:h-40 w-full transition-all duration-300 ease-out",
+        "rounded-lg relative bg-gray-100 dark:bg-neutral-900 overflow-hidden h-35 w-full transition-all duration-300 ease-out max-[1600px]:h-35 max-[1400px]:h-30",
         (index > categoryCount ||
           (index == categoryCount &&
             user.username !== activePlayer.username)) &&
@@ -28,7 +27,7 @@ export default function Card({
       >
         <div
           className={cn(
-            "text-xl md:text-2xl font-medium bg-clip-text text-black bg-gradient-to-b from-neutral-50 to-neutral-200 uppercase",
+            "text-2xl font-medium bg-clip-text text-black bg-gradient-to-b from-neutral-50 to-neutral-200 uppercase max-[1400px]:text-xl",
             index == categoryCount &&
               user.username === activePlayer.username &&
               "cursor-pointer"
