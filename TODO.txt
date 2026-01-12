@@ -2,10 +2,6 @@ Sockets:
  - When a user disconnects, check if the user has another active token - in case the user is logged in a few different tabs
     - If the same user logs in from a different browser, the name appears twice or more times to the rest of the users in the "Pick opponent" box
 
-Replace css files with tailwind css
-
-Add responsive design to the game components
-
 Create Pages:
  - Check for errors after implementing the new socket logic (shouldn't have any)
  - Apply new design
