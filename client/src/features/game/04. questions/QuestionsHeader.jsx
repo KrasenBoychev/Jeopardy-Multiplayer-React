@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import { selectActivePlayer } from "../playersSlice";
 import { selectCurrentUser } from "../../authentication/authSlice";
-import "../game.css";
 import { selectQuestionsAnswered } from "./questionsSlice";
 
 export default function QuestionsHeader() {
@@ -11,12 +10,14 @@ export default function QuestionsHeader() {
 
   return (
     <p
-      className={`bg-clip-text text-transparent drop-shadow-2xl bg-gradient-to-b from-white/80 to-white/20 uppercase text-5xl font-bold 
+      className={`uppercase text-5xl font-bold bg-[#00000099] px-4 py-2 rounded-md 
         ${
-          user.username == activePlayer.username
-            ? "active_player"
-            : "inactive_player"
-        }`}
+          questionsAnswered == 16
+            ? "text-chart-5"
+            : user.username == activePlayer.username
+            ? "text-active-player"
+            : "text-destructive"
+        } max-[1600px]:text-4xl max-[1400px]:text-3xl`}
     >
       {questionsAnswered == 16
         ? "Loading result..."

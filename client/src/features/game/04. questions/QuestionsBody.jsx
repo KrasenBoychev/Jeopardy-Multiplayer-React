@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentUser } from "../../authentication/authSlice";
 import { selectActivePlayer, selectRoomId } from "../playersSlice";
 import { setSocketReq } from "../../socket_connection/socketSlice";
-import "../game.css";
 
 export default function QuestionsBody({ question }) {
   const activePlayer = useSelector(selectActivePlayer);
@@ -11,6 +10,10 @@ export default function QuestionsBody({ question }) {
   const dispatch = useDispatch();
 
   const showQuestionClickHandler = async () => {
+    if (user.username !== activePlayer.username || question.answered) {
+      return;
+    }
+
     dispatch(
       setSocketReq({
         socketReqName: "send_question_chosen",
@@ -23,28 +26,26 @@ export default function QuestionsBody({ question }) {
   };
 
   return (
-    <button
-      className="p-[3px] relative question_box"
-      disabled={
-        user.username !== activePlayer.username || question.answered
-          ? true
-          : false
-      }
+    <div
+      className="flex items-center justify-center"
       onClick={showQuestionClickHandler}
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
       <div
-        className={`px-8 py-2 rounded-[6px] bg-black relative group transition duration-200 ${
+        className={`relative h-20 w-20 flex items-center justify-center text-[20px] rounded-full shadow-[inset_0_0_13px_black] ${
           question.answered
-            ? "bg-white text-black"
-            : `text-white ${
+            ? "bg-black text-white"
+            : `${
                 user.username === activePlayer.username &&
-                "hover:bg-transparent cursor-pointer"
+                "bg-white text-black cursor-pointer hover:font-bold hover:text-[24px] hover:shadow-[inset_0_0_18px_black] max-[1800px]:hover:text-[22px] max-[1600px]:hover:text-[20px] max-[1400px]:hover:text-[18px]"
               }`
-        } }`}
+        } max-[1800px]:h-18 max-[1800px]:w-18 max-[1600px]:h-16 max-[1600px]:w-16 max-[1400px]:h-14 max-[1400px]:w-14 
+          max-[1800px]:text-[18px] max-[1600px]:text-[16px] max-[1400px]:text-[14px] `}
       >
-        {question.points}
+        <span className="">{question.points}</span>
+        {question.answered && (
+          <div className="absolute inset-x-0 top-1/2 h-0.5 bg-destructive rotate-145"></div>
+        )}
       </div>
-    </button>
+    </div>
   );
 }

@@ -13,7 +13,6 @@ import Score from "../score/Score";
 import Questions from "./Questions";
 import Answers from "../05. answers/Answers";
 import ResultGame from "../06. final_result/ResultGame";
-import "../game.css";
 import { setSocketReq } from "../../socket_connection/socketSlice";
 import { selectIsGameCompleted } from "../gameSlice";
 import { selectCurrentUser } from "../../authentication/authSlice";
@@ -50,10 +49,12 @@ export default function QuestionsMiddleware() {
       {isGameCompleted ? (
         <ResultGame />
       ) : (
-        <div className="questions_page_wrapper">
+        <>
           <Score />
-          {questionChosen ? <Answers /> : <Questions />}
-        </div>
+          <div className="w-fit h-full flex">
+            {questionChosen ? <Answers /> : <Questions />}
+          </div>
+        </>
       )}
     </>
   );
