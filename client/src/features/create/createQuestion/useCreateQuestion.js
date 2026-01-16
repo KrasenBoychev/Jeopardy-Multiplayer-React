@@ -25,16 +25,22 @@ export function useCreateQuestion() {
   });
   const [allCategoriesNames, setAllCategoriesNames] = useState([]);
   const currentPage = useSelector(selectCurrentPage);
-  const { data: getCategories } = useGetCategoriesQuery("getCategories");
+  const {
+    data: getCategories,
+    isSuccess,
+    isError,
+  } = useGetCategoriesQuery("getCategories", {
+    refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,
+  });
   const createItemsAllValues = useSelector(selectCreateItemsAllValues);
   const categoryName = useSelector(selectCategoryName);
 
   useEffect(() => {
-    if (currentPage == 0) {
+    if (currentPage == 0 && isSuccess) {
       (async () => {
         try {
-          const getAllCategories = await getCategories();
-          const categoryNamesOnly = getAllCategories.data.map(
+          const categoryNamesOnly = getCategories.map(
             (category) => category.name
           );
           setAllCategoriesNames(categoryNamesOnly);
@@ -42,6 +48,8 @@ export function useCreateQuestion() {
           toast.error(err.message);
         }
       })();
+    } else if (currentPage == 0 && isError) {
+      toast.error("Cannot fetch the data, please refresh the page.");
     } else if (currentPage > 0 && currentPage <= 4) {
       const formInitialValues = multipleQuestionsInitialValues(
         createItemsAllValues,
@@ -63,7 +71,7 @@ export function useCreateQuestion() {
         },
       });
     }
-  }, [currentPage]);
+  }, [currentPage, getCategories]);
 
   return [allCategoriesNames, formValues, setFormValues];
 }
