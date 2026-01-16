@@ -29,7 +29,6 @@ import {
   useCheckIfQuestionExistsMutation,
   useRecordSingleQuestionMutation,
 } from "../createApiSlice";
-import "../create.css";
 
 export default function CreateQuestion() {
   const [recordQuestion, setRecordQuestion] = useState(false);
@@ -172,156 +171,170 @@ export default function CreateQuestion() {
   return (
     <>
       <div
-        className={`flex-column self-center pt-25 pb-10 ${
+        className={`flex flex-col justify-center items-center px-4 bg-[url(planet.png)] bg-cover bg-center ${
           recordQuestion ? "bg-white" : "bg-black"
         }`}
       >
         {!recordQuestion ? (
-          <div className="shadow-input mx-auto w-full max-w-md rounded-none bg-white p-4 md:rounded-2xl md:p-8">
-            <h2 className="text-center text-xl font-bold text-neutral-800 dark:text-neutral-200 uppercase">
-              Create Question
-            </h2>
-            <form className="my-8">
-              <LabelInputContainer className="mb-4">
-                <Label htmlFor="category">Category</Label>
-                {currentPage > 0 ? (
+          <div className="w-[800px] h-[80vh] bg-white p-4 rounded-md">
+            <div className="custom-scroll-container p-5">
+              <h2 className="text-center text-xl font-bold text-neutral-800 dark:text-neutral-200 uppercase">
+                Create Question
+              </h2>
+              <form className="my-8">
+                <LabelInputContainer className="mb-4">
+                  <Label htmlFor="category">Category</Label>
+                  {currentPage > 0 ? (
+                    <Input
+                      id="category"
+                      type="text"
+                      className="uppercase"
+                      disabled
+                      value={formValues.category.content}
+                    />
+                  ) : (
+                    <Select
+                      name="category"
+                      id="category"
+                      className={
+                        formValues.category.error == true &&
+                        "border border-solid border-destructive"
+                      }
+                      optionsArray={allCategoriesNames}
+                      onChange={handleInput}
+                    />
+                  )}
+                </LabelInputContainer>
+                <LabelInputContainer className="mb-4">
+                  <Label htmlFor="points">Points</Label>
+                  {currentPage > 0 ? (
+                    <Input
+                      id="points"
+                      type="text"
+                      className="uppercase"
+                      disabled
+                      value={formValues.points.content}
+                    />
+                  ) : (
+                    <Select
+                      name="points"
+                      id="points"
+                      className={
+                        formValues.points.error == true &&
+                        "border border-solid border-destructive"
+                      }
+                      optionsArray={gamePoints}
+                      onChange={handleInput}
+                    />
+                  )}
+                </LabelInputContainer>
+                <LabelInputContainer className="mb-8">
+                  <Label htmlFor="question">Question</Label>
                   <Input
-                    id="category"
+                    id="question"
                     type="text"
-                    className="uppercase"
-                    disabled
-                    value={formValues.category.content}
-                  />
-                ) : (
-                  <Select
-                    name="category"
-                    id="category"
                     className={
-                      formValues.category.error == true && "false_field"
+                      formValues.question.error == true &&
+                      "border border-solid border-destructive"
                     }
-                    optionsArray={allCategoriesNames}
+                    value={formValues.question.content}
                     onChange={handleInput}
                   />
-                )}
-              </LabelInputContainer>
-              <LabelInputContainer className="mb-4">
-                <Label htmlFor="points">Points</Label>
-                {currentPage > 0 ? (
+                </LabelInputContainer>
+                <LabelInputContainer className="mb-8">
+                  <Label htmlFor="answerOne">Answer 1</Label>
                   <Input
-                    id="points"
+                    id="answerOne"
                     type="text"
-                    className="uppercase"
-                    disabled
-                    value={formValues.points.content}
-                  />
-                ) : (
-                  <Select
-                    name="points"
-                    id="points"
-                    className={formValues.points.error == true && "false_field"}
-                    optionsArray={gamePoints}
+                    className={
+                      formValues.answerOne.error == true &&
+                      "border border-solid border-destructive"
+                    }
+                    value={formValues.answerOne.content}
                     onChange={handleInput}
                   />
+                </LabelInputContainer>
+                <LabelInputContainer className="mb-8">
+                  <Label htmlFor="answerTwo">Answer 2</Label>
+                  <Input
+                    id="answerTwo"
+                    type="text"
+                    className={
+                      formValues.answerTwo.error == true &&
+                      "border border-solid border-destructive"
+                    }
+                    value={formValues.answerTwo.content}
+                    onChange={handleInput}
+                  />
+                </LabelInputContainer>
+                <LabelInputContainer className="mb-8">
+                  <Label htmlFor="answerThree">Answer 3</Label>
+                  <Input
+                    id="answerThree"
+                    type="text"
+                    className={
+                      formValues.answerThree.error == true &&
+                      "border border-solid border-destructive"
+                    }
+                    value={formValues.answerThree.content}
+                    onChange={handleInput}
+                  />
+                </LabelInputContainer>
+                <LabelInputContainer className="mb-8">
+                  <Label htmlFor="answerFour">Answer 4</Label>
+                  <Input
+                    id="answerFour"
+                    type="text"
+                    className={
+                      formValues.answerFour.error == true &&
+                      "border border-solid border-destructive"
+                    }
+                    value={formValues.answerFour.content}
+                    onChange={handleInput}
+                  />
+                </LabelInputContainer>
+                <LabelInputContainer className="mb-4">
+                  <Label htmlFor="correctAnswer">Correct Answer</Label>
+                  <Select
+                    name="correctAnswer"
+                    id="correctAnswer"
+                    className={
+                      formValues.correctAnswer.error == true &&
+                      "border border-solid border-destructive"
+                    }
+                    optionsArray={correctAnswerValues}
+                    value={formValues.correctAnswer.content}
+                    onChange={handleInput}
+                  />
+                </LabelInputContainer>
+                <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
+              </form>
+
+              <div className={`mt-10 ${currentPage > 0 && "flex gap-10"}`}>
+                {currentPage > 0 && (
+                  <button
+                    className="group/btn relative block h-10 w-full rounded-md cursor-pointer bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
+                    onClick={handlePreviousPage}
+                  >
+                    Previous Page
+                    <BottomGradient />
+                  </button>
                 )}
-              </LabelInputContainer>
-              <LabelInputContainer className="mb-8">
-                <Label htmlFor="question">Question</Label>
-                <Input
-                  id="question"
-                  type="text"
-                  className={formValues.question.error == true && "false_field"}
-                  value={formValues.question.content}
-                  onChange={handleInput}
-                />
-              </LabelInputContainer>
-              <LabelInputContainer className="mb-8">
-                <Label htmlFor="answerOne">Answer 1</Label>
-                <Input
-                  id="answerOne"
-                  type="text"
-                  className={
-                    formValues.answerOne.error == true && "false_field"
-                  }
-                  value={formValues.answerOne.content}
-                  onChange={handleInput}
-                />
-              </LabelInputContainer>
-              <LabelInputContainer className="mb-8">
-                <Label htmlFor="answerTwo">Answer 2</Label>
-                <Input
-                  id="answerTwo"
-                  type="text"
-                  className={
-                    formValues.answerTwo.error == true && "false_field"
-                  }
-                  value={formValues.answerTwo.content}
-                  onChange={handleInput}
-                />
-              </LabelInputContainer>
-              <LabelInputContainer className="mb-8">
-                <Label htmlFor="answerThree">Answer 3</Label>
-                <Input
-                  id="answerThree"
-                  type="text"
-                  className={
-                    formValues.answerThree.error == true && "false_field"
-                  }
-                  value={formValues.answerThree.content}
-                  onChange={handleInput}
-                />
-              </LabelInputContainer>
-              <LabelInputContainer className="mb-8">
-                <Label htmlFor="answerFour">Answer 4</Label>
-                <Input
-                  id="answerFour"
-                  type="text"
-                  className={
-                    formValues.answerFour.error == true && "false_field"
-                  }
-                  value={formValues.answerFour.content}
-                  onChange={handleInput}
-                />
-              </LabelInputContainer>
-              <LabelInputContainer className="mb-4">
-                <Label htmlFor="correctAnswer">Correct Answer</Label>
-                <Select
-                  name="correctAnswer"
-                  id="correctAnswer"
-                  className={
-                    formValues.correctAnswer.error == true && "false_field"
-                  }
-                  optionsArray={correctAnswerValues}
-                  value={formValues.correctAnswer.content}
-                  onChange={handleInput}
-                />
-              </LabelInputContainer>
-              <div className="my-8 h-[1px] w-full bg-gradient-to-r from-transparent via-neutral-300 to-transparent dark:via-neutral-700" />
-            </form>
 
-            <div className={`mt-10 ${currentPage > 0 && "flex gap-10"}`}>
-              {currentPage > 0 && (
                 <button
-                  className="group/btn relative block h-10 w-full rounded-md cursor-pointer bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
-                  onClick={handlePreviousPage}
-                >
-                  Previous Page
-                  <BottomGradient />
-                </button>
-              )}
-
-              <button
-                className={`group/btn relative block h-10 w-full rounded-md cursor-pointer bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]
+                  className={`group/btn relative block h-10 w-full rounded-md cursor-pointer bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]
                     ${currentPage == 4 && "font-medium"}
                   `}
-                onClick={handleNextPageAndSubmit}
-              >
-                {currentPage == 0
-                  ? "Save Question"
-                  : currentPage > 0 && currentPage <= 3
-                  ? "Next Page"
-                  : "Save All"}
-                <BottomGradient />
-              </button>
+                  onClick={handleNextPageAndSubmit}
+                >
+                  {currentPage == 0
+                    ? "Save Question"
+                    : currentPage > 0 && currentPage <= 3
+                    ? "Next Page"
+                    : "Save All"}
+                  <BottomGradient />
+                </button>
+              </div>
             </div>
           </div>
         ) : (

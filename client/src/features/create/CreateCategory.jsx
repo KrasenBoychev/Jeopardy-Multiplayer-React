@@ -48,16 +48,18 @@ export default function CreateCategory() {
   };
 
   return (
-    <div className="flex flex-col justify-center  items-center px-4">
-      <h2 className="mb-10 sm:mb-20 text-xl text-center sm:text-5xl dark:text-white text-black uppercase">
-        Category Name
-      </h2>
-      <PlaceholdersAndVanishInput
-        placeholders={placeholders}
-        onChange={handleChange}
-        onSubmit={onSubmit}
-        initialValue={categoryName}
-      />
+    <div className="flex flex-col justify-center items-center px-4 bg-[url(planet.png)] bg-cover bg-center">
+      <div className="p-30 bg-[#00000099] rounded-md shadow-[0px_0px_10px_10px_var(--chart-5)] max-[1600px]:p-25 max-[1400px]:p-20">
+        <h2 className="mb-20 text-5xl text-center text-chart-5 uppercase font-bold max-[1600px]:text-4xl max-[1600px]:mb-15 max-[1400px]:mb-10">
+          Category Name
+        </h2>
+        <PlaceholdersAndVanishInput
+          placeholders={placeholders}
+          onChange={handleChange}
+          onSubmit={onSubmit}
+          initialValue={categoryName}
+        />
+      </div>
     </div>
   );
 }

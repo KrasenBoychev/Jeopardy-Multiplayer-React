@@ -27,7 +27,7 @@ export default function CreateCatAndQMiddleware() {
           msg: "Something went wrong! Refresh the page and try again.",
         })
       );
- 
+
       navigate("/create");
     }
 
