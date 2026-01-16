@@ -21,13 +21,19 @@ export default function Nav() {
           />
         </MenuItemLink>
 
-        <Notifications />
-
         {user.userId == adminId && (
           <MenuItemLink to="/create">
-            <BadgePlus />
+            <BadgePlus
+              width={25}
+              height={25}
+              color="white"
+              className="max-[1600px]:w-[20px] max-[1600px]:h-[20px] max-[1400px]:w-[15px] max-[1400px]:h-[15px]"
+            />
           </MenuItemLink>
         )}
+
+        <Notifications />
+
         <MenuItemLink to="/logout">
           <LogOut
             width={25}
