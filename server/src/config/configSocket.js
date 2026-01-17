@@ -19,12 +19,20 @@ function configSocket(server) {
 
   io.on("connection", (socket) => {
     socket.on("identify", (username) => {
-      activeUsers.set(socket.id, {
-        username: username,
-        status: "Online",
-      });
+      const findUsername = Array.from(activeUsers).find(
+        (activeUser) => activeUser[1].username == username
+      );
 
-      io.emit("user_list_update", Array.from(activeUsers));
+      if (findUsername) {
+        io.to(socket.id).emit("logged_in_from_another_device", {});
+      } else {
+        activeUsers.set(socket.id, {
+          username: username,
+          status: "Online",
+        });
+
+        io.emit("user_list_update", Array.from(activeUsers));
+      }
     });
 
     socket.on("start_game", async ({ targetUserId }) => {
