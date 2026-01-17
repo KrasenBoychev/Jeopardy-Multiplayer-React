@@ -23,7 +23,9 @@ function FriendsListInner() {
           Friends List
         </h3>
         {isLoading && (
-          <p className="flex-1 text-center">Loading friends status...</p>
+          <p className="text-center text-[17px] max-[1600px]:text-[15px] max-[1400px]:text-[13px]">
+            Loading friends status...
+          </p>
         )}
         {isSuccess && friendsList.length > 0 && (
           <ul className="custom-scroll-container flex flex-col flex-1 px-2 gap-1 overflow-y-auto text-[17px] max-[1600px]:text-[15px] max-[1400px]:text-[13px]">
