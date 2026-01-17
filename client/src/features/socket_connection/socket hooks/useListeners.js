@@ -9,6 +9,7 @@ import {
 } from "../../game/gameSlice";
 import { setRivalPlayer } from "../../game/playersSlice";
 import { useGetFriendsListQuery } from "../../game/01. play_page/friends_list/friendsApiSlice";
+import { setUserOnlineFromAnotherDevice } from "../../authentication/authSlice";
 
 export default function useListeners(socket) {
   const isNewGameStarted = useSelector(selectIsNewGameStarted);
@@ -21,6 +22,10 @@ export default function useListeners(socket) {
 
   useEffect(() => {
     if (!socket || isNewGameStarted) return;
+
+    const handleUserLoggedInFromAnotherDevice = () => {
+      dispatch(setUserOnlineFromAnotherDevice(true));
+    };
 
     const handleUserListUpdate = (updatedFriends) => {
       dispatch(setActiveFriends(updatedFriends));
@@ -48,6 +53,10 @@ export default function useListeners(socket) {
       dispatch(updateGameReqSentBy({ username, updateType: "remove" }));
     };
 
+    socket.on(
+      "logged_in_from_another_device",
+      handleUserLoggedInFromAnotherDevice
+    );
     socket.on("user_list_update", handleUserListUpdate);
     socket.on("get_update_notifications", handleGetUpdateNotifications);
     socket.on("get_friend_req_accepted", handleGetFriendReqAccepted);
@@ -56,6 +65,10 @@ export default function useListeners(socket) {
     socket.on("get_cancel_game_invitation", handleGetCancelGameInvitation);
 
     return () => {
+      socket.off(
+        "logged_in_from_another_device",
+        handleUserLoggedInFromAnotherDevice
+      );
       socket.off("user_list_update", handleUserListUpdate);
       socket.off("get_update_notifications", handleGetUpdateNotifications);
       socket.off("get_friend_req_accepted", handleGetFriendReqAccepted);
