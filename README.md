@@ -50,7 +50,7 @@ Also, there is an Admin account, so the owner of the game can create new categor
 
   ![Alt text](images-README/notifications.png)
 
-- #### If a user logges in from another device, a message shows in the Play Page:
+- #### If a user logs in from another device, a message shows in the Play Page:
 
   ![Alt text](images-README/another_device.png)
 
