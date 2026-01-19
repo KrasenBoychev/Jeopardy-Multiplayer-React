@@ -4,6 +4,7 @@ import { selectGameCategories } from "../03. categories/categoriesSlice";
 import QuestionsBody from "./QuestionsBody";
 import QuestionsHeader from "./QuestionsHeader";
 import { points } from "../gamePoints";
+import InfiniteMarquee from "../../../components/InfiniteMarquee";
 
 export default function Questions() {
   const questions = useSelector(selectQuestions);
@@ -22,14 +23,16 @@ export default function Questions() {
                 index == 0
                   ? "bg-[#1E3A8A99]"
                   : index == 1
-                  ? "bg-[#10B98199]"
-                  : index == 2
-                  ? "bg-[#F59E0B99]"
-                  : "bg-[#7C3AED99]"
+                    ? "bg-[#10B98199]"
+                    : index == 2
+                      ? "bg-[#F59E0B99]"
+                      : "bg-[#7C3AED99]"
               }`}
             >
-              <div className="w-[200px] flex uppercase font-bold justify-center bg-[#00000099] p-2 rounded-sm truncate max-[1800px]:w-[175px] max-[1600px]:w-[150px] max-[1400px]:w-[125px]">
-                {category.name}
+              <div className="w-[200px] flex uppercase font-bold justify-center bg-[#00000099] py-2 rounded-sm truncate max-[1800px]:w-[175px] max-[1600px]:w-[150px] max-[1400px]:w-[125px]">
+                <InfiniteMarquee>
+                  <p className="px-2">{category.name}</p>
+                </InfiniteMarquee>
               </div>
               <div className="flex flex-col gap-10 max-[1800px]:gap-9 max-[1600px]:gap-8 max-[1400px]:gap-7">
                 {points.map((questionPoints, index) => {
@@ -39,7 +42,7 @@ export default function Questions() {
                       question={questions.find(
                         (findQuestion) =>
                           findQuestion.categoryId == category.id &&
-                          findQuestion.points == questionPoints
+                          findQuestion.points == questionPoints,
                       )}
                     />
                   );
