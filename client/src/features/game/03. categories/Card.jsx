@@ -1,5 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
+import InfiniteMarquee from "../../../components/InfiniteMarquee";
 
 export default function Card({
   index,
@@ -16,26 +17,30 @@ export default function Card({
         (index > categoryCount ||
           (index == categoryCount &&
             user.username !== activePlayer.username)) &&
-          "blur-sm scale-[0.98]"
+          "blur-sm scale-[0.98]",
       )}
     >
       <div
         className={cn(
-          "absolute inset-0 bg-white flex items-center justify-center py-8 px-4 transition-opacity duration-300 uppercase",
-          index <= categoryCount ? "opacity-100" : "opacity-0"
+          "absolute inset-0 bg-white flex items-center justify-center transition-opacity duration-300 uppercase",
+          index <= categoryCount ? "opacity-100" : "opacity-0",
         )}
       >
         <div
           className={cn(
-            "text-2xl font-medium bg-clip-text text-black bg-gradient-to-b from-neutral-50 to-neutral-200 uppercase max-[1400px]:text-xl",
+            "text-xl font-medium bg-clip-text max-w-full text-black bg-gradient-to-b from-neutral-50 to-neutral-200 uppercase",
             index == categoryCount &&
               user.username === activePlayer.username &&
-              "cursor-pointer"
+              "cursor-pointer",
           )}
         >
-          {index == categoryCount && user.username === activePlayer.username
-            ? PopUp
-            : gameCategory.name}
+          {index == categoryCount && user.username === activePlayer.username ? (
+            PopUp
+          ) : (
+            <InfiniteMarquee>
+              <p className="p-2">{gameCategory.name}</p>
+            </InfiniteMarquee>
+          )}
         </div>
       </div>
     </div>
