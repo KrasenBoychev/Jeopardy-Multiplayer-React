@@ -17,7 +17,7 @@ export default function Categories() {
         ) : (
           <div className="flex flex-col items-center gap-12">
             <CategoriesHeader />
-            <div className="w-[800px]">
+            <div className="w-[1000px]">
               <CategoriesCards />
             </div>
           </div>
