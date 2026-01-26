@@ -1,0 +1,9 @@
+{
+  "name": "my-app-root",
+  "version": "1.0.0",
+  "scripts": {
+    "install-client": "cd client && npm install",
+    "build-client": "cd client && npm run build",
+    "install-all": "npm run install-client"
+  }
+}
