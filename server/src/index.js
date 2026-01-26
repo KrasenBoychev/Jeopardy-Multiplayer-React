@@ -9,7 +9,7 @@ const { configSocket } = require("./config/configSocket");
 const express = require("express");
 const http = require("http");
 const port = process.env.PORT || 5000;
-// const app = express();
+const app = express();
 
 start();
 
@@ -25,4 +25,4 @@ async function start() {
   server.listen(port);
 }
 
-module.exports = start;
+module.exports = app;
