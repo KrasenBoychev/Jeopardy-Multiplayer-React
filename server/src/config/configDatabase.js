@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 async function connectDatabase() {
   await mongoose
     .connect(
-      "mongodb+srv://krasenboychev11_db_user:snBHKcrezslhqroY@cluster0.qr9biv1.mongodb.net/?appName=Jeopardy_Multiplayer_Cluster0",
+      "mongodb+srv://krasenboychev11_db_user:snBHKcrezslhqroY@cluster0.qr9biv1.mongodb.net/?appName=Cluster0",
       {
         dbName: "jeopardy_multiplayer",
       },
