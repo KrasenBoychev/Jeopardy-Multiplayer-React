@@ -6,10 +6,14 @@ const {
   updatePoints,
 } = require("../services/game");
 
-function configSocket(server) {
+const http = require("http");
+
+function configSocket(app) {
+  const server = http.createServer(app);
+
   const io = new Server(server, {
     cors: {
-      origin: "http://localhost:5173",
+      origin: "https://jeopardy-multiplayer-react.vercel.app",
       methods: ["GET", "POST"],
     },
   });
@@ -20,7 +24,7 @@ function configSocket(server) {
   io.on("connection", (socket) => {
     socket.on("identify", (username) => {
       const findUsername = Array.from(activeUsers).find(
-        (activeUser) => activeUser[1].username == username
+        (activeUser) => activeUser[1].username == username,
       );
 
       if (findUsername) {
@@ -38,7 +42,7 @@ function configSocket(server) {
     socket.on("start_game", async ({ targetUserId }) => {
       const roomId = `room-${socket.id}-${targetUserId}`;
       const targetSocket = [...io.sockets.sockets.values()].find(
-        (s) => s.id === targetUserId
+        (s) => s.id === targetUserId,
       );
 
       if (targetSocket) {
@@ -91,7 +95,7 @@ function configSocket(server) {
           console.error("Database error:", error);
           socket.emit(
             "game_error_message",
-            "Could not fetch data. You will be redirected automatically"
+            "Could not fetch data. You will be redirected automatically",
           );
         }
       }
@@ -123,7 +127,7 @@ function configSocket(server) {
         io.to(receiverSocketId).emit("get_cancel_game_invitation", {
           username,
         });
-      }
+      },
     );
 
     socket.on(
@@ -142,7 +146,7 @@ function configSocket(server) {
               for (let c = 0; c < selectedCategoriesIDs.length; c++) {
                 const receivedQuestion = await getQuestion(
                   selectedCategoriesIDs[c],
-                  pointsList[p]
+                  pointsList[p],
                 );
 
                 allQuestions.push(receivedQuestion[0]);
@@ -163,11 +167,11 @@ function configSocket(server) {
             console.error("Database error:", error);
             socket.emit(
               "game_error_message",
-              "Could not fetch data. You will be redirected automatically"
+              "Could not fetch data. You will be redirected automatically",
             );
           }
         }
-      }
+      },
     );
 
     socket.on("send_question_chosen", ({ roomId, question }) => {
@@ -193,7 +197,7 @@ function configSocket(server) {
           pointsToAdd,
           questionChosen,
         });
-      }
+      },
     );
 
     socket.on(
@@ -210,10 +214,10 @@ function configSocket(server) {
           console.error("Database error:", error);
           socket.emit(
             "game_error_message",
-            "Could not fetch data. You will be redirected automatically"
+            "Could not fetch data. You will be redirected automatically",
           );
         }
-      }
+      },
     );
 
     socket.on("leave_game", ({ roomId }) => {

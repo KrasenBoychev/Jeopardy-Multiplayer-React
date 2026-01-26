@@ -1,20 +1,27 @@
 const mongoose = require("mongoose");
 
+let cachedConnection = null;
+
 async function connectDatabase() {
-  await mongoose
-    .connect(
-      "mongodb+srv://krasenboychev11_db_user:snBHKcrezslhqroY@cluster0.qr9biv1.mongodb.net/?appName=Cluster0",
-      {
-        dbName: "jeopardy_multiplayer",
-      },
-    )
-    // eslint-disable-next-line no-unused-vars
-    .then((res) => {
-      console.log("Connected to your database");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  if (cachedConnection) {
+    return cachedConnection;
+  }
+
+  const uri = process.env.MONGODB_URI || "mongodb+srv://...";
+
+  try {
+    const opts = {
+      dbName: "jeopardy_multiplayer",
+      bufferCommands: false,
+    };
+
+    cachedConnection = await mongoose.connect(uri, opts);
+    console.log("Connected to your database");
+    return cachedConnection;
+  } catch (err) {
+    console.error("Database connection error:", err);
+    throw err;
+  }
 }
 
 module.exports = { connectDatabase };
