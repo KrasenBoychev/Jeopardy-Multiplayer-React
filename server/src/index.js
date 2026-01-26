@@ -1,13 +1,14 @@
 // Code  for mongoose config in backend
 // Filename - backend/index.js
 
-const { connectDatabase } = require('./config/configDatabase');
-const { configExpress } = require('./config/configExpress');
-const { configRoutes } = require('./config/configRoutes');
-const { configSocket } = require('./config/configSocket');
+const { connectDatabase } = require("./config/configDatabase");
+const { configExpress } = require("./config/configExpress");
+const { configRoutes } = require("./config/configRoutes");
+const { configSocket } = require("./config/configSocket");
 
-const express = require('express');
-const http = require('http');
+const express = require("express");
+const http = require("http");
+const port = process.env.PORT || 5000;
 
 start();
 
@@ -20,5 +21,5 @@ async function start() {
   configRoutes(app);
   configSocket(server);
 
-  server.listen(5000);
+  server.listen(port);
 }
